@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/screens/login_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -49,7 +51,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       color: const Color(0xfffca311),
                       borderRadius: BorderRadius.circular(60)),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
+                      );
+                    },
                     child: Text(
                       'LOG IN',
                       style: GoogleFonts.montserrat(
@@ -87,11 +94,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     indent: 50,
                     endIndent: 50,
                     height: 0.5),
-                Text("or connect with",
-                    style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 57,
+                      height: 56,
+                      decoration: BoxDecoration(
+                          color: const Color(0xff1877F2),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: TextButton(
+                        onPressed: () {},
+                        child: const FaIcon(
+                          FontAwesomeIcons.facebook,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 31),
+                    Container(
+                      width: 57,
+                      height: 56,
+                      decoration: BoxDecoration(
+                          color: const Color(0xffffffff),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: TextButton(
+                        onPressed: () {},
+                        child: const FaIcon(FontAwesomeIcons.google,
+                            color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
