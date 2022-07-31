@@ -8,7 +8,6 @@ class AuthController with ChangeNotifier {
   User? currentUser;
   FirebaseAuthException? error;
   bool working = false;
-
   AuthController() {
     authStream = _auth.authStateChanges().listen(handleAuthUserChanges);
   }
