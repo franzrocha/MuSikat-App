@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 import '../../screens/auth_screen.dart';
 import '../../screens/home/home_screen.dart';
+import '../../screens/welcome_screen.dart';
 part 'navigation_animations.dart';
 part 'navigation_routing.dart';
 

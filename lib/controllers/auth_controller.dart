@@ -5,6 +5,7 @@ import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/service_locators.dart';
 import '../screens/auth_screen.dart';
 import '../screens/home/home_screen.dart';
+import '../screens/welcome_screen.dart';
 
 class AuthController with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,7 +29,7 @@ class AuthController with ChangeNotifier {
     if (event == null) {
       print('No logged in user');
       nav.popUntilFirst();
-      nav.pushReplacementNamed(AuthScreen.route);
+      nav.pushReplacementNamed(WelcomeScreen.route);
     }
     if (event != null) {
       print('Logged in user');

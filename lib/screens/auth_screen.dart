@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/service_locators.dart';
-
 import '../controllers/navigation/navigation_service.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -20,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailCon = TextEditingController(),
       _passCon = TextEditingController();
-  final AuthController _authController = AuthController();
+  final AuthController _authController = locator<AuthController>();
 
   String prompts = '';
 
@@ -51,38 +50,146 @@ class _AuthScreenState extends State<AuthScreen> {
         builder: (context, Widget? w) {
           if (_authController.working) {
             return const Scaffold(
-              backgroundColor: Colors.white,
+              backgroundColor: Color(0xff262525),
               body: Center(
                 child: SizedBox(
                     width: 50,
                     height: 50,
                     child: CircularProgressIndicator(
-                      backgroundColor: Color(0xfffaebef),
-                      valueColor: AlwaysStoppedAnimation(Color(0xff333d79)),
+                      backgroundColor: Color(0xff34b771),
+                      valueColor: AlwaysStoppedAnimation (Color(0xfffca311),),
                       strokeWidth: 10,
                     )),
               ),
             );
           } else {
             return Scaffold(
-              // appBar: appBar(context),
+              appBar: appBar(context),
               backgroundColor: const Color(0xff262525),
-              resizeToAvoidBottomInset: false,
               body: SafeArea(
                 child: Center(
                   child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      onChanged: () {
-                        _formKey.currentState?.validate();
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      },
-                      child: Column(children: [
-                        upperBody(context),
-                        lowerBody(context),
-                      ]),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 25),
+                          child: Image.asset("assets/images/musikat_logo.png",
+                              width: 141, height: 141),
+                        ),
+                        const SizedBox(height: 30),
+                        Text("MuSikat",
+                            style: GoogleFonts.montserrat(
+                                color: Colors.white,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold)),
+                        Container(
+                          padding: const EdgeInsets.only(left: 25, top: 30),
+                          alignment: Alignment.topLeft,
+                          child: Text("We are here for OPM.",
+                              textAlign: TextAlign.right,
+                              style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            child: Form(
+                              key: _formKey,
+                              onChanged: () {
+                                _formKey.currentState?.validate();
+                                if (mounted) {
+                                  setState(() {});
+                                }
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  emailForm(),
+                                  const SizedBox(height: 15),
+                                  passForm(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            _authController.error?.message ?? '',
+                            style: GoogleFonts.montserrat(color: Colors.red),
+                          ),
+                        ),
+                        Container(
+                          width: 318,
+                          height: 63,
+                          decoration: BoxDecoration(
+                              color: const Color(0xfffca311),
+                              borderRadius: BorderRadius.circular(60)),
+                          child: TextButton(
+                            onPressed:
+                                (_formKey.currentState?.validate() ?? false)
+                                    ? () {
+                                        _authController.login(
+                                            _emailCon.text.trim(),
+                                            _passCon.text.trim());
+                                      }
+                                    : null,
+                            child: Text(
+                              'LOG IN',
+                              style: GoogleFonts.montserrat(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 318,
+                          height: 63,
+                          decoration: BoxDecoration(
+                              color: const Color(0xfffca311),
+                              borderRadius: BorderRadius.circular(60)),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'REGISTER',
+                              style: GoogleFonts.montserrat(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            _authController.error?.message ?? '',
+                            style: GoogleFonts.montserrat(color: Colors.red),
+                          ),
+                        ),
+                        // Text(
+                        //   "Don't have an account?",
+                        //   style: GoogleFonts.openSans(
+                        //       fontSize: 15, color: Colors.black),
+                        // ),
+                        // TextButton(
+                        //     onPressed: () {
+                        //       Navigator.of(context).push(
+                        //         MaterialPageRoute(
+                        //           builder: (context) => const RegisterScreen(),
+                        //         ),
+                        //       );
+                        //     },
+                        //     child: Text(
+                        //       'Register here',
+                        //       style: GoogleFonts.openSans(
+                        //           fontSize: 15,
+                        //           color: Colors.blueAccent,
+                        //           decoration: TextDecoration.underline),
+                        //     )),
+                      ],
                     ),
                   ),
                 ),
@@ -91,119 +198,22 @@ class _AuthScreenState extends State<AuthScreen> {
           }
         });
   }
-
-  Padding lowerBody(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28.0),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.52,
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              alignment: Alignment.topLeft,
-              child: Text("We are here for OPM.",
-                  textAlign: TextAlign.right,
-                  style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold)),
-            ),
-            const SizedBox(height: 20),
-            emailForm(),
-            passForm(),
-            Container(
-              width: 318,
-              height: 63,
-              decoration: BoxDecoration(
-                  color: const Color(0xfffca311),
-                  borderRadius: BorderRadius.circular(60)),
-              child: TextButton(
-                onPressed: (_formKey.currentState?.validate() ?? false)
-                    ? () {
-                        _authController.login(
-                            _emailCon.text.trim(), _passCon.text.trim());
-                      }
-                    : null,
-                child: Text(
-                  'LOG IN',
-                  style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            ),
-            Container(
-              width: 318,
-              height: 63,
-              decoration: BoxDecoration(
-                  color: const Color(0xfffca311),
-                  borderRadius: BorderRadius.circular(60)),
-              child: TextButton(
-                onPressed: () {},
-                child: Text(
-                  'REGISTER',
-                  style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                _authController.error?.message ?? '',
-                style: GoogleFonts.montserrat(color: Colors.red),
-              ),
-            ),
-          ],
+  
+AppBar appBar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 75,
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.angleLeft,
+          size: 20,
         ),
       ),
-    );
-  }
-
-  // AppBar appBar(BuildContext context) {
-  //   return AppBar(
-  //     toolbarHeight: 75,
-  //     elevation: 0.0,
-  //     backgroundColor: Colors.transparent,
-  //     automaticallyImplyLeading: false,
-  //     leading: IconButton(
-  //       onPressed: () {
-  //         Navigator.pop(context);
-  //       },
-  //       icon: const FaIcon(
-  //         FontAwesomeIcons.angleLeft,
-  //         size: 20,
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  Stack upperBody(context) {
-    return Stack(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.35,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Column(
-              children: [
-                Image.asset("assets/images/musikat_logo.png",
-                    width: 141, height: 141),
-                const SizedBox(height: 30),
-                Text("MuSikat",
-                    style: GoogleFonts.montserrat(
-                        color: Colors.white,
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -296,4 +306,7 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
     );
   }
+
 }
+
+ 

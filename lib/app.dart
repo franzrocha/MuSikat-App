@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musikat_app/screens/auth_screen.dart';
+import 'package:musikat_app/screens/welcome_screen.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'controllers/navigation/navigation_service.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       builder: (context, Widget? child) => child as Widget,
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: NavigationService.generateRoute,
-      initialRoute: AuthScreen.route,
+      initialRoute: WelcomeScreen.route,
     );
   }
 
