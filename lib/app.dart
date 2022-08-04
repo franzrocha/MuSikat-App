@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musikat_app/screens/auth_screen.dart';
-import 'package:musikat_app/screens/welcome_screen.dart';
+import 'package:musikat_app/screens/authentication/auth_screen.dart';
+import 'package:musikat_app/screens/authentication/welcome_screen.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'controllers/navigation/navigation_service.dart';
 

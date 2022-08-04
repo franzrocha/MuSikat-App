@@ -4,7 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/service_locators.dart';
-import '../controllers/navigation/navigation_service.dart';
+import '../../controllers/navigation/navigation_service.dart';
+import 'forget_password.dart';
 
 class AuthScreen extends StatefulWidget {
   static const String route = 'auth-screen';
@@ -57,7 +58,9 @@ class _AuthScreenState extends State<AuthScreen> {
                     height: 50,
                     child: CircularProgressIndicator(
                       backgroundColor: Color(0xff34b771),
-                      valueColor: AlwaysStoppedAnimation (Color(0xfffca311),),
+                      valueColor: AlwaysStoppedAnimation(
+                        Color(0xfffca311),
+                      ),
                       strokeWidth: 10,
                     )),
               ),
@@ -83,7 +86,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold)),
                         Container(
-                          padding: const EdgeInsets.only(left: 25, top: 30),
+                          padding: const EdgeInsets.only(left: 25, top: 10),
                           alignment: Alignment.topLeft,
                           child: Text("We are here for OPM.",
                               textAlign: TextAlign.right,
@@ -114,81 +117,9 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            _authController.error?.message ?? '',
-                            style: GoogleFonts.montserrat(color: Colors.red),
-                          ),
-                        ),
-                        Container(
-                          width: 318,
-                          height: 63,
-                          decoration: BoxDecoration(
-                              color: const Color(0xfffca311),
-                              borderRadius: BorderRadius.circular(60)),
-                          child: TextButton(
-                            onPressed:
-                                (_formKey.currentState?.validate() ?? false)
-                                    ? () {
-                                        _authController.login(
-                                            _emailCon.text.trim(),
-                                            _passCon.text.trim());
-                                      }
-                                    : null,
-                            child: Text(
-                              'LOG IN',
-                              style: GoogleFonts.montserrat(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 318,
-                          height: 63,
-                          decoration: BoxDecoration(
-                              color: const Color(0xfffca311),
-                              borderRadius: BorderRadius.circular(60)),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'REGISTER',
-                              style: GoogleFonts.montserrat(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            _authController.error?.message ?? '',
-                            style: GoogleFonts.montserrat(color: Colors.red),
-                          ),
-                        ),
-                        // Text(
-                        //   "Don't have an account?",
-                        //   style: GoogleFonts.openSans(
-                        //       fontSize: 15, color: Colors.black),
-                        // ),
-                        // TextButton(
-                        //     onPressed: () {
-                        //       Navigator.of(context).push(
-                        //         MaterialPageRoute(
-                        //           builder: (context) => const RegisterScreen(),
-                        //         ),
-                        //       );
-                        //     },
-                        //     child: Text(
-                        //       'Register here',
-                        //       style: GoogleFonts.openSans(
-                        //           fontSize: 15,
-                        //           color: Colors.blueAccent,
-                        //           decoration: TextDecoration.underline),
-                        //     )),
+                        authErrorMsg(),
+                        loginButton(),
+                        forgotPass(context),
                       ],
                     ),
                   ),
@@ -198,8 +129,63 @@ class _AuthScreenState extends State<AuthScreen> {
           }
         });
   }
-  
-AppBar appBar(BuildContext context) {
+
+  Container forgotPass(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(right: 20, top: 30),
+      alignment: Alignment.bottomRight,
+      child: TextButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ForgotPasswordScreen(),
+              ),
+            );
+          },
+          child: Text(
+            'Forgot Password?',
+            style: GoogleFonts.inter(
+                fontSize: 13,
+                color: Colors.blueAccent,
+                decoration: TextDecoration.underline),
+          )),
+    );
+  }
+
+  Padding authErrorMsg() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Text(
+        _authController.error?.message ?? '',
+        style: GoogleFonts.montserrat(color: Colors.red),
+      ),
+    );
+  }
+
+  Container loginButton() {
+    return Container(
+      width: 318,
+      height: 63,
+      decoration: BoxDecoration(
+          color: const Color(0xfffca311),
+          borderRadius: BorderRadius.circular(60)),
+      child: TextButton(
+        onPressed: (_formKey.currentState?.validate() ?? false)
+            ? () {
+                _authController.login(
+                    _emailCon.text.trim(), _passCon.text.trim());
+              }
+            : null,
+        child: Text(
+          'LOG IN',
+          style: GoogleFonts.montserrat(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
+  }
+
+  AppBar appBar(BuildContext context) {
     return AppBar(
       toolbarHeight: 75,
       elevation: 0.0,
@@ -231,11 +217,11 @@ AppBar appBar(BuildContext context) {
       child: TextFormField(
         controller: _emailCon,
         validator: (value) {
-          // // setState(() {
-          // //   isEmailEmpty = (value == null || value.isEmpty) ? true : false;
-          // // });
-
-          // return null;
+          if (value!.isEmpty) {
+            return "Email cannot be empty";
+          } else {
+            return null;
+          }
         },
         style: GoogleFonts.inter(
           fontWeight: FontWeight.bold,
@@ -276,11 +262,15 @@ AppBar appBar(BuildContext context) {
         obscureText: true,
         controller: _passCon,
         validator: (value) {
-          // // setState(() {
-          // //   isEmailEmpty = (value == null || value.isEmpty) ? true : false;
-          // // });
-
-          // return null;
+          if (value!.isEmpty) {
+            return "Password cannot be empty";
+          } else if (value.length < 6) {
+            return "Password should be atleast 6 characters";
+          } else if (value.length > 15) {
+            return "Password should not be greater than 15 characters";
+          } else {
+            return null;
+          }
         },
         style: GoogleFonts.inter(
           fontWeight: FontWeight.bold,
@@ -306,7 +296,4 @@ AppBar appBar(BuildContext context) {
       ),
     );
   }
-
 }
-
- 

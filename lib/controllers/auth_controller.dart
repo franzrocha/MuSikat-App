@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/service_locators.dart';
-import '../screens/auth_screen.dart';
+import '../screens/authentication/auth_screen.dart';
 import '../screens/home/home_screen.dart';
-import '../screens/welcome_screen.dart';
+import '../screens/authentication/welcome_screen.dart';
 
 class AuthController with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
