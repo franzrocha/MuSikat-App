@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/screens/authentication/register_screen.dart';
 import 'auth_screen.dart';
 
 
@@ -75,7 +76,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       color: const Color(0xff34b771),
                       borderRadius: BorderRadius.circular(60)),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                        Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterScreen()),
+                      );
+                    },
                     child: Text(
                       'SIGN UP',
                       style: GoogleFonts.montserrat(

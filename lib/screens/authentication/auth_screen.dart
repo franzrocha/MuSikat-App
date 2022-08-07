@@ -120,6 +120,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         authErrorMsg(),
                         loginButton(),
                         forgotPass(context),
+                        
                       ],
                     ),
                   ),
@@ -188,6 +189,10 @@ class _AuthScreenState extends State<AuthScreen> {
   AppBar appBar(BuildContext context) {
     return AppBar(
       toolbarHeight: 75,
+       title: Text("Login",
+          textAlign: TextAlign.right,
+          style: GoogleFonts.inter(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
