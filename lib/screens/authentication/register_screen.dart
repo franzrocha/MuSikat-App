@@ -289,7 +289,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.circular(20)),
       child: TextFormField(
         // maxLength: 25,
-        controller: _emailCon,
+        controller: _usernameCon,
         validator: (value) {
           if (value!.isEmpty) {
             return 'Please enter your username';
@@ -413,19 +413,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
           color: const Color(0xfffca311),
           borderRadius: BorderRadius.circular(60)),
       child: TextButton(
-        onPressed: (){},
-        //  onPressed: (_formKey.currentState?.validate() ?? false)
-        //     ? () {
-        //         _authController.register(
-        //           email: _emailCon.text.trim(),
-        //           password: _passCon.text.trim(),
-        //           username: _usernameCon.text.trim(),
-        //           age: _ageCon.text.trim(),
-        //          gender: dropdownValue,
+         onPressed: (_formKey.currentState?.validate() ?? false)
+            ? () {
+                _authController.register(
+                  email: _emailCon.text.trim(),
+                  password: _passCon.text.trim(),
+                  username: _usernameCon.text.trim(),
+                  age: _ageCon.text.trim(),
+                 gender: dropdownValue,
                   
-        //         );
-        //       }
-        //     : null,
+                );
+              }
+            : null,
         child: Text(
           'REGISTER',
           style: GoogleFonts.montserrat(

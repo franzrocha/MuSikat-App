@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
+import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/service_locators.dart';
-import '../screens/authentication/auth_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/authentication/welcome_screen.dart';
 
@@ -13,7 +14,7 @@ class AuthController with ChangeNotifier {
   User? currentUser;
   FirebaseAuthException? error;
   bool working = true;
-   final NavigationService nav = locator<NavigationService>();
+  final NavigationService nav = locator<NavigationService>();
 
   AuthController() {
     authStream = _auth.authStateChanges().listen(handleAuthUserChanges);
@@ -34,6 +35,9 @@ class AuthController with ChangeNotifier {
     if (event != null) {
       print('Logged in user');
       print(event.email);
+      // if(currentUser == null){
+        
+      // }
       nav.pushReplacementNamed(HomeScreen.route);
     }
     error = null;
@@ -41,7 +45,6 @@ class AuthController with ChangeNotifier {
     currentUser = event;
     notifyListeners();
   }
-
 
   Future login(String email, String password) async {
     try {
@@ -67,6 +70,34 @@ class AuthController with ChangeNotifier {
     working = false;
     notifyListeners();
     return;
-    
+  }
+
+  Future register(
+      {required String email,
+      required String password,
+      required String username,
+      required String age,
+      required String gender}) async {
+    try {
+      working = true;
+      notifyListeners();
+      UserCredential createdUser = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      if (createdUser.user != null) {
+        UserModel userModel = UserModel(createdUser.user!.uid, username, email,
+            age, gender, '', Timestamp.now(), Timestamp.now());
+        return FirebaseFirestore.instance
+            .collection('users')
+            .doc(userModel.uid)
+            .set(userModel.json);
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      print(e.code);
+      working = false;
+      currentUser = null;
+      error = e;
+      notifyListeners();
+    }
   }
 }

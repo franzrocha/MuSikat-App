@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ChatUser {
-  final String uid, username, email, image;
+class UserModel {
+  final String uid, username, email, image, age, gender;
   Timestamp created, updated;
 
-  ChatUser(this.uid, this.username, this.email, this.image, this.created, this.updated);
+  UserModel(this.uid, this.username, this.email, this.age, this.gender,  this.image, this.created, this.updated);
 
-  static ChatUser fromDocumentSnap(DocumentSnapshot snap) {
+  static UserModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
-    return ChatUser(
+    return UserModel(
       snap.id,
       json['username'] ?? '',
       json['email'] ?? '',
+      json['age'] ?? '',
+      json['gender'] ?? '',
       json['image'] ?? '',
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
@@ -22,22 +24,24 @@ class ChatUser {
         'uid': uid,
         'username': username,
         'email': email,
+        'age': age,
+        'gender': gender,
         'image': image,
         'created': created,
         'updated': updated
       };
 
-  static Future<ChatUser> fromUid({required String uid}) async {
+  static Future<UserModel> fromUid({required String uid}) async {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    return ChatUser.fromDocumentSnap(snap);
+    return UserModel.fromDocumentSnap(snap);
   }
 
-  static Stream<ChatUser> fromUidStream({required String uid}) {
+  static Stream<UserModel> fromUidStream({required String uid}) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
         .snapshots()
-        .map(ChatUser.fromDocumentSnap);
+        .map(UserModel.fromDocumentSnap);
   }
 }
