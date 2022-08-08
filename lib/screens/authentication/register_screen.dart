@@ -20,6 +20,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _usernameCon = TextEditingController(),
       _ageCon = TextEditingController();
 
+  bool isEmailEmpty = false;
+  bool isPasswordEmpty = false;
+  bool isUsernameEmpty = false;
+  bool isAgeEmpty = true;
+  bool checkMe = false;
+
   final genderList = ["Prefer not to say", "Male", "Female", "Others"];
   String dropdownValue = 'Prefer not to say';
 
@@ -98,15 +104,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                    Padding(
-                  padding: const EdgeInsets.all(10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 14,
+                      height: 14,
+                      color: Colors.white,
+                      child: Checkbox(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0))),
+                          activeColor: Colors.orange,
+                          value: checkMe,
+                          onChanged: (newValue) {
+                            setState(() => checkMe = newValue!);
+                          }),
+                    ),
+                    const SizedBox(width: 15.0),
+                    Text(
+                      'By signing up you accept the MuSikats \n Term of Service and Piracy Policy',
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30, bottom: 30),
                   child: Text(
-                    _authController.error?.message ?? '',
+                    prompts,
                     style: GoogleFonts.montserrat(color: Colors.red),
                   ),
                 ),
-                  registerButton(),
-
+                registerButton(),
               ],
             ),
           ),
@@ -152,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         controller: _emailCon,
         validator: (value) {
           if (value!.isEmpty) {
-            return "Please enter your email";
+            return null;
           } else {
             return null;
           }
@@ -196,7 +228,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         controller: _passCon,
         validator: (value) {
           if (value!.isEmpty) {
-            return "Please enter your password";
+            return null;
           } else if (value.length < 6) {
             return "Password should be atleast 6 characters";
           } else if (value.length > 15) {
@@ -246,9 +278,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         controller: _pass2Con,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please confirm your password';
+            return null;
           } else if (_passCon.text != _pass2Con.text) {
             return 'Passwords do not match!';
+          } else if (value.length < 6) {
+            return "Password should be atleast 6 characters";
+          } else if (value.length > 15) {
+            return "Password should not be greater than 15 characters";
           }
           return null;
         },
@@ -292,7 +328,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         controller: _usernameCon,
         validator: (value) {
           if (value!.isEmpty) {
-            return 'Please enter your username';
+            return null;
           } else if (value.length < 3) {
             return 'Username must be more than 3 characters';
           } else if (value.length > 25) {
@@ -341,7 +377,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ],
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter your age';
+              return null;
             } else if (int.parse(value) < 18) {
               return 'Age must be 18 and above';
             } else if (int.parse(value) > 100) {
@@ -413,18 +449,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
           color: const Color(0xfffca311),
           borderRadius: BorderRadius.circular(60)),
       child: TextButton(
-         onPressed: (_formKey.currentState?.validate() ?? false)
-            ? () {
-                _authController.register(
-                  email: _emailCon.text.trim(),
-                  password: _passCon.text.trim(),
-                  username: _usernameCon.text.trim(),
-                  age: _ageCon.text.trim(),
-                 gender: dropdownValue,
-                  
-                );
-              }
-            : null,
+        onPressed: () {
+          if (_formKey.currentState!.validate() && isFieldEmpty()) {
+            setState(() {
+              register();
+            });
+          } else if (checkMe != true) {
+            setState(() {
+              prompts = "Please accept the terms and conditions to proceed";
+            });
+          } else {
+            setState(() {
+              prompts = "Invalid or empty fields";
+            });
+          }
+        },
         child: Text(
           'REGISTER',
           style: GoogleFonts.montserrat(
@@ -432,5 +471,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> register() async {
+    try {
+      await _authController.register(
+        email: _emailCon.text.trim(),
+        password: _passCon.text.trim(),
+        username: _usernameCon.text.trim(),
+        age: _ageCon.text.trim(),
+        gender: dropdownValue,
+      );
+    } catch (error) {
+      setState(() {
+        prompts = error.toString();
+      });
+    }
+  }
+
+  bool isFieldEmpty() {
+    return !(isEmailEmpty || isPasswordEmpty || isAgeEmpty || isUsernameEmpty);
   }
 }
