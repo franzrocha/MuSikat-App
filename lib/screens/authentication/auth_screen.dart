@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
+import 'package:musikat_app/screens/home/nav_bar.dart';
 import 'package:musikat_app/service_locators.dart';
 import '../../controllers/navigation/navigation_service.dart';
 import 'forget_password.dart';
@@ -40,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   handleLogin() {
     if (_authController.currentUser != null) {
-      locator<NavigationService>().pushReplacementNamed(HomeScreen.route);
+      locator<NavigationService>().pushReplacementNamed(NavBar.route);
     }
   }
 
