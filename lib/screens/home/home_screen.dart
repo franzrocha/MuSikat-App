@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _auth.logout();
               },
               icon: const Icon(Icons.logout)),
-        ],
+        ],  
       ),
     ));
   }

@@ -35,116 +35,149 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(context),
-      backgroundColor: const Color(0xff262525),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 20),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       Image.asset(
-                //         "assets/images/musikat_logo.png",
-                //         width: 50,
-                //         height: 50,
-                //       ),
-                //       const SizedBox(width: 14),
-                //       Text("MuSikat",
-                //           style: GoogleFonts.montserrat(
-                //               color: Colors.white,
-                //               fontSize: 36,
-                //               fontWeight: FontWeight.bold)),
-                //     ],
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 10),
-                  child: Image.asset(
-                    "assets/images/register.png",
-                    width: 237,
-                    height: 210,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 25, top: 10),
-                  alignment: Alignment.topLeft,
-                  child: Text("Become a listener or an artist",
-                      textAlign: TextAlign.right,
-                      style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Center(
-                    child: Form(
-                      key: _formKey,
-                      onChanged: () {
-                        _formKey.currentState?.validate();
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      },
-                      child: Column(
-                        children: [
-                          emailForm(context),
-                          passForm(context),
-                          conPassForm(context),
-                          usernameForm(context),
-                          ageForm(context),
-                          genderDropDown(context),
-                        ],
+    return AnimatedBuilder(
+        animation: _authController,
+        builder: (context, Widget? w) {
+          if (_authController.working) {
+            return const Scaffold(
+              backgroundColor: Color(0xff262525),
+              body: Center(
+                child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(
+                      backgroundColor: Color(0xff34b771),
+                      valueColor: AlwaysStoppedAnimation(
+                        Color(0xfffca311),
                       ),
+                      strokeWidth: 10,
+                    )),
+              ),
+            );
+          } else {
+            return Scaffold(
+              appBar: appBar(context),
+              backgroundColor: const Color(0xff262525),
+              body: SafeArea(
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // Padding(
+                        //   padding: const EdgeInsets.only(top: 20),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Image.asset(
+                        //         "assets/images/musikat_logo.png",
+                        //         width: 50,
+                        //         height: 50,
+                        //       ),
+                        //       const SizedBox(width: 14),
+                        //       Text("MuSikat",
+                        //           style: GoogleFonts.montserrat(
+                        //               color: Colors.white,
+                        //               fontSize: 36,
+                        //               fontWeight: FontWeight.bold)),
+                        //     ],
+                        //   ),
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20, bottom: 10),
+                          child: Image.asset(
+                            "assets/images/register.png",
+                            width: 237,
+                            height: 210,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 25, top: 10),
+                          alignment: Alignment.topLeft,
+                          child: Text("Become a listener or an artist",
+                              textAlign: TextAlign.right,
+                              style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            child: Form(
+                              key: _formKey,
+                              onChanged: () {
+                                _formKey.currentState?.validate();
+                                if (mounted) {
+                                  setState(() {});
+                                }
+                              },
+                              child: Column(
+                                children: [
+                                  emailForm(context),
+                                  passForm(context),
+                                  conPassForm(context),
+                                  usernameForm(context),
+                                  ageForm(context),
+                                  genderDropDown(context),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 16,
+                              height: 16,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5.0),
+                                ),
+                              ),
+                              child: checkBox(),
+                            ),
+                            const SizedBox(width: 15.0),
+                            Text(
+                              'By signing up you accept the MuSikat \n Term of Service and Piracy Policy',
+                              style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30, bottom: 30),
+                          child: Text(
+                            prompts,
+                            style: GoogleFonts.inter(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        registerButton(),
+                      ],
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 14,
-                      height: 14,
-                      color: Colors.white,
-                      child: Checkbox(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0))),
-                          activeColor: Colors.orange,
-                          value: checkMe,
-                          onChanged: (newValue) {
-                            setState(() => checkMe = newValue!);
-                          }),
-                    ),
-                    const SizedBox(width: 15.0),
-                    Text(
-                      'By signing up you accept the MuSikats \n Term of Service and Piracy Policy',
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30, bottom: 30),
-                  child: Text(
-                    prompts,
-                    style: GoogleFonts.montserrat(color: Colors.red),
-                  ),
-                ),
-                registerButton(),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+              ),
+            );
+          }
+        });
+  }
+
+  Checkbox checkBox() {
+    return Checkbox(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0))),
+        activeColor: Colors.orange,
+        value: checkMe,
+        onChanged: (newValue) {
+          setState(() => checkMe = newValue!);
+        });
   }
 
   AppBar appBar(BuildContext context) {
@@ -450,7 +483,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.circular(60)),
       child: TextButton(
         onPressed: () {
-          if (_formKey.currentState!.validate() && isFieldEmpty()) {
+          if (_formKey.currentState!.validate() || isFieldEmpty())  {
             setState(() {
               register();
             });
