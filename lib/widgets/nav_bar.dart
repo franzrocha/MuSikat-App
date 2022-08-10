@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
@@ -6,6 +7,8 @@ import 'package:musikat_app/screens/home/chat_home_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile_screen.dart';
 import 'package:musikat_app/service_locators.dart';
+import 'package:musikat_app/services/image_service.dart';
+import 'package:musikat_app/widgets/avatar.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
@@ -16,9 +19,12 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
+ 
   int pageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+   
     final AuthController auth = locator<AuthController>();
 
     final List<Widget> pages = [
@@ -28,18 +34,21 @@ class _NavBarState extends State<NavBar> {
       const ProfileScreen(),
     ];
 
-    // void _onItemTapped(int index) {
-    //   setState(() {
-    //    pageIndex = index;
-    //   });
-    // }
-
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color(0xffE28D00),
           automaticallyImplyLeading: false,
           toolbarHeight: 65,
           actions: [
+            InkWell(
+            onTap: () {
+              ImageService.updateProfileImage();
+            },
+            child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
             IconButton(
                 onPressed: () async {
                   auth.logout();

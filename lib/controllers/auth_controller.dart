@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
-import 'package:musikat_app/screens/home/nav_bar.dart';
+import 'package:musikat_app/widgets/nav_bar.dart';
 import 'package:musikat_app/service_locators.dart';
 import '../screens/authentication/welcome_screen.dart';
 
