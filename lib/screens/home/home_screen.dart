@@ -4,7 +4,7 @@ import 'package:musikat_app/service_locators.dart';
 
 
 class HomeScreen extends StatefulWidget {
-  // static const String route = 'home-screen';
+  static const String route = 'home-screen';
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       backgroundColor: const Color(0xff262525),
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

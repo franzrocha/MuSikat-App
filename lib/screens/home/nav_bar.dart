@@ -16,10 +16,10 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
+  int pageIndex = 0;
   @override
   Widget build(BuildContext context) {
-    int pageIndex = 0;
-      final AuthController auth = locator<AuthController>();
+    final AuthController auth = locator<AuthController>();
 
     final List<Widget> pages = [
       const HomeScreen(),
@@ -36,17 +36,16 @@ class _NavBarState extends State<NavBar> {
 
     return Scaffold(
       appBar: AppBar(
-         backgroundColor: const Color(0xffE28D00),
-         automaticallyImplyLeading: false,
-         toolbarHeight: 65,
-         actions:[
-           IconButton(
-              onPressed: () async {
-                auth.logout();
-              },
-              icon: const Icon(Icons.logout)),
-         ]
-      ),
+          backgroundColor: const Color(0xffE28D00),
+          automaticallyImplyLeading: false,
+          toolbarHeight: 65,
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  auth.logout();
+                },
+                icon: const Icon(Icons.logout)),
+          ]),
       body: pages[pageIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

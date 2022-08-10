@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:musikat_app/screens/home/artists_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/nav_bar.dart';
 import 'dart:developer' as developer;
