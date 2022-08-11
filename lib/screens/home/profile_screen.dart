@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/screens/home/account_info.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/avatar.dart';
 
@@ -43,40 +44,129 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 profilePic(),
                 userName(),
-                ListTile(
-                  title: Text("Settings",
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '-- \n FOLLOWERS',
+                      textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         color: Colors.white,
-                        fontSize: 14,
-                        
-                      )),
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Text(
+                      '-- \n FOLLOWING',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
                 ),
-                const Card( 
-                  child: ListTile(
-                    leading: FlutterLogo(),
-                    title: Text('One-line with both widgets'),
-                    trailing: Icon(Icons.more_vert),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Divider(
+                  height: 1.0,
+                  indent: 1.0,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.queue_music,
+                      color: Colors.white, size: 25),
+                  title: Text(
+                    'Playlists',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-                const Card(
-                  child: ListTile(
-                    leading: FlutterLogo(),
-                    title: Text('One-line with both widgets'),
-                    trailing: Icon(Icons.more_vert),
+                const Divider(
+                  height: 1.0,
+                  indent: 1.0,
+                ),
+                ListTile(
+                  leading: const FaIcon(FontAwesomeIcons.heart,
+                      color: Colors.white, size: 25),
+                  title: Text(
+                    'Liked Songs',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-                const Card(
-                  child: ListTile(
-                    leading: FlutterLogo(),
-                    title: Text('One-line with both widgets'),
-                    trailing: Icon(Icons.more_vert),
+                const Divider(
+                  height: 1.0,
+                  indent: 1.0,
+                ),
+                ListTile(
+                  onTap: () => {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const AccountInfoScreen()),
+                    ),
+                  },
+                  leading: const Icon(Icons.account_box,
+                      color: Colors.white, size: 25),
+                  title: Text(
+                    'Account info',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-                const Card(
-                  child: ListTile(
-                    leading: FlutterLogo(),
-                    title: Text('One-line with both widgets'),
-                    trailing: Icon(Icons.more_vert),
+                const Divider(
+                  height: 1.0,
+                  indent: 1.0,
+                ),
+                ListTile(
+                  leading:
+                      const Icon(Icons.people, color: Colors.white, size: 25),
+                  title: Text(
+                    'Find friends',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                const Divider(
+                  height: 1.0,
+                  indent: 1.0,
+                ),
+                ListTile(
+                  leading:
+                      const Icon(Icons.info, color: Colors.white, size: 25),
+                  title: Text(
+                    'About us',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                const Divider(
+                  height: 1.0,
+                  indent: 1.0,
+                ),
+                ListTile(
+                  onTap: () async {
+                    _auth.logout();
+                  },
+                  leading:
+                      const Icon(Icons.logout, color: Colors.white, size: 25),
+                  title: Text(
+                    'Log-out',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ],

@@ -39,6 +39,11 @@ class _NavBarState extends State<NavBar> {
           backgroundColor: const Color(0xffE28D00),
           automaticallyImplyLeading: false,
           toolbarHeight: 65,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Image.asset("assets/images/musikat_logo.png",
+                        width: 45, height: 47),
+          ),
           actions: [
             InkWell(
             onTap: () {
@@ -49,11 +54,6 @@ class _NavBarState extends State<NavBar> {
           const SizedBox(
             width: 8,
           ),
-            IconButton(
-                onPressed: () async {
-                  auth.logout();
-                },
-                icon: const Icon(Icons.logout)),
           ]),
       body: pages[pageIndex],
       bottomNavigationBar: BottomNavigationBar(
