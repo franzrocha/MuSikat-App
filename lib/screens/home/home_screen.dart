@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
 
@@ -12,21 +13,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final AuthController _auth = locator<AuthController>();
+  // final AuthController _auth = locator<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: const Color(0xff262525),
+      backgroundColor: musikatBackgroundColor,
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('Hello bestie'),
-          IconButton(
-              onPressed: () async {
-                _auth.logout();
-              },
-              icon: const Icon(Icons.logout)),
+        children: const [
+          Text('Hello bestie'),
+         
         ],
       ),
     ));

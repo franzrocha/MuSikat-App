@@ -9,6 +9,7 @@ import 'package:musikat_app/screens/home/profile_screen.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/services/image_service.dart';
 import 'package:musikat_app/widgets/avatar.dart';
+import 'package:musikat_app/widgets/search_bar.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
@@ -44,14 +45,15 @@ class _NavBarState extends State<NavBar> {
             child: Image.asset("assets/images/musikat_logo.png",
                         width: 45, height: 47),
           ),
-          actions: [
-            InkWell(
-            onTap: () {
-              ImageService.updateProfileImage();
-            },
-            child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
-          ),
-          const SizedBox(
+          actions: const [
+            Searchbar(),
+          //   InkWell(
+          //   onTap: () {
+          //     ImageService.updateProfileImage();
+          //   },
+          //   child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+          // ),
+          SizedBox(
             width: 8,
           ),
           ]),

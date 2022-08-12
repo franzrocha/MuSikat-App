@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/screens/authentication/register_screen.dart';
 import 'auth_screen.dart';
 
-
 class WelcomeScreen extends StatefulWidget {
   static const String route = 'welcome-screen';
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -77,7 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       borderRadius: BorderRadius.circular(60)),
                   child: TextButton(
                     onPressed: () {
-                        Navigator.of(context).push(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => const RegisterScreen()),
                       );

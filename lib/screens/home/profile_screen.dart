@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/account_info.dart';
@@ -36,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff262525),
+      backgroundColor: musikatBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -71,8 +72,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 20,
                 ),
                 const Divider(
-                  height: 1.0,
+                  height: 20,
                   indent: 1.0,
+        
                 ),
                 ListTile(
                   leading: const Icon(Icons.queue_music,
@@ -86,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const Divider(
-                  height: 1.0,
+                  height: 20,
                   indent: 1.0,
                 ),
                 ListTile(
@@ -101,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const Divider(
-                  height: 1.0,
+                  height: 20,
                   indent: 1.0,
                 ),
                 ListTile(
@@ -122,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const Divider(
-                  height: 1.0,
+                  height: 20,
                   indent: 1.0,
                 ),
                 ListTile(
@@ -137,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const Divider(
-                  height: 1.0,
+                  height: 20,
                   indent: 1.0,
                 ),
                 ListTile(
@@ -152,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const Divider(
-                  height: 1.0,
+                  height: 20,
                   indent: 1.0,
                 ),
                 ListTile(
@@ -181,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Text(user?.username ?? '...',
         style: GoogleFonts.montserrat(
           color: Colors.white,
-          fontSize: 25,
+          fontSize: 30,
           fontWeight: FontWeight.bold,
         ));
   }

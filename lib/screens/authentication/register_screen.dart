@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
 
@@ -40,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (context, Widget? w) {
           if (_authController.working) {
             return const Scaffold(
-              backgroundColor: Color(0xff262525),
+              backgroundColor: musikatBackgroundColor,
               body: Center(
                 child: SizedBox(
                     width: 50,
@@ -128,8 +129,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 16,
-                              height: 16,
+                              width: 18,
+                              height: 18,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.all(

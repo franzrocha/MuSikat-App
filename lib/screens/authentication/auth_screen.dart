@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
-import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/widgets/nav_bar.dart';
 import 'package:musikat_app/service_locators.dart';
 import '../../controllers/navigation/navigation_service.dart';
-import 'forget_password.dart';
+import 'forgot_password.dart';
 
 class AuthScreen extends StatefulWidget {
   static const String route = 'auth-screen';
@@ -52,7 +52,7 @@ class _AuthScreenState extends State<AuthScreen> {
         builder: (context, Widget? w) {
           if (_authController.working) {
             return const Scaffold(
-              backgroundColor: Color(0xff262525),
+             backgroundColor: musikatBackgroundColor,
               body: Center(
                 child: SizedBox(
                     width: 50,
