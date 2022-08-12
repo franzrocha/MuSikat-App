@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
-
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';
@@ -18,14 +18,264 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text('Hello bestie'),
-         
-        ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SafeArea(
+          child: Center(
+            child: Column(children: [
+              Container(
+                padding: const EdgeInsets.only(left: 25, top: 25),
+                alignment: Alignment.topLeft,
+                child: Text("Home For OPM",
+                    textAlign: TextAlign.right,
+                    style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 160,
+                              height: 160,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color(0xff34B771),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 160,
+                              height: 160,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color(0xff34B771),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 160,
+                              height: 160,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color(0xff34B771),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 25, top: 25),
+                alignment: Alignment.topLeft,
+                child: Text("What's Trending?",
+                    textAlign: TextAlign.right,
+                    style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 160,
+                              height: 160,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color(0xff34B771),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 160,
+                              height: 160,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color(0xff34B771),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 160,
+                              height: 160,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color(0xff34B771),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 25, top: 25),
+                alignment: Alignment.topLeft,
+                child: Text("Artist Of The Week",
+                    textAlign: TextAlign.right,
+                    style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50)),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        ),
       ),
-    ));
+    );
   }
 }
