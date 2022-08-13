@@ -50,12 +50,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 160,
                               height: 160,
                               decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  border: Border.all(
-                                    color: const Color(0xff34B771),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5)),
+                                color: Colors.blue,
+                                border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 124, 131, 127),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/opm_logo.png"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -68,12 +75,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 160,
                               height: 160,
                               decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  border: Border.all(
-                                    color: const Color(0xff34B771),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5)),
+                                color: Colors.blue,
+                                border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 124, 131, 127),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/album1.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -86,12 +100,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 160,
                               height: 160,
                               decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  border: Border.all(
-                                    color: const Color(0xff34B771),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5)),
+                                color: Colors.blue,
+                                border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 124, 131, 127),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/arnel.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -127,12 +148,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 160,
                               height: 160,
                               decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  border: Border.all(
-                                    color: const Color(0xff34B771),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5)),
+                                color: Colors.blue,
+                                border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 124, 131, 127),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/ticket1.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -145,12 +173,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 160,
                               height: 160,
                               decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  border: Border.all(
-                                    color: const Color(0xff34B771),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5)),
+                                color: Colors.blue,
+                                border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 124, 131, 127),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/album2.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -163,12 +198,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 160,
                               height: 160,
                               decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  border: Border.all(
-                                    color: const Color(0xff34B771),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5)),
+                                color: Colors.blue,
+                                border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 124, 131, 127),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/ticket3.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -204,12 +246,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  border: Border.all(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50)),
+                                color: Colors.red,
+                                border: Border.all(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/range.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -222,12 +270,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  border: Border.all(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50)),
+                                color: Colors.red,
+                                border: Border.all(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/rpg.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -240,12 +294,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  border: Border.all(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50)),
+                                color: Colors.red,
+                                border: Border.all(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/jeper.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -258,12 +318,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  border: Border.all(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50)),
+                                color: Colors.red,
+                                border: Border.all(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/homescreen/winston.jpg"),
+                                  fit: BoxFit.cover, //change image fill type
+                                ),
+                              ),
                             ),
                           ],
                         ),
