@@ -15,7 +15,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
       backgroundColor: musikatBackgroundColor,
       body: Center(
         child: Column(
-          children:const [
+          children: const [
             Text('CHAT HOME'),
           ],
         ),

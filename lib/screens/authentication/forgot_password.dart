@@ -1,15 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/constants.dart';
-=======
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
->>>>>>> main
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -19,13 +13,6 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-<<<<<<< HEAD
-  final _emailController = TextEditingController();
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-=======
   final _emailCon = TextEditingController();
   final AuthController auth = locator<AuthController>();
   final _formKey = GlobalKey<FormState>();
@@ -35,74 +22,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   void dispose() {
     _emailCon.dispose();
->>>>>>> main
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
-      backgroundColor: musikatBackgroundColor,
-      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Image.asset("assets/images/Forgot_password.png",
-              width: 200, height: 200),
-        ),
-        SizedBox(height: 30),
-        Text('Forgot your password?',
-            textAlign: TextAlign.left,
-            style: GoogleFonts.montserrat(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
-        SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Text(
-              'Enter your e-mail address you have used to register with us and we will send you a reset link.',
-              textAlign: TextAlign.left,
-              style: GoogleFonts.montserrat(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.normal)),
-        ),
-        SizedBox(height: 40),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: TextField(
-            controller: _emailController,
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.deepPurple),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              prefixIcon: Icon(Icons.email),
-              hintText: 'Email',
-              fillColor: Colors.grey[200],
-              filled: true,
-            ),
-          ),
-        ),
-        SizedBox(height: 50),
-        MaterialButton(
-          onPressed: () {},
-          child: Text(
-            'Reset Password',
-            style: GoogleFonts.montserrat(
-                color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
-          ),
-          color: const Color(0xfffca311),
-        ),
-      ]),
-    );
-  }
-=======
       appBar: appBar(context),
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
@@ -147,16 +72,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                       const SizedBox(height: 20),
                       emailForm(context),
-                       Padding(
-                          padding: const EdgeInsets.only(top: 30, bottom: 30),
-                          child: Text(
-                            prompts,
-                            style: GoogleFonts.inter(
-                              color: Colors.red,
-                              fontSize: 12,
-                            ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, bottom: 30),
+                        child: Text(
+                          prompts,
+                          style: GoogleFonts.inter(
+                            color: Colors.red,
+                            fontSize: 12,
                           ),
                         ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 45),
                         child: resetButton(context),
@@ -289,5 +214,4 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       });
     }
   }
->>>>>>> main
 }

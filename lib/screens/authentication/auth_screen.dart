@@ -138,23 +138,12 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-<<<<<<< HEAD
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return ForgotPasswordScreen();
-                  },
-=======
           TextButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const ForgotPasswordScreen(),
->>>>>>> main
                 ),
               );
             },
@@ -186,8 +175,7 @@ class _AuthScreenState extends State<AuthScreen> {
       width: 318,
       height: 63,
       decoration: BoxDecoration(
-          color: buttonColor,
-          borderRadius: BorderRadius.circular(60)),
+          color: buttonColor, borderRadius: BorderRadius.circular(60)),
       child: TextButton(
         onPressed: (_formKey.currentState?.validate() ?? false)
             ? () {
