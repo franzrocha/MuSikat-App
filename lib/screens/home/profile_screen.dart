@@ -71,11 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Divider(
-                  height: 20,
-                  indent: 1.0,
-        
-                ),
+                const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
                   leading: const Icon(Icons.queue_music,
                       color: Colors.white, size: 25),
@@ -87,10 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                const Divider(
-                  height: 20,
-                  indent: 1.0,
-                ),
+                const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
                   leading: const FaIcon(FontAwesomeIcons.heart,
                       color: Colors.white, size: 25),
@@ -102,10 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                const Divider(
-                  height: 20,
-                  indent: 1.0,
-                ),
+               const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
                   onTap: () => {
                     Navigator.of(context).push(
@@ -123,10 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                const Divider(
-                  height: 20,
-                  indent: 1.0,
-                ),
+               const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
                   leading:
                       const Icon(Icons.people, color: Colors.white, size: 25),
@@ -138,10 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                const Divider(
-                  height: 20,
-                  indent: 1.0,
-                ),
+               const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
                   leading:
                       const Icon(Icons.info, color: Colors.white, size: 25),
@@ -153,10 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                const Divider(
-                  height: 20,
-                  indent: 1.0,
-                ),
+                const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
                   onTap: () async {
                     _auth.logout();

@@ -40,6 +40,8 @@ dependencies:
   get_it: ^7.2.0
   image_picker: ^0.8.5+3
   file_picker: ^5.0.1
+  intl: ^0.17.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
