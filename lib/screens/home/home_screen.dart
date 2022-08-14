@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
-import 'package:musikat_app/controllers/auth_controller.dart';
-import 'package:musikat_app/service_locators.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';
@@ -248,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.red,
                                 border: Border.all(
-                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  color: const Color.fromARGB(255, 0, 0, 0),
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(50),
@@ -272,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.red,
                                 border: Border.all(
-                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  color: const Color.fromARGB(255, 0, 0, 0),
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(50),
@@ -296,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.red,
                                 border: Border.all(
-                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  color: const Color.fromARGB(255, 0, 0, 0),
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(50),
@@ -320,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.red,
                                 border: Border.all(
-                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  color: const Color.fromARGB(255, 0, 0, 0),
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(50),

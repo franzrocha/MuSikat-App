@@ -120,6 +120,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         authErrorMsg(),
                         loginButton(),
+                        const SizedBox(height: 15),
                         forgotPass(context),
                       ],
                     ),
@@ -137,14 +138,12 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          GestureDetector(
-            onTap: () {
+          TextButton(
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
-                    return ForgotPasswordScreen();
-                  },
+                  builder: (context) => const ForgotPasswordScreen(),
                 ),
               );
             },
@@ -176,7 +175,7 @@ class _AuthScreenState extends State<AuthScreen> {
       width: 318,
       height: 63,
       decoration: BoxDecoration(
-          color: const Color(0xfffca311),
+          color: buttonColor,
           borderRadius: BorderRadius.circular(60)),
       child: TextButton(
         onPressed: (_formKey.currentState?.validate() ?? false)
@@ -231,7 +230,7 @@ class _AuthScreenState extends State<AuthScreen> {
         controller: _emailCon,
         validator: (value) {
           if (value!.isEmpty) {
-            return "Email cannot be empty";
+            return null;
           } else {
             return null;
           }
@@ -276,7 +275,7 @@ class _AuthScreenState extends State<AuthScreen> {
         controller: _passCon,
         validator: (value) {
           if (value!.isEmpty) {
-            return "Password cannot be empty";
+            return null;
           } else if (value.length < 6) {
             return "Password should be atleast 6 characters";
           } else if (value.length > 15) {
