@@ -41,10 +41,15 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
   AppBar appbar(BuildContext context) {
     return AppBar(
       toolbarHeight: 75,
-      title: Text("Account info",
-          textAlign: TextAlign.right,
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+      title: Text(
+        "Account info",
+        textAlign: TextAlign.right,
+        style: GoogleFonts.inter(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
@@ -59,4 +64,6 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
       ),
     );
   }
+
+   
 }

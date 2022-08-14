@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
-import 'package:musikat_app/controllers/auth_controller.dart';
-import 'package:musikat_app/service_locators.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';

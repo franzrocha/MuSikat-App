@@ -27,6 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 fit: BoxFit.cover),
           ),
           child: Center(
+             
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
