@@ -6,7 +6,7 @@ import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/widgets/nav_bar.dart';
 import 'package:musikat_app/service_locators.dart';
 import '../../controllers/navigation/navigation_service.dart';
-import 'forgot_password.dart';
+import 'package:musikat_app/screens/authentication/forgot_password.dart';
 
 class AuthScreen extends StatefulWidget {
   static const String route = 'auth-screen';
@@ -52,7 +52,7 @@ class _AuthScreenState extends State<AuthScreen> {
         builder: (context, Widget? w) {
           if (_authController.working) {
             return const Scaffold(
-             backgroundColor: musikatBackgroundColor,
+              backgroundColor: musikatBackgroundColor,
               body: Center(
                 child: SizedBox(
                     width: 50,
@@ -121,7 +121,6 @@ class _AuthScreenState extends State<AuthScreen> {
                         authErrorMsg(),
                         loginButton(),
                         forgotPass(context),
-                        
                       ],
                     ),
                   ),
@@ -134,23 +133,31 @@ class _AuthScreenState extends State<AuthScreen> {
 
   Container forgotPass(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: 20, top: 30),
-      alignment: Alignment.bottomRight,
-      child: TextButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const ForgotPasswordScreen(),
-              ),
-            );
-          },
-          child: Text(
-            'Forgot Password?',
-            style: GoogleFonts.inter(
-                fontSize: 13,
-                color: Colors.blueAccent,
-                decoration: TextDecoration.underline),
-          )),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return ForgotPasswordScreen();
+                  },
+                ),
+              );
+            },
+            child: Text(
+              'Forgot Password?',
+              style: GoogleFonts.inter(
+                  fontSize: 13,
+                  color: Colors.blueAccent,
+                  decoration: TextDecoration.underline),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -190,7 +197,7 @@ class _AuthScreenState extends State<AuthScreen> {
   AppBar appBar(BuildContext context) {
     return AppBar(
       toolbarHeight: 75,
-       title: Text("Login",
+      title: Text("Login",
           textAlign: TextAlign.right,
           style: GoogleFonts.inter(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
