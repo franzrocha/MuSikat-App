@@ -20,17 +20,11 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
   TextEditingController songname = TextEditingController();
   TextEditingController artistname = TextEditingController();
 
-  // File? song;
   String? imagepath;
   File? file;
 
   String url = "";
   var name;
-  // void selectsong() async {
-  //   FilePickerResult? song = await FilePicker.platform.pickFiles(
-  //     allowedExtensions: ['mp3'],
-  //   );
-  // }
 
   getfile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(

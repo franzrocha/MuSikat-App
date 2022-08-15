@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/screens/home/global_chat.dart';
 
 class ChatHomeScreen extends StatefulWidget {
   const ChatHomeScreen({Key? key}) : super(key: key);
@@ -15,8 +17,34 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
       backgroundColor: musikatBackgroundColor,
       body: Center(
         child: Column(
-          children: const [
-            Text('CHAT HOME'),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3.0),
+              child: ListTile(
+                onTap: () => {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const GlobalChatScreen(),
+                    ),
+                  )
+                },
+                leading: FittedBox(
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.transparent,
+                    child: Image.asset("assets/images/musikat_global.png"),
+                  ),
+                ),
+                title: Text(
+                  "MuSikat Global Chat",
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

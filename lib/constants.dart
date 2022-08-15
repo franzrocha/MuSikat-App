@@ -10,3 +10,8 @@ const buttonColor2 = Color(0xff34b771);
 
 //listile
 const listileColor = Color.fromARGB(255, 123, 123, 123);
+
+
+//chatCard
+const yourChat = Color(0xfffca311);
+const otherChat = Color(0xffffffff);
