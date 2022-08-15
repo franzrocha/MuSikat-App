@@ -26,10 +26,10 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
   String url = "";
   var name;
 
-  getfile() async {
+  getsong() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['mp4'],
+      allowedExtensions: ['mp3', 'wav'],
     );
 
     if (result != null) {
@@ -44,9 +44,9 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
 
   uploadFile() async {
     try {
-      var imagefile =
-          FirebaseStorage.instance.ref().child("Users").child("/$name");
-      UploadTask task = imagefile.putFile(file!);
+      var songfile =
+          FirebaseStorage.instance.ref().child("Songs").child("/$name");
+      UploadTask task = songfile.putFile(file!);
       TaskSnapshot snapshot = await task;
       url = await snapshot.ref.getDownloadURL();
 
@@ -85,7 +85,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
             //   height: 10,
             // ),
             RaisedButton(
-              onPressed: () => getfile(),
+              onPressed: () => getsong(),
               child: const Text("Upload Song"),
             ),
             const SizedBox(
