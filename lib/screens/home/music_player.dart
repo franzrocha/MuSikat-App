@@ -28,7 +28,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     player.onPlayerStateChanged.listen((state) {
       setState(() {
         isPlaying = state == PlayerState.PLAYING;
-      });
+                                           
+      });                                          
     });
 
     player.onDurationChanged.listen((newDuration) {
