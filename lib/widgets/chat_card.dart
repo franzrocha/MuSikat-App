@@ -73,7 +73,7 @@ class _ChatCardState extends State<ChatCard> {
                   padding: const EdgeInsets.all(5),
                   child: Text(
                     '(edited)',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: GoogleFonts.inter(fontSize: 9, color: Colors.white70),
                   ),
                 ),
               ),
@@ -111,8 +111,7 @@ class _ChatCardState extends State<ChatCard> {
                                       left: 10, top: 5, bottom: 3),
                                   child: Text(
                                     '${snap.data?.username}',
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall,
+                                   style: GoogleFonts.inter(fontSize: 12, color: Colors.white70),
                                   ));
                             }),
                       Container(
@@ -121,7 +120,7 @@ class _ChatCardState extends State<ChatCard> {
                         decoration: BoxDecoration(
                           border: Border.all(
                               color: chat[index].isDeleted
-                                  ? yourChat
+                                  ? Colors.white
                                   : Colors.transparent),
                           borderRadius: const BorderRadius.all(Radius.circular(20)),
                           color: chat[index].isDeleted
@@ -129,19 +128,17 @@ class _ChatCardState extends State<ChatCard> {
                               : chat[index].sentBy ==
                                       FirebaseAuth.instance.currentUser?.uid
                                   ? yourChat
-                                  : Theme.of(context).primaryColor,
+                                  : otherChat,
                         ),
                         child: Text(
                           chat[index].message,
                           style: TextStyle(
                               fontSize: 17,
                               color: chat[index].isDeleted
-                                  ? Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.color
-                                  : Theme.of(context).colorScheme.onPrimary),
+                                  ? Colors.white70
+                                  : Colors.white,
                         ),
+                      ),
                       ),
                     ],
                   ),
@@ -158,7 +155,7 @@ class _ChatCardState extends State<ChatCard> {
                   padding: const EdgeInsets.all(5),
                   child: Text(
                     '(edited)',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: GoogleFonts.inter(fontSize: 9, color: Colors.white70)
                   ),
                 ),
               ),
@@ -167,7 +164,6 @@ class _ChatCardState extends State<ChatCard> {
           Visibility(
             visible: isVisible,
             child: Container(
-              // color: Colors.pink,
               padding: const EdgeInsets.only(bottom: 2, top: 2),
               alignment: Alignment.center,
               width: double.infinity,
@@ -183,7 +179,7 @@ class _ChatCardState extends State<ChatCard> {
                   children: [
                     Text(
                       chat[index].seenBy.length > 1 ? "Seen by " : "Sent",
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: GoogleFonts.inter(fontSize: 9, color: Colors.white70)
                     ),
 
                     for (String uid in chat[index].seenBy)
@@ -194,12 +190,12 @@ class _ChatCardState extends State<ChatCard> {
                               if (chat[index].seenBy.last == uid) {
                                 return Text(
                                   'and ${snap.data?.username}',
-                                  style: Theme.of(context).textTheme.bodySmall,
+                                  style: GoogleFonts.inter(fontSize: 9, color: Colors.white70)
                                 );
                               } else {
                                 return Text(
                                   '${snap.data?.username}${chat[index].seenBy.length > 2 ? chat[index].seenBy[chat[index].seenBy.length - 2] == uid ? '' : ',' : ''} ',
-                                  style: Theme.of(context).textTheme.bodySmall,
+                                  style: GoogleFonts.inter(fontSize: 9, color: Colors.white70)
                                 );
                               }
                             }

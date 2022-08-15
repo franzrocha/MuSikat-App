@@ -43,7 +43,12 @@ dependencies:
   intl: ^0.17.0
   fluttertoast: ^8.0.9
   modal_bottom_sheet: ^2.0.1
+<<<<<<< HEAD
   audioplayers: ^0.20.1
+=======
+
+
+>>>>>>> main
 dev_dependencies:
   flutter_test:
     sdk: flutter

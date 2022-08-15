@@ -130,10 +130,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                         controller: _messageController,
                         decoration: InputDecoration(
                           hintText: 'Message....',
-
                           hintStyle: GoogleFonts.montserrat(
                             fontSize: 14,
-                      
                           ),
                           isDense: true,
                           border: InputBorder.none,
@@ -183,10 +181,24 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
       elevation: 0.0,
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
-      title: Text("MuSikat Global Chat",
-          textAlign: TextAlign.right,
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+      title: Row(
+        children: [
+          FittedBox(
+            child: CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.transparent,
+              child: Image.asset("assets/images/musikat_global.png"),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text("MuSikat Global Chat",
+              textAlign: TextAlign.right,
+              style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold)),
+        ],
+      ),
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);

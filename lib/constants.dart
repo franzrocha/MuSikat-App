@@ -14,4 +14,5 @@ const listileColor = Color.fromARGB(255, 123, 123, 123);
 
 //chatCard
 const yourChat = Color(0xfffca311);
-const otherChat = Color(0xffffffff);
+const otherChat = Color.fromARGB(255, 69, 66, 66);
+
