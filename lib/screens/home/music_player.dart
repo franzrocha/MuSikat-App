@@ -1,5 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/constants.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   const MusicPlayerScreen({Key? key, required this.title}) : super(key: key);
@@ -69,20 +71,73 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: musikatBackgroundColor,
         body: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/images/albumdes.jpg",
-                  width: double.infinity,
-                  height: 300,
-                  fit: BoxFit.cover,
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 280,
+                        height: 280,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 124, 131, 127),
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                          image: const DecorationImage(
+                            image: AssetImage("assets/images/albumdes.jpg"),
+                            fit: BoxFit.cover, //change image fill type
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const Text(
-                  "Where do we go now?",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "where do we go now?",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                            color: Colors.orange),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "Desiree Armojallas",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 20,
+                            color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Slider(
                   min: 0,
@@ -109,6 +164,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   ),
                 ),
                 IconButton(
+                  color: Colors.white,
                   onPressed: () async {
                     if (isPlaying) {
                       await player.pause();
