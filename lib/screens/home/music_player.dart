@@ -28,8 +28,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     player.onPlayerStateChanged.listen((state) {
       setState(() {
         isPlaying = state == PlayerState.PLAYING;
-                                           
-      });                                          
+      });
     });
 
     player.onDurationChanged.listen((newDuration) {
@@ -143,9 +142,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   height: 20,
                 ),
                 SliderTheme(
+<<<<<<< Updated upstream
                   data: const SliderThemeData(
                     thumbColor: buttonColor,
                     overlayColor: Color.fromRGBO(255, 240, 210, 0.5),
+=======
+                  data: SliderThemeData(
+                    thumbColor: buttonColor,
+                    overlayColor: Color.fromARGB(255, 240, 210, 165),
+>>>>>>> Stashed changes
                   ),
                   child: Slider(
                     min: 0,
