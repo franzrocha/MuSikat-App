@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/screens/home/music_player.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';
@@ -142,21 +143,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(left: 25, top: 10),
                         child: Column(
                           children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/ticket1.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                            GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MusicPlayerScreen(
+                                          title: 'Where do we go now?',
+                                        )),
+                              ),
+                              child: Container(
+                                width: 160,
+                                height: 160,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color.fromARGB(
+                                        255, 124, 131, 127),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/albumdes.jpg"),
+                                    fit: BoxFit.cover, //change image fill type
+                                  ),
                                 ),
                               ),
                             ),
