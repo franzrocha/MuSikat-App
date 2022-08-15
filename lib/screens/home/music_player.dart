@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 
@@ -71,6 +72,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: appbar(context),
         backgroundColor: musikatBackgroundColor,
         body: Padding(
             padding: const EdgeInsets.all(20),
@@ -82,8 +84,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   child: Column(
                     children: [
                       Container(
-                        width: 280,
-                        height: 280,
+                        width: 300,
+                        height: 300,
                         decoration: BoxDecoration(
                           color: Colors.blue,
                           border: Border.all(
@@ -104,10 +106,10 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   height: 30,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 35),
                   child: Row(
-                    children: [
-                      const Text(
+                    children: const [
+                      Text(
                         "where do we go now?",
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -122,10 +124,10 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   height: 5,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 35),
                   child: Row(
-                    children: [
-                      const Text(
+                    children: const [
+                      Text(
                         "Desiree Armojallas",
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -139,43 +141,142 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Slider(
-                  min: 0,
-                  max: duration.inSeconds.toDouble(),
-                  value: position.inSeconds.toDouble(),
-                  onChanged: (value) async {
-                    final position = Duration(seconds: value.toInt());
-                    await player.seek(position);
+                SliderTheme(
+                  data: const SliderThemeData(
+                    thumbColor: buttonColor,
+                    overlayColor: Color.fromRGBO(255, 240, 210, 0.5),
+                  ),
+                  child: Slider(
+                    min: 0,
+                    max: duration.inSeconds.toDouble(),
+                    value: position.inSeconds.toDouble(),
+                    onChanged: (value) async {
+                      final position = Duration(seconds: value.toInt());
+                      await player.seek(position);
 
-                    await player.resume();
-                  },
+                      await player.resume();
+                    },
+                  ),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(time(position)),
-                      Text(time(duration - position))
+                      Text(
+                        time(position),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        time(duration - position),
+                        style: const TextStyle(color: Colors.white),
+                      )
                     ],
                   ),
                 ),
-                IconButton(
-                  color: Colors.white,
-                  onPressed: () async {
-                    if (isPlaying) {
-                      await player.pause();
-                    } else {
-                      await player.resume();
-                    }
-                  },
-                  icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-                  iconSize: 50,
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const FaIcon(
+                      FontAwesomeIcons.backwardStep,
+                      size: 35,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 30),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.topRight,
+                          colors: [
+                            Color(0xfffca311),
+                            Color(0xff62DD69),
+                          ],
+                        ),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: IconButton(
+                        color: const Color.fromARGB(255, 26, 25, 25),
+                        onPressed: () async {
+                          if (isPlaying) {
+                            await player.pause();
+                          } else {
+                            await player.resume();
+                          }
+                        },
+                        icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                        iconSize: 50,
+                      ),
+                    ),
+                    const SizedBox(width: 30),
+                    const FaIcon(
+                      FontAwesomeIcons.forwardStep,
+                      size: 35,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'LYRICS',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 70),
+                    const FaIcon(
+                      FontAwesomeIcons.heart,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 80),
+                    Text(
+                      'INFO',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             )));
+  }
+
+  AppBar appbar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 75,
+      centerTitle: true,
+      title: Text("Now Playing",
+          style: GoogleFonts.inter(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.angleLeft,
+          size: 20,
+        ),
+      ),
+    );
   }
 }
