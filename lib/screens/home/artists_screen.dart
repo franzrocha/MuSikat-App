@@ -20,7 +20,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
           child: Column(
             children: [
                ListTile(
-                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white),
+                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white, size: 18),
                   title: Text(
                     'Your Tracks',
                     style: GoogleFonts.inter(
@@ -31,7 +31,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
                 ),
                const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
-                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white),
+                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white, size: 18),
                   title: Text(
                     'Albums',
                     style: GoogleFonts.inter(
@@ -42,7 +42,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
                 ),
                const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
-                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white),
+                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white, size: 18),
                   title: Text(
                     'Upload a file',
                     style: GoogleFonts.inter(
@@ -53,7 +53,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
                 ),
                const Divider(height: 20, indent: 1.0, color: listileColor),
                  ListTile(
-                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white),
+                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white, size: 18 ),
                   title: Text(
                     'Insights',
                     style: GoogleFonts.inter(
@@ -64,7 +64,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
                 ),
                const Divider(height: 20, indent: 1.0, color: listileColor),
                 ListTile(
-                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white),
+                  trailing: const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white, size: 18),
                   title: Text(
                     'Patreon for Artists',
                     style: GoogleFonts.inter(
