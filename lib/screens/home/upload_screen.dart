@@ -4,11 +4,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-<<<<<<< HEAD
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-=======
->>>>>>> main
+
 import 'package:musikat_app/constants.dart';
 
 class UploadScreen extends StatefulWidget {
@@ -23,7 +22,6 @@ class _UploadScreenState extends State<UploadScreen> {
   TextEditingController songname = TextEditingController();
   TextEditingController artistname = TextEditingController();
 
-<<<<<<< HEAD
   String? imagepath;
   File? file;
 
@@ -74,70 +72,15 @@ class _UploadScreenState extends State<UploadScreen> {
       );
     }
   }
-=======
-  // String? imagepath;
-  // File? file;
-
-  // String url = "";
-  // var name;
-
-  // getsong() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['mp3', 'wav'],
-  //   );
-
-  //   if (result != null) {
-  //     File c = File(result.files.single.path.toString());
-  //     setState(() {
-  //       file = c;
-  //       name = result.names.toString();
-  //     });
-  //     uploadFile();
-  //   }
-  // }
-
-  // uploadFile() async {
-  //   try {
-  //     var songfile =
-  //         FirebaseStorage.instance.ref().child("Songs").child("/$name");
-  //     UploadTask task = songfile.putFile(file!);
-  //     TaskSnapshot snapshot = await task;
-  //     url = await snapshot.ref.getDownloadURL();
-
-  //     print(url);
-  //     if (file != null) {
-  //       Fluttertoast.showToast(
-  //         msg: "Done Uploaded",
-  //         textColor: Colors.red,
-  //       );
-  //     } else {
-  //       Fluttertoast.showToast(
-  //         msg: "Something went wrong",
-  //         textColor: Colors.red,
-  //       );
-  //     }
-  //   } on Exception catch (e) {
-  //     Fluttertoast.showToast(
-  //       msg: e.toString(),
-  //       textColor: Colors.red,
-  //     );
-  //   }
-  // }
->>>>>>> main
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       appBar: appbar(context),
-=======
->>>>>>> main
       backgroundColor: musikatBackgroundColor,
       body: Center(
         child: Column(
           children: [
-<<<<<<< HEAD
             ElevatedButton(
               onPressed: () => getsong(),
               child: const Text("Upload Song"),
@@ -145,16 +88,7 @@ class _UploadScreenState extends State<UploadScreen> {
             const SizedBox(
               height: 10,
             ),
-=======
-         
-            // ElevatedButton(
-            //   onPressed: () => getsong(),
-            //   child: const Text("Upload Song"),
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
->>>>>>> main
+
             // // Padding(
             // //   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
             // //   child: TextField(
@@ -189,7 +123,6 @@ class _UploadScreenState extends State<UploadScreen> {
       ),
     );
   }
-<<<<<<< HEAD
 
   AppBar appbar(BuildContext context) {
     return AppBar(
@@ -213,6 +146,3 @@ class _UploadScreenState extends State<UploadScreen> {
     );
   }
 }
-=======
-}
->>>>>>> main
