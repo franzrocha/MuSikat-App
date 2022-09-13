@@ -32,7 +32,7 @@ class _UploadScreenState extends State<UploadScreen> {
   getsong() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['mp3', 'wav'],
+      allowedExtensions: ['mp3', 'wav', 'm4a'],
     );
 
     if (result != null) {

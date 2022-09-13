@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musikat_app/screens/home/search_screen.dart';
 
 class Searchbar extends StatelessWidget {
   const Searchbar({Key? key}) : super(key: key);
@@ -14,11 +15,11 @@ class Searchbar extends StatelessWidget {
             color: Colors.white, borderRadius: BorderRadius.circular(50)),
         child: TextButton(
           onPressed: () {
-            // Navigator.of(context).push(
-            // //   MaterialPageRoute(
-            // //     builder: (context) => const AuthScreen(),
-            // //   ),
-            // // );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const SearchScreen(),
+              ),
+            );
           },
           child: Padding(
             padding: const EdgeInsets.all(2.0),
