@@ -9,10 +9,10 @@ class Searchbar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Container(
-        height: 42,
-        width: MediaQuery.of(context).size.width / 1.25,
+        height: 40,
+        width: MediaQuery.of(context).size.width / 1.45,
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(50)),
+            color: Colors.white, borderRadius: BorderRadius.circular(20)),
         child: TextButton(
           onPressed: () {
             Navigator.of(context).push(

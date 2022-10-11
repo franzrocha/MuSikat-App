@@ -49,4 +49,23 @@ class UserModel {
         .snapshots()
         .map(UserModel.fromDocumentSnap);
   }
+
+    static Future<List<UserModel>> getUsers() async {
+    List<UserModel> users = [];
+    await FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        users.add(UserModel.fromDocumentSnap(doc));
+      }
+    });
+
+    return users;
+  }
+
+  searchUsername(String user) {
+    return username.toLowerCase().contains(user.toLowerCase());
+  }
+
 }
