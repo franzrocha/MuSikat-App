@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/categories_screen.dart';
@@ -24,9 +25,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return SafeArea(
       child: Scaffold(
-      appBar: appbar(context),
-      backgroundColor: musikatBackgroundColor,
-      body: SizedBox(
+        appBar: appbar(context),
+        backgroundColor: musikatBackgroundColor,
+        body: SizedBox(
           child: FutureBuilder<List<UserModel>>(
               future: getUsers,
               builder: (
@@ -39,7 +40,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
                 List<UserModel> searchResult = [];
                 if (_textCon.text.isNotEmpty) {
-              
                   for (var element in snapshot.data!) {
                     if (element.searchUsername(_textCon.text)) {
                       searchResult.add(element);
@@ -47,13 +47,18 @@ class _SearchScreenState extends State<SearchScreen> {
                   }
 
                   return searchResult.isEmpty
-                      ? const Center(child: Text("No result found"))
+                      ? Center(
+                          child: Text('No results found',
+                              style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold)),
+                        )
                       : ListView.builder(
                           itemCount: searchResult.length,
                           itemBuilder: (context, index) {
                             return searchResult[index].uid !=
-                                        FirebaseAuth.instance.currentUser?.uid 
-                                 
+                                    FirebaseAuth.instance.currentUser?.uid
                                 ? ListTile(
                                     onTap: () {
                                       // Navigator.of(context).pushReplacement(
@@ -69,15 +74,37 @@ class _SearchScreenState extends State<SearchScreen> {
                                         uid: searchResult[index].uid),
                                     title: Text(
                                       searchResult[index].username,
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                      ),
                                     ),
                                     subtitle: null,
                                   )
                                 : const SizedBox();
                           });
                 }
-                return const Text("Hey");
-                    
-              }),),
+                return Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, bottom: 15),
+                        child: Image.asset(
+                          "assets/images/search.png",
+                          width: 254,
+                          height: 254,
+                        ),
+                      ),
+                      Text('Search for your favourite music or your friends',
+                          style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                );
+              }),
+        ),
       ),
     );
   }
