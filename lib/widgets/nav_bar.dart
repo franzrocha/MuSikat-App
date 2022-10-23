@@ -6,11 +6,10 @@ import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/screens/home/artists_screen.dart';
 import 'package:musikat_app/screens/home/categories_screen.dart';
 import 'package:musikat_app/screens/home/chat_home_screen.dart';
+import 'package:musikat_app/screens/home/fer.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile_screen.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/services/image_service.dart';
-import 'package:musikat_app/widgets/avatar.dart';
 import 'package:musikat_app/widgets/search_bar.dart';
 
 class NavBar extends StatefulWidget {
@@ -24,6 +23,10 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
 
+  Future getImage(bool isCamera) async {
+   
+  }
+
   @override
   Widget build(BuildContext context) {
     final AuthController auth = locator<AuthController>();
@@ -31,6 +34,7 @@ class _NavBarState extends State<NavBar> {
     final List<Widget> pages = [
       const HomeScreen(),
       const ArtistsScreen(),
+      const FERScreen(),
       const ChatHomeScreen(),
       const ProfileScreen(),
     ];
@@ -90,20 +94,32 @@ class _NavBarState extends State<NavBar> {
             pageIndex = index;
           });
         },
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.house),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.music),
             label: 'Artists Hub',
           ),
           BottomNavigationBarItem(
+          icon:  Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              
+              decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+              padding: const EdgeInsets.all(5),
+              child: const Icon(Icons.camera_alt, color: Colors.white),
+            ),
+          ),
+          label: 'Camera',
+          ),
+          const BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.comment),
             label: 'Chat',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.user),
             label: 'Profile',
           ),
