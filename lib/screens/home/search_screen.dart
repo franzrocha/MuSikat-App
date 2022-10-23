@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/categories_screen.dart';
+import 'package:musikat_app/screens/home/other_artist_screen.dart';
 import 'package:musikat_app/widgets/avatar.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -61,14 +62,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                     FirebaseAuth.instance.currentUser?.uid
                                 ? ListTile(
                                     onTap: () {
-                                      // Navigator.of(context).pushReplacement(
-                                      //   MaterialPageRoute(
-                                      //       builder: (context) =>
-                                      //           ChatScreenPrivate(
-                                      //               selectedUserUID:
-                                      //                   searchResult[index]
-                                      //                       .uid)),
-                                      // );
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ArtistsProfileScreen(
+                                                    selectedUserUID:
+                                                        searchResult[index]
+                                                            .uid)),
+                                      );
                                     },
                                     leading: AvatarImage(
                                         uid: searchResult[index].uid),
