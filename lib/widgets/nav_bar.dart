@@ -23,9 +23,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
 
-  Future getImage(bool isCamera) async {
-   
-  }
+  Future getImage(bool isCamera) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +86,7 @@ class _NavBarState extends State<NavBar> {
         currentIndex: pageIndex,
         elevation: 3,
         showUnselectedLabels: false,
-         showSelectedLabels: false,   // <-- HERE/ <-
+        showSelectedLabels: false, // <-- HERE/ <-
         onTap: (int index) {
           setState(() {
             pageIndex = index;
@@ -104,16 +102,16 @@ class _NavBarState extends State<NavBar> {
             label: 'Artists Hub',
           ),
           BottomNavigationBarItem(
-          icon:  Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              
-              decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
-              padding: const EdgeInsets.all(5),
-              child: const Icon(Icons.camera_alt, color: Colors.white),
+            icon: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.black, shape: BoxShape.circle),
+                padding: const EdgeInsets.all(5),
+                child: const Icon(Icons.camera_alt, color: Colors.white),
+              ),
             ),
-          ),
-          label: 'Camera',
+            label: 'Camera',
           ),
           const BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.comment),

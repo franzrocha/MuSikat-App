@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/screens/home/artist_hub/insights.dart';
 import 'package:musikat_app/screens/home/artist_hub/upload_screen.dart';
 
 class ArtistsScreen extends StatefulWidget {
@@ -63,6 +64,13 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
             ),
             const Divider(height: 20, indent: 1.0, color: listileColor),
             ListTile(
+              onTap: () => {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const InsightsScreen(),
+                  ),
+                )
+              },
               trailing: const FaIcon(FontAwesomeIcons.chevronRight,
                   color: Colors.white, size: 18),
               title: Text(

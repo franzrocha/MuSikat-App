@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/user_model.dart';
 
@@ -37,5 +38,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
         backgroundColor: musikatBackgroundColor,
       ),
     );
+
+    return const Scaffold();
   }
 }
