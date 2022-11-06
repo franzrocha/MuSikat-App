@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/widgets/avatar.dart';
 
 // ignore: must_be_immutable
 class ArtistsProfileScreen extends StatefulWidget {
@@ -33,13 +35,34 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppBar(
+      appBar: AppBar(
         title: Text(user?.username ?? '...'),
-        backgroundColor: musikatBackgroundColor,
+        backgroundColor: Colors.transparent,
+      ),
+      backgroundColor: musikatBackgroundColor,
+      body: SafeArea(
+          child: SingleChildScrollView(
+        child: Column(
+          children: [
+            profilePic(),
+          ],
+        ),
+      )),
+    );
+  }
+
+  Padding profilePic() {
+    return Padding(
+      padding: const EdgeInsets.all(30),
+      child: Stack(
+        children: [
+          SizedBox(
+            width: 150,
+            height: 150,
+            child: AvatarImage(uid: selectedUserUID),
+          ),
+        ],
       ),
     );
-
-    return const Scaffold();
   }
 }
-  
