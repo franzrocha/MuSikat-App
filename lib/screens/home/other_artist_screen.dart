@@ -42,3 +42,4 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
     return const Scaffold();
   }
 }
+  
