@@ -45,7 +45,7 @@ class _UploadScreenState extends State<UploadScreen> {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
-        print('no image selected');
+        toastMessage('No image selected');
       }
     });
   }
@@ -56,7 +56,7 @@ class _UploadScreenState extends State<UploadScreen> {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
-        print('no image selected');
+        toastMessage('No image selected');
       }
     });
   }
@@ -313,7 +313,7 @@ class _UploadScreenState extends State<UploadScreen> {
                 // 'uMusic': date.toString(),
               }).then((value) {
                 toastMessage('Upload Published');
-                //print("Upload success");
+                //print('Upload success');
                 setState(() {
                   showSpinner = false;
                 });
@@ -347,8 +347,9 @@ class _UploadScreenState extends State<UploadScreen> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.SNACKBAR,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         fontSize: 16.0);
+    const TextStyle(color: Colors.white);
   }
 
   Container sourceForm() {
