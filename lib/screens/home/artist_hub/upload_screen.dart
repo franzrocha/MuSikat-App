@@ -298,7 +298,7 @@ class _UploadScreenState extends State<UploadScreen> {
               var newUrl = await ref.getDownloadURL();
 
               final User? user = _auth.currentUser;
-              uploadRef.child('Upload List').child(date.toString()).set({
+              uploadRef.child("Upload List").child(date.toString()).set({
                 'uId': date.toString(),
                 'uImage': newUrl.toString(),
                 'uTime': date.toString(),
@@ -313,6 +313,7 @@ class _UploadScreenState extends State<UploadScreen> {
                 // 'uMusic': date.toString(),
               }).then((value) {
                 toastMessage('Upload Published');
+                //print("Upload success");
                 setState(() {
                   showSpinner = false;
                 });
