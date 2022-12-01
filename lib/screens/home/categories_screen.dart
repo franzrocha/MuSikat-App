@@ -14,6 +14,9 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen> {
   get width => null;
 
+
+ 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,25 +24,25 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
           child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: const [
-                  CategoryCard(
-                    image: 'assets/images/category/genres.jpg',
-                    text: 'genres',
-                  ),
-                  CategoryCard(
-                    image: 'assets/images/category/languages.jpg',
-                    text: 'languages',
-                  ),
-                  CategoryCard(
-                    image: 'assets/images/category/mood.jpg',
-                    text: 'moods',
-                  ),
-                ],
+        child: Center(
+          child: Column(
+            children: const [
+              CategoryCard(
+                image: 'assets/images/category/genres.jpg',
+                text: 'genres',
               ),
-            ),
-          )),
+              CategoryCard(
+                image: 'assets/images/category/languages.jpg',
+                text: 'languages',
+              ),
+              CategoryCard(
+                image: 'assets/images/category/mood.jpg',
+                text: 'moods',
+              ),
+            ],
+          ),
+        ),
+      )),
     );
   }
 

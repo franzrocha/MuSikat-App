@@ -8,6 +8,8 @@ import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/account_info.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/avatar.dart';
+import 'package:musikat_app/widgets/tile_list.dart';
+import 'package:rounded_expansion_tile/rounded_expansion_tile.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -71,86 +73,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Divider(height: 20, indent: 1.0, color: listileColor),
-                ListTile(
-                  leading: const Icon(Icons.queue_music,
-                      color: Colors.white, size: 25),
-                  title: Text(
-                    'Playlists',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                const Divider(height: 20, indent: 1.0, color: listileColor),
-                ListTile(
-                  leading: const FaIcon(FontAwesomeIcons.heart,
-                      color: Colors.white, size: 25),
-                  title: Text(
-                    'Liked Songs',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-               const Divider(height: 20, indent: 1.0, color: listileColor),
-                ListTile(
-                  onTap: () => {
+                TileList(
+                  icon: Icons.queue_music,
+                  text: 'Playlist',
+                  ontap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                           builder: (context) => const AccountInfoScreen()),
-                    ),
+                    );
                   },
-                  leading: const Icon(Icons.account_box,
-                      color: Colors.white, size: 25),
-                  title: Text(
-                    'Account info',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
                 ),
-               const Divider(height: 20, indent: 1.0, color: listileColor),
-                ListTile(
-                  leading:
-                      const Icon(Icons.people, color: Colors.white, size: 25),
-                  title: Text(
-                    'Find friends',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
+                TileList(
+                  icon: FontAwesomeIcons.heart,
+                  text: 'Liked Songs',
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const AccountInfoScreen()),
+                    );
+                  },
                 ),
-               const Divider(height: 20, indent: 1.0, color: listileColor),
-                ListTile(
-                  leading:
-                      const Icon(Icons.info, color: Colors.white, size: 25),
-                  title: Text(
-                    'About us',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
+                TileList(
+                  icon: Icons.account_box,
+                  text: 'Account Info',
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const AccountInfoScreen()),
+                    );
+                  },
                 ),
-                const Divider(height: 20, indent: 1.0, color: listileColor),
-                ListTile(
-                  onTap: () async {
+                TileList(
+                  icon: Icons.people,
+                  text: 'Friends',
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const AccountInfoScreen()),
+                    );
+                  },
+                ),
+                TileList(
+                  icon: Icons.info,
+                  text: 'About us',
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const AccountInfoScreen()),
+                    );
+                  },
+                ),
+                TileList(
+                  icon: Icons.logout,
+                  text: 'Log-out',
+                  ontap: () async {
                     _auth.logout();
                   },
-                  leading:
-                      const Icon(Icons.logout, color: Colors.white, size: 25),
-                  title: Text(
-                    'Log-out',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
               ],
             ),
@@ -162,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Text userName() {
     return Text(user?.username ?? '...',
-        style: GoogleFonts.montserrat(
+        style: GoogleFonts.inter(
           color: Colors.white,
           fontSize: 30,
           fontWeight: FontWeight.bold,
