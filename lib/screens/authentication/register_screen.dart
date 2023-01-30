@@ -488,8 +488,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             setState(() {
               register();
             });
-          } else if (checkMe != true) {
+          } if (checkMe != true) {
             setState(() {
+
               prompts = "Please accept the terms and conditions to proceed";
             });
           } else {

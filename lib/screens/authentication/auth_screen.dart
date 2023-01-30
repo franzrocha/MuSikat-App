@@ -80,14 +80,14 @@ class _AuthScreenState extends State<AuthScreen> {
                           child: Image.asset("assets/images/musikat_logo.png",
                               width: 141, height: 141),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
                         Text("MuSikat",
                             style: GoogleFonts.montserrat(
                                 color: Colors.white,
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold)),
                         Container(
-                          padding: const EdgeInsets.only(left: 25, top: 10),
+                          padding: const EdgeInsets.only(left: 25, top: 20),
                           alignment: Alignment.topLeft,
                           child: Text("We are here for OPM.",
                               textAlign: TextAlign.right,
@@ -111,17 +111,18 @@ class _AuthScreenState extends State<AuthScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   emailForm(),
-                                  const SizedBox(height: 15),
+                                  const SizedBox(height: 10),
                                   passForm(),
+                                  forgotPass(context),
+                                  authErrorMsg(),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                        authErrorMsg(),
+                        
                         loginButton(),
-                        const SizedBox(height: 15),
-                        forgotPass(context),
+                        const SizedBox(height: 30),
                       ],
                     ),
                   ),
@@ -134,7 +135,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   Container forgotPass(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -148,11 +149,13 @@ class _AuthScreenState extends State<AuthScreen> {
               );
             },
             child: Text(
-              'Forgot Password?',
+              'Forgot Password',
               style: GoogleFonts.inter(
-                  fontSize: 13,
-                  color: Colors.blueAccent,
-                  decoration: TextDecoration.underline),
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                   decoration: TextDecoration.underline,
+                  ),
             ),
           ),
         ],
