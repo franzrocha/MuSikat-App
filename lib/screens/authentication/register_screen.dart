@@ -21,10 +21,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _usernameCon = TextEditingController(),
       _ageCon = TextEditingController();
 
-  bool isEmailEmpty = false;
-  bool isPasswordEmpty = false;
-  bool isUsernameEmpty = false;
-  bool isAgeEmpty = true;
+  // bool isEmailEmpty = false;
+  // bool isPasswordEmpty = false;
+  // bool isUsernameEmpty = false;
+  // bool isAgeEmpty = true;
   bool checkMe = false;
 
   final genderList = ["Prefer not to say", "Male", "Female", "Others"];
@@ -150,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30, bottom: 30),
+                          padding: const EdgeInsets.only(top: 30),
                           child: Text(
                             prompts,
                             style: GoogleFonts.inter(
@@ -176,8 +176,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             borderRadius: BorderRadius.all(Radius.circular(5.0))),
         activeColor: Colors.orange,
         value: checkMe,
-        onChanged: (newValue) {
-          setState(() => checkMe = newValue!);
+        onChanged: (bool? value) {
+          setState(() => checkMe = value ?? false);
         });
   }
 
@@ -484,21 +484,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.circular(60)),
       child: TextButton(
         onPressed: () {
-          if (_formKey.currentState!.validate() || isFieldEmpty())  {
-            setState(() {
-              register();
-            });
-          } if (checkMe != true) {
-            setState(() {
-
-              prompts = "Please accept the terms and conditions to proceed";
-            });
+          if (isFieldEmpty()) {
+            const snackBar = SnackBar(
+              content: Text('Please fill in all fields'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          } else if (!checkMe) {
+            const snackBar = SnackBar(
+              content: Text('Please accept the terms and conditions'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else {
-            setState(() {
-              prompts = "Invalid or empty fields";
-            });
+            if (_formKey.currentState!.validate()) {
+              setState(() {
+                register();
+              });
+            } else {
+              const snackBar = SnackBar(
+                content: Text('Please fill in all fields correctly'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
           }
         },
+
+        
         child: Text(
           'REGISTER',
           style: GoogleFonts.montserrat(
@@ -517,6 +527,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         age: _ageCon.text.trim(),
         gender: dropdownValue,
       );
+      // ignore: use_build_context_synchronously
+
     } catch (error) {
       setState(() {
         prompts = error.toString();
@@ -524,7 +536,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  // bool isFieldEmpty() {
+  //   return !(isEmailEmpty || isPasswordEmpty || isAgeEmpty || isUsernameEmpty);
+  // }
+
   bool isFieldEmpty() {
-    return !(isEmailEmpty || isPasswordEmpty || isAgeEmpty || isUsernameEmpty);
+    if (_emailCon.text.isEmpty ||
+        _passCon.text.isEmpty ||
+        _usernameCon.text.isEmpty ||
+        _ageCon.text.isEmpty) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
