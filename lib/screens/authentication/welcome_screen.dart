@@ -82,8 +82,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         );
                       },
                       child: Text(
-                        'LOG IN',
-                        style: GoogleFonts.montserrat(
+                        'Log in',
+                        style: GoogleFonts.inter(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w500),
@@ -104,8 +104,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         );
                       },
                       child: Text(
-                        'SIGN UP',
-                        style: GoogleFonts.montserrat(
+                        'Sign up',
+                        style: GoogleFonts.inter(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w500),

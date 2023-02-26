@@ -8,6 +8,8 @@ import 'package:musikat_app/service_locators.dart';
 import '../../controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/screens/authentication/forgot_password.dart';
 
+import '../../widgets/toast_msg.dart';
+
 class AuthScreen extends StatefulWidget {
   static const String route = 'auth-screen';
 
@@ -54,6 +56,7 @@ class _AuthScreenState extends State<AuthScreen> {
         builder: (context, Widget? w) {
           if (_authController.working) {
             return const Scaffold(
+              resizeToAvoidBottomInset: false,
               backgroundColor: musikatBackgroundColor,
               body: Center(
                 child: SizedBox(
@@ -115,9 +118,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 children: [
                                   emailForm(),
                                   const SizedBox(height: 10),
-                                  passForm(),
+                                  SizedBox(height: 90, child: passForm()),
                                   forgotPass(context),
-                                  authErrorMsg(),
                                 ],
                               ),
                             ),
@@ -190,6 +192,7 @@ class _AuthScreenState extends State<AuthScreen> {
           filled: true,
           fillColor: Colors.white,
           hintText: 'Password',
+          errorMaxLines: 2,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
@@ -203,6 +206,7 @@ class _AuthScreenState extends State<AuthScreen> {
             },
             child: Icon(
               _passwordVisible ? Icons.visibility : Icons.visibility_off,
+              color: Colors.grey,
             ),
           ),
         ),
@@ -226,7 +230,7 @@ class _AuthScreenState extends State<AuthScreen> {
               );
             },
             child: Text(
-              'Forgot Password',
+              'Forgot Password?',
               style: GoogleFonts.inter(
                 fontSize: 15,
                 color: Colors.white,
@@ -257,12 +261,16 @@ class _AuthScreenState extends State<AuthScreen> {
       decoration: BoxDecoration(
           color: buttonColor, borderRadius: BorderRadius.circular(60)),
       child: TextButton(
-        onPressed: (_formKey.currentState?.validate() ?? false)
-            ? () {
-                _authController.login(
-                    _emailCon.text.trim(), _passCon.text.trim());
-              }
-            : null,
+        onPressed: () {
+          if (isFieldEmpty()) {
+            ToastMessage.show(context, 'Please fill in all fields');
+          }
+          if (_formKey.currentState?.validate() ?? false) {
+            _authController.login(_emailCon.text.trim(), _passCon.text.trim());
+          } else {
+            ToastMessage.show(context, 'Please fill in all fields correctly');
+          }
+        },
         child: Text(
           'Log In',
           style: GoogleFonts.inter(
@@ -292,5 +300,13 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       ),
     );
+  }
+
+  bool isFieldEmpty() {
+    if (_emailCon.text.isEmpty || _passCon.text.isEmpty) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

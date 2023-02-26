@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
+import 'package:musikat_app/widgets/toast_msg.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -481,25 +483,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: TextButton(
         onPressed: () {
           if (isFieldEmpty()) {
-            const snackBar = SnackBar(
-              content: Text('Please fill in all fields'),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+             ToastMessage.show(context, 'Please fill in all fields');
           } else if (!checkMe) {
-            const snackBar = SnackBar(
-              content: Text('Please accept the terms and conditions'),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            ToastMessage.show(context, 'Please accept the terms and conditions');
           } else {
             if (_formKey.currentState!.validate()) {
               setState(() {
                 register();
               });
             } else {
-              const snackBar = SnackBar(
-                content: Text('Please fill in all fields correctly'),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              ToastMessage.show(context, 'Please fill in all fields correctly');
             }
           }
         },
