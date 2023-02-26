@@ -21,10 +21,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _usernameCon = TextEditingController(),
       _ageCon = TextEditingController();
 
-  // bool isEmailEmpty = false;
-  // bool isPasswordEmpty = false;
-  // bool isUsernameEmpty = false;
-  // bool isAgeEmpty = true;
   bool checkMe = false;
 
   final genderList = ["Prefer not to say", "Male", "Female", "Others"];

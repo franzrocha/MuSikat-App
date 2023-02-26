@@ -23,6 +23,8 @@ class _AuthScreenState extends State<AuthScreen> {
       _passCon = TextEditingController();
   final AuthController _authController = locator<AuthController>();
 
+  bool _passwordVisible = false;
+
   String prompts = '';
 
   @override
@@ -87,13 +89,14 @@ class _AuthScreenState extends State<AuthScreen> {
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold)),
                         Container(
-                          padding: const EdgeInsets.only(left: 25, top: 20),
+                          padding: const EdgeInsets.only(
+                              left: 30, top: 20, bottom: 5),
                           alignment: Alignment.topLeft,
                           child: Text("We are here for OPM.",
                               textAlign: TextAlign.right,
                               style: GoogleFonts.inter(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold)),
                         ),
                         Container(
@@ -120,7 +123,6 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                         ),
-                        
                         loginButton(),
                         const SizedBox(height: 30),
                       ],
@@ -131,6 +133,81 @@ class _AuthScreenState extends State<AuthScreen> {
             );
           }
         });
+  }
+
+  Padding emailForm() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: TextFormField(
+        style: GoogleFonts.inter(
+          color: Colors.black,
+          fontSize: 17,
+        ),
+        controller: _emailCon,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return null;
+          } else {
+            return null;
+          }
+        },
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          hintText: 'Email',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none,
+          ),
+          prefixIcon: const Icon(Icons.email),
+        ),
+      ),
+    );
+  }
+
+  Padding passForm() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: TextFormField(
+        style: GoogleFonts.inter(
+          color: Colors.black,
+          fontSize: 17,
+        ),
+        obscureText: !_passwordVisible,
+        controller: _passCon,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return null;
+          } else if (value.length < 6) {
+            return "Password should be atleast 6 characters";
+          } else if (value.length > 15) {
+            return "Password should not be greater than 15 characters";
+          } else {
+            return null;
+          }
+        },
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          hintText: 'Password',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none,
+          ),
+          prefixIcon: const Icon(Icons.lock),
+          suffixIcon: GestureDetector(
+            onTap: () {
+              setState(() {
+                _passwordVisible = !_passwordVisible;
+              });
+            },
+            child: Icon(
+              _passwordVisible ? Icons.visibility : Icons.visibility_off,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Container forgotPass(BuildContext context) {
@@ -151,11 +228,11 @@ class _AuthScreenState extends State<AuthScreen> {
             child: Text(
               'Forgot Password',
               style: GoogleFonts.inter(
-                  fontSize: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                   decoration: TextDecoration.underline,
-                  ),
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                decoration: TextDecoration.underline,
+              ),
             ),
           ),
         ],
@@ -187,8 +264,8 @@ class _AuthScreenState extends State<AuthScreen> {
               }
             : null,
         child: Text(
-          'LOG IN',
-          style: GoogleFonts.montserrat(
+          'Log In',
+          style: GoogleFonts.inter(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
         ),
       ),
@@ -198,7 +275,7 @@ class _AuthScreenState extends State<AuthScreen> {
   AppBar appBar(BuildContext context) {
     return AppBar(
       toolbarHeight: 75,
-      title: Text("Login",
+      title: Text("Log in",
           textAlign: TextAlign.right,
           style: GoogleFonts.inter(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
@@ -212,100 +289,6 @@ class _AuthScreenState extends State<AuthScreen> {
         icon: const FaIcon(
           FontAwesomeIcons.angleLeft,
           size: 20,
-        ),
-      ),
-    );
-  }
-
-  Container emailForm() {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: const Color(0xff34B771),
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(20)),
-      child: TextFormField(
-        controller: _emailCon,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return null;
-          } else {
-            return null;
-          }
-        },
-        style: GoogleFonts.inter(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: 17,
-        ),
-        decoration: const InputDecoration(
-          prefixIcon: Icon(Icons.email),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintStyle: TextStyle(
-            color: Colors.grey,
-          ),
-          hintText: "Email",
-          contentPadding:
-              EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-        ),
-      ),
-    );
-  }
-
-  Container passForm() {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: const Color(0xff34B771),
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: TextFormField(
-        obscureText: true,
-        controller: _passCon,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return null;
-          } else if (value.length < 6) {
-            return "Password should be atleast 6 characters";
-          } else if (value.length > 15) {
-            return "Password should not be greater than 15 characters";
-          } else {
-            return null;
-          }
-        },
-        style: GoogleFonts.inter(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: 17,
-        ),
-        decoration: const InputDecoration(
-          fillColor: Colors.white,
-          filled: true,
-          prefixIcon: Icon(Icons.key),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintStyle: TextStyle(
-            color: Colors.grey,
-          ),
-          hintText: "Password",
-          contentPadding:
-              EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
         ),
       ),
     );
