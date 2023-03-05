@@ -43,22 +43,26 @@ class AuthController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future login(String email, String password) async {
-    try {
-      working = true;
-      notifyListeners();
-      UserCredential? result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return result;
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-      print(e.code);
-      working = false;
-      currentUser = null;
-      error = e;
-      notifyListeners();
-    }
+
+Future login(String email, String password) async {
+  try {
+    working = true;
+    notifyListeners();
+
+    UserCredential? result = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+
+    return result;
+  } on FirebaseAuthException catch (e) {
+    print(e.message);
+    print(e.code);
+    working = false;
+    currentUser = null;
+    error = e;
+    notifyListeners();
   }
+}
+
 
   Future logout() async {
     working = true;

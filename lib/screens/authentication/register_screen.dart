@@ -92,11 +92,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Container(
                           padding: const EdgeInsets.only(left: 25, top: 10),
                           alignment: Alignment.topLeft,
-                          child: Text("Become a listener or an artist",
+                          child: Text("Create an account for free",
                               textAlign: TextAlign.right,
                               style: GoogleFonts.inter(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold)),
                         ),
                         Container(

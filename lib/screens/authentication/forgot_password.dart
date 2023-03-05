@@ -49,8 +49,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         padding: const EdgeInsets.only(top: 5, bottom: 15),
                         child: Image.asset(
                           "assets/images/Forgot_password.png",
-                          width: 254,
-                          height: 254,
+                          width: 240,
+                          height: 240,
                         ),
                       ),
                       Text('Forgot your password?',
@@ -71,7 +71,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             )),
                       ),
                       const SizedBox(height: 20),
-                      emailForm(context),
+                      emailForm(),
                       Padding(
                         padding: const EdgeInsets.only(top: 30, bottom: 30),
                         child: Text(
@@ -95,18 +95,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  Container emailForm(context) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: const Color(0xff34B771),
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(20)),
+  Padding emailForm() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextFormField(
+        style: GoogleFonts.inter(
+          color: Colors.black,
+          fontSize: 17,
+        ),
         controller: _emailCon,
         validator: (value) {
           if (value!.isEmpty) {
@@ -115,29 +111,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             return null;
           }
         },
-        style: GoogleFonts.inter(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: 17,
-        ),
-        decoration: const InputDecoration(
-          prefixIcon: Icon(Icons.email),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintStyle: TextStyle(
-            color: Colors.grey,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          hintText: 'Email',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none,
           ),
-          hintText: "Email",
-          contentPadding:
-              EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+          prefixIcon: const Icon(Icons.email),
         ),
       ),
     );
   }
 
+ 
   Container resetButton(context) {
     return Container(
       width: 318,
@@ -150,8 +138,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           resetPass();
         },
         child: Text(
-          'SUBMIT',
-          style: GoogleFonts.montserrat(
+          'Submit',
+          style: GoogleFonts.inter(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w500,

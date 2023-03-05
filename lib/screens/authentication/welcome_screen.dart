@@ -66,8 +66,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                           color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500)),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600)),
                   Container(
                     width: 318,
                     height: 63,
