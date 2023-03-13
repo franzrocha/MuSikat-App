@@ -25,7 +25,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
               trailing: const FaIcon(FontAwesomeIcons.chevronRight,
                   color: Colors.white, size: 18),
               title: Text(
-                'Your Tracks',
+                'Library',
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 20,

@@ -50,9 +50,6 @@ dependencies:
   rounded_expansion_tile: ^0.0.13
   flutter_cache_manager: ^3.1.2
   cached_network_image: ^3.1.0
-  flutter_ffmpeg: ^0.4.2
-  flutter_media_metadata: ^1.0.0+1
-  flutter_audio_query: ^0.3.4+1
   
 
 

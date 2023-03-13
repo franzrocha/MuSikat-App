@@ -26,6 +26,13 @@ class AudioUploaderState extends State<AudioUploader> {
 
   File? _selectedFile;
 
+    @override
+  void dispose() {
+    _titleCon.dispose();
+    super.dispose();
+  }
+
+
   void _pickAudioFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.audio);
     if (result != null) {
@@ -127,67 +134,53 @@ class AudioUploaderState extends State<AudioUploader> {
       backgroundColor: musikatBackgroundColor,
       body: Center(
         child: SingleChildScrollView(
-          child: Form(
-            onChanged: () {
-              _formKey.currentState?.validate();
-              if (mounted) {
-                setState(() {});
-              }
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                titleForm(),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: _pickAudioFile,
-                      icon: Icon(_selectedFile != null
-                          ? Icons.check_circle
-                          : Icons.music_note),
-                      label: Text(_selectedFile != null
-                          ? _selectedFile!.path.split('/').last
-                          : 'Select Audio'),
-                    ),
-                    if (_selectedFile != null)
-                      InkWell(
-                        onTap: _removeAudioFile,
-                        borderRadius: BorderRadius.circular(20.0),
-                        splashColor: Colors.grey[300]!,
-                        hoverColor: Colors.grey[200]!,
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.close,
-                            size: 20,
-                            color: Colors.white,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              onChanged: () {
+                _formKey.currentState?.validate();
+                if (mounted) {
+                  setState(() {});
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  titleForm(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: _pickAudioFile,
+                        icon: Icon(_selectedFile != null
+                            ? Icons.check_circle
+                            : Icons.music_note),
+                        label: Text(_selectedFile != null
+                            ? _selectedFile!.path.split('/').last
+                            : 'Select Audio'),
+                      ),
+                      if (_selectedFile != null)
+                        InkWell(
+                          onTap: _removeAudioFile,
+                          borderRadius: BorderRadius.circular(20.0),
+                          splashColor: Colors.grey[300]!,
+                          hoverColor: Colors.grey[200]!,
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.close,
+                              size: 20,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
-                Container(
-                  width: 250,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: const Color(0xfffca311),
-                      borderRadius: BorderRadius.circular(60)),
-                  child: TextButton(
-                    onPressed: _uploadAudio,
-                    child: Text(
-                      'Upload',
-                      style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
-                    ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -197,11 +190,11 @@ class AudioUploaderState extends State<AudioUploader> {
 
   Padding titleForm() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextFormField(
         style: GoogleFonts.inter(
           color: Colors.black,
-          fontSize: 17,
+          fontSize: 15,
         ),
         controller: _titleCon,
         validator: (value) {
@@ -244,6 +237,34 @@ class AudioUploaderState extends State<AudioUploader> {
           size: 20,
         ),
       ),
+      actions: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Container(
+                    width: 50,
+                    // height: 10,
+                    decoration: BoxDecoration(
+                        color: const Color(0xfffca311),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: IconButton(
+                      onPressed: _uploadAudio,
+                      icon: const Icon(
+                        Icons.upload,
+                        size: 25,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

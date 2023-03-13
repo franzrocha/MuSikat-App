@@ -101,7 +101,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       child: TextFormField(
         style: GoogleFonts.inter(
           color: Colors.black,
-          fontSize: 17,
+          fontSize: 15,
         ),
         controller: _emailCon,
         validator: (value) {

@@ -143,7 +143,7 @@ class _AuthScreenState extends State<AuthScreen> {
       child: TextFormField(
         style: GoogleFonts.inter(
           color: Colors.black,
-          fontSize: 17,
+          fontSize: 15,
         ),
         controller: _emailCon,
         validator: (value) {
@@ -173,7 +173,7 @@ class _AuthScreenState extends State<AuthScreen> {
       child: TextFormField(
         style: GoogleFonts.inter(
           color: Colors.black,
-          fontSize: 17,
+          fontSize: 15,
         ),
         obscureText: !_passwordVisible,
         controller: _passCon,
@@ -265,7 +265,7 @@ class _AuthScreenState extends State<AuthScreen> {
           if (isFieldEmpty()) {
             ToastMessage.show(context, 'Please fill in all fields');
           }
-          if (_formKey.currentState?.validate() ?? false) {
+          else if (_formKey.currentState?.validate() ?? false) {
             _authController.login(_emailCon.text.trim(), _passCon.text.trim());
           } else {
             ToastMessage.show(context, 'Please fill in all fields correctly');
