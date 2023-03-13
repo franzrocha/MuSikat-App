@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SongModel {
-  final String songId, title, fileName, audioLocation;
+  final String songId, title, fileName, audio;
   final DateTime createdAt;
 
   SongModel({
     required this.songId,
     required this.title,
     required this.fileName,
-    required this.audioLocation,
+    required this.audio,
     required this.createdAt,
   });
 
@@ -18,7 +18,7 @@ class SongModel {
       songId: snap.id,
       title: json['title'] ?? '',
       fileName: json['file_name'] ?? '',
-      audioLocation: json['audio_location'] ?? '',
+      audio: json['audio'] ?? '',
       createdAt: json['created_at']?.toDate() ?? DateTime.now(),
     );
   }
@@ -27,7 +27,7 @@ class SongModel {
         'songId': songId,
         'title': title,
         'fileName': fileName,
-        'audioLocation': audioLocation,
+        'audio': audio,
         'createdAt': createdAt,
       };
 }

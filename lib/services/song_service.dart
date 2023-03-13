@@ -1,22 +1,31 @@
 // ignore_for_file: unused_local_variable
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:musikat_app/models/song_model.dart';
-import 'dart:io';
 
 class SongService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final _uploadProgressStreamController = StreamController<double>.broadcast();
+
+  Stream<double> get uploadProgressStream => _uploadProgressStreamController.stream;
 
   Future<String> uploadSong(String title, String filePath) async {
     try {
       final String fileName = filePath.split('/').last;
-      final Reference ref =
-          FirebaseStorage.instance.ref().child('audios/$fileName');
+      final Reference ref = FirebaseStorage.instance.ref().child('audios/$fileName');
       final UploadTask uploadTask = ref.putFile(File(filePath));
 
-      final TaskSnapshot taskSnapshot =
-          await uploadTask.whenComplete(() => null);
+      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+        final double progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        _uploadProgressStreamController.sink.add(progress);
+      });
+
+      final TaskSnapshot taskSnapshot = await uploadTask;
       final String downloadUrl = await ref.getDownloadURL();
 
       final Map<String, dynamic> metadata = {
@@ -24,7 +33,7 @@ class SongService {
         'title': title,
         'file_name': fileName,
         'created_at': FieldValue.serverTimestamp(),
-        'audio_location': downloadUrl,
+        'audio': downloadUrl,
       };
 
       final DocumentReference docRef = _db.collection('songs').doc();
@@ -35,6 +44,8 @@ class SongService {
     } catch (e) {
       print(e.toString());
       return '';
+    } finally {
+      _uploadProgressStreamController.close();
     }
   }
 
@@ -48,5 +59,9 @@ class SongService {
     final DocumentSnapshot snap =
         await _db.collection('songs').doc(songId).get();
     return SongModel.fromDocumentSnap(snap);
+  }
+
+  void cancelUpload() {
+    _uploadProgressStreamController.close();
   }
 }

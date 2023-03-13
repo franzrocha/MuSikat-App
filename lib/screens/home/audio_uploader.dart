@@ -1,15 +1,15 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, use_build_context_synchronously
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
 
 import '../../services/song_service.dart';
+import '../../widgets/toast_msg.dart';
 
 class AudioUploader extends StatefulWidget {
   const AudioUploader({Key? key}) : super(key: key);
@@ -46,41 +46,77 @@ class AudioUploaderState extends State<AudioUploader> {
       final String fileName = _selectedFile!.path.split('/').last;
       final String title = _titleCon.text.trim();
       if (title.isEmpty) {
-        Fluttertoast.showToast(
-          msg: 'Please enter a title for the song',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-        );
+        ToastMessage.show(context, 'Please enter the title of the song');
         return;
       }
 
+      final SongService songService = SongService();
+
+      // Show progress during upload
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Uploading...'),
+            content: StreamBuilder<double>(
+              stream: songService.uploadProgressStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const LinearProgressIndicator();
+                } else {
+                  final double uploadPercent = snapshot.data!;
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      LinearProgressIndicator(
+                        value: uploadPercent / 100,
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.blue),
+                        backgroundColor: Colors.grey.shade300,
+                      ),
+                      const SizedBox(height: 10.0),
+                      Text('${uploadPercent.toStringAsFixed(2)}% uploaded'),
+                      const SizedBox(height: 10.0),
+                      ElevatedButton(
+                        onPressed: () {
+                          songService.cancelUpload();
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+          );
+        },
+      );
+
       try {
-        String songId =
-            await SongService().uploadSong(title, _selectedFile!.path);
-        final SongModel song = await SongService().getSongById(songId);
-        // ignore: use_build_context_synchronously
+        // Start uploading the file
+        final String songId =
+            await songService.uploadSong(title, _selectedFile!.path);
+
+        // Get the song model with the uploaded file data
+        final SongModel song = await songService.getSongById(songId);
+
+        // Close progress dialog
+        Navigator.of(context).pop();
+
+        // Navigate to the previous screen and pass the song data
         Navigator.of(context).pop(song);
 
         // Show toast message to indicate success
-        Fluttertoast.showToast(
-          msg: 'Song uploaded successfully',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-        );
+        ToastMessage.show(context, 'Song uploaded successfully');
       } catch (e) {
         print('Upload failed: ${e.toString()}');
-        Fluttertoast.showToast(
-          msg: 'Upload failed: ${e.toString()}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-        );
+        ToastMessage.show(context, 'Upload failed: ${e.toString()}');
+        return;
       }
     } else {
-      Fluttertoast.showToast(
-        msg: 'Please select an audio file to upload',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-      );
+      ToastMessage.show(context, 'Please select an audio file to upload');
     }
   }
 
@@ -161,7 +197,7 @@ class AudioUploaderState extends State<AudioUploader> {
 
   Padding titleForm() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         style: GoogleFonts.inter(
           color: Colors.black,
