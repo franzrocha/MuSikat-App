@@ -5,6 +5,7 @@ import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/widgets/nav_bar.dart';
 import 'package:musikat_app/service_locators.dart';
+import 'package:musikat_app/widgets/custom_text_field.dart';
 import '../../controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/screens/authentication/forgot_password.dart';
 
@@ -137,78 +138,49 @@ class _AuthScreenState extends State<AuthScreen> {
         });
   }
 
-  Padding emailForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: TextFormField(
-        style: GoogleFonts.inter(
-          color: Colors.black,
-          fontSize: 15,
-        ),
-        controller: _emailCon,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return null;
-          } else {
-            return null;
-          }
-        },
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Email',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide.none,
-          ),
-          prefixIcon: const Icon(Icons.email),
-        ),
-      ),
+  CustomTextField emailForm() {
+    return CustomTextField(
+      obscureText: false,
+      controller: _emailCon,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      hintText: 'Email',
+      prefixIcon: const Icon(Icons.email),
     );
   }
 
-  Padding passForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: TextFormField(
-        style: GoogleFonts.inter(
-          color: Colors.black,
-          fontSize: 15,
-        ),
-        obscureText: !_passwordVisible,
-        controller: _passCon,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return null;
-          } else if (value.length < 6) {
-            return "Password should be atleast 6 characters";
-          } else if (value.length > 15) {
-            return "Password should not be greater than 15 characters";
-          } else {
-            return null;
-          }
+  CustomTextField passForm() {
+    return CustomTextField(
+      obscureText: !_passwordVisible,
+      controller: _passCon,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else if (value.length < 6) {
+          return "Password should be atleast 6 characters";
+        } else if (value.length > 15) {
+          return "Password should not be greater than 15 characters";
+        } else {
+          return null;
+        }
+      },
+      hintText: 'Password',
+      errorMaxLines: 2,
+      prefixIcon: const Icon(Icons.lock),
+      suffixIcon: GestureDetector(
+        onTap: () {
+          setState(() {
+            _passwordVisible = !_passwordVisible;
+          });
         },
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Password',
-          errorMaxLines: 2,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide.none,
-          ),
-          prefixIcon: const Icon(Icons.lock),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(() {
-                _passwordVisible = !_passwordVisible;
-              });
-            },
-            child: Icon(
-              _passwordVisible ? Icons.visibility : Icons.visibility_off,
-              color: Colors.grey,
-            ),
-          ),
+        child: Icon(
+          _passwordVisible ? Icons.visibility : Icons.visibility_off,
+          color: Colors.grey,
         ),
       ),
     );
@@ -264,8 +236,7 @@ class _AuthScreenState extends State<AuthScreen> {
         onPressed: () {
           if (isFieldEmpty()) {
             ToastMessage.show(context, 'Please fill in all fields');
-          }
-          else if (_formKey.currentState?.validate() ?? false) {
+          } else if (_formKey.currentState?.validate() ?? false) {
             _authController.login(_emailCon.text.trim(), _passCon.text.trim());
           } else {
             ToastMessage.show(context, 'Please fill in all fields correctly');

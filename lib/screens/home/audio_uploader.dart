@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
-
 import '../../services/song_service.dart';
 import '../../widgets/toast_msg.dart';
 
@@ -24,20 +23,28 @@ class AudioUploaderState extends State<AudioUploader> {
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
-  File? _selectedFile;
+  File? _selectedFile, _selectedAlbumCover;
 
-    @override
+  @override
   void dispose() {
     _titleCon.dispose();
     super.dispose();
   }
-
 
   void _pickAudioFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.audio);
     if (result != null) {
       setState(() {
         _selectedFile = File(result.files.single.path!);
+      });
+    }
+  }
+
+  void _pickAlbumCover() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result != null) {
+      setState(() {
+        _selectedAlbumCover = File(result.files.single.path!);
       });
     }
   }
@@ -65,7 +72,9 @@ class AudioUploaderState extends State<AudioUploader> {
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Uploading...'),
+            title: Text("Uploading...",
+          style: GoogleFonts.inter( fontSize: 18
+              )),
             content: StreamBuilder<double>(
               stream: songService.uploadProgressStream,
               builder: (context, snapshot) {
@@ -83,7 +92,7 @@ class AudioUploaderState extends State<AudioUploader> {
                         backgroundColor: Colors.grey.shade300,
                       ),
                       const SizedBox(height: 10.0),
-                      Text('${uploadPercent.toStringAsFixed(2)}% uploaded'),
+                      Text('${uploadPercent.toStringAsFixed(0)}% uploaded'),
                       const SizedBox(height: 10.0),
                       ElevatedButton(
                         onPressed: () {
@@ -146,10 +155,34 @@ class AudioUploaderState extends State<AudioUploader> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  titleForm(),
-                  const SizedBox(
-                    height: 20,
+                  Center(
+                    child: InkWell(
+                      onTap: _pickAlbumCover,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                          image: _selectedAlbumCover != null
+                              ? DecorationImage(
+                                  image: FileImage(_selectedAlbumCover!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        width: 198,
+                        height: 189,
+                        child: _selectedAlbumCover == null
+                            ? const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                              )
+                            : null,
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 20),
+                  titleForm(),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
