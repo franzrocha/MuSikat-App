@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musikat_app/constants.dart';
@@ -27,6 +26,7 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final AuthController auth = locator<AuthController>();
 
     final List<Widget> pages = [

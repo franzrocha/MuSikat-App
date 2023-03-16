@@ -83,18 +83,18 @@ class _AuthScreenState extends State<AuthScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 25),
-                          child: Image.asset("assets/images/musikat_logo.png",
-                              width: 141, height: 141),
+                          child: Image.asset("assets/images/login_bg.png",
+                              width: 230, height: 230),
                         ),
-                        const SizedBox(height: 20),
-                        Text("MuSikat",
-                            style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold)),
+                        // const SizedBox(height: 10),
+                        // Text("MuSikat",
+                        //     style: GoogleFonts.montserrat(
+                        //         color: Colors.white,
+                        //         fontSize: 36,
+                        //         fontWeight: FontWeight.bold)),
                         Container(
                           padding: const EdgeInsets.only(
-                              left: 30, top: 20, bottom: 5),
+                              left: 30, top: 10, bottom: 5),
                           alignment: Alignment.topLeft,
                           child: Text("We are here for OPM.",
                               textAlign: TextAlign.right,

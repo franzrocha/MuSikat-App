@@ -56,7 +56,7 @@ class AudioUploaderState extends State<AudioUploader> {
   }
 
   void _uploadAudio() async {
-    if (_selectedFile != null) {
+    if (_selectedFile != null && _selectedAlbumCover != null) {
       final String fileName = _selectedFile!.path.split('/').last;
       final String title = _titleCon.text.trim();
       if (title.isEmpty) {
@@ -72,9 +72,10 @@ class AudioUploaderState extends State<AudioUploader> {
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
-            title: Text("Uploading...",
-          style: GoogleFonts.inter( fontSize: 18
-              )),
+            title: Text(
+              "Uploading...",
+              style: GoogleFonts.inter(fontSize: 18),
+            ),
             content: StreamBuilder<double>(
               stream: songService.uploadProgressStream,
               builder: (context, snapshot) {
@@ -112,8 +113,8 @@ class AudioUploaderState extends State<AudioUploader> {
 
       try {
         // Start uploading the file
-        final String songId =
-            await songService.uploadSong(title, _selectedFile!.path);
+        final String songId = await songService.uploadSong(
+            title, _selectedFile!.path, _selectedAlbumCover!.path);
 
         // Get the song model with the uploaded file data
         final SongModel song = await songService.getSongById(songId);
@@ -132,7 +133,11 @@ class AudioUploaderState extends State<AudioUploader> {
         return;
       }
     } else {
-      ToastMessage.show(context, 'Please select an audio file to upload');
+      if (_selectedFile == null) {
+        ToastMessage.show(context, 'Please select an audio file');
+      } else {
+        ToastMessage.show(context, 'Please select an album cover');
+      }
     }
   }
 
@@ -175,6 +180,7 @@ class AudioUploaderState extends State<AudioUploader> {
                             ? const Icon(
                                 Icons.camera_alt,
                                 color: Colors.white,
+                                size: 50,
                               )
                             : null,
                       ),

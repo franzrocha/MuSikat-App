@@ -13,11 +13,14 @@ class SongService {
 
   Stream<double> get uploadProgressStream => _uploadProgressStreamController.stream;
 
-  Future<String> uploadSong(String title, String filePath) async {
+  Future<String> uploadSong(String title, String filePath, String coverPath, {String? albumCover}) async {
     try {
       final String fileName = filePath.split('/').last;
+      final String coverFileName = coverPath.split('/').last;
       final Reference ref = FirebaseStorage.instance.ref().child('audios/$fileName');
+      final Reference coverRef = FirebaseStorage.instance.ref().child('albumCovers/$coverFileName');
       final UploadTask uploadTask = ref.putFile(File(filePath));
+      final UploadTask coverUploadTask = coverRef.putFile(File(coverPath));
 
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
         final double progress =
@@ -26,7 +29,9 @@ class SongService {
       });
 
       final TaskSnapshot taskSnapshot = await uploadTask;
+      final TaskSnapshot coverTaskSnapshot = await coverUploadTask;
       final String downloadUrl = await ref.getDownloadURL();
+      final String coverDownloadUrl = await coverRef.getDownloadURL();
 
       final Map<String, dynamic> metadata = {
         'song_id': '',
@@ -34,6 +39,7 @@ class SongService {
         'file_name': fileName,
         'created_at': FieldValue.serverTimestamp(),
         'audio': downloadUrl,
+        'album_cover': coverDownloadUrl,
       };
 
       final DocumentReference docRef = _db.collection('songs').doc();
@@ -48,6 +54,7 @@ class SongService {
       _uploadProgressStreamController.close();
     }
   }
+
 
   Future<List<SongModel>> getSongs() async {
     final QuerySnapshot snapshot = await _db.collection('songs').get();
