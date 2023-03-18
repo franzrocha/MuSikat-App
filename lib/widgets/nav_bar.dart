@@ -22,8 +22,6 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
 
-  Future getImage(bool isCamera) async {}
-
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -86,7 +84,7 @@ class _NavBarState extends State<NavBar> {
         currentIndex: pageIndex,
         elevation: 3,
         showUnselectedLabels: false,
-        showSelectedLabels: false, // <-- HERE/ <-
+        showSelectedLabels: false,
         onTap: (int index) {
           setState(() {
             pageIndex = index;

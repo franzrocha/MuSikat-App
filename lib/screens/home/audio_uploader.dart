@@ -19,7 +19,10 @@ class AudioUploader extends StatefulWidget {
 
 class AudioUploaderState extends State<AudioUploader> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleCon = TextEditingController();
+  final TextEditingController _titleCon = TextEditingController(),
+      _writerCon = TextEditingController();
+  // final _writersFocusNode = FocusNode();
+  final List<String> _writers = [];
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -28,6 +31,7 @@ class AudioUploaderState extends State<AudioUploader> {
   @override
   void dispose() {
     _titleCon.dispose();
+    _writerCon.dispose();
     super.dispose();
   }
 
@@ -55,6 +59,13 @@ class AudioUploaderState extends State<AudioUploader> {
     });
   }
 
+  void _addWriter(String writer) {
+    setState(() {
+      _writers.add(writer);
+    });
+    _writerCon.clear();
+  }
+
   void _uploadAudio() async {
     if (_selectedFile != null && _selectedAlbumCover != null) {
       final String fileName = _selectedFile!.path.split('/').last;
@@ -63,7 +74,10 @@ class AudioUploaderState extends State<AudioUploader> {
         ToastMessage.show(context, 'Please enter the title of the song');
         return;
       }
-
+      if (_writers.isEmpty) {
+        ToastMessage.show(context, 'Please add writers of the song');
+        return;
+      }
       final SongService songService = SongService();
 
       // Show progress during upload
@@ -114,7 +128,7 @@ class AudioUploaderState extends State<AudioUploader> {
       try {
         // Start uploading the file
         final String songId = await songService.uploadSong(
-            title, _selectedFile!.path, _selectedAlbumCover!.path);
+            title, _selectedFile!.path, _selectedAlbumCover!.path, _writers);
 
         // Get the song model with the uploaded file data
         final SongModel song = await songService.getSongById(songId);
@@ -133,7 +147,9 @@ class AudioUploaderState extends State<AudioUploader> {
         return;
       }
     } else {
-      if (_selectedFile == null) {
+      if (_selectedFile == null && _selectedAlbumCover == null) {
+        ToastMessage.show(context, 'Please input the required fields');
+      } else if (_selectedFile == null) {
         ToastMessage.show(context, 'Please select an audio file');
       } else {
         ToastMessage.show(context, 'Please select an album cover');
@@ -174,20 +190,18 @@ class AudioUploaderState extends State<AudioUploader> {
                                 )
                               : null,
                         ),
-                        width: 198,
-                        height: 189,
+                        width: 180,
+                        height: 170,
                         child: _selectedAlbumCover == null
                             ? const Icon(
                                 Icons.camera_alt,
                                 color: Colors.white,
-                                size: 50,
+                                size: 40,
                               )
                             : null,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  titleForm(),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -218,6 +232,69 @@ class AudioUploaderState extends State<AudioUploader> {
                         ),
                     ],
                   ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Title',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                  ),
+                  titleForm(),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Writers',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                  ),
+                  writerForm(),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: 450,
+                    height: _writers.isEmpty ? 0 : null,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Scrollbar(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: LayoutBuilder(
+                          builder: (BuildContext context,
+                              BoxConstraints constraints) {
+                            return Wrap(
+                              spacing: 8.0, // Add some space between the chips
+                              runSpacing:
+                                  8.0, // Add some space between the lines of chips
+                              children: _writers.map((writer) {
+                                return Chip(
+                                  backgroundColor: musikatColor,
+                                  label: Text(writer),
+                                  labelStyle: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  deleteIcon: const Icon(
+                                    Icons.clear,
+                                    color: Colors.white,
+                                  ),
+                                  onDeleted: () {
+                                    setState(() {
+                                      _writers.remove(writer);
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -227,31 +304,66 @@ class AudioUploaderState extends State<AudioUploader> {
     );
   }
 
-  Padding titleForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: TextFormField(
-        style: GoogleFonts.inter(
-          color: Colors.black,
-          fontSize: 15,
-        ),
-        controller: _titleCon,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return null;
+  TextFormField writerForm() {
+  return TextFormField(
+    controller: _writerCon,
+    validator: (value) {
+      if (value!.isEmpty) {
+        return null;
+      } else {
+        return null;
+      }
+    },
+    style: GoogleFonts.inter(
+      color: Colors.white,
+      fontSize: 13,
+    ),
+    decoration: InputDecoration(
+      hintText: 'Add writers for the song',
+      hintStyle: GoogleFonts.inter(
+        color: Colors.grey,
+        fontSize: 13,
+      ),
+      suffixIcon: IconButton(
+        icon: const Icon(Icons.add),
+        onPressed: () {
+          if (_writerCon.text.isEmpty) {
+            ToastMessage.show(context, 'Please enter a writer for the song');
+          } else if (_writers.map((w) => w.toLowerCase()).contains(_writerCon.text.toLowerCase())) {
+            ToastMessage.show(context, 'Writer already added');
+          } else if (_writers.length < 10) {
+            setState(() {
+              _addWriter(_writerCon.text);
+              _writerCon.clear();
+            });
           } else {
-            return null;
+            ToastMessage.show(context, 'You can only add up to 10 writers');
           }
         },
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Enter the song title',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide.none,
-          ),
-          prefixIcon: const Icon(Icons.music_note),
+      ),
+    ),
+  );
+}
+
+  TextFormField titleForm() {
+    return TextFormField(
+      style: GoogleFonts.inter(
+        color: Colors.white,
+        fontSize: 13,
+      ),
+      controller: _titleCon,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      decoration: InputDecoration(
+        hintText: 'Enter the song title',
+        hintStyle: GoogleFonts.inter(
+          color: Colors.grey,
+          fontSize: 13,
         ),
       ),
     );

@@ -39,9 +39,10 @@ class AvatarImage extends StatelessWidget {
         radius: radius,
         child: Icon(
           Icons.person_rounded,
+          color: Colors.grey,
           size: radius,
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Colors.blue,
       ),
     );
   }

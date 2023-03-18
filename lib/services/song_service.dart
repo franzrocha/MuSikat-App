@@ -13,7 +13,9 @@ class SongService {
 
   Stream<double> get uploadProgressStream => _uploadProgressStreamController.stream;
 
-  Future<String> uploadSong(String title, String filePath, String coverPath, {String? albumCover}) async {
+  Future<String> uploadSong(
+      String title, String filePath, String coverPath, List<String> writers,
+      {String? albumCover}) async {
     try {
       final String fileName = filePath.split('/').last;
       final String coverFileName = coverPath.split('/').last;
@@ -40,6 +42,7 @@ class SongService {
         'created_at': FieldValue.serverTimestamp(),
         'audio': downloadUrl,
         'album_cover': coverDownloadUrl,
+        'writers': writers,
       };
 
       final DocumentReference docRef = _db.collection('songs').doc();
@@ -54,7 +57,6 @@ class SongService {
       _uploadProgressStreamController.close();
     }
   }
-
 
   Future<List<SongModel>> getSongs() async {
     final QuerySnapshot snapshot = await _db.collection('songs').get();

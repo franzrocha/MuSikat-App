@@ -24,6 +24,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
   final FocusNode _messageFN = FocusNode();
   final ScrollController _scrollController = ScrollController();
 
+  
+
   UserModel? user;
   @override
   void initState() {
@@ -127,11 +129,17 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                           send();
                         },
                         focusNode: _messageFN,
+                        style: GoogleFonts.inter(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
                         controller: _messageController,
+                        // maxLines: null,
                         decoration: InputDecoration(
-                          hintText: 'Message....',
-                          hintStyle: GoogleFonts.montserrat(
+                          hintText: 'Type a message....',
+                          hintStyle: GoogleFonts.inter(
                             fontSize: 14,
+                            color: Colors.grey,
                           ),
                           isDense: true,
                           border: InputBorder.none,
@@ -139,6 +147,8 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                           enabledBorder: InputBorder.none,
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(
+                              left: 12, bottom: 12, top: 10, right: 12),
                         ),
                       ),
                     ),

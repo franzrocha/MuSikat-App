@@ -86,12 +86,6 @@ class _AuthScreenState extends State<AuthScreen> {
                           child: Image.asset("assets/images/login_bg.png",
                               width: 230, height: 230),
                         ),
-                        // const SizedBox(height: 10),
-                        // Text("MuSikat",
-                        //     style: GoogleFonts.montserrat(
-                        //         color: Colors.white,
-                        //         fontSize: 36,
-                        //         fontWeight: FontWeight.bold)),
                         Container(
                           padding: const EdgeInsets.only(
                               left: 30, top: 10, bottom: 5),

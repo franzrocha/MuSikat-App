@@ -13,3 +13,6 @@ const listileColor = Color.fromARGB(255, 123, 123, 123);
 const yourChat = Color(0xfffca311);
 const otherChat = Color.fromARGB(255, 69, 66, 66);
 
+//musikatColor
+const musikatColor = Color(0xfffca311);
+const musikatColor2 = Color(0xff34b771);
