@@ -65,7 +65,6 @@ class AudioUploaderState extends State<AudioUploader> {
     });
   }
 
-  //reuse code for producers
   void _addWriter(String writer) {
     setState(() {
       _writers.add(writer);
@@ -73,100 +72,108 @@ class AudioUploaderState extends State<AudioUploader> {
     _writerCon.clear();
   }
 
-void _uploadAudio() async {
-  if (_selectedFile == null || _selectedAlbumCover == null) {
-    if (_selectedFile == null && _selectedAlbumCover == null) {
-      ToastMessage.show(context, 'Please input the required fields');
-    } else if (_selectedFile == null) {
-      ToastMessage.show(context, 'Please select an audio file');
-    } else {
-      ToastMessage.show(context, 'Please select an album cover');
+  void _addProducer(String producer) {
+    setState(() {
+      _producers.add(producer);
+    });
+    _producerCon.clear();
+  }
+
+  void _uploadAudio() async {
+    if (_selectedFile == null || _selectedAlbumCover == null) {
+      if (_selectedFile == null && _selectedAlbumCover == null) {
+        ToastMessage.show(context, 'Please input the required fields');
+      } else if (_selectedFile == null) {
+        ToastMessage.show(context, 'Please select an audio file');
+      } else {
+        ToastMessage.show(context, 'Please select an album cover');
+      }
+      return;
     }
-    return;
+
+    final String fileName = _selectedFile!.path.split('/').last;
+    final String title = _titleCon.text.trim();
+    final List<String> trimmedWriters =
+        _writers.map((writer) => writer.trim()).toList();
+
+    if (title.isEmpty) {
+      ToastMessage.show(context, 'Please enter the title of the song');
+      return;
+    }
+    if (trimmedWriters.isEmpty) {
+      ToastMessage.show(context, 'Please add writers of the song');
+      return;
+    }
+
+    final SongService songService = SongService();
+
+    // Show progress during upload
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Uploading...",
+            style: GoogleFonts.inter(fontSize: 18),
+          ),
+          content: StreamBuilder<double>(
+            stream: songService.uploadProgressStream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const LinearProgressIndicator();
+              } else {
+                final double uploadPercent = snapshot.data!;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LinearProgressIndicator(
+                      value: uploadPercent / 100,
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(Colors.blue),
+                      backgroundColor: Colors.grey.shade300,
+                    ),
+                    const SizedBox(height: 10.0),
+                    Text('${uploadPercent.toStringAsFixed(0)}% uploaded'),
+                    const SizedBox(height: 10.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        songService.cancelUpload();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
+        );
+      },
+    );
+
+    try {
+      // Start uploading the file
+      final String songId = await songService.uploadSong(title,
+          _selectedFile!.path, _selectedAlbumCover!.path, trimmedWriters);
+
+      // Get the song model with the uploaded file data
+      final SongModel song = await songService.getSongById(songId);
+
+      // Close progress dialog
+      Navigator.of(context).pop();
+
+      // Navigate to the previous screen and pass the song data
+      Navigator.of(context).pop(song);
+
+      // Show toast message to indicate success
+      ToastMessage.show(context, 'Song uploaded successfully');
+    } catch (e) {
+      print('Upload failed: ${e.toString()}');
+      ToastMessage.show(context, 'Upload failed: ${e.toString()}');
+      return;
+    }
   }
-
-  final String fileName = _selectedFile!.path.split('/').last;
-  final String title = _titleCon.text.trim();
-  final List<String> trimmedWriters = _writers.map((writer) => writer.trim()).toList();
-
-  if (title.isEmpty) {
-    ToastMessage.show(context, 'Please enter the title of the song');
-    return;
-  }
-  if (trimmedWriters.isEmpty) {
-    ToastMessage.show(context, 'Please add writers of the song');
-    return;
-  }
-
-  final SongService songService = SongService();
-
-  // Show progress during upload
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) {
-      return AlertDialog(
-        title: Text(
-          "Uploading...",
-          style: GoogleFonts.inter(fontSize: 18),
-        ),
-        content: StreamBuilder<double>(
-          stream: songService.uploadProgressStream,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const LinearProgressIndicator();
-            } else {
-              final double uploadPercent = snapshot.data!;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  LinearProgressIndicator(
-                    value: uploadPercent / 100,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-                    backgroundColor: Colors.grey.shade300,
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text('${uploadPercent.toStringAsFixed(0)}% uploaded'),
-                  const SizedBox(height: 10.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      songService.cancelUpload();
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              );
-            }
-          },
-        ),
-      );
-    },
-  );
-
-  try {
-    // Start uploading the file
-    final String songId = await songService.uploadSong(
-        title, _selectedFile!.path, _selectedAlbumCover!.path, trimmedWriters);
-
-    // Get the song model with the uploaded file data
-    final SongModel song = await songService.getSongById(songId);
-
-    // Close progress dialog
-    Navigator.of(context).pop();
-
-    // Navigate to the previous screen and pass the song data
-    Navigator.of(context).pop(song);
-
-    // Show toast message to indicate success
-    ToastMessage.show(context, 'Song uploaded successfully');
-  } catch (e) {
-    print('Upload failed: ${e.toString()}');
-    ToastMessage.show(context, 'Upload failed: ${e.toString()}');
-    return;
-  }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -271,61 +278,161 @@ void _uploadAudio() async {
                   titleForm(),
                   const SizedBox(height: 20),
                   Text(
-                    'Writers',
+                    'Songwriter(s)',
                     style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 13,
                     ),
                   ),
                   writerForm(),
-                  const SizedBox(height: 16),
-                  Container(
-                    width: 450,
-                    height: _writers.isEmpty ? 0 : null,
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: Scrollbar(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: LayoutBuilder(
-                          builder: (BuildContext context,
-                              BoxConstraints constraints) {
-                            return Wrap(
-                              spacing: 8.0,
-                              runSpacing:
-                                  8.0,  
-                              children: _writers.map((writer) {
-                                return Chip(
-                                  backgroundColor: musikatColor,
-                                  label: Text(writer),
-                                  labelStyle: GoogleFonts.inter(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  deleteIcon: const Icon(
-                                    Icons.clear,
-                                    color: Colors.white,
-                                  ),
-                                  onDeleted: () {
-                                    setState(() {
-                                      _writers.remove(writer);
-                                    });
-                                  },
-                                );
-                              }).toList(),
-                            );
-                          },
-                        ),
-                      ),
+                  const SizedBox(height: 10),
+                  writerChips(),
+                  const SizedBox(height: 10),
+                   Text(
+                    'Producer(s)',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 13,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  producerForm(),
+                   const SizedBox(height: 10),
+                  producerChips(),
                 ],
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+TextFormField producerForm() {
+    return TextFormField(
+      controller: _producerCon,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      style: GoogleFonts.inter(
+        color: Colors.white,
+        fontSize: 13,
+      ),
+      decoration: InputDecoration(
+        hintText: 'Enter the producer(s)',
+        hintStyle: GoogleFonts.inter(
+          color: Colors.grey,
+          fontSize: 13,
+        ),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            if (_producerCon.text.isEmpty) {
+              ToastMessage.show(context, 'Please enter a producer for the song');
+            } else if (_producers
+                .map((w) => w.toLowerCase())
+                .contains(_producerCon.text.toLowerCase())) {
+              ToastMessage.show(context, 'Producer already added');
+            } else if (_producers.length < 10) {
+              setState(() {
+                _addProducer(_producerCon.text);
+                _producerCon.clear();
+              });
+            } else {
+              ToastMessage.show(context, 'You can only add up to 10 writers');
+              _writerCon.clear();
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+ Container producerChips() {
+    return Container(
+      width: 450,
+      height: _producers.isEmpty ? 0 : null,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: _producers.map((producer) {
+                  return Chip(
+                    backgroundColor: musikatColor,
+                    label: Text(producer),
+                    labelStyle: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    deleteIcon: const Icon(
+                      Icons.clear,
+                      color: Colors.white,
+                    ),
+                    onDeleted: () {
+                      setState(() {
+                        _producers.remove(producer);
+                      });
+                    },
+                  );
+                }).toList(),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container writerChips() {
+    return Container(
+      width: 450,
+      height: _writers.isEmpty ? 0 : null,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: _writers.map((writer) {
+                  return Chip(
+                    backgroundColor: musikatColor,
+                    label: Text(writer),
+                    labelStyle: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    deleteIcon: const Icon(
+                      Icons.clear,
+                      color: Colors.white,
+                    ),
+                    onDeleted: () {
+                      setState(() {
+                        _writers.remove(writer);
+                      });
+                    },
+                  );
+                }).toList(),
+              );
+            },
           ),
         ),
       ),
@@ -347,7 +454,7 @@ void _uploadAudio() async {
         fontSize: 13,
       ),
       decoration: InputDecoration(
-        hintText: 'Add writers for the song',
+        hintText: 'Enter the songwriter(s)',
         hintStyle: GoogleFonts.inter(
           color: Colors.grey,
           fontSize: 13,
@@ -368,6 +475,7 @@ void _uploadAudio() async {
               });
             } else {
               ToastMessage.show(context, 'You can only add up to 10 writers');
+              _writerCon.clear();
             }
           },
         ),
