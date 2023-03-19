@@ -20,9 +20,10 @@ class AudioUploader extends StatefulWidget {
 class AudioUploaderState extends State<AudioUploader> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleCon = TextEditingController(),
-      _writerCon = TextEditingController();
-  // final _writersFocusNode = FocusNode();
+      _writerCon = TextEditingController(),
+      _producerCon = TextEditingController();
   final List<String> _writers = [];
+  final List<String> _producers = [];
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -32,6 +33,7 @@ class AudioUploaderState extends State<AudioUploader> {
   void dispose() {
     _titleCon.dispose();
     _writerCon.dispose();
+    _producerCon.dispose();
     super.dispose();
   }
 
@@ -63,6 +65,7 @@ class AudioUploaderState extends State<AudioUploader> {
     });
   }
 
+  //reuse code for producers
   void _addWriter(String writer) {
     setState(() {
       _writers.add(writer);
@@ -70,96 +73,100 @@ class AudioUploaderState extends State<AudioUploader> {
     _writerCon.clear();
   }
 
-  void _uploadAudio() async {
-    if (_selectedFile != null && _selectedAlbumCover != null) {
-      final String fileName = _selectedFile!.path.split('/').last;
-      final String title = _titleCon.text.trim();
-      if (title.isEmpty) {
-        ToastMessage.show(context, 'Please enter the title of the song');
-        return;
-      }
-      if (_writers.isEmpty) {
-        ToastMessage.show(context, 'Please add writers of the song');
-        return;
-      }
-      final SongService songService = SongService();
-
-      // Show progress during upload
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              "Uploading...",
-              style: GoogleFonts.inter(fontSize: 18),
-            ),
-            content: StreamBuilder<double>(
-              stream: songService.uploadProgressStream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const LinearProgressIndicator();
-                } else {
-                  final double uploadPercent = snapshot.data!;
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      LinearProgressIndicator(
-                        value: uploadPercent / 100,
-                        valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.blue),
-                        backgroundColor: Colors.grey.shade300,
-                      ),
-                      const SizedBox(height: 10.0),
-                      Text('${uploadPercent.toStringAsFixed(0)}% uploaded'),
-                      const SizedBox(height: 10.0),
-                      ElevatedButton(
-                        onPressed: () {
-                          songService.cancelUpload();
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                    ],
-                  );
-                }
-              },
-            ),
-          );
-        },
-      );
-
-      try {
-        // Start uploading the file
-        final String songId = await songService.uploadSong(
-            title, _selectedFile!.path, _selectedAlbumCover!.path, _writers);
-
-        // Get the song model with the uploaded file data
-        final SongModel song = await songService.getSongById(songId);
-
-        // Close progress dialog
-        Navigator.of(context).pop();
-
-        // Navigate to the previous screen and pass the song data
-        Navigator.of(context).pop(song);
-
-        // Show toast message to indicate success
-        ToastMessage.show(context, 'Song uploaded successfully');
-      } catch (e) {
-        print('Upload failed: ${e.toString()}');
-        ToastMessage.show(context, 'Upload failed: ${e.toString()}');
-        return;
-      }
+void _uploadAudio() async {
+  if (_selectedFile == null || _selectedAlbumCover == null) {
+    if (_selectedFile == null && _selectedAlbumCover == null) {
+      ToastMessage.show(context, 'Please input the required fields');
+    } else if (_selectedFile == null) {
+      ToastMessage.show(context, 'Please select an audio file');
     } else {
-      if (_selectedFile == null && _selectedAlbumCover == null) {
-        ToastMessage.show(context, 'Please input the required fields');
-      } else if (_selectedFile == null) {
-        ToastMessage.show(context, 'Please select an audio file');
-      } else {
-        ToastMessage.show(context, 'Please select an album cover');
-      }
+      ToastMessage.show(context, 'Please select an album cover');
     }
+    return;
   }
+
+  final String fileName = _selectedFile!.path.split('/').last;
+  final String title = _titleCon.text.trim();
+  final List<String> trimmedWriters = _writers.map((writer) => writer.trim()).toList();
+
+  if (title.isEmpty) {
+    ToastMessage.show(context, 'Please enter the title of the song');
+    return;
+  }
+  if (trimmedWriters.isEmpty) {
+    ToastMessage.show(context, 'Please add writers of the song');
+    return;
+  }
+
+  final SongService songService = SongService();
+
+  // Show progress during upload
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(
+          "Uploading...",
+          style: GoogleFonts.inter(fontSize: 18),
+        ),
+        content: StreamBuilder<double>(
+          stream: songService.uploadProgressStream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const LinearProgressIndicator();
+            } else {
+              final double uploadPercent = snapshot.data!;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LinearProgressIndicator(
+                    value: uploadPercent / 100,
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                    backgroundColor: Colors.grey.shade300,
+                  ),
+                  const SizedBox(height: 10.0),
+                  Text('${uploadPercent.toStringAsFixed(0)}% uploaded'),
+                  const SizedBox(height: 10.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      songService.cancelUpload();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+      );
+    },
+  );
+
+  try {
+    // Start uploading the file
+    final String songId = await songService.uploadSong(
+        title, _selectedFile!.path, _selectedAlbumCover!.path, trimmedWriters);
+
+    // Get the song model with the uploaded file data
+    final SongModel song = await songService.getSongById(songId);
+
+    // Close progress dialog
+    Navigator.of(context).pop();
+
+    // Navigate to the previous screen and pass the song data
+    Navigator.of(context).pop(song);
+
+    // Show toast message to indicate success
+    ToastMessage.show(context, 'Song uploaded successfully');
+  } catch (e) {
+    print('Upload failed: ${e.toString()}');
+    ToastMessage.show(context, 'Upload failed: ${e.toString()}');
+    return;
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -210,30 +217,47 @@ class AudioUploaderState extends State<AudioUploader> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: _pickAudioFile,
-                        icon: Icon(_selectedFile != null
-                            ? Icons.check_circle
-                            : Icons.music_note),
-                        label: Text(_selectedFile != null
-                            ? _selectedFile!.path.split('/').last
-                            : 'Select Audio'),
-                      ),
-                      if (_selectedFile != null)
-                        InkWell(
-                          onTap: _removeAudioFile,
-                          borderRadius: BorderRadius.circular(20.0),
-                          splashColor: Colors.grey[300]!,
-                          hoverColor: Colors.grey[200]!,
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.close,
-                              size: 20,
-                              color: Colors.white,
+                      Stack(
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: _pickAudioFile,
+                            icon: Icon(_selectedFile != null
+                                ? Icons.check_circle
+                                : Icons.music_note),
+                            label: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _selectedFile != null
+                                      ? _selectedFile!.path.split('/').last
+                                      : 'Select Audio',
+                                ),
+                                if (_selectedFile != null)
+                                  const SizedBox(width: 20.0),
+                              ],
                             ),
                           ),
-                        ),
+                          if (_selectedFile != null)
+                            Positioned(
+                              top: 5,
+                              right: 0,
+                              child: InkWell(
+                                onTap: _removeAudioFile,
+                                borderRadius: BorderRadius.circular(20.0),
+                                splashColor: Colors.grey[300]!,
+                                hoverColor: Colors.grey[200]!,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.close_rounded,
+                                    size: 22,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -270,9 +294,9 @@ class AudioUploaderState extends State<AudioUploader> {
                           builder: (BuildContext context,
                               BoxConstraints constraints) {
                             return Wrap(
-                              spacing: 8.0, // Add some space between the chips
+                              spacing: 8.0,
                               runSpacing:
-                                  8.0, // Add some space between the lines of chips
+                                  8.0,  
                               children: _writers.map((writer) {
                                 return Chip(
                                   backgroundColor: musikatColor,
