@@ -41,6 +41,8 @@ class AudioUploaderState extends State<AudioUploader> {
       setState(() {
         _selectedFile = File(result.files.single.path!);
       });
+    } else {
+      ToastMessage.show(context, 'No audio selected');
     }
   }
 
@@ -50,6 +52,8 @@ class AudioUploaderState extends State<AudioUploader> {
       setState(() {
         _selectedAlbumCover = File(result.files.single.path!);
       });
+    } else {
+      ToastMessage.show(context, 'No image selected');
     }
   }
 
@@ -305,45 +309,47 @@ class AudioUploaderState extends State<AudioUploader> {
   }
 
   TextFormField writerForm() {
-  return TextFormField(
-    controller: _writerCon,
-    validator: (value) {
-      if (value!.isEmpty) {
-        return null;
-      } else {
-        return null;
-      }
-    },
-    style: GoogleFonts.inter(
-      color: Colors.white,
-      fontSize: 13,
-    ),
-    decoration: InputDecoration(
-      hintText: 'Add writers for the song',
-      hintStyle: GoogleFonts.inter(
-        color: Colors.grey,
+    return TextFormField(
+      controller: _writerCon,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      style: GoogleFonts.inter(
+        color: Colors.white,
         fontSize: 13,
       ),
-      suffixIcon: IconButton(
-        icon: const Icon(Icons.add),
-        onPressed: () {
-          if (_writerCon.text.isEmpty) {
-            ToastMessage.show(context, 'Please enter a writer for the song');
-          } else if (_writers.map((w) => w.toLowerCase()).contains(_writerCon.text.toLowerCase())) {
-            ToastMessage.show(context, 'Writer already added');
-          } else if (_writers.length < 10) {
-            setState(() {
-              _addWriter(_writerCon.text);
-              _writerCon.clear();
-            });
-          } else {
-            ToastMessage.show(context, 'You can only add up to 10 writers');
-          }
-        },
+      decoration: InputDecoration(
+        hintText: 'Add writers for the song',
+        hintStyle: GoogleFonts.inter(
+          color: Colors.grey,
+          fontSize: 13,
+        ),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            if (_writerCon.text.isEmpty) {
+              ToastMessage.show(context, 'Please enter a writer for the song');
+            } else if (_writers
+                .map((w) => w.toLowerCase())
+                .contains(_writerCon.text.toLowerCase())) {
+              ToastMessage.show(context, 'Writer already added');
+            } else if (_writers.length < 10) {
+              setState(() {
+                _addWriter(_writerCon.text);
+                _writerCon.clear();
+              });
+            } else {
+              ToastMessage.show(context, 'You can only add up to 10 writers');
+            }
+          },
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   TextFormField titleForm() {
     return TextFormField(
