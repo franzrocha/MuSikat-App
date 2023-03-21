@@ -47,6 +47,10 @@ class _AuthScreenState extends State<AuthScreen> {
   handleLogin() {
     if (_authController.currentUser != null) {
       locator<NavigationService>().pushReplacementNamed(NavBar.route);
+    } else if (_authController.error != null) {
+      String errorMessage =
+          _authController.error!.message ?? 'An unknown error occurred';
+      ToastMessage.show(context, errorMessage);
     }
   }
 
@@ -157,8 +161,8 @@ class _AuthScreenState extends State<AuthScreen> {
           return null;
         } else if (value.length < 6) {
           return "Password should be atleast 6 characters";
-        } else if (value.length > 15) {
-          return "Password should not be greater than 15 characters";
+        } else if (value.length > 20) {
+          return "Password should not be greater than 20 characters";
         } else {
           return null;
         }
@@ -210,15 +214,15 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  Padding authErrorMsg() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Text(
-        _authController.error?.message ?? '',
-        style: GoogleFonts.montserrat(color: Colors.red),
-      ),
-    );
-  }
+  // Padding authErrorMsg() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(10),
+  //     child: Text(
+  //       _authController.error?.message ?? '',
+  //       style: GoogleFonts.montserrat(color: Colors.red),
+  //     ),
+  //   );
+  // }
 
   Container loginButton() {
     return Container(
