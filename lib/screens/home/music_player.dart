@@ -139,7 +139,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   ),
                   SliderTheme(
                     data: const SliderThemeData(
-                      thumbColor: buttonColor,
+                      thumbColor:musikatColor,
                       overlayColor: Color.fromRGBO(255, 240, 210, 0.5),
                     ),
                     child: Slider(

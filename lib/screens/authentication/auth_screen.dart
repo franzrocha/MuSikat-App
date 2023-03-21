@@ -225,7 +225,7 @@ class _AuthScreenState extends State<AuthScreen> {
       width: 318,
       height: 63,
       decoration: BoxDecoration(
-          color: buttonColor, borderRadius: BorderRadius.circular(60)),
+          color: musikatColor, borderRadius: BorderRadius.circular(60)),
       child: TextButton(
         onPressed: () {
           if (isFieldEmpty()) {

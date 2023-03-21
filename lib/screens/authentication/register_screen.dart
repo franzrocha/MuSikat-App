@@ -27,6 +27,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final genderList = ["Prefer not to say", "Male", "Female", "Others"];
   String dropdownValue = 'Prefer not to say';
+  bool _passwordVisible = false;
+  bool _conPassVisible = false;
 
   final AuthController _authController = locator<AuthController>();
 
@@ -203,7 +205,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   CustomTextField passForm() {
     return CustomTextField(
-      obscureText: true,
+      obscureText: !_passwordVisible,
       controller: _passCon,
       validator: (value) {
         if (value!.isEmpty) {
@@ -218,12 +220,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
       },
       hintText: "Password",
       prefixIcon: const Icon(Icons.lock),
+      suffixIcon: GestureDetector(
+        onTap: () {
+          setState(() {
+            _passwordVisible = !_passwordVisible;
+          });
+        },
+        child: Icon(
+          _passwordVisible ? Icons.visibility : Icons.visibility_off,
+          color: Colors.grey,
+        ),
+      ),
     );
   }
 
   CustomTextField conPassForm() {
     return CustomTextField(
-      obscureText: true,
+      obscureText: !_conPassVisible,
       controller: _pass2Con,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -239,6 +252,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       },
       hintText: "Confirm Password",
       prefixIcon: const Icon(Icons.lock_outline_sharp),
+      suffixIcon: GestureDetector(
+        onTap: () {
+          setState(() {
+            _conPassVisible = !_conPassVisible;
+          });
+        },
+        child: Icon(
+          _conPassVisible ? Icons.visibility : Icons.visibility_off,
+          color: Colors.grey,
+        ),
+      ),
     );
   }
 

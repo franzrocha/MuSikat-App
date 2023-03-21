@@ -36,7 +36,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                   ),
                 ),
                 title: Text(
-                  "MuSikat Global Chat",
+                  "Global Chat",
                   style: GoogleFonts.inter(
                     color: Colors.white,
                     fontSize: 20,

@@ -29,14 +29,6 @@ class AudioUploaderState extends State<AudioUploader> {
 
   File? _selectedFile, _selectedAlbumCover;
 
-  @override
-  void dispose() {
-    _titleCon.dispose();
-    _writerCon.dispose();
-    _producerCon.dispose();
-    super.dispose();
-  }
-
   void _pickAudioFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.audio);
     if (result != null) {
@@ -93,15 +85,24 @@ class AudioUploaderState extends State<AudioUploader> {
 
     final String fileName = _selectedFile!.path.split('/').last;
     final String title = _titleCon.text.trim();
+    final String genre = genreValue.trim();
     final List<String> trimmedWriters =
         _writers.map((writer) => writer.trim()).toList();
+    final List<String> trimmedProducers =
+        _producers.map((producer) => producer.trim()).toList();
 
     if (title.isEmpty) {
       ToastMessage.show(context, 'Please enter the title of the song');
       return;
     }
+
     if (trimmedWriters.isEmpty) {
-      ToastMessage.show(context, 'Please add writers of the song');
+      ToastMessage.show(context, 'Please add songwriter(s) of the song');
+      return;
+    }
+
+    if (trimmedProducers.isEmpty) {
+      ToastMessage.show(context, 'Please add producer(s) of the song');
       return;
     }
 
@@ -154,8 +155,12 @@ class AudioUploaderState extends State<AudioUploader> {
 
     try {
       // Start uploading the file
-      final String songId = await songService.uploadSong(title,
-          _selectedFile!.path, _selectedAlbumCover!.path, trimmedWriters);
+      final String songId = await songService.uploadSong(
+          title,
+          _selectedFile!.path,
+          _selectedAlbumCover!.path,
+          trimmedWriters,
+          trimmedProducers, genre);
 
       // Get the song model with the uploaded file data
       final SongModel song = await songService.getSongById(songId);
@@ -173,6 +178,14 @@ class AudioUploaderState extends State<AudioUploader> {
       ToastMessage.show(context, 'Upload failed: ${e.toString()}');
       return;
     }
+  }
+
+  @override
+  void dispose() {
+    _titleCon.dispose();
+    _writerCon.dispose();
+    _producerCon.dispose();
+    super.dispose();
   }
 
   @override
@@ -284,20 +297,23 @@ class AudioUploaderState extends State<AudioUploader> {
                       fontSize: 13,
                     ),
                   ),
+                  const SizedBox(height: 10),
                   writerForm(),
                   const SizedBox(height: 10),
                   writerChips(),
                   const SizedBox(height: 10),
-                   Text(
+                  Text(
                     'Producer(s)',
                     style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 13,
                     ),
                   ),
+                  const SizedBox(height: 10),
                   producerForm(),
-                   const SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   producerChips(),
+                  genderDropDown(context),
                 ],
               ),
             ),
@@ -307,7 +323,40 @@ class AudioUploaderState extends State<AudioUploader> {
     );
   }
 
-TextFormField producerForm() {
+  DropdownButtonFormField genderDropDown(BuildContext context) {
+    return DropdownButtonFormField(
+      value: genreValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      style: GoogleFonts.inter(color: Colors.white),
+      decoration: const InputDecoration(
+        labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+        labelText: "Genre",
+        border: InputBorder.none,
+        prefixIconConstraints: BoxConstraints(
+          minWidth: 2,
+        ),
+      ),
+      dropdownColor: Colors.black,
+       itemHeight: 70, 
+       isExpanded: true,
+      items: genreList.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            style: GoogleFonts.inter(color: Colors.white),
+          ),
+        );
+      }).toList(),
+      onChanged: (dynamic newValue) {
+        setState(() {
+          genreValue = newValue as String;
+        });
+      },
+    );
+  }
+
+  TextFormField producerForm() {
     return TextFormField(
       controller: _producerCon,
       validator: (value) {
@@ -331,7 +380,8 @@ TextFormField producerForm() {
           icon: const Icon(Icons.add),
           onPressed: () {
             if (_producerCon.text.isEmpty) {
-              ToastMessage.show(context, 'Please enter a producer for the song');
+              ToastMessage.show(
+                  context, 'Please enter a producer for the song');
             } else if (_producers
                 .map((w) => w.toLowerCase())
                 .contains(_producerCon.text.toLowerCase())) {
@@ -342,8 +392,8 @@ TextFormField producerForm() {
                 _producerCon.clear();
               });
             } else {
-              ToastMessage.show(context, 'You can only add up to 10 writers');
-              _writerCon.clear();
+              ToastMessage.show(context, 'You can only add up to 10 producers');
+              _producerCon.clear();
             }
           },
         ),
@@ -351,7 +401,7 @@ TextFormField producerForm() {
     );
   }
 
- Container producerChips() {
+  Container producerChips() {
     return Container(
       width: 450,
       height: _producers.isEmpty ? 0 : null,

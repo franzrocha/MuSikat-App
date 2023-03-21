@@ -11,16 +11,19 @@ class SongService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final _uploadProgressStreamController = StreamController<double>.broadcast();
 
-  Stream<double> get uploadProgressStream => _uploadProgressStreamController.stream;
+  Stream<double> get uploadProgressStream =>
+      _uploadProgressStreamController.stream;
 
-  Future<String> uploadSong(
-      String title, String filePath, String coverPath, List<String> writers,
+  Future<String> uploadSong(String title, String filePath, String coverPath,
+      List<String> writers, List<String> producers, String genre,
       {String? albumCover}) async {
     try {
       final String fileName = filePath.split('/').last;
       final String coverFileName = coverPath.split('/').last;
-      final Reference ref = FirebaseStorage.instance.ref().child('audios/$fileName');
-      final Reference coverRef = FirebaseStorage.instance.ref().child('albumCovers/$coverFileName');
+      final Reference ref =
+          FirebaseStorage.instance.ref().child('audios/$fileName');
+      final Reference coverRef =
+          FirebaseStorage.instance.ref().child('albumCovers/$coverFileName');
       final UploadTask uploadTask = ref.putFile(File(filePath));
       final UploadTask coverUploadTask = coverRef.putFile(File(coverPath));
 
@@ -43,6 +46,8 @@ class SongService {
         'audio': downloadUrl,
         'album_cover': coverDownloadUrl,
         'writers': writers,
+        'producers': producers,
+        'genre': genre,
       };
 
       final DocumentReference docRef = _db.collection('songs').doc();

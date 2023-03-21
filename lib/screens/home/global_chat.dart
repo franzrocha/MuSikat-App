@@ -158,7 +158,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                        color: buttonColor,
+                        color: musikatColor,
                         borderRadius: BorderRadius.circular(15)),
                     child: IconButton(
                       icon: const Icon(
@@ -201,7 +201,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          Text("MuSikat Global Chat",
+          Text("Global Chat",
               textAlign: TextAlign.right,
               style: GoogleFonts.inter(
                   color: Colors.white,

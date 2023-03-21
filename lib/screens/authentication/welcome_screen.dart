@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/screens/authentication/register_screen.dart';
 import 'auth_screen.dart';
 
@@ -72,7 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     width: 318,
                     height: 63,
                     decoration: BoxDecoration(
-                        color: const Color(0xfffca311),
+                        color: musikatColor,
                         borderRadius: BorderRadius.circular(60)),
                     child: TextButton(
                       onPressed: () {
@@ -94,7 +95,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     width: 318,
                     height: 63,
                     decoration: BoxDecoration(
-                        color: const Color(0xff34b771),
+                        color: musikatColor2,
                         borderRadius: BorderRadius.circular(60)),
                     child: TextButton(
                       onPressed: () {
