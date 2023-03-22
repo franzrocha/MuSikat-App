@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/screens/home/artist_hub/insights.dart';
 import 'package:musikat_app/screens/home/artist_hub/upload_screen.dart';
-import 'package:musikat_app/screens/home/audio_uploader.dart';
+import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
 
 class ArtistsScreen extends StatefulWidget {
   const ArtistsScreen({Key? key}) : super(key: key);
@@ -49,7 +49,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
               onTap: () => {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const AudioUploader(),
+                    builder: (context) => const AudioUploaderScreen(),
                   ),
                 )
               },

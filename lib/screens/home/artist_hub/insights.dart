@@ -12,6 +12,7 @@ class InsightsScreen extends StatefulWidget {
   State<InsightsScreen> createState() => _InsightsScreenState();
 }
 
+
 class _InsightsScreenState extends State<InsightsScreen> {
   @override
   Widget build(BuildContext context) {

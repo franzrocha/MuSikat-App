@@ -15,7 +15,7 @@ class SongService {
       _uploadProgressStreamController.stream;
 
   Future<String> uploadSong(String title, String filePath, String coverPath,
-      List<String> writers, List<String> producers, String genre,
+      List<String> writers, List<String> producers, String genre, String uid,
       {String? albumCover}) async {
     try {
       final String fileName = filePath.split('/').last;
@@ -48,6 +48,7 @@ class SongService {
         'writers': writers,
         'producers': producers,
         'genre': genre,
+        'uid': uid,
       };
 
       final DocumentReference docRef = _db.collection('songs').doc();

@@ -6,25 +6,37 @@ import 'package:file_picker/file_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/upload_dialog.dart';
-import '../../services/song_service.dart';
-import '../../widgets/toast_msg.dart';
+import '../../../services/song_service.dart';
+import '../../../widgets/toast_msg.dart';
 
-class AudioUploader extends StatefulWidget {
-  const AudioUploader({Key? key}) : super(key: key);
+class AudioUploaderScreen extends StatefulWidget {
+  const AudioUploaderScreen({Key? key}) : super(key: key);
 
   @override
-  AudioUploaderState createState() => AudioUploaderState();
+  AudioUploaderScreenState createState() => AudioUploaderScreenState();
 }
 
-class AudioUploaderState extends State<AudioUploader> {
+class AudioUploaderScreenState extends State<AudioUploaderScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleCon = TextEditingController(),
       _writerCon = TextEditingController(),
       _producerCon = TextEditingController();
   final List<String> _writers = [];
   final List<String> _producers = [];
+  final AuthController _auth = locator<AuthController>();
+
+
+  String? uid;
+
+  @override
+  void initState() {
+    uid = _auth.currentUser!.uid;
+    super.initState();
+  }
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -126,7 +138,8 @@ class AudioUploaderState extends State<AudioUploader> {
           _selectedAlbumCover!.path,
           trimmedWriters,
           trimmedProducers,
-          genre);
+          genre,
+          uid!);
 
       // Get the song model with the uploaded file data
       final SongModel song = await songService.getSongById(songId);
@@ -292,15 +305,17 @@ class AudioUploaderState extends State<AudioUploader> {
   DropdownButtonFormField genderDropDown(BuildContext context) {
     return DropdownButtonFormField(
       value: genreValue,
-      icon: const Icon(Icons.arrow_drop_down),
+      icon: const Icon(
+        Icons.arrow_drop_down,
+      ),
       style: GoogleFonts.inter(color: Colors.white),
       decoration: const InputDecoration(
         labelStyle: TextStyle(color: Colors.white, fontSize: 18),
         labelText: "Genre",
         border: InputBorder.none,
-        prefixIconConstraints: BoxConstraints(
-          minWidth: 2,
-        ),
+        // prefixIconConstraints: BoxConstraints(
+        //   minWidth: 10,
+        // ),
       ),
       dropdownColor: Colors.black,
       itemHeight: 70,

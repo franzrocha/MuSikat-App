@@ -5,7 +5,8 @@ class UserModel {
   Timestamp created, updated;
   List<String> songs;
 
-  UserModel(this.uid, this.username, this.email, this.age, this.gender,  this.image, this.created, this.updated, this.songs);
+  UserModel(this.uid, this.username, this.email, this.age, this.gender,
+      this.image, this.created, this.updated, this.songs);
 
   static UserModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
@@ -18,9 +19,7 @@ class UserModel {
       json['image'] ?? '',
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
-      json['songs'] != null
-          ? List<String>.from(json['songs'])
-          : <String>[],
+      json['songs'] != null ? List<String>.from(json['songs']) : <String>[],
     );
   }
 
@@ -33,7 +32,7 @@ class UserModel {
         'image': image,
         'created': created,
         'updated': updated,
-        'songs' : songs
+        'songs': songs
       };
 
   static Future<UserModel> fromUid({required String uid}) async {
@@ -50,7 +49,7 @@ class UserModel {
         .map(UserModel.fromDocumentSnap);
   }
 
-    static Future<List<UserModel>> getUsers() async {
+  static Future<List<UserModel>> getUsers() async {
     List<UserModel> users = [];
     await FirebaseFirestore.instance
         .collection('users')
@@ -67,5 +66,4 @@ class UserModel {
   searchUsername(String user) {
     return username.toLowerCase().contains(user.toLowerCase());
   }
-
 }
