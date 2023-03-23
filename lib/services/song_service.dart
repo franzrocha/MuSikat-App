@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/models/user_model.dart';
 
 class SongService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -18,13 +19,21 @@ class SongService {
       List<String> writers, List<String> producers, String genre, String uid,
       {String? albumCover}) async {
     try {
+        // Retrieve the user's username from Firestore using the user's uid as a reference
+      final DocumentSnapshot userSnapshot = await _db.collection('users').doc(uid).get();
+      final UserModel user = UserModel.fromDocumentSnap(userSnapshot);
+      final String username = user.username;
+
+
       final String fileName = filePath.split('/').last;
       final String coverFileName = coverPath.split('/').last;
-      final Reference ref =
-          FirebaseStorage.instance.ref().child('audios/$fileName');
-      final Reference coverRef =
-          FirebaseStorage.instance.ref().child('albumCovers/$coverFileName');
-      final UploadTask uploadTask = ref.putFile(File(filePath));
+     
+       // Create a reference to the audio and album cover files in Firebase Storage
+      final Reference audioRef = FirebaseStorage.instance.ref('users/$username/audios/$fileName');
+      final Reference coverRef = FirebaseStorage.instance.ref('users/$username/albumCovers/$coverFileName');
+
+      // Upload the audio and album cover files to Firebase Storage
+      final UploadTask uploadTask = audioRef.putFile(File(filePath));
       final UploadTask coverUploadTask = coverRef.putFile(File(coverPath));
 
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
@@ -35,7 +44,7 @@ class SongService {
 
       final TaskSnapshot taskSnapshot = await uploadTask;
       final TaskSnapshot coverTaskSnapshot = await coverUploadTask;
-      final String downloadUrl = await ref.getDownloadURL();
+      final String downloadUrl = await audioRef.getDownloadURL();
       final String coverDownloadUrl = await coverRef.getDownloadURL();
 
       final Map<String, dynamic> metadata = {
