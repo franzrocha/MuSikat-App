@@ -7,7 +7,7 @@ import 'package:musikat_app/screens/home/categories_screen.dart';
 import 'package:musikat_app/screens/home/chat_home_screen.dart';
 import 'package:musikat_app/screens/home/fer.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
-import 'package:musikat_app/screens/home/profile_screen.dart';
+import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/search_bar.dart';
 

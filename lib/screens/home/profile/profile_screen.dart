@@ -5,11 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/screens/home/account_info.dart';
+import 'package:musikat_app/screens/home/profile/account_info.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/avatar.dart';
 import 'package:musikat_app/widgets/tile_list.dart';
-import 'package:rounded_expansion_tile/rounded_expansion_tile.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
