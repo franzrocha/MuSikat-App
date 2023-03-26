@@ -3,18 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField(
-      {Key? key,
-      required this.controller,
-      required this.validator,
-      required this.hintText,
-      this.prefixIcon,
-      required this.obscureText,
-      this.errorMaxLines,
-      this.suffixIcon,
-      this.inputFormatters,
-      this.keyboardType})
-      : super(key: key);
+  const CustomTextField({
+    Key? key,
+    required this.controller,
+    required this.validator,
+    required this.hintText,
+    this.prefixIcon,
+    required this.obscureText,
+    this.errorMaxLines,
+    this.suffixIcon,
+    this.inputFormatters,
+    this.keyboardType,
+  }) : super(key: key);
 
   final TextEditingController? controller;
   final String? Function(String?)? validator;

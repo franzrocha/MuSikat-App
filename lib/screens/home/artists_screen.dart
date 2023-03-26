@@ -6,7 +6,7 @@ import 'package:musikat_app/screens/home/artist_hub/insights.dart';
 
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
 
-import 'artist_hub/libary_screen.dart';
+import 'artist_hub/library_screen.dart';
 
 class ArtistsScreen extends StatefulWidget {
   const ArtistsScreen({Key? key}) : super(key: key);

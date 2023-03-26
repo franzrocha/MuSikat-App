@@ -47,9 +47,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: 50,
                     height: 50,
                     child: CircularProgressIndicator(
-                      backgroundColor: Color(0xff34b771),
+                      backgroundColor: musikatColor2,
                       valueColor: AlwaysStoppedAnimation(
-                        Color(0xfffca311),
+                        musikatColor,
                       ),
                       strokeWidth: 10,
                     )),
@@ -364,7 +364,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       width: 318,
       height: 63,
       decoration: BoxDecoration(
-          color: const Color(0xfffca311),
+          color: musikatColor,
           borderRadius: BorderRadius.circular(60)),
       child: TextButton(
         onPressed: () {

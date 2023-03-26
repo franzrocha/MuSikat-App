@@ -13,6 +13,7 @@ const otherChat = Color.fromARGB(255, 69, 66, 66);
 const musikatColor = Color(0xfffca311);
 const musikatColor2 = Color(0xff34b771);
 
+
 //genrelist
 final genreList = [
   "Alternative",

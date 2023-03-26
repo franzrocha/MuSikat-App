@@ -43,26 +43,43 @@ class AuthController with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> login(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
 
-Future login(String email, String password) async {
-  try {
-    working = true;
-    notifyListeners();
+      if (result.user == null) {
+        throw Exception('Login failed');
+      }
 
-    UserCredential? result = await _auth.signInWithEmailAndPassword(
-        email: email, password: password);
-
-    return result;
-  } on FirebaseAuthException catch (e) {
-    print(e.message);
-    print(e.code);
-    working = false;
-    currentUser = null;
-    error = e;
-    notifyListeners();
+      working = false;
+      currentUser = result.user;
+      error = null;
+      notifyListeners();
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      print(e.code);
+      working = false;
+      currentUser = null;
+      error = e;
+      notifyListeners();
+      rethrow;
+    } catch (e) {
+      print(e);
+      working = false;
+      currentUser = null;
+      error = FirebaseAuthException(
+        code: 'unknown',
+        message: e.toString(),
+      );
+      notifyListeners();
+      if (error != null) {
+        throw error!;
+      } else {
+        throw Exception('Unknown error occurred');
+      }
+    }
   }
-}
-
 
   Future logout() async {
     working = true;

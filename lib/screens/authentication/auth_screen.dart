@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -68,9 +69,9 @@ class _AuthScreenState extends State<AuthScreen> {
                     width: 50,
                     height: 50,
                     child: CircularProgressIndicator(
-                      backgroundColor: Color(0xff34b771),
+                      backgroundColor: musikatColor2,
                       valueColor: AlwaysStoppedAnimation(
-                        Color(0xfffca311),
+                        musikatColor,
                       ),
                       strokeWidth: 10,
                     )),
@@ -231,11 +232,19 @@ class _AuthScreenState extends State<AuthScreen> {
       decoration: BoxDecoration(
           color: musikatColor, borderRadius: BorderRadius.circular(60)),
       child: TextButton(
-        onPressed: () {
+        onPressed: () async {
           if (isFieldEmpty()) {
             ToastMessage.show(context, 'Please fill in all fields');
           } else if (_formKey.currentState?.validate() ?? false) {
-            _authController.login(_emailCon.text.trim(), _passCon.text.trim());
+            try {
+              await _authController.login(
+                  _emailCon.text.trim(), _passCon.text.trim());
+            } on FirebaseAuthException catch (e) {
+              ToastMessage.show(context, e.message ?? '');
+            } catch (e) {
+              ToastMessage.show(context,
+                  'An unknown error occurred. Please try again later.');
+            }
           } else {
             ToastMessage.show(context, 'Please fill in all fields correctly');
           }
