@@ -19,18 +19,20 @@ class SongService {
       List<String> writers, List<String> producers, String genre, String uid,
       {String? albumCover}) async {
     try {
-        // Retrieve the user's username from Firestore using the user's uid as a reference
-      final DocumentSnapshot userSnapshot = await _db.collection('users').doc(uid).get();
+      // Retrieve the user's username from Firestore using the user's uid as a reference
+      final DocumentSnapshot userSnapshot =
+          await _db.collection('users').doc(uid).get();
       final UserModel user = UserModel.fromDocumentSnap(userSnapshot);
       final String username = user.username;
 
-
       final String fileName = filePath.split('/').last;
       final String coverFileName = coverPath.split('/').last;
-     
-       // Create a reference to the audio and album cover files in Firebase Storage
-      final Reference audioRef = FirebaseStorage.instance.ref('users/$username/audios/$fileName');
-      final Reference coverRef = FirebaseStorage.instance.ref('users/$username/albumCovers/$coverFileName');
+
+      // Create a reference to the audio and album cover files in Firebase Storage
+      final Reference audioRef =
+          FirebaseStorage.instance.ref('users/$username/audios/$fileName');
+      final Reference coverRef = FirebaseStorage.instance
+          .ref('users/$username/albumCovers/$coverFileName');
 
       // Upload the audio and album cover files to Firebase Storage
       final UploadTask uploadTask = audioRef.putFile(File(filePath));
@@ -73,19 +75,31 @@ class SongService {
     }
   }
 
-  Future<List<SongModel>> getSongs() async {
-    final QuerySnapshot snapshot = await _db.collection('songs').get();
-
-    return snapshot.docs.map((doc) => SongModel.fromDocumentSnap(doc)).toList();
-  }
-
   Future<SongModel> getSongById(String songId) async {
     final DocumentSnapshot snap =
         await _db.collection('songs').doc(songId).get();
     return SongModel.fromDocumentSnap(snap);
   }
 
+  Stream<List<SongModel>> getSongsStream() {
+    return _db
+        .collection('songs')
+        .orderBy('created_at', descending: true)
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) => querySnapshot.docs
+            .map((DocumentSnapshot documentSnapshot) =>
+                SongModel.fromDocumentSnap(documentSnapshot))
+            .toList());
+  }
+
   void cancelUpload() {
     _uploadProgressStreamController.close();
   }
+
+  // Future<List<SongModel>> getSongs() async {
+  //   final QuerySnapshot snapshot = await _db.collection('songs').get();
+
+  //   return snapshot.docs.map((doc) => SongModel.fromDocumentSnap(doc)).toList();
+  // }
+
 }

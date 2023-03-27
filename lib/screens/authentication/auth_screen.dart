@@ -215,16 +215,6 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  // Padding authErrorMsg() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(10),
-  //     child: Text(
-  //       _authController.error?.message ?? '',
-  //       style: GoogleFonts.montserrat(color: Colors.red),
-  //     ),
-  //   );
-  // }
-
   Container loginButton() {
     return Container(
       width: 318,

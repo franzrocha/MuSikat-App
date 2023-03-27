@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/services/song_service.dart';
 
 class UploadDialog extends StatelessWidget {
@@ -30,7 +31,7 @@ class UploadDialog extends StatelessWidget {
                 LinearProgressIndicator(
                   value: uploadPercent / 100,
                   valueColor:
-                      const AlwaysStoppedAnimation<Color>(Colors.blue),
+                      const AlwaysStoppedAnimation<Color>(musikatColor),
                   backgroundColor: Colors.grey.shade300,
                 ),
                 const SizedBox(height: 10.0),

@@ -27,7 +27,7 @@ class _ArtistsScreenState extends State<ArtistsScreen> {
                onTap: () => {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => LibraryScreen(),
+                    builder: (context) => const LibraryScreen(),
                   ),
                 )
               },

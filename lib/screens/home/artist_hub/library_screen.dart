@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
-import '../music_player.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -12,17 +12,19 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final SongService songService = SongService();
+
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      appBar: appbar(context),
       backgroundColor: musikatBackgroundColor,
       body: Center(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: _db.collection('songs').snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        child: StreamBuilder<List<SongModel>>(
+          stream: songService.getSongsStream(),
+          builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
               return const SizedBox(
                   width: 50,
@@ -36,7 +38,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   ));
             }
             if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Center(child: Text('Error: ${snapshot.error}'));
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -52,11 +54,22 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   ));
             }
 
-            final List<DocumentSnapshot> documents = snapshot.data!.docs;
-            return ListView(
-              children: documents.map((doc) {
-                final song = SongModel.fromDocumentSnap(doc);
+            final songs = snapshot.data!;
+            return ListView.builder(
+              itemCount: songs.length,
+              itemBuilder: (context, index) {
+                final song = songs[index];
                 return ListTile(
+                  title: Text(
+                    song.title,
+                    style: GoogleFonts.inter(color: Colors.white, fontSize: 14),
+                  ),
+                  subtitle: Text(song.genre,
+                      style: GoogleFonts.inter(
+                          color: Colors.white.withOpacity(0.5), fontSize: 12)),
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(song.albumCover),
+                  ),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) => const MusicPlayerScreen()),
@@ -64,9 +77,31 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   title: Text(song.title),
                   subtitle: Text(song.genre),
                 );
-              }).toList(),
+              },
             );
           },
+        ),
+      ),
+    );
+  }
+
+  AppBar appbar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 75,
+      title: Text("Library",
+          textAlign: TextAlign.right,
+          style: GoogleFonts.inter(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+      elevation: 0.0,
+      backgroundColor: const Color(0xff262525),
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.angleLeft,
+          size: 20,
         ),
       ),
     );

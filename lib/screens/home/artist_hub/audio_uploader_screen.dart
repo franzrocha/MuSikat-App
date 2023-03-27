@@ -1,6 +1,5 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
-import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/upload_dialog.dart';
 import '../../../services/song_service.dart';
@@ -30,7 +28,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
   final List<String> _writers = [];
   final List<String> _producers = [];
   final AuthController _auth = locator<AuthController>();
-
 
   String? uid;
 
@@ -131,7 +128,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
         return UploadDialog(songService: songService);
       },
     );
-    
 
     try {
       // Start uploading the file
