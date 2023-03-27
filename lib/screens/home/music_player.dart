@@ -1,14 +1,28 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/models/song_model.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   const MusicPlayerScreen({Key? key}) : super(key: key);
 
   @override
   State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
+}
+
+final storage = FirebaseStorage.instance;
+final ref = storage.ref().child('songs');
+final List<String> urls = [];
+final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+Future<List<SongModel>> getSongs() async {
+  final QuerySnapshot snapshot = await _db.collection('songs').get();
+
+  return snapshot.docs.map((doc) => SongModel.fromDocumentSnap(doc)).toList();
 }
 
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
@@ -74,7 +88,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         backgroundColor: musikatBackgroundColor,
         body: SafeArea(
           child: Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -102,15 +116,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     height: 30,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 35),
+                    padding: const EdgeInsets.only(left: 23),
                     child: Row(
                       children: const [
                         Text(
-                          "where do we go now?",
+                          ("asdsad"),
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 25,
+                              fontSize: 20,
                               color: Colors.orange),
                         ),
                       ],
@@ -120,15 +134,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     height: 5,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 35),
+                    padding: const EdgeInsets.only(left: 23),
                     child: Row(
                       children: const [
                         Text(
                           "Desiree Armojallas",
-                          textAlign: TextAlign.left,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
-                              fontSize: 20,
+                              fontSize: 15,
                               color: Colors.white),
                         ),
                       ],
@@ -139,7 +153,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   ),
                   SliderTheme(
                     data: const SliderThemeData(
-                      thumbColor:musikatColor,
+                      thumbColor: musikatColor,
                       overlayColor: Color.fromRGBO(255, 240, 210, 0.5),
                     ),
                     child: Slider(
@@ -154,11 +168,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -223,33 +234,33 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'LYRICS',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 70),
-                      const FaIcon(
-                        FontAwesomeIcons.heart,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 80),
-                      Text(
-                        'INFO',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
+                    //children: [
+                    // Text(
+                    //   'LYRICS',
+                    //   textAlign: TextAlign.center,
+                    //   style: GoogleFonts.inter(
+                    //     color: Colors.white,
+                    //     fontSize: 20,
+                    //   ),
+                    // ),
+                    // const SizedBox(width: 50),
+                    // const FaIcon(
+                    //   FontAwesomeIcons.heart,
+                    //   color: Colors.white,
+                    // ),
+                    // const SizedBox(width: 50),
+                    // Text(
+                    //   'INFO',
+                    //   textAlign: TextAlign.center,
+                    //   style: GoogleFonts.inter(
+                    //     color: Colors.white,
+                    //     fontSize: 20,
+                    //   ),
+                    // ),
+                    //  ],
                   ),
                 ],
               )),
