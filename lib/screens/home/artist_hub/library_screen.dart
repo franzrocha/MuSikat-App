@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/screens/home/music_player.dart';
+import 'package:musikat_app/services/song_service.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -14,10 +16,8 @@ class LibraryScreen extends StatefulWidget {
 class _LibraryScreenState extends State<LibraryScreen> {
   final SongService songService = SongService();
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: appbar(context),
       backgroundColor: musikatBackgroundColor,
@@ -70,12 +70,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(song.albumCover),
                   ),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const MusicPlayerScreen()),
-                  ),
-                  title: Text(song.title),
-                  subtitle: Text(song.genre),
+                  // onTap: () => Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //       builder: (context) => const MusicPlayerScreen()),
+                  // ),
                 );
               },
             );
