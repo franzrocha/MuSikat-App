@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
+import '../music_player.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -56,6 +57,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
               children: documents.map((doc) {
                 final song = SongModel.fromDocumentSnap(doc);
                 return ListTile(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const MusicPlayerScreen()),
+                  ),
                   title: Text(song.title),
                   subtitle: Text(song.genre),
                 );
