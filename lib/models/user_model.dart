@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel {
   final String uid, username, email, image, age, gender;
@@ -65,5 +66,14 @@ class UserModel {
 
   searchUsername(String user) {
     return username.toLowerCase().contains(user.toLowerCase());
+  }
+
+  static Future<UserModel?> getCurrentUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      UserModel userModel = await UserModel.fromUid(uid: user.uid);
+      return userModel;
+    }
+    return null;
   }
 }

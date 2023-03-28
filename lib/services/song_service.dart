@@ -96,10 +96,6 @@ class SongService {
     _uploadProgressStreamController.close();
   }
 
-  // Future<List<SongModel>> getSongs() async {
-  //   final QuerySnapshot snapshot = await _db.collection('songs').get();
-
-  //   return snapshot.docs.map((doc) => SongModel.fromDocumentSnap(doc)).toList();
-  // }
+  
 
 }

@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/upload_dialog.dart';
 import '../../../services/song_service.dart';
@@ -27,16 +28,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       _producerCon = TextEditingController();
   final List<String> _writers = [];
   final List<String> _producers = [];
-  final AuthController _auth = locator<AuthController>();
-
-  String? uid;
-
-  @override
-  void initState() {
-    uid = _auth.currentUser!.uid;
-    super.initState();
-  }
-
+  
   FirebaseStorage storage = FirebaseStorage.instance;
 
   File? _selectedFile, _selectedAlbumCover;
@@ -130,6 +122,9 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
     );
 
     try {
+
+      final UserModel? user = await UserModel.getCurrentUser();
+
       // Start uploading the file
       final String songId = await songService.uploadSong(
           title,
@@ -138,7 +133,8 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
           trimmedWriters,
           trimmedProducers,
           genre,
-          uid!);
+          user!.uid,
+      );
 
       // Get the song model with the uploaded file data
       final SongModel song = await songService.getSongById(songId);

@@ -6,6 +6,7 @@ import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/custom_text_field.dart';
+import 'package:musikat_app/widgets/loading_indicator.dart';
 import 'package:musikat_app/widgets/toast_msg.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -43,16 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             return const Scaffold(
               backgroundColor: musikatBackgroundColor,
               body: Center(
-                child: SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: CircularProgressIndicator(
-                      backgroundColor: musikatColor2,
-                      valueColor: AlwaysStoppedAnimation(
-                        musikatColor,
-                      ),
-                      strokeWidth: 10,
-                    )),
+                child: LoadingIndicator(),
               ),
             );
           } else {

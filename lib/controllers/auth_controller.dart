@@ -128,4 +128,7 @@ class AuthController with ChangeNotifier {
       return Future.error(error.message.toString());
     }
   }
+
+  
+  
 }
