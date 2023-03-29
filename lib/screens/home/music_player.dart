@@ -1,12 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
-import 'package:musikat_app/models/user_model.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   final SongModel song;
@@ -20,9 +17,6 @@ class MusicPlayerScreen extends StatefulWidget {
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final player = AudioPlayer();
   bool isPlaying = false;
-
-  String _songUrl = '';
-  String _songTitle = '';
 
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
@@ -89,6 +83,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
   Future setAudio() async {
     player.setReleaseMode(ReleaseMode.LOOP);
+    // ignore: unused_local_variable
     int result = await player.play(widget.song.audio);
     //final players = AudioCache(prefix: 'assets/audio/');
     //final url = await players.load('desiree.mp3');

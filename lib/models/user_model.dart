@@ -4,10 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class UserModel {
   final String uid, username, email, image, age, gender;
   Timestamp created, updated;
-  List<String> songs;
 
   UserModel(this.uid, this.username, this.email, this.age, this.gender,
-      this.image, this.created, this.updated, this.songs);
+      this.image, this.created, this.updated);
 
   static UserModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
@@ -20,7 +19,6 @@ class UserModel {
       json['image'] ?? '',
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
-      json['songs'] != null ? List<String>.from(json['songs']) : <String>[],
     );
   }
 
@@ -33,7 +31,6 @@ class UserModel {
         'image': image,
         'created': created,
         'updated': updated,
-        'songs': songs
       };
 
   static Future<UserModel> fromUid({required String uid}) async {

@@ -74,18 +74,18 @@ class _AuthScreenState extends State<AuthScreen> {
               appBar: appBar(context),
               backgroundColor: const Color(0xff262525),
               body: SafeArea(
-                child: Center(
-                  child: SingleChildScrollView(
+                child: SingleChildScrollView(
+                  child: Center(
                     child: Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 25),
                           child: Image.asset("assets/images/login_bg.png",
-                              width: 230, height: 230),
+                              width: 210, height: 210),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(
-                              left: 30, top: 10, bottom: 5),
+                          padding:
+                              const EdgeInsets.only(left: 30, top: 5, bottom: 5),
                           alignment: Alignment.topLeft,
                           child: Text("We are here for OPM.",
                               textAlign: TextAlign.right,
@@ -110,7 +110,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 children: [
                                   emailForm(),
                                   const SizedBox(height: 10),
-                                  SizedBox(height: 90, child: passForm()),
+                                  passForm(),
                                   forgotPass(context),
                                 ],
                               ),
@@ -118,7 +118,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                         loginButton(),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),

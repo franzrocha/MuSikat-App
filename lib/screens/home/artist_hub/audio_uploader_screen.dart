@@ -6,10 +6,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
-import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/upload_dialog.dart';
 import '../../../services/song_service.dart';
 import '../../../widgets/toast_msg.dart';
@@ -28,7 +26,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       _producerCon = TextEditingController();
   final List<String> _writers = [];
   final List<String> _producers = [];
-  
+
   FirebaseStorage storage = FirebaseStorage.instance;
 
   File? _selectedFile, _selectedAlbumCover;
@@ -122,18 +120,17 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
     );
 
     try {
-
       final UserModel? user = await UserModel.getCurrentUser();
 
       // Start uploading the file
       final String songId = await songService.uploadSong(
-          title,
-          _selectedFile!.path,
-          _selectedAlbumCover!.path,
-          trimmedWriters,
-          trimmedProducers,
-          genre,
-          user!.uid,
+        title,
+        _selectedFile!.path,
+        _selectedAlbumCover!.path,
+        trimmedWriters,
+        trimmedProducers,
+        genre,
+        user!.uid,
       );
 
       // Get the song model with the uploaded file data
