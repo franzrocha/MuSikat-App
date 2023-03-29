@@ -21,7 +21,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
 
-  //SongModel song, title, audio, albumCover;
   @override
   void initState() {
     setAudio();
@@ -64,30 +63,10 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       seconds,
     ].join(":");
   }
-// final UserModel user = UserModel.fromDocumentSnap(userSnapshot);
-//       final String username = user.username;
-
-//       final String fileName = filePath.split('/').last;
-  // Future<void> setAudio() async {
-  //   player.setReleaseMode(ReleaseMode.LOOP);
-
-  // Replace 'path/to/file' with the actual path to your audio file in Firebase Storage
-  //   final Reference ref = storage.ref().child('users/$username/audios/$fileName');
-  //   final String downloadUrl = await ref.getDownloadURL();
-
-  //   final players = AudioCache();
-  //   await players.load(downloadUrl);
-
-  //   player.setUrl(downloadUrl, isLocal: true);
-  // }
 
   Future setAudio() async {
     player.setReleaseMode(ReleaseMode.LOOP);
-    // ignore: unused_local_variable
-    int result = await player.play(widget.song.audio);
-    //final players = AudioCache(prefix: 'assets/audio/');
-    //final url = await players.load('desiree.mp3');
-    // player.setUrl(.path, isLocal: true);
+    await player.play(widget.song.audio);
   }
 
   @override

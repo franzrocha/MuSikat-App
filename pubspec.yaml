@@ -30,20 +30,21 @@ dependencies:
   flutter:
    sdk: flutter
   flutter_native_splash: ^2.2.6
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.3
   font_awesome_flutter: ^10.1.0
-  firebase_core: ^1.20.0
-  firebase_auth: ^3.6.1
-  cloud_firestore: ^3.4.2
-  firebase_storage: ^10.3.4 
+  firebase_core: ^2.8.0
+  firebase_auth: ^4.2.2
+  cloud_firestore: ^4.4.5
+  firebase_storage: ^11.0.16 
   get_it: ^7.2.0
   image_picker: ^0.8.5
   file_picker: ^5.2.3
-  intl: ^0.17.0
+  intl: ^0.18.0
   fluttertoast: ^8.2.1
-  audioplayers: ^0.20.1
-  firebase_database: ^9.1.7
+  audioplayers: ^0.20.0
+  firebase_database: ^10.0.16
   rounded_expansion_tile: ^0.0.13
+  firebase_core_platform_interface: ^4.5.3
   
 dev_dependencies:
   flutter_test:
