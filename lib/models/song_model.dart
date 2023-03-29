@@ -4,7 +4,6 @@ class SongModel {
   final String songId, title, fileName, audio, albumCover, genre, uid;
   final DateTime createdAt;
   final List<String> writers, producers;
-  
 
   SongModel({
     required this.songId,
