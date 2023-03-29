@@ -211,11 +211,11 @@ class _ChatCardState extends State<ChatCard> {
   }
 
   Future<dynamic> bottomModal(BuildContext context) {
-    return showDialog(
+    return showModalBottomSheet(
       context: context,
       builder: (context) => SingleChildScrollView(
           // controller: ModalScrollController.of(context),
-          child: BottomSheetModal(
+          child: BottomField(
         chat: chat[index],
       )),
     );

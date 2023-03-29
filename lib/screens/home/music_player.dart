@@ -28,26 +28,36 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     super.initState();
 
     player.onPlayerStateChanged.listen((state) {
-      setState(() {
-        isPlaying = state == PlayerState.PLAYING;
-      });
+      if (mounted) {
+        setState(() {
+          isPlaying = state == PlayerState.PLAYING;
+        });
+      }
     });
 
     player.onDurationChanged.listen((newDuration) {
-      setState(() {
-        duration = newDuration;
-      });
+      if (mounted) {
+        setState(() {
+          duration = newDuration;
+        });
+      }
     });
+
     player.onAudioPositionChanged.listen((newPosition) {
-      setState(() {
-        position = newPosition;
-      });
+      if (mounted) {
+        setState(() {
+          position = newPosition;
+        });
+      }
     });
   }
 
   @override
   void dispose() {
     player.dispose();
+    player.onPlayerStateChanged.listen(null);
+    player.onDurationChanged.listen(null);
+    player.onAudioPositionChanged.listen(null);
     super.dispose();
   }
 
