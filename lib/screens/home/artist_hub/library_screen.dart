@@ -6,6 +6,8 @@ import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
+import 'package:musikat_app/screens/home/artist_hub/sample.dart';
+import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/widgets/loading_indicator.dart';
 
@@ -98,6 +100,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
                             if (snapshot.hasData && snapshot.data != null) {
                               final user = snapshot.data!;
                               return ListTile(
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            song: song,
+                                          )),
+                                ),
                                 title: Text(
                                   song.title,
                                   style: GoogleFonts.inter(
