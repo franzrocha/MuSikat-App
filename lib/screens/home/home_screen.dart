@@ -144,11 +144,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           children: [
                             GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const MusicPlayerScreen()),
-                              ),
+                              // onTap: () => Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //       builder: (context) =>
+                              //           const MusicPlayerScreen(
+                              //             songId: 'songId',
+                              //           )),
+                              // ),
                               child: Container(
                                 width: 160,
                                 height: 160,
