@@ -6,31 +6,28 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/models/user_model.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
-  const MusicPlayerScreen({Key? key}) : super(key: key);
+  final SongModel song;
+
+  const MusicPlayerScreen({super.key, required this.song});
 
   @override
   State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
 }
 
-final storage = FirebaseStorage.instance;
-final ref = storage.ref().child('songs');
-final List<String> urls = [];
-final FirebaseFirestore _db = FirebaseFirestore.instance;
-
-Future<List<SongModel>> getSongs() async {
-  final QuerySnapshot snapshot = await _db.collection('songs').get();
-
-  return snapshot.docs.map((doc) => SongModel.fromDocumentSnap(doc)).toList();
-}
-
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final player = AudioPlayer();
   bool isPlaying = false;
+
+  String _songUrl = '';
+  String _songTitle = '';
+
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
 
+  //SongModel song, title, audio, albumCover;
   @override
   void initState() {
     setAudio();
@@ -73,12 +70,29 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       seconds,
     ].join(":");
   }
+// final UserModel user = UserModel.fromDocumentSnap(userSnapshot);
+//       final String username = user.username;
+
+//       final String fileName = filePath.split('/').last;
+  // Future<void> setAudio() async {
+  //   player.setReleaseMode(ReleaseMode.LOOP);
+
+  // Replace 'path/to/file' with the actual path to your audio file in Firebase Storage
+  //   final Reference ref = storage.ref().child('users/$username/audios/$fileName');
+  //   final String downloadUrl = await ref.getDownloadURL();
+
+  //   final players = AudioCache();
+  //   await players.load(downloadUrl);
+
+  //   player.setUrl(downloadUrl, isLocal: true);
+  // }
 
   Future setAudio() async {
     player.setReleaseMode(ReleaseMode.LOOP);
-    final players = AudioCache(prefix: 'assets/audio/');
-    final url = await players.load('desiree.mp3');
-    player.setUrl(url.path, isLocal: true);
+    int result = await player.play(widget.song.audio);
+    //final players = AudioCache(prefix: 'assets/audio/');
+    //final url = await players.load('desiree.mp3');
+    // player.setUrl(.path, isLocal: true);
   }
 
   @override
@@ -104,8 +118,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             width: 1.0,
                           ),
                           borderRadius: BorderRadius.circular(5),
-                          image: const DecorationImage(
-                            image: AssetImage("assets/images/albumdes.jpg"),
+                          image: DecorationImage(
+                            image: NetworkImage(widget.song.albumCover),
                             fit: BoxFit.cover, //change image fill type
                           ),
                         ),
@@ -118,11 +132,11 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 23),
                     child: Row(
-                      children: const [
+                      children: [
                         Text(
-                          ("asdsad"),
+                          widget.song.title,
                           textAlign: TextAlign.left,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: Colors.orange),
@@ -136,11 +150,11 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 23),
                     child: Row(
-                      children: const [
+                      children: [
                         Text(
-                          "Desiree Armojallas",
+                          widget.song.writers.first,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: 15,
                               color: Colors.white),
