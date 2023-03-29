@@ -2,14 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:musikat_app/constants.dart';
 
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/widgets/bottom_field.dart';
 
 import '../models/chat_message_model.dart';
-
 
 class ChatCard extends StatefulWidget {
   const ChatCard({
@@ -32,7 +30,6 @@ class _ChatCardState extends State<ChatCard> {
   int get index => widget.index;
   ScrollController get scrollController => widget.scrollController;
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,7 +50,10 @@ class _ChatCardState extends State<ChatCard> {
               child: Text(
                 DateFormat("MMM d, y hh:mm aaa")
                     .format(chat[index].ts.toDate()),
-                style: GoogleFonts.inter(color: Colors.white70, fontSize: 12,),
+                style: GoogleFonts.inter(
+                  color: Colors.white70,
+                  fontSize: 12,
+                ),
               ),
             ),
           ),
@@ -73,7 +73,8 @@ class _ChatCardState extends State<ChatCard> {
                   padding: const EdgeInsets.all(5),
                   child: Text(
                     '(edited)',
-                    style: GoogleFonts.inter(fontSize: 9, color: Colors.white70),
+                    style:
+                        GoogleFonts.inter(fontSize: 9, color: Colors.white70),
                   ),
                 ),
               ),
@@ -111,7 +112,8 @@ class _ChatCardState extends State<ChatCard> {
                                       left: 10, top: 5, bottom: 3),
                                   child: Text(
                                     '${snap.data?.username}',
-                                   style: GoogleFonts.inter(fontSize: 12, color: Colors.white70),
+                                    style: GoogleFonts.inter(
+                                        fontSize: 12, color: Colors.white70),
                                   ));
                             }),
                       Container(
@@ -122,7 +124,8 @@ class _ChatCardState extends State<ChatCard> {
                               color: chat[index].isDeleted
                                   ? Colors.white
                                   : Colors.transparent),
-                          borderRadius: const BorderRadius.all(Radius.circular(20)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
                           color: chat[index].isDeleted
                               ? Colors.transparent
                               : chat[index].sentBy ==
@@ -133,12 +136,12 @@ class _ChatCardState extends State<ChatCard> {
                         child: Text(
                           chat[index].message,
                           style: TextStyle(
-                              fontSize: 17,
-                              color: chat[index].isDeleted
-                                  ? Colors.white70
-                                  : Colors.white,
+                            fontSize: 17,
+                            color: chat[index].isDeleted
+                                ? Colors.white70
+                                : Colors.white,
+                          ),
                         ),
-                      ),
                       ),
                     ],
                   ),
@@ -153,10 +156,9 @@ class _ChatCardState extends State<ChatCard> {
                     : false,
                 child: Padding(
                   padding: const EdgeInsets.all(5),
-                  child: Text(
-                    '(edited)',
-                    style: GoogleFonts.inter(fontSize: 9, color: Colors.white70)
-                  ),
+                  child: Text('(edited)',
+                      style: GoogleFonts.inter(
+                          fontSize: 9, color: Colors.white70)),
                 ),
               ),
             ],
@@ -167,7 +169,6 @@ class _ChatCardState extends State<ChatCard> {
               padding: const EdgeInsets.only(bottom: 2, top: 2),
               alignment: Alignment.center,
               width: double.infinity,
-
               child: Padding(
                 padding:
                     const EdgeInsets.only(bottom: 5.0, right: 10, left: 10),
@@ -177,31 +178,27 @@ class _ChatCardState extends State<ChatCard> {
                       ? MainAxisAlignment.end
                       : MainAxisAlignment.start,
                   children: [
-                    Text(
-                      chat[index].seenBy.length > 1 ? "Seen by " : "Sent",
-                      style: GoogleFonts.inter(fontSize: 9, color: Colors.white70)
-                    ),
-
+                    Text(chat[index].seenBy.length > 1 ? "Seen by " : "Sent",
+                        style: GoogleFonts.inter(
+                            fontSize: 9, color: Colors.white70)),
                     for (String uid in chat[index].seenBy)
                       FutureBuilder(
                           future: UserModel.fromUid(uid: uid),
                           builder: (context, AsyncSnapshot snap) {
                             if (snap.hasData && chat[index].seenBy.length > 1) {
                               if (chat[index].seenBy.last == uid) {
-                                return Text(
-                                  'and ${snap.data?.username}',
-                                  style: GoogleFonts.inter(fontSize: 9, color: Colors.white70)
-                                );
+                                return Text('and ${snap.data?.username}',
+                                    style: GoogleFonts.inter(
+                                        fontSize: 9, color: Colors.white70));
                               } else {
                                 return Text(
-                                  '${snap.data?.username}${chat[index].seenBy.length > 2 ? chat[index].seenBy[chat[index].seenBy.length - 2] == uid ? '' : ',' : ''} ',
-                                  style: GoogleFonts.inter(fontSize: 9, color: Colors.white70)
-                                );
+                                    '${snap.data?.username}${chat[index].seenBy.length > 2 ? chat[index].seenBy[chat[index].seenBy.length - 2] == uid ? '' : ',' : ''} ',
+                                    style: GoogleFonts.inter(
+                                        fontSize: 9, color: Colors.white70));
                               }
                             }
                             return const Text('');
                           }),
-                   
                   ],
                 ),
               ),
@@ -214,13 +211,13 @@ class _ChatCardState extends State<ChatCard> {
   }
 
   Future<dynamic> bottomModal(BuildContext context) {
-    return showMaterialModalBottomSheet(
+    return showDialog(
       context: context,
       builder: (context) => SingleChildScrollView(
-          controller: ModalScrollController.of(context),
+          // controller: ModalScrollController.of(context),
           child: BottomSheetModal(
-            chat: chat[index],
-          )),
+        chat: chat[index],
+      )),
     );
   }
 }
