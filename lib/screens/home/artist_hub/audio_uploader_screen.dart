@@ -305,9 +305,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
         labelStyle: TextStyle(color: Colors.white, fontSize: 18),
         labelText: "Genre",
         border: InputBorder.none,
-        // prefixIconConstraints: BoxConstraints(
-        //   minWidth: 10,
-        // ),
       ),
       dropdownColor: Colors.black,
       itemHeight: 70,

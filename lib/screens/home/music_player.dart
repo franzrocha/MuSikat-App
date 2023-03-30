@@ -16,7 +16,7 @@ class MusicPlayerScreen extends StatefulWidget {
 
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final player = AudioPlayer();
-  bool isPlaying = false;
+  bool isPlaying = false; 
 
   Duration duration = Duration.zero;
   Duration position = Duration.zero;

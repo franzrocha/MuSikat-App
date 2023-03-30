@@ -65,14 +65,14 @@ class _ChatCardState extends State<ChatCard> {
                     : MainAxisAlignment.start,
             children: [
               Visibility(
-                visible: chat[index].isEdited
+                visible: chat[index].isEdited && !chat[index].isDeleted
                     ? chat[index].sentBy ==
                         FirebaseAuth.instance.currentUser?.uid
                     : false,
                 child: Padding(
                   padding: const EdgeInsets.all(5),
                   child: Text(
-                    '(edited)',
+                    '(edited)', 
                     style:
                         GoogleFonts.inter(fontSize: 9, color: Colors.white70),
                   ),
@@ -148,7 +148,7 @@ class _ChatCardState extends State<ChatCard> {
                 ),
               ),
               Visibility(
-                visible: chat[index].isEdited
+                visible: chat[index].isEdited && !chat[index].isDeleted
                     ? chat[index].sentBy ==
                             FirebaseAuth.instance.currentUser?.uid
                         ? false
@@ -178,27 +178,30 @@ class _ChatCardState extends State<ChatCard> {
                       ? MainAxisAlignment.end
                       : MainAxisAlignment.start,
                   children: [
-                    Text(chat[index].seenBy.length > 1 ? "Seen by " : "Sent",
-                        style: GoogleFonts.inter(
-                            fontSize: 9, color: Colors.white70)),
-                    for (String uid in chat[index].seenBy)
-                      FutureBuilder(
-                          future: UserModel.fromUid(uid: uid),
-                          builder: (context, AsyncSnapshot snap) {
-                            if (snap.hasData && chat[index].seenBy.length > 1) {
-                              if (chat[index].seenBy.last == uid) {
-                                return Text('and ${snap.data?.username}',
-                                    style: GoogleFonts.inter(
-                                        fontSize: 9, color: Colors.white70));
-                              } else {
+                    Text(
+                      chat[index].seenBy.length >= 5
+                          ? "Seen by 4+ "
+                          : "Seen by ",
+                      style:
+                          GoogleFonts.inter(fontSize: 9, color: Colors.white70),
+                    ),
+                    if (chat[index].seenBy.length < 5)
+                      for (String uid in chat[index].seenBy)
+                        FutureBuilder(
+                            future: UserModel.fromUid(uid: uid),
+                            builder: (context, AsyncSnapshot snap) {
+                              if (snap.hasData) {
+                                final username = snap.data?.username ?? '';
+                                final isLast = chat[index].seenBy.last == uid;
+                                final separator = isLast ? '' : ', ';
                                 return Text(
-                                    '${snap.data?.username}${chat[index].seenBy.length > 2 ? chat[index].seenBy[chat[index].seenBy.length - 2] == uid ? '' : ',' : ''} ',
-                                    style: GoogleFonts.inter(
-                                        fontSize: 9, color: Colors.white70));
+                                  '$username$separator',
+                                  style: GoogleFonts.inter(
+                                      fontSize: 9, color: Colors.white70),
+                                );
                               }
-                            }
-                            return const Text('');
-                          }),
+                              return const SizedBox();
+                            }),
                   ],
                 ),
               ),

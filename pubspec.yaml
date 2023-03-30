@@ -45,6 +45,7 @@ dependencies:
   firebase_database: ^10.0.16
   rounded_expansion_tile: ^0.0.13
   firebase_core_platform_interface: ^4.5.3
+  textfield_tags: ^2.0.2
   
 dev_dependencies:
   flutter_test:
