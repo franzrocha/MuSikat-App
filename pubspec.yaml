@@ -46,6 +46,7 @@ dependencies:
   rounded_expansion_tile: ^0.0.13
   firebase_core_platform_interface: ^4.5.3
   textfield_tags: ^2.0.2
+  transparent_image: ^2.0.1
   
 dev_dependencies:
   flutter_test:
@@ -61,6 +62,7 @@ dev_dependencies:
 flutter_native_splash:
   image: assets/images/musikat_logo.png
   color: "#262525"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
