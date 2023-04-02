@@ -15,10 +15,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   final List<String> _languages = [
     'English',
     'Tagalog',
-    'Français',
-    'Deutsch',
-    'Italiano',
-    'Português',
   ];
 
   final Map<String, bool> _checkedLanguages = {};

@@ -26,7 +26,7 @@ class AuthController with ChangeNotifier {
     super.dispose();
   }
 
-  handleAuthUserChanges(User? event) {
+ handleAuthUserChanges(User? event) {
     if (event == null) {
       print('No logged in user');
       nav.popUntilFirst();
@@ -42,6 +42,7 @@ class AuthController with ChangeNotifier {
     currentUser = event;
     notifyListeners();
   }
+
 
   Future<void> login(String email, String password) async {
     try {

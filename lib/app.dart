@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:musikat_app/screens/authentication/welcome_screen.dart';
+import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'controllers/navigation/navigation_service.dart';
+
 
 
 class MyApp extends StatelessWidget {
@@ -14,14 +14,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       restorationScopeId: 'app',
       debugShowCheckedModeBanner: false,
-       theme: ThemeData().copyWith(
-       colorScheme: ThemeData().colorScheme.copyWith(
-              primary: Colors.green,),),
+      theme: ThemeData().copyWith(
+        colorScheme: ThemeData().colorScheme.copyWith(
+              primary: Colors.green,
+            ),
+      ),
       builder: (context, Widget? child) => child as Widget,
       navigatorKey: locator<NavigationService>().navigatorKey,
-      onGenerateRoute: NavigationService.generateRoute,
-      initialRoute: WelcomeScreen.route,
+      onGenerateRoute: locator<NavigationService>().getRoute,
+      // initialRoute: WelcomeScreen.route,
     );
   }
-
 }

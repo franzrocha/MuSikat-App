@@ -1,13 +1,11 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
-import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/widgets/nav_bar.dart';
 import 'dart:developer' as developer;
-// import '../../screens/authentication/auth_screen.dart';
 import '../../screens/authentication/welcome_screen.dart';
 part 'navigation_animations.dart';
-part 'navigation_routing.dart';
+// part 'navigation_routing.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -145,11 +143,20 @@ class NavigationService {
     logCurrentRoute();
   }
 
-  static PageRoute Function(RouteSettings settings) get generateRoute =>
-      getRoute;
+  // static PageRoute Function(RouteSettings settings) get generateRoute =>
+  //     getRoute;
 
   log(String message, {String? origin}) {
     developer.log(message,
         name: 'NavigationService${origin != null ? '/$origin' : ''}');
+  }
+
+  material.PageRoute getRoute(RouteSettings settings) {
+    // NavigationService nav = locator<NavigationService>();
+    if (FirebaseAuth.instance.currentUser != null) {
+      return FadeRoute(page: const NavBar(), settings: settings);
+    } else {
+      return FadeRoute(page: const WelcomeScreen(), settings: settings);
+    }
   }
 }
