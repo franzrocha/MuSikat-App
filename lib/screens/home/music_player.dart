@@ -3,7 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
+<<<<<<< Updated upstream
 import 'package:just_audio/just_audio.dart';
+=======
+import 'package:musikat_app/services/song_service.dart';
+>>>>>>> Stashed changes
 
 
   class MusicPlayerScreen extends StatefulWidget {
@@ -11,9 +15,24 @@ import 'package:just_audio/just_audio.dart';
 
   const MusicPlayerScreen({Key? key, required this.song}) : super(key: key);
 
+<<<<<<< Updated upstream
     @override
     State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
   }
+=======
+class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
+<<<<<<< Updated upstream
+  final player = AudioPlayer();
+  bool isPlaying = false; 
+=======
+  //final player = AudioPlayer();
+
+  AudioPlayer player = AudioPlayer();
+
+  //AudioCache cache = AudioCache();
+  bool isPlaying = false;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
   class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     final player = AudioPlayer();
@@ -31,7 +50,11 @@ import 'package:just_audio/just_audio.dart';
     player.playerStateStream.listen((playerState) {
       if (mounted) {
         setState(() {
+<<<<<<< Updated upstream
           isPlaying = playerState.playing;
+=======
+          isPlaying = state == PlayerState.playing;
+>>>>>>> Stashed changes
         });
       }
     });
@@ -44,7 +67,11 @@ import 'package:just_audio/just_audio.dart';
       }
     });
 
+<<<<<<< Updated upstream
   player.positionStream.listen((newPosition) {
+=======
+    player.onPositionChanged.listen((newPosition) {
+>>>>>>> Stashed changes
       if (mounted) {
         setState(() {
           position = newPosition;
@@ -53,6 +80,7 @@ import 'package:just_audio/just_audio.dart';
     });
   }
 
+<<<<<<< Updated upstream
     @override
     void dispose() {
       player.dispose();
@@ -61,6 +89,16 @@ import 'package:just_audio/just_audio.dart';
       player.positionStream.listen(null);
       super.dispose();
     }
+=======
+  @override
+  void dispose() {
+    player.dispose();
+    player.onPlayerStateChanged.listen(null);
+    player.onDurationChanged.listen(null);
+    player.onPositionChanged.listen(null);
+    super.dispose();
+  }
+>>>>>>> Stashed changes
 
     String time(Duration duration) {
       String twoDigits(int n) => n.toString().padLeft(2, '0');
@@ -76,9 +114,14 @@ import 'package:just_audio/just_audio.dart';
     }
 
   Future<void> setAudio() async {
+<<<<<<< Updated upstream
     player.setLoopMode(LoopMode.one);
     await player.setUrl(widget.song.audio);
     await player.play();
+=======
+    //await player.play(widget.song.audio);
+    player.setReleaseMode(ReleaseMode.loop);
+>>>>>>> Stashed changes
   }
 
   @override
