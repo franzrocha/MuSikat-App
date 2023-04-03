@@ -102,6 +102,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                   MaterialPageRoute(
                                       builder: (context) => MusicPlayerScreen(
                                             song: song,
+                                            username: user.username,
                                           )),
                                 ),
                                 title: Text(
@@ -157,7 +158,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
           size: 20,
         ),
       ),
-     
     );
   }
 }

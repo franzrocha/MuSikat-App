@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.musikat_app">
    <application
-        android:label="MusiKat"
+        android:label="MuSiKat"
         android:name="${applicationName}"
         android:icon="@mipmap/musikat_launcher">
         <activity

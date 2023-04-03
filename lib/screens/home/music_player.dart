@@ -9,43 +9,30 @@ import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/services/song_service.dart';
 >>>>>>> Stashed changes
 
+class MusicPlayerScreen extends StatefulWidget {
+  final SongModel song;
+  final String username;
 
-  class MusicPlayerScreen extends StatefulWidget {
-    final SongModel song;
+  const MusicPlayerScreen(
+      {Key? key, required this.song, required this.username})
+      : super(key: key);
 
-  const MusicPlayerScreen({Key? key, required this.song}) : super(key: key);
+  @override
+  State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
+}
 
-<<<<<<< Updated upstream
-    @override
-    State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
-  }
-=======
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
-<<<<<<< Updated upstream
   final player = AudioPlayer();
-  bool isPlaying = false; 
-=======
-  //final player = AudioPlayer();
-
-  AudioPlayer player = AudioPlayer();
-
-  //AudioCache cache = AudioCache();
   bool isPlaying = false;
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
-  class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
-    final player = AudioPlayer();
-    bool isPlaying = false; 
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
 
-    Duration duration = Duration.zero;
-    Duration position = Duration.zero;
+  @override
+  void initState() {
+    setAudio();
 
-    @override
-    void initState() {
-      setAudio();
-
-      super.initState();
+    super.initState();
 
     player.playerStateStream.listen((playerState) {
       if (mounted) {
@@ -67,11 +54,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       }
     });
 
-<<<<<<< Updated upstream
-  player.positionStream.listen((newPosition) {
-=======
-    player.onPositionChanged.listen((newPosition) {
->>>>>>> Stashed changes
+    player.positionStream.listen((newPosition) {
       if (mounted) {
         setState(() {
           position = newPosition;
@@ -80,38 +63,27 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     });
   }
 
-<<<<<<< Updated upstream
-    @override
-    void dispose() {
-      player.dispose();
-      player.playerStateStream.listen(null);
-      player.durationStream.listen(null);
-      player.positionStream.listen(null);
-      super.dispose();
-    }
-=======
   @override
   void dispose() {
     player.dispose();
-    player.onPlayerStateChanged.listen(null);
-    player.onDurationChanged.listen(null);
-    player.onPositionChanged.listen(null);
+    player.playerStateStream.listen(null);
+    player.durationStream.listen(null);
+    player.positionStream.listen(null);
     super.dispose();
   }
->>>>>>> Stashed changes
 
-    String time(Duration duration) {
-      String twoDigits(int n) => n.toString().padLeft(2, '0');
-      final hours = twoDigits(duration.inHours);
-      final minutes = twoDigits(duration.inMinutes.remainder(60));
-      final seconds = twoDigits(duration.inSeconds.remainder(60));
+  String time(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
 
-      return [
-        if (duration.inHours > 0) hours,
-        minutes,
-        seconds,
-      ].join(":");
-    }
+    return [
+      if (duration.inHours > 0) hours,
+      minutes,
+      seconds,
+    ].join(":");
+  }
 
   Future<void> setAudio() async {
 <<<<<<< Updated upstream
@@ -181,7 +153,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     child: Row(
                       children: [
                         Text(
-                          widget.song.writers.first,
+                          widget.username,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontWeight: FontWeight.normal,
