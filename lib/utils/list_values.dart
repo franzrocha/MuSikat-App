@@ -48,3 +48,27 @@ final genreList = [
 
 //genre value
 String genreValue = 'Alternative';
+
+//language list
+final List<String> languages = [
+  'English',
+  'Tagalog',
+  'Cebuano',
+  'Aklanon',
+  'Bikol',
+  'Chavacano',
+  'Hiligaynon',
+  'Ibanag',
+  'Ilocano',
+  'Ivatan',
+  'Kapampangan',
+  'Kinaray-a',
+  'Maguindanao',
+  'Maranao',
+  'Pangasinan',
+  'Sambal',
+  'Surigaonon',
+  'Tausug',
+  'Waray',
+  'Wakan',
+];

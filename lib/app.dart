@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/service_locators.dart';
-
-
+import 'package:musikat_app/utils/constants.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(
         colorScheme: ThemeData().colorScheme.copyWith(
-              primary: Colors.green,
+              primary: musikatColor2,
             ),
       ),
       builder: (context, Widget? child) => child as Widget,

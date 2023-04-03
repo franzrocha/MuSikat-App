@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/utils/constants.dart';
+import 'package:musikat_app/utils/list_values.dart';
+import 'package:musikat_app/widgets/toast_msg.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({Key? key}) : super(key: key);
@@ -12,35 +14,12 @@ class LanguageSelectionScreen extends StatefulWidget {
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
-  final List<String> _languages = [
-    'English',
-    'Tagalog',
-    'Cebuano',
-    'Aklanon',
-    'Bikol',
-    'Chavacano',
-    'Hiligaynon',
-    'Ibanag',
-    'Ilocano',
-    'Ivatan',
-    'Kapampangan',
-    'Kinaray-a',
-    'Maguindanao',
-    'Maranao',
-    'Pangasinan',
-    'Sambal',
-    'Surigaonon',
-    'Tausug',
-    'Waray',
-    'Wakan',
-  ];
-
   final Map<String, bool> _checkedLanguages = {};
 
   @override
   void initState() {
     super.initState();
-    for (String language in _languages) {
+    for (String language in languages) {
       _checkedLanguages[language] = false;
     }
   }
@@ -51,22 +30,24 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
       backgroundColor: musikatBackgroundColor,
       appBar: appbar(context),
       body: ListView.builder(
-        itemCount: _languages.length,
+        itemCount: languages.length,
         itemBuilder: (BuildContext context, int index) {
-          String language = _languages[index];
-          return CheckboxListTile(
-            activeColor: musikatColor2,
+          String language = languages[index];
+          return ListTile(
+            onTap: () {
+              setState(() {
+                _checkedLanguages[language] = !_checkedLanguages[language]!;
+              });
+            },
+            selected: _checkedLanguages[language]!,
             selectedTileColor: Colors.grey,
             title: Text(
               language,
               style: GoogleFonts.inter(fontSize: 14, color: Colors.white),
             ),
-            value: _checkedLanguages[language],
-            onChanged: (bool? value) {
-              setState(() {
-                _checkedLanguages[language] = value!;
-              });
-            },
+            trailing: _checkedLanguages[language]!
+                ? const Icon(Icons.check, color: musikatColor2)
+                : null,
           );
         },
       ),
@@ -74,12 +55,19 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         backgroundColor: musikatColor,
         onPressed: () {
           List<String> selectedLanguages = [];
-          for (String language in _languages) {
+          for (String language in languages) {
             if (_checkedLanguages[language]!) {
               selectedLanguages.add(language);
             }
           }
-          Navigator.pop(context, selectedLanguages);
+          if (selectedLanguages.isEmpty) {
+            ToastMessage.show(context, 'Please select a language');
+          } else if (selectedLanguages.length > 3) {
+            ToastMessage.show(
+                context, 'Please select a maximum of 3 languages');
+          } else {
+            Navigator.pop(context, selectedLanguages);
+          }
         },
         child: const Icon(Icons.save),
       ),

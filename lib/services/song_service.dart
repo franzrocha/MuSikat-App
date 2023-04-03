@@ -14,8 +14,15 @@ class SongService {
   Stream<double> get uploadProgressStream =>
       _uploadProgressStreamController.stream;
 
-  Future<String> uploadSong(String title, String filePath, String coverPath,
-      List<String> writers, List<String> producers, String genre, String uid,
+  Future<String> uploadSong(
+      String title,
+      String filePath,
+      String coverPath,
+      List<String> writers,
+      List<String> producers,
+      String genre,
+      String uid,
+      List<String> languages,
       {String? albumCover}) async {
     try {
       // Retrieves the user's username from Firestore using the user's uid as a reference
@@ -59,6 +66,7 @@ class SongService {
         'producers': producers,
         'genre': genre,
         'uid': uid,
+        'languages': languages,
       };
 
       final DocumentReference docRef = _db.collection('songs').doc();

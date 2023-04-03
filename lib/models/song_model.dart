@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class SongModel {
   final String songId, title, fileName, audio, albumCover, genre, uid;
   final DateTime createdAt;
-  final List<String> writers, producers;
+  final List<String> writers, producers, languages;
 
   SongModel({
     required this.songId,
@@ -16,6 +16,7 @@ class SongModel {
     required this.producers,
     required this.genre,
     required this.uid,
+    required this.languages,
   });
 
   static SongModel fromDocumentSnap(DocumentSnapshot snap) {
@@ -30,7 +31,8 @@ class SongModel {
       writers: (json['writers'] as List<dynamic>?)?.cast<String>() ?? [],
       producers: (json['producers'] as List<dynamic>?)?.cast<String>() ?? [],
       genre: json['genre'] ?? '',
-      uid: json['uid'] ?? '',
+      uid: json['uid'] ?? '', 
+      languages: (json['languages'] as List<dynamic>?)?.cast<String>() ?? [],
     );
   }
 
@@ -45,5 +47,6 @@ class SongModel {
         'producers': producers,
         'genre': genre,
         'uid': uid,
+        'languages': languages,
       };
 }

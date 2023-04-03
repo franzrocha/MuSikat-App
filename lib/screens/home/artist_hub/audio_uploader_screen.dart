@@ -9,7 +9,7 @@ import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/artist_hub/language_selection_screen.dart';
-import 'package:musikat_app/utils/dropdown_values.dart';
+import 'package:musikat_app/utils/list_values.dart';
 import 'package:musikat_app/widgets/upload_dialog.dart';
 import '../../../services/song_service.dart';
 import '../../../widgets/toast_msg.dart';
@@ -28,6 +28,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       _producerCon = TextEditingController();
   final List<String> _writers = [];
   final List<String> _producers = [];
+  List<String>? selectedLanguage;
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -133,6 +134,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
         trimmedProducers,
         genre,
         user!.uid,
+        selectedLanguage ?? [],
       );
 
       // Get the song model with the uploaded file data
@@ -295,21 +297,51 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                     ),
                   ),
                   genderDropDown(context),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => const LanguageSelectionScreen()),
-                        );
-                      },
-                      child: const Text(
-                        "Go to this bullshit",
-                      ))
+                  const SizedBox(height: 10),
+                  Text(
+                    'Choose language',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                  ),
+                  languageTile(context),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  ListTile languageTile(BuildContext context) {
+    return ListTile(
+      onTap: () async {
+        final result = await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const LanguageSelectionScreen(),
+          ),
+        );
+        if (result != null) {
+          setState(() {
+            selectedLanguage = result;
+          });
+        }
+      },
+      title: Text(
+        selectedLanguage != null
+            ? selectedLanguage!.join(", ")
+            : 'Select a language',
+        style: GoogleFonts.inter(
+          color: Colors.white,
+          fontSize: 13,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.arrow_forward_ios,
+        color: Colors.grey,
+        size: 15,
       ),
     );
   }
@@ -365,8 +397,17 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
           color: Colors.grey,
           fontSize: 13,
         ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
         suffixIcon: IconButton(
-          icon: const Icon(Icons.add),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.grey,
+          ),
           onPressed: () {
             if (_producerCon.text.isEmpty) {
               ToastMessage.show(
@@ -498,8 +539,17 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
           color: Colors.grey,
           fontSize: 13,
         ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.grey, // add the desired color
+              width: 0.5 // add the desired width
+              ),
+        ),
         suffixIcon: IconButton(
-          icon: const Icon(Icons.add),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.grey,
+          ),
           onPressed: () {
             if (_writerCon.text.isEmpty) {
               ToastMessage.show(context, 'Please enter a writer for the song');
@@ -541,6 +591,12 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
         hintStyle: GoogleFonts.inter(
           color: Colors.grey,
           fontSize: 13,
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
         ),
       ),
     );
