@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/utils/constants.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({Key? key}) : super(key: key);
@@ -15,6 +15,24 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   final List<String> _languages = [
     'English',
     'Tagalog',
+    'Cebuano',
+    'Aklanon',
+    'Bikol',
+    'Chavacano',
+    'Hiligaynon',
+    'Ibanag',
+    'Ilocano',
+    'Ivatan',
+    'Kapampangan',
+    'Kinaray-a',
+    'Maguindanao',
+    'Maranao',
+    'Pangasinan',
+    'Sambal',
+    'Surigaonon',
+    'Tausug',
+    'Waray',
+    'Wakan',
   ];
 
   final Map<String, bool> _checkedLanguages = {};

@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -19,7 +18,7 @@ class SongService {
       List<String> writers, List<String> producers, String genre, String uid,
       {String? albumCover}) async {
     try {
-      // Retrieve the user's username from Firestore using the user's uid as a reference
+      // Retrieves the user's username from Firestore using the user's uid as a reference
       final DocumentSnapshot userSnapshot =
           await _db.collection('users').doc(uid).get();
       final UserModel user = UserModel.fromDocumentSnap(userSnapshot);
@@ -28,7 +27,7 @@ class SongService {
       final String fileName = filePath.split('/').last;
       final String coverFileName = coverPath.split('/').last;
 
-      // Create a reference to the audio and album cover files in Firebase Storage
+      // Creates a reference to the audio and album cover files in Firebase Storage
       final Reference audioRef =
           FirebaseStorage.instance.ref('users/$username/audios/$fileName');
       final Reference coverRef = FirebaseStorage.instance

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/widgets/avatar.dart';
 

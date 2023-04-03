@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/utils/constants.dart';
 
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/widgets/bottom_field.dart';

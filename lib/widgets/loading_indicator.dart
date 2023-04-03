@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/utils/constants.dart';
 
 class LoadingIndicator extends StatelessWidget {
   const LoadingIndicator({

@@ -1,49 +1,50 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:just_audio/just_audio.dart';
 
-class MusicPlayerScreen extends StatefulWidget {
-  final SongModel song;
 
-  const MusicPlayerScreen({super.key, required this.song});
+  class MusicPlayerScreen extends StatefulWidget {
+    final SongModel song;
 
-  @override
-  State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
-}
+  const MusicPlayerScreen({Key? key, required this.song}) : super(key: key);
 
-class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
-  final player = AudioPlayer();
-  bool isPlaying = false; 
+    @override
+    State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
+  }
 
-  Duration duration = Duration.zero;
-  Duration position = Duration.zero;
+  class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
+    final player = AudioPlayer();
+    bool isPlaying = false; 
 
-  @override
-  void initState() {
-    setAudio();
+    Duration duration = Duration.zero;
+    Duration position = Duration.zero;
 
-    super.initState();
+    @override
+    void initState() {
+      setAudio();
 
-    player.onPlayerStateChanged.listen((state) {
+      super.initState();
+
+    player.playerStateStream.listen((playerState) {
       if (mounted) {
         setState(() {
-          isPlaying = state == PlayerState.PLAYING;
+          isPlaying = playerState.playing;
         });
       }
     });
 
-    player.onDurationChanged.listen((newDuration) {
+    player.durationStream.listen((newDuration) {
       if (mounted) {
         setState(() {
-          duration = newDuration;
+          duration = newDuration ?? Duration.zero;
         });
       }
     });
 
-    player.onAudioPositionChanged.listen((newPosition) {
+  player.positionStream.listen((newPosition) {
       if (mounted) {
         setState(() {
           position = newPosition;
@@ -52,31 +53,32 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    player.dispose();
-    player.onPlayerStateChanged.listen(null);
-    player.onDurationChanged.listen(null);
-    player.onAudioPositionChanged.listen(null);
-    super.dispose();
-  }
+    @override
+    void dispose() {
+      player.dispose();
+      player.playerStateStream.listen(null);
+      player.durationStream.listen(null);
+      player.positionStream.listen(null);
+      super.dispose();
+    }
 
-  String time(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = twoDigits(duration.inHours);
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    String time(Duration duration) {
+      String twoDigits(int n) => n.toString().padLeft(2, '0');
+      final hours = twoDigits(duration.inHours);
+      final minutes = twoDigits(duration.inMinutes.remainder(60));
+      final seconds = twoDigits(duration.inSeconds.remainder(60));
 
-    return [
-      if (duration.inHours > 0) hours,
-      minutes,
-      seconds,
-    ].join(":");
-  }
+      return [
+        if (duration.inHours > 0) hours,
+        minutes,
+        seconds,
+      ].join(":");
+    }
 
-  Future setAudio() async {
-    player.setReleaseMode(ReleaseMode.LOOP);
-    await player.play(widget.song.audio);
+  Future<void> setAudio() async {
+    player.setLoopMode(LoopMode.one);
+    await player.setUrl(widget.song.audio);
+    await player.play();
   }
 
   @override
@@ -162,7 +164,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                         final position = Duration(seconds: value.toInt());
                         await player.seek(position);
 
-                        await player.resume();
+                        await player.play();
                       },
                     ),
                   ),
@@ -216,7 +218,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             if (isPlaying) {
                               await player.pause();
                             } else {
-                              await player.resume();
+                              await player.play();
                             }
                           },
                           icon:

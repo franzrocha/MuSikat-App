@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/constants.dart';
+import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/screens/authentication/register_screen.dart';
 import 'auth_screen.dart';
 import 'package:transparent_image/transparent_image.dart';

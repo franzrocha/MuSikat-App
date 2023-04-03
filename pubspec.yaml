@@ -39,14 +39,12 @@ dependencies:
   get_it: ^7.2.0
   image_picker: ^0.8.5
   file_picker: ^5.2.3
-  intl: ^0.18.0
   fluttertoast: ^8.2.1
-  audioplayers: ^0.20.0
   firebase_database: ^10.0.16
   rounded_expansion_tile: ^0.0.13
   firebase_core_platform_interface: ^4.5.3
-  textfield_tags: ^2.0.2
   transparent_image: ^2.0.1
+  just_audio: ^0.9.32
   
 dev_dependencies:
   flutter_test:
