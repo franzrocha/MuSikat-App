@@ -3,11 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
-<<<<<<< Updated upstream
 import 'package:just_audio/just_audio.dart';
-=======
-import 'package:musikat_app/services/song_service.dart';
->>>>>>> Stashed changes
 
 class MusicPlayerScreen extends StatefulWidget {
   final SongModel song;
@@ -37,11 +33,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     player.playerStateStream.listen((playerState) {
       if (mounted) {
         setState(() {
-<<<<<<< Updated upstream
           isPlaying = playerState.playing;
-=======
-          isPlaying = state == PlayerState.playing;
->>>>>>> Stashed changes
         });
       }
     });
@@ -86,14 +78,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   }
 
   Future<void> setAudio() async {
-<<<<<<< Updated upstream
     player.setLoopMode(LoopMode.one);
     await player.setUrl(widget.song.audio);
     await player.play();
-=======
-    //await player.play(widget.song.audio);
-    player.setReleaseMode(ReleaseMode.loop);
->>>>>>> Stashed changes
   }
 
   @override
