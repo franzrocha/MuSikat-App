@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/screens/home/chat/global_chat.dart';
 import 'package:musikat_app/utils/constants.dart';
-import 'package:musikat_app/screens/home/global_chat.dart';
 
 class ChatHomeScreen extends StatefulWidget {
   const ChatHomeScreen({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 //genrelist
-final genreList = [
+final genres = [
   "Alternative",
   "Ambient",
   "Avant-garde",
@@ -45,9 +45,6 @@ final genreList = [
   "Techno",
   "World"
 ];
-
-//genre value
-String genreValue = 'Alternative';
 
 //language list
 final List<String> languages = [

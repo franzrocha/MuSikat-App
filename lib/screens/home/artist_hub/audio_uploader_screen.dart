@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/screens/home/artist_hub/genre_selection_screen.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -29,6 +30,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
   final List<String> _writers = [];
   final List<String> _producers = [];
   List<String>? selectedLanguage;
+  String? selectedGenre;
 
   FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -90,7 +92,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
 
     final String fileName = _selectedFile!.path.split('/').last;
     final String title = _titleCon.text.trim();
-    final String genre = genreValue.trim();
     final List<String> trimmedWriters =
         _writers.map((writer) => writer.trim()).toList();
     final List<String> trimmedProducers =
@@ -108,6 +109,16 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
 
     if (trimmedProducers.isEmpty) {
       ToastMessage.show(context, 'Please add producer(s) of the song');
+      return;
+    }
+
+    if (selectedLanguage == null) {
+      ToastMessage.show(context, 'Please select the language of the song');
+      return;
+    }
+
+    if (selectedGenre == null) {
+      ToastMessage.show(context, 'Please select the genre of the song');
       return;
     }
 
@@ -132,7 +143,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
         _selectedAlbumCover!.path,
         trimmedWriters,
         trimmedProducers,
-        genre,
+        selectedGenre!,
         user!.uid,
         selectedLanguage ?? [],
       );
@@ -290,13 +301,14 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                   producerChips(),
                   const SizedBox(height: 10),
                   Text(
-                    'Genre',
+                    'Choose genre',
                     style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 13,
                     ),
                   ),
-                  genderDropDown(context),
+                  // genderDropDown(context),
+                  genreTile(context),
                   const SizedBox(height: 10),
                   Text(
                     'Choose language',
@@ -311,6 +323,35 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  ListTile genreTile(BuildContext context) {
+    return ListTile(
+      onTap: () async {
+        final result = await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const GenreSelectionScreen(),
+          ),
+        );
+        if (result != null) {
+          setState(() {
+            selectedGenre = result;
+          });
+        }
+      },
+      title: Text(
+        selectedGenre != null ? selectedGenre! : 'Select a genre',
+        style: GoogleFonts.inter(
+          color: selectedGenre != null ? Colors.white : Colors.grey,
+          fontSize: 13,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.arrow_forward_ios,
+        color: Colors.grey,
+        size: 15,
       ),
     );
   }
@@ -334,7 +375,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
             ? selectedLanguage!.join(", ")
             : 'Select a language',
         style: GoogleFonts.inter(
-          color: Colors.white,
+          color: selectedLanguage != null ? Colors.white : Colors.grey,
           fontSize: 13,
         ),
       ),
@@ -345,38 +386,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       ),
     );
   }
-
-  DropdownButtonFormField genderDropDown(BuildContext context) {
-    return DropdownButtonFormField(
-      value: genreValue,
-      icon: const Icon(
-        Icons.arrow_drop_down,
-      ),
-      style: GoogleFonts.inter(color: Colors.white),
-      decoration: const InputDecoration(
-        labelStyle: TextStyle(color: Colors.white, fontSize: 18),
-        border: InputBorder.none,
-      ),
-      dropdownColor: Colors.black,
-      itemHeight: 70,
-      isExpanded: true,
-      items: genreList.map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(
-            value,
-            style: GoogleFonts.inter(color: Colors.white),
-          ),
-        );
-      }).toList(),
-      onChanged: (dynamic newValue) {
-        setState(() {
-          genreValue = newValue as String;
-        });
-      },
-    );
-  }
-
+  
   TextFormField producerForm() {
     return TextFormField(
       controller: _producerCon,

@@ -5,7 +5,6 @@ import 'package:musikat_app/widgets/nav_bar.dart';
 import 'dart:developer' as developer;
 import '../../screens/authentication/welcome_screen.dart';
 part 'navigation_animations.dart';
-// part 'navigation_routing.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

@@ -9,7 +9,6 @@ import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/chat_card.dart';
 
 class GlobalChatScreen extends StatefulWidget {
-  static const String route = 'home-screen';
   const GlobalChatScreen({Key? key}) : super(key: key);
 
   @override

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:musikat_app/screens/home/search_screen.dart';
+import 'package:musikat_app/screens/home/fer.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
-import 'package:musikat_app/screens/home/artists_screen.dart';
+import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/categories_screen.dart';
 import 'package:musikat_app/screens/home/chat_home_screen.dart';
-import 'package:musikat_app/screens/home/fer.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/widgets/search_bar.dart';
+
+import '../screens/home/search_screen.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
@@ -30,92 +30,130 @@ class _NavBarState extends State<NavBar> {
 
     final List<Widget> pages = [
       const HomeScreen(),
-      const ArtistsScreen(),
-      const FERScreen(),
+      const ArtistsHubScreen(),
+      Container(),
       const ChatHomeScreen(),
       const ProfileScreen(),
     ];
 
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: musikatBackgroundColor,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          toolbarHeight: 70,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: Image.asset("assets/images/musikat_logo.png",
-                width: 45, height: 47),
-          ),
-          actions: [
-            Row(
-              children: [
-                const Searchbar(),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const CategoriesScreen(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.category,
-                    size: 20,
+      resizeToAvoidBottomInset: false,
+      appBar: appbar(context),
+      body: pages[pageIndex],
+      bottomNavigationBar: SafeArea(
+        child: SizedBox(
+          height: 70,
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: const Color(0xffE28D00),
+            selectedItemColor:Colors.white,
+            unselectedItemColor: Colors.white54,
+            currentIndex: pageIndex,
+            elevation: 3,
+            showUnselectedLabels: false,
+            showSelectedLabels: false,
+            onTap: (int index) {
+              if (index != 2) {
+                setState(() {
+                  pageIndex = index;
+                });
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SearchScreen(),
+                  ),
+                );
+              }
+            },
+            items: [
+              const BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.house),
+                label: 'Home',
+              ),
+              const BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.music),
+                label: 'Artists Hub',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black,
+                  ),
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.black,
+                    child: FaIcon(
+                      FontAwesomeIcons.magnifyingGlass,
+                      color: Colors.white,
+                      size: 15,
+                    ),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-          ]),
-      body: pages[pageIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xffE28D00),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        currentIndex: pageIndex,
-        elevation: 3,
-        showUnselectedLabels: false,
-        showSelectedLabels: false,
-        onTap: (int index) {
-          setState(() {
-            pageIndex = index;
-          });
-        },
-        items: [
-          const BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
-            label: 'Home',
-          ),
-          const BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.music),
-            label: 'Artists Hub',
-          ),
-          BottomNavigationBarItem(
-            icon: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.black, shape: BoxShape.circle),
-                padding: const EdgeInsets.all(5),
-                child: const Icon(Icons.camera_alt, color: Colors.white),
+                label: '',
               ),
-            ),
-            label: 'Camera',
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.chat_bubble),
+                label: 'Chat',
+              ),
+              const BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.person,
+                  size: 35,
+                ),
+                label: 'Profile',
+              ),
+            ],
           ),
-          const BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.comment),
-            label: 'Chat',
-          ),
-          const BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.user),
-            label: 'Profile',
-          ),
-        ],
+        ),
       ),
     );
+  }
+
+  AppBar appbar(BuildContext context) {
+    return AppBar(
+        backgroundColor: musikatBackgroundColor,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 70,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Image.asset("assets/images/musikat_logo.png",
+              width: 30, height: 35),
+        ),
+        actions: [
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const CategoriesScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.category,
+                  size: 25,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const FERScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.camera_alt,
+                  size: 25,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+        ]);
   }
 }
