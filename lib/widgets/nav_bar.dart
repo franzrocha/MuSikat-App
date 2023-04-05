@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musikat_app/screens/home/fer.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
-import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
+import 'package:musikat_app/screens/home/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/categories_screen.dart';
 import 'package:musikat_app/screens/home/chat_home_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
@@ -46,7 +46,7 @@ class _NavBarState extends State<NavBar> {
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor: const Color(0xffE28D00),
-            selectedItemColor:Colors.white,
+            selectedItemColor: Colors.white,
             unselectedItemColor: Colors.white54,
             currentIndex: pageIndex,
             elevation: 3,
@@ -111,49 +111,53 @@ class _NavBarState extends State<NavBar> {
 
   AppBar appbar(BuildContext context) {
     return AppBar(
-        backgroundColor: musikatBackgroundColor,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        toolbarHeight: 70,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Image.asset("assets/images/musikat_logo.png",
-              width: 30, height: 35),
+      backgroundColor: musikatBackgroundColor,
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      toolbarHeight: 60,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: Image.asset(
+          "assets/images/musikat_logo.png",
+          width: 30,
+          height: 35,
         ),
-        actions: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const CategoriesScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.category,
-                  size: 25,
-                ),
+      ),
+      actions: [
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CategoriesScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.category,
+                size: 25,
               ),
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const FERScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.camera_alt,
-                  size: 25,
-                ),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const FERScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.camera_alt,
+                size: 25,
               ),
-            ],
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-        ]);
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+      ],
+    );
   }
 }

@@ -47,31 +47,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 profilePic(),
                 userName(),
                 const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '-- \n FOLLOWERS',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 13,
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Text(
-                      '-- \n FOLLOWING',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       '-- \n FOLLOWERS',
+                //       textAlign: TextAlign.center,
+                //       style: GoogleFonts.inter(
+                //         color: Colors.white,
+                //         fontSize: 13,
+                //       ),
+                //     ),
+                //     const SizedBox(width: 20),
+                //     Text(
+                //       '-- \n FOLLOWING',
+                //       textAlign: TextAlign.center,
+                //       style: GoogleFonts.inter(
+                //         color: Colors.white,
+                //         fontSize: 13,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 20),
                 TileList(
                   icon: Icons.queue_music,
                   text: 'Playlist',

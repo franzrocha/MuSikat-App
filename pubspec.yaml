@@ -41,8 +41,6 @@ dependencies:
   file_picker: ^5.2.3
   fluttertoast: ^8.2.1
   firebase_database: ^10.0.16
-  modal_bottom_sheet: ^2.0.1
-  audioplayers: ^3.0.1
   modal_progress_hud_nsn: ^0.3.0
   rounded_expansion_tile: ^0.0.13
   firebase_core_platform_interface: ^4.5.3
