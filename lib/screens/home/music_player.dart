@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:just_audio/just_audio.dart';
@@ -79,7 +80,17 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
   Future<void> setAudio() async {
     player.setLoopMode(LoopMode.one);
-    await player.setUrl(widget.song.audio);
+
+    final source = AudioSource.uri(
+      Uri.parse(widget.song.audio),
+      tag: MediaItem(
+        id: widget.song.songId,
+        title: widget.song.title,
+        artist: widget.username,
+        artUri: Uri.parse(widget.song.albumCover),
+      ),
+    );
+    await player.setAudioSource(source);
     await player.play();
   }
 

@@ -1,4 +1,3 @@
-
 //
 // Generated file. Do not edit.
 //
@@ -32,4 +31,3 @@ void registerPlugins(Registrar registrar) {
   ImagePickerPlugin.registerWith(registrar);
   registrar.registerMessageHandler();
 }
-
