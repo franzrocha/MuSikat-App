@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/screens/home/chat/global_chat.dart';
 import 'package:musikat_app/utils/constants.dart';
 
@@ -23,8 +24,9 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
               child: ListTile(
                 onTap: () => {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const GlobalChatScreen(),
+                    FadeRoute(
+                      page: const GlobalChatScreen(),
+                      settings: const RouteSettings(),
                     ),
                   )
                 },

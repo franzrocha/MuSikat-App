@@ -10,7 +10,6 @@ import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/artist_hub/language_selection_screen.dart';
-import 'package:musikat_app/utils/list_values.dart';
 import 'package:musikat_app/widgets/upload_dialog.dart';
 import '../../../services/song_service.dart';
 import '../../../widgets/toast_msg.dart';
@@ -386,7 +385,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       ),
     );
   }
-  
+
   TextFormField producerForm() {
     return TextFormField(
       controller: _producerCon,

@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/utils/constants.dart';
 
 class AvatarImage extends StatelessWidget {
   final String uid;
@@ -38,10 +39,10 @@ class AvatarImage extends StatelessWidget {
         radius: radius,
         child: Icon(
           Icons.person_rounded,
-          color: Colors.grey,
+          color: Colors.white,
           size: radius,
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
       ),
     );
   }

@@ -1,17 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
+import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/screens/home/artist_hub/library_screen.dart';
+import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/service_locators.dart';
+import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/screens/home/artist_hub/insights.dart';
-
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
 import 'package:musikat_app/widgets/avatar.dart';
+import 'package:musikat_app/widgets/card_tile.dart';
+import 'package:musikat_app/widgets/header_image.dart';
 
-import 'artist_hub/library_screen.dart';
+import '../../widgets/loading_indicator.dart';
 
 class ArtistsHubScreen extends StatefulWidget {
   const ArtistsHubScreen({Key? key}) : super(key: key);
@@ -22,6 +26,7 @@ class ArtistsHubScreen extends StatefulWidget {
 
 class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
   final AuthController _auth = locator<AuthController>();
+  final SongService songService = SongService();
 
   UserModel? user;
 
@@ -46,16 +51,10 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(children: [
-                Container(
-                  height: 150,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/background.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+              Stack(
+                children: [
+                HeaderImage(uid: FirebaseAuth.instance.currentUser!.uid),
+                editButton(),
                 Padding(
                   padding: const EdgeInsets.only(top: 40.0),
                   child: Align(
@@ -63,143 +62,209 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                     child: profilePic(),
                   ),
                 ),
+                Positioned(
+                  bottom: 14,
+                  left: 35,
+                  child: Text(user?.username ?? '...',
+                      style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
+                ),
+                Positioned(
+                  bottom: 0.5,
+                  left: 35,
+                  child: Text('@${user?.username ?? ''}',
+                      style: GoogleFonts.inter(
+                          color: Colors.grey,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold)),
+                ),
               ]),
+              const SizedBox(height: 20),
               Divider(
-                  height: 20,
+                  height: 15,
                   indent: 1.0,
                   color: listileColor.withOpacity(0.4)),
               SizedBox(
-                height: 150,
-                width: 120,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  color: const Color(0xff353434),
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const CircleAvatar(
-                            backgroundColor: Color(0xff62DD69),
-                            child: Icon(
-                              Icons.music_note,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'Library',
-                            style: GoogleFonts.inter(
-                              fontSize: 17,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                height: 170,
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 250, top: 5),
+                      child: Text('Latest Release',
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                    const SizedBox(height: 15),
+                    StreamBuilder<SongModel>(
+                      stream: songService.getLatestSong(
+                          FirebaseAuth.instance.currentUser!.uid),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData || snapshot.data == null) {
+                          return Container();
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container();
+                        } else {
+                          final latestSong = snapshot.data!;
+              
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MusicPlayerScreen(
+                                                  song: latestSong,
+                                                  username: user!.username,
+                                                )));
+                                  },
+                                  child: Container(
+                                    height: 100,
+                                    width: 105,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                            latestSong.albumCover),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      color: Colors.grey.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.grey.withOpacity(0.5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(latestSong.title,
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  Text(latestSong.genre,
+                                      style: GoogleFonts.inter(
+                                        color: Colors.grey,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ],
+                              ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 260, top: 5, bottom: 10),
+                child: Text("Artist's Hub",
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Scrollbar(
+                    child: Row(
+                      children: [
+                        CardTile(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const AudioUploaderScreen(),
+                            ));
+                          },
+                          icon: Icons.upload_file,
+                          text: 'Upload a file',
+                        ),
+                        CardTile(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const LibraryScreen(),
+                            ));
+                          },
+                          icon: Icons.library_music,
+                          text: 'Library',
+                        ),
+                        CardTile(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const InsightsScreen(),
+                            ));
+                          },
+                          icon: Icons.stacked_bar_chart,
+                          text: 'Insights',
+                        ),
+                        CardTile(
+                          onTap: () {},
+                          icon: Icons.monetization_on,
+                          text: 'Patreon',
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              ListTile(
-                onTap: () => {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const LibraryScreen(),
-                    ),
-                  )
-                },
-                trailing: const FaIcon(
-                  FontAwesomeIcons.chevronRight,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                title: Text(
-                  'Library',
-                  style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const Divider(height: 20, indent: 1.0, color: listileColor),
-              ListTile(
-                trailing: const FaIcon(
-                  FontAwesomeIcons.chevronRight,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                title: Text(
-                  'Albums',
-                  style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const Divider(height: 20, indent: 1.0, color: listileColor),
-              ListTile(
-                onTap: () => {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const AudioUploaderScreen(),
-                    ),
-                  )
-                },
-                trailing: const FaIcon(
-                  FontAwesomeIcons.chevronRight,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                title: Text(
-                  'Upload a file',
-                  style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const Divider(height: 20, indent: 1.0, color: listileColor),
-              ListTile(
-                onTap: () => {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const InsightsScreen(),
-                    ),
-                  )
-                },
-                trailing: const FaIcon(
-                  FontAwesomeIcons.chevronRight,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                title: Text(
-                  'Insights',
-                  style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const Divider(height: 20, indent: 1.0, color: listileColor),
-              ListTile(
-                trailing: const FaIcon(FontAwesomeIcons.chevronRight,
-                    color: Colors.white, size: 18),
-                title: Text(
-                  'Patreon for Artists',
-                  style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const Divider(height: 20, indent: 1.0, color: listileColor),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Positioned editButton() {
+    return Positioned(
+      right: 12,
+      bottom: 79,
+      child: Stack(
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            child: Center(
+              child: InkWell(
+                onTap: () {},
+                child: const Icon(
+                  Icons.edit,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

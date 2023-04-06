@@ -78,12 +78,12 @@ class _NavBarState extends State<NavBar> {
                 icon: Container(
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black,
+                    color: musikatBackgroundColor,
                   ),
                   child: const CircleAvatar(
-                    backgroundColor: Colors.black,
+                    backgroundColor: musikatBackgroundColor,
                     child: FaIcon(
-                      FontAwesomeIcons.magnifyingGlass,
+                      FontAwesomeIcons.magnifyingGlassChart,
                       color: Colors.white,
                       size: 15,
                     ),

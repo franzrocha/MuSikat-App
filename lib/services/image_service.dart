@@ -29,4 +29,29 @@ class ImageService {
       print(e);
     }
   }
+
+   static updateHeaderImage() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        final storageRef = FirebaseStorage.instance.ref();
+        final headerRef = storageRef.child(
+            'headers/${FirebaseAuth.instance.currentUser!.uid}/${image.path.split('/').last}');
+        print(headerRef.fullPath);
+        File file = File(image.path);
+        print(image.path);
+        TaskSnapshot result = await headerRef.putFile(file);
+        print(result);
+        String publicUrl = await headerRef.getDownloadURL();
+        print(publicUrl);
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({'headerImage': publicUrl});
+      } else {}
+    } catch (e) {
+      print(e);
+    }
+  }
 }

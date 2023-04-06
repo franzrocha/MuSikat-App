@@ -138,7 +138,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
-                              color: Colors.orange),
+                              color: Colors.white)  ,
                         ),
                       ],
                     ),

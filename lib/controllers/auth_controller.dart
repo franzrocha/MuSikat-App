@@ -104,7 +104,7 @@ class AuthController with ChangeNotifier {
           email: email, password: password);
       if (createdUser.user != null) {
         UserModel userModel = UserModel(createdUser.user!.uid, username, email,
-            age, gender, '', Timestamp.now(), Timestamp.now());
+            age, gender, '', '', Timestamp.now(), Timestamp.now());
         return FirebaseFirestore.instance
             .collection('users')
             .doc(userModel.uid)

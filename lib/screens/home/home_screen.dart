@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final AuthController _auth = locator<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

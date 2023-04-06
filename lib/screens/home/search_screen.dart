@@ -165,3 +165,22 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
+
+// Positioned(
+                //   right: 15,
+                //   bottom: 0,
+                //   child: InkWell(
+                //     onTap: () {
+                //       ImageService.updateHeaderImage();
+                //     },
+                //     child: const CircleAvatar(
+                //       radius: 25,
+                //       backgroundColor: musikatColor2,
+                //       child: Icon(
+                //         Icons.camera_alt,
+                //         size: 30,
+                //         color: Colors.white,
+                //       ),
+                //     ),
+                //   ),
+                // ),

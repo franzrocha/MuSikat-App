@@ -1,4 +1,6 @@
 # This is a generated file; do not edit or check into version control.
+audio_service=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\audio_service-0.18.9\\
+audio_service_web=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\audio_service_web-0.1.1\\
 audio_session=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\audio_session-0.1.13\\
 cloud_firestore=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\cloud_firestore-4.4.5\\
 cloud_firestore_web=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\cloud_firestore_web-3.3.5\\
@@ -26,3 +28,4 @@ path_provider_android=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.
 path_provider_foundation=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_foundation-2.2.1\\
 path_provider_linux=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_linux-2.1.10\\
 path_provider_windows=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_windows-2.1.5\\
+sqflite=C:\\Users\\Rocha\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\sqflite-2.2.6\\

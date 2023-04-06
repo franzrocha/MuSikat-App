@@ -99,6 +99,17 @@ class SongService {
             .toList());
   }
 
+  Stream<SongModel> getLatestSong(String uid) {
+    return _db
+        .collection('songs')
+         .where('uid', isEqualTo: uid)
+        .orderBy('created_at', descending: true)
+        .limit(1)
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) =>
+            SongModel.fromDocumentSnap(querySnapshot.docs.first));
+  }
+
   void cancelUpload() {
     _uploadProgressStreamController.close();
   }
