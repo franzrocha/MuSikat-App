@@ -10,13 +10,15 @@ import 'package:musikat_app/services/song_service.dart';
 class MusicPlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
   final String username;
-  final int initialIndex; // new parameter to set the initial song to play
+  final int? initialIndex;
+  // final SongModel? song;
 
   const MusicPlayerScreen({
     Key? key,
+    // this.song,
     required this.songs,
     required this.username,
-    required this.initialIndex,
+    this.initialIndex,
   }) : super(key: key);
 
   @override
@@ -29,15 +31,14 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final songService = SongService();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
-  int currentIndex = 0; // new variable to keep track of the current song index
+  int currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    currentIndex =
-        widget.initialIndex; // set the current song index to the initialIndex
+    currentIndex = widget.initialIndex ?? 0;
     setAudio();
-    player.playerStateStream.listen((playerState) {
+      player.playerStateStream.listen((playerState) async {
       if (mounted) {
         setState(() {
           isPlaying = playerState.playing;
@@ -58,6 +59,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         });
       }
     });
+   
   }
 
   @override
@@ -87,7 +89,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
     final source = AudioSource.uri(
       Uri.parse(widget
-          .songs[currentIndex].audio), // play the song at the current index
+          .songs[currentIndex].audio), 
       tag: MediaItem(
         id: widget.songs[currentIndex].songId,
         title: widget.songs[currentIndex].title,
@@ -96,7 +98,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       ),
     );
     await player.setAudioSource(source);
-    await player.play();
+    await player.play();  
   }
 
   Future<void> playPrevious() async {
@@ -131,8 +133,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   Column(
                     children: [
                       Container(
-                        width: 310,
-                        height: 300,
+                        width: 280,
+                        height: 260,
                         decoration: BoxDecoration(
                           color: Colors.blue,
                           border: Border.all(
@@ -162,7 +164,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
-                              color: musikatColor)  ,
+                              color: musikatColor),
                         ),
                       ],
                     ),

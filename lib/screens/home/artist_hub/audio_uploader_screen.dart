@@ -236,6 +236,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                                   _selectedFile != null
                                       ? _selectedFile!.path.split('/').last
                                       : 'Select Audio',
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 if (_selectedFile != null)
                                   const SizedBox(width: 20.0),

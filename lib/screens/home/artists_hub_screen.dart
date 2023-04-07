@@ -14,8 +14,6 @@ import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
 import 'package:musikat_app/widgets/avatar.dart';
 import 'package:musikat_app/widgets/card_tile.dart';
 import 'package:musikat_app/widgets/header_image.dart';
-
-import '../../widgets/loading_indicator.dart';
 import 'artist_hub/edit_hub_screen.dart';
 
 class ArtistsHubScreen extends StatefulWidget {
@@ -65,8 +63,8 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                     ),
                   ),
                   Positioned(
-                    bottom: 20,
-                    left: 40,
+                    bottom: 17,
+                    left: 30,
                     child: Text(user?.username ?? '',
                         style: GoogleFonts.inter(
                             color: Colors.white,
@@ -74,9 +72,9 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                             fontWeight: FontWeight.bold)),
                   ),
                   Positioned(
-                    bottom: 4,
-                    left: 40,
-                    child: Text('@${user?.username ?? ''}',
+                    top: 215,
+                    left: 30,
+                    child: Text(user?.username ?? '',
                         style: GoogleFonts.inter(
                             color: Colors.grey,
                             fontSize: 12,
@@ -96,24 +94,20 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const SizedBox(height: 15),
-                    StreamBuilder<SongModel>(
+                    StreamBuilder<List<SongModel>>(
                       stream: songService.getLatestSong(
                           FirebaseAuth.instance.currentUser!.uid),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data == null) {
-                          return StreamBuilder<Object>(
-                              stream: null,
-                              builder: (context, snapshot) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 50),
-                                  child: Text(
-                                    "No songs found in your library",
-                                    style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                );
-                              });
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Text(
+                              "No songs found in your library",
+                              style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          );
                         }
                         if (snapshot.hasError) {
                           return Center(
@@ -123,7 +117,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                             ConnectionState.waiting) {
                           return Container();
                         } else {
-                          final latestSong = snapshot.data!;
+                          final latestSong = snapshot.data!.first;
 
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -131,15 +125,15 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 30),
                                 child: InkWell(
-                                  // onTap: () {
-                                  //   Navigator.of(context).push(
-                                  //       MaterialPageRoute(
-                                  //           builder: (context) =>
-                                  //               MusicPlayerScreen(
-                                  //                 song: latestSong,
-                                  //                 username: user!.username,
-                                  //               )));
-                                  // },
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MusicPlayerScreen(
+                                                  songs: [latestSong],
+                                                  username: user!.username,
+                                                )));
+                                  },
                                   child: Container(
                                     height: 105,
                                     width: 110,
@@ -167,14 +161,14 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                   Text('Latest Release',
                                       style: GoogleFonts.inter(
                                         color: Colors.white,
-                                        fontSize: 18,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                       )),
                                   Text(latestSong.title,
                                       style: GoogleFonts.inter(
                                         color: Colors.white,
                                         fontSize: 15,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w500,
                                       )),
                                   Text(latestSong.genre,
                                       style: GoogleFonts.inter(
@@ -192,14 +186,17 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 260, top: 5, bottom: 10),
-                child: Text("Artist's Hub",
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    )),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30, top: 20, bottom: 10),
+                  child: Text("Artist's Hub",
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
