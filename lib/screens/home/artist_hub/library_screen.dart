@@ -101,8 +101,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                 onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) => MusicPlayerScreen(
-                                            song: song,
+                                            songs: songs,
                                             username: user.username,
+                                            initialIndex: index,
                                           )),
                                 ),
                                 title: Text(

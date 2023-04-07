@@ -131,15 +131,15 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 30),
                                 child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                MusicPlayerScreen(
-                                                  song: latestSong,
-                                                  username: user!.username,
-                                                )));
-                                  },
+                                  // onTap: () {
+                                  //   Navigator.of(context).push(
+                                  //       MaterialPageRoute(
+                                  //           builder: (context) =>
+                                  //               MusicPlayerScreen(
+                                  //                 song: latestSong,
+                                  //                 username: user!.username,
+                                  //               )));
+                                  // },
                                   child: Container(
                                     height: 105,
                                     width: 110,

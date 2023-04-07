@@ -31,7 +31,7 @@ class SongModel {
       writers: (json['writers'] as List<dynamic>?)?.cast<String>() ?? [],
       producers: (json['producers'] as List<dynamic>?)?.cast<String>() ?? [],
       genre: json['genre'] ?? '',
-      uid: json['uid'] ?? '', 
+      uid: json['uid'] ?? '',
       languages: (json['languages'] as List<dynamic>?)?.cast<String>() ?? [],
     );
   }

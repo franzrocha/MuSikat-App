@@ -5,14 +5,19 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:musikat_app/services/song_service.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
-  final SongModel song;
+  final List<SongModel> songs;
   final String username;
+  final int initialIndex; // new parameter to set the initial song to play
 
-  const MusicPlayerScreen(
-      {Key? key, required this.song, required this.username})
-      : super(key: key);
+  const MusicPlayerScreen({
+    Key? key,
+    required this.songs,
+    required this.username,
+    required this.initialIndex,
+  }) : super(key: key);
 
   @override
   State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
@@ -21,16 +26,17 @@ class MusicPlayerScreen extends StatefulWidget {
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final player = AudioPlayer();
   bool isPlaying = false;
-
+  final songService = SongService();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+  int currentIndex = 0; // new variable to keep track of the current song index
 
   @override
   void initState() {
-    setAudio();
-
     super.initState();
-
+    currentIndex =
+        widget.initialIndex; // set the current song index to the initialIndex
+    setAudio();
     player.playerStateStream.listen((playerState) {
       if (mounted) {
         setState(() {
@@ -38,7 +44,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         });
       }
     });
-
     player.durationStream.listen((newDuration) {
       if (mounted) {
         setState(() {
@@ -46,7 +51,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         });
       }
     });
-
     player.positionStream.listen((newPosition) {
       if (mounted) {
         setState(() {
@@ -79,19 +83,38 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   }
 
   Future<void> setAudio() async {
-    player.setLoopMode(LoopMode.one);
+    player.setLoopMode(LoopMode.all);
 
     final source = AudioSource.uri(
-      Uri.parse(widget.song.audio),
+      Uri.parse(widget
+          .songs[currentIndex].audio), // play the song at the current index
       tag: MediaItem(
-        id: widget.song.songId,
-        title: widget.song.title,
+        id: widget.songs[currentIndex].songId,
+        title: widget.songs[currentIndex].title,
         artist: widget.username,
-        artUri: Uri.parse(widget.song.albumCover),
+        artUri: Uri.parse(widget.songs[currentIndex].albumCover),
       ),
     );
     await player.setAudioSource(source);
     await player.play();
+  }
+
+  Future<void> playPrevious() async {
+    if (currentIndex > 0) {
+      currentIndex--;
+    } else {
+      currentIndex = widget.songs.length - 1;
+    }
+    await setAudio();
+  }
+
+  Future<void> playNext() async {
+    if (currentIndex < widget.songs.length - 1) {
+      currentIndex++;
+    } else {
+      currentIndex = 0;
+    }
+    await setAudio();
   }
 
   @override
@@ -118,7 +141,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           ),
                           borderRadius: BorderRadius.circular(5),
                           image: DecorationImage(
-                            image: NetworkImage(widget.song.albumCover),
+                            image: NetworkImage(
+                                widget.songs[currentIndex].albumCover),
                             fit: BoxFit.cover, //change image fill type
                           ),
                         ),
@@ -133,7 +157,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     child: Row(
                       children: [
                         Text(
-                          widget.song.title,
+                          widget.songs[currentIndex].title,
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -203,10 +227,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const FaIcon(
-                        FontAwesomeIcons.backwardStep,
-                        size: 35,
-                        color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          playPrevious();
+                        },
+                        child: const FaIcon(
+                          FontAwesomeIcons.backwardStep,
+                          size: 35,
+                          color: Colors.white,
+                        ),
                       ),
                       const SizedBox(width: 30),
                       Container(
@@ -240,10 +269,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                         ),
                       ),
                       const SizedBox(width: 30),
-                      const FaIcon(
-                        FontAwesomeIcons.forwardStep,
-                        size: 35,
-                        color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          playNext();
+                        },
+                        child: const FaIcon(
+                          FontAwesomeIcons.forwardStep,
+                          size: 35,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
