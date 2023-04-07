@@ -37,11 +37,11 @@ class AvatarImage extends StatelessWidget {
     return FittedBox(
       child: CircleAvatar(
         radius: radius,
-        child: Icon(
-          Icons.person_rounded,
-          color: Colors.white,
-          size: radius,
-        ),
+        // child: Icon(
+        //   Icons.person_rounded,
+        //   color: Colors.white,
+        //   size: radius,
+        // ),
         backgroundColor: Colors.white,
       ),
     );

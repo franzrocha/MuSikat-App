@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class HeaderImage extends StatelessWidget {
   const HeaderImage({super.key, required this.uid});
@@ -12,25 +11,23 @@ class HeaderImage extends StatelessWidget {
         stream: UserModel.fromUidStream(uid: uid),
         builder: (context, AsyncSnapshot<UserModel?> snap) {
           if (snap.error != null || !snap.hasData) {
-            return Container();
+            return tempHeader(context);
           }
           if (snap.data!.headerImage.isEmpty) {
-            return Container();
+            return tempHeader(context);
           } else if (snap.connectionState == ConnectionState.waiting) {
-            return Container();
+            return tempHeader(context);
           } else {
             return SizedBox(
               height: 150,
               width: double.infinity,
               child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(snap.data!.headerImage),
-                    fit: BoxFit.cover,
-                  ),
-                 
-                )
-              ),
+                  decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(snap.data!.headerImage),
+                  fit: BoxFit.cover,
+                ),
+              )),
             );
           }
         });
@@ -40,7 +37,7 @@ class HeaderImage extends StatelessWidget {
     return Container(
       height: 150,
       decoration: const BoxDecoration(
-        color: Colors.grey,
+        color: Colors.white38,
       ),
     );
   }

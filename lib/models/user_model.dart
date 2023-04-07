@@ -6,10 +6,13 @@ class UserModel {
   Timestamp created, updated;
 
   UserModel(this.uid, this.username, this.email, this.age, this.gender,
-      this.image, this.headerImage,  this.created, this.updated);
+      this.image, this.headerImage, this.created, this.updated);
 
   static UserModel fromDocumentSnap(DocumentSnapshot snap) {
-    Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
+    Map<String, dynamic> json = {};
+    if (snap.data() != null) {
+      json = snap.data() as Map<String, dynamic>;
+    }
     return UserModel(
       snap.id,
       json['username'] ?? '',

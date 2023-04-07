@@ -139,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Text userName() {
-    return Text(user?.username ?? '...',
+    return Text(user?.username ?? '',
         style: GoogleFonts.inter(
           color: Colors.white,
           fontSize: 30,

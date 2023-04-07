@@ -16,6 +16,7 @@ import 'package:musikat_app/widgets/card_tile.dart';
 import 'package:musikat_app/widgets/header_image.dart';
 
 import '../../widgets/loading_indicator.dart';
+import 'artist_hub/edit_hub_screen.dart';
 
 class ArtistsHubScreen extends StatefulWidget {
   const ArtistsHubScreen({Key? key}) : super(key: key);
@@ -51,39 +52,41 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
-                children: [
-                HeaderImage(uid: FirebaseAuth.instance.currentUser!.uid),
-                editButton(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 40.0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: profilePic(),
+              SizedBox(
+                height: 230,
+                child: Stack(children: [
+                  HeaderImage(uid: FirebaseAuth.instance.currentUser!.uid),
+                  editButton(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: profilePic(),
+                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: 14,
-                  left: 35,
-                  child: Text(user?.username ?? '...',
-                      style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
-                ),
-                Positioned(
-                  bottom: 0.5,
-                  left: 35,
-                  child: Text('@${user?.username ?? ''}',
-                      style: GoogleFonts.inter(
-                          color: Colors.grey,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ]),
+                  Positioned(
+                    bottom: 20,
+                    left: 40,
+                    child: Text(user?.username ?? '',
+                        style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  Positioned(
+                    bottom: 4,
+                    left: 40,
+                    child: Text('@${user?.username ?? ''}',
+                        style: GoogleFonts.inter(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ]),
+              ),
               const SizedBox(height: 20),
               Divider(
-                  height: 15,
+                  height: 20,
                   indent: 1.0,
                   color: listileColor.withOpacity(0.4)),
               SizedBox(
@@ -92,22 +95,25 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 250, top: 5),
-                      child: Text('Latest Release',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
                     const SizedBox(height: 15),
                     StreamBuilder<SongModel>(
                       stream: songService.getLatestSong(
                           FirebaseAuth.instance.currentUser!.uid),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data == null) {
-                          return Container();
+                          return StreamBuilder<Object>(
+                              stream: null,
+                              builder: (context, snapshot) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: Text(
+                                    "No songs found in your library",
+                                    style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                );
+                              });
                         }
                         if (snapshot.hasError) {
                           return Center(
@@ -118,13 +124,13 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                           return Container();
                         } else {
                           final latestSong = snapshot.data!;
-              
+
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(left: 30),
-                                child: GestureDetector(
+                                child: InkWell(
                                   onTap: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -135,12 +141,12 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                                 )));
                                   },
                                   child: Container(
-                                    height: 100,
-                                    width: 105,
+                                    height: 105,
+                                    width: 110,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
-                                        image: NetworkImage(
-                                            latestSong.albumCover),
+                                        image:
+                                            NetworkImage(latestSong.albumCover),
                                         fit: BoxFit.cover,
                                       ),
                                       color: Colors.grey.withOpacity(0.5),
@@ -158,6 +164,12 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Text('Latest Release',
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      )),
                                   Text(latestSong.title,
                                       style: GoogleFonts.inter(
                                         color: Colors.white,
@@ -243,19 +255,23 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
   Positioned editButton() {
     return Positioned(
       right: 12,
-      bottom: 79,
+      bottom: 95,
       child: Stack(
         children: [
           Container(
             width: 30,
             height: 30,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey,
             ),
             child: Center(
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const EditHubScreen(),
+                  ));
+                },
                 child: const Icon(
                   Icons.edit,
                   size: 20,
