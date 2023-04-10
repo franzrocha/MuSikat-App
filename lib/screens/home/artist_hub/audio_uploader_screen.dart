@@ -123,7 +123,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
 
     final SongService songService = SongService();
 
-    // Show progress during upload
+    // shows progress during upload
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -135,7 +135,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
     try {
       final UserModel? user = await UserModel.getCurrentUser();
 
-      // Start uploading the file
+      // starts uploading the file
       final String songId = await songService.uploadSong(
         title,
         _selectedFile!.path,
@@ -307,7 +307,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                       fontSize: 13,
                     ),
                   ),
-                  // genderDropDown(context),
                   genreTile(context),
                   const SizedBox(height: 10),
                   Text(

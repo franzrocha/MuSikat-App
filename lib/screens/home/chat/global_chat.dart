@@ -23,8 +23,6 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
   final FocusNode _messageFN = FocusNode();
   final ScrollController _scrollController = ScrollController();
 
-  
-
   UserModel? user;
   @override
   void initState() {

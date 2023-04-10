@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -11,11 +12,9 @@ class MusicPlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
   final String username;
   final int? initialIndex;
-  // final SongModel? song;
 
   const MusicPlayerScreen({
     Key? key,
-    // this.song,
     required this.songs,
     required this.username,
     this.initialIndex,
@@ -27,18 +26,20 @@ class MusicPlayerScreen extends StatefulWidget {
 
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final player = AudioPlayer();
-  bool isPlaying = false;
   final songService = SongService();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
   int currentIndex = 0;
+
+  bool isPlaying = false;
+  bool isLoadingAudio = false;
 
   @override
   void initState() {
     super.initState();
     currentIndex = widget.initialIndex ?? 0;
     setAudio();
-      player.playerStateStream.listen((playerState) async {
+    player.playerStateStream.listen((playerState) async {
       if (mounted) {
         setState(() {
           isPlaying = playerState.playing;
@@ -59,7 +60,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         });
       }
     });
-   
   }
 
   @override
@@ -88,8 +88,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     player.setLoopMode(LoopMode.all);
 
     final source = AudioSource.uri(
-      Uri.parse(widget
-          .songs[currentIndex].audio), 
+      Uri.parse(widget.songs[currentIndex].audio),
       tag: MediaItem(
         id: widget.songs[currentIndex].songId,
         title: widget.songs[currentIndex].title,
@@ -97,26 +96,52 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         artUri: Uri.parse(widget.songs[currentIndex].albumCover),
       ),
     );
-    await player.setAudioSource(source);
-    await player.play();  
+
+    try {
+      await player.setAudioSource(source);
+      await player.play();
+    } catch (e) {
+      if (e is PlatformException) {
+        await Future.delayed(const Duration(seconds: 2));
+        await setAudio();
+      } else {
+        rethrow;
+      }
+    }
   }
 
   Future<void> playPrevious() async {
+    if (isLoadingAudio) {
+      return;
+    }
     if (currentIndex > 0) {
       currentIndex--;
     } else {
       currentIndex = widget.songs.length - 1;
     }
-    await setAudio();
+    try {
+      await setAudio();
+    } on PlayerInterruptedException catch (_) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      await setAudio();
+    }
   }
 
   Future<void> playNext() async {
+    if (isLoadingAudio) {
+      return;
+    }
     if (currentIndex < widget.songs.length - 1) {
       currentIndex++;
     } else {
       currentIndex = 0;
     }
-    await setAudio();
+    try {
+      await setAudio();
+    } on PlayerInterruptedException catch (_) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      await setAudio();
+    }
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/utils/constants.dart';
 
 class TileList extends StatelessWidget {
   const TileList(
@@ -26,7 +27,7 @@ class TileList extends StatelessWidget {
           child: ListTile(
             onTap: ontap,
             leading: CircleAvatar(
-              backgroundColor: const Color(0xff62DD69),
+              backgroundColor: musikatColor2,
               child: Icon(
                 icon,
                 color: Colors.white,

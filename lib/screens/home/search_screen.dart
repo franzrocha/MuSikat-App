@@ -17,8 +17,13 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textCon = TextEditingController();
-  // ignore: prefer_typing_uninitialized_variables
-  var getUsers;
+  Future<List<UserModel>>? getUsers;
+
+  @override
+  void dispose() {
+    _textCon.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +60,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold)),
                         )
-                      : ListView.builder(
+                      : ListView.separated(
+                          separatorBuilder: (context, index) => Divider(
+                                color: Colors.white.withOpacity(0.2),
+                                thickness: 0,
+                              ),
                           itemCount: searchResult.length,
                           itemBuilder: (context, index) {
                             return searchResult[index].uid !=
@@ -86,22 +95,22 @@ class _SearchScreenState extends State<SearchScreen> {
                           });
                 }
                 return Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30, bottom: 15),
-                        child: Image.asset(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 150),
+                    child: Column(
+                      children: [
+                        Image.asset(
                           "assets/images/search.png",
                           width: 254,
                           height: 254,
                         ),
-                      ),
-                      Text('Search for your favourite music or your friends',
-                          style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
-                    ],
+                        Text('Search for your favourite music or your friends',
+                            style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
                   ),
                 );
               }),
@@ -165,4 +174,3 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
-

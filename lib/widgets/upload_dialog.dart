@@ -30,8 +30,7 @@ class UploadDialog extends StatelessWidget {
               children: [
                 LinearProgressIndicator(
                   value: uploadPercent / 100,
-                  valueColor:
-                      const AlwaysStoppedAnimation<Color>(musikatColor),
+                  valueColor: const AlwaysStoppedAnimation<Color>(musikatColor),
                   backgroundColor: Colors.grey.shade300,
                 ),
                 const SizedBox(height: 10.0),
@@ -42,7 +41,10 @@ class UploadDialog extends StatelessWidget {
                     songService.cancelUpload();
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: GoogleFonts.inter(color: Colors.white),
+                  ),
                 ),
               ],
             );

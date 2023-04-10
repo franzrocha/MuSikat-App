@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/services/image_service.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/widgets/header_image.dart';
-
 import '../../../widgets/avatar.dart';
 
 class EditHubScreen extends StatefulWidget {
@@ -25,49 +24,73 @@ class _EditHubScreenState extends State<EditHubScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              InkWell(
-                onTap: () {
-                  ImageService.updateHeaderImage();
-                },
-                child: SizedBox(
-                  height: 230,
-                  child: Stack(
-                    children: [
-                      HeaderImage(uid: FirebaseAuth.instance.currentUser!.uid),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 40.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: profilePic(),
+              SizedBox(
+                height: 200,
+                child: Stack(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        ImageService.updateHeaderImage(context);
+                      },
+                      child: HeaderImage(
+                          uid: FirebaseAuth.instance.currentUser!.uid),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 40),
+                      child: Center(
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white.withOpacity(0.8),
+                          size: 70,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    profilePic(),
+                  ],
                 ),
               ),
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: musikatColor,
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Icon(Icons.save),
+      ),
     );
   }
 
-  Padding profilePic() {
-    return Padding(
-      padding: const EdgeInsets.all(30),
-      child: Stack(
-        children: [
-          InkWell(
-            onTap: () {
-              ImageService.updateProfileImage();
-            },
-            child: SizedBox(
-              width: 100,
-              height: 120,
-              child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
-            ),
+  Align profilePic() {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, left: 30, bottom: 10),
+        child: InkWell(
+          onTap: () {
+            ImageService.updateProfileImage(context);
+          },
+          child: Stack(
+            children: [
+              SizedBox(
+                width: 100,
+                height: 120,
+                child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+              ),
+              Positioned(
+                left: 35,
+                top: 45,
+                child: Icon(
+                  Icons.camera_alt,
+                  color: Colors.white.withOpacity(0.8),
+                  size: 35,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

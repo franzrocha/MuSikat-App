@@ -240,24 +240,6 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
             height: 180,
             child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
           ),
-          Positioned(
-            right: 15,
-            bottom: 0,
-            child: InkWell(
-              onTap: () {
-                ImageService.updateProfileImage();
-              },
-              child: CircleAvatar(
-                radius: 25,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 30,
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

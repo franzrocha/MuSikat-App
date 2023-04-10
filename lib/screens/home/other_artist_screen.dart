@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/widgets/avatar.dart';
+import 'package:musikat_app/widgets/header_image.dart';
 
 // ignore: must_be_immutable
 class ArtistsProfileScreen extends StatefulWidget {
@@ -34,47 +35,55 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.chat))
-        ],
-      ),
+      appBar: appbar(),
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              children: [
-                profilePic(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user?.username ?? '...',
+            SizedBox(
+              height: 230,
+              child: Stack(children: [
+                HeaderImage(uid: selectedUserUID),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: profilePic(),
+                  ),
+                ),
+                Positioned(
+                  bottom: 17,
+                  left: 30,
+                  child: Text(user?.username ?? '',
                       style: GoogleFonts.inter(
                           color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      "---- followers",
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
                 ),
-              ],
+                Positioned(
+                  top: 215,
+                  left: 30,
+                  child: Text(user?.username ?? '',
+                      style: GoogleFonts.inter(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ]),
             ),
+          
           ],
         ),
       )),
+    );
+  }
+
+  AppBar appbar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+      actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.chat))],
     );
   }
 

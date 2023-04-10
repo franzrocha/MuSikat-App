@@ -51,38 +51,16 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: 230,
+                height: 200,
                 child: Stack(children: [
                   HeaderImage(uid: FirebaseAuth.instance.currentUser!.uid),
                   editButton(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 40.0),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: profilePic(),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 17,
-                    left: 30,
-                    child: Text(user?.username ?? '',
-                        style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Positioned(
-                    top: 215,
-                    left: 30,
-                    child: Text(user?.username ?? '',
-                        style: GoogleFonts.inter(
-                            color: Colors.grey,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold)),
-                  ),
+                  profilePic(),
                 ]),
               ),
-              const SizedBox(height: 20),
+              userText(),
+              userText2(),
+              const SizedBox(height: 10),
               Divider(
                   height: 20,
                   indent: 1.0,
@@ -93,12 +71,16 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     StreamBuilder<List<SongModel>>(
                       stream: songService.getLatestSong(
                           FirebaseAuth.instance.currentUser!.uid),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data == null) {
+                          return Container();
+                        }
+
+                        if (snapshot.data!.isEmpty) {
                           return Padding(
                             padding: const EdgeInsets.only(top: 50),
                             child: Text(
@@ -119,63 +101,76 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                         } else {
                           final latestSong = snapshot.data!.first;
 
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          return Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 30),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                MusicPlayerScreen(
-                                                  songs: [latestSong],
-                                                  username: user!.username,
-                                                )));
-                                  },
-                                  child: Container(
-                                    height: 105,
-                                    width: 110,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image:
-                                            NetworkImage(latestSong.albumCover),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      color: Colors.grey.withOpacity(0.5),
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: Colors.grey.withOpacity(0.5),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 30, top: 10, bottom: 15),
+                                  child: Text('Latest Release',
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 30),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MusicPlayerScreen(
+                                                      songs: [latestSong],
+                                                      username: user!.username,
+                                                    )));
+                                      },
+                                      child: Container(
+                                        height: 105,
+                                        width: 110,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                                latestSong.albumCover),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          color: Colors.grey.withOpacity(0.5),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: Colors.grey.withOpacity(0.5),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Latest Release',
-                                      style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  Text(latestSong.title,
-                                      style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  Text(latestSong.genre,
-                                      style: GoogleFonts.inter(
-                                        color: Colors.grey,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                      )),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(latestSong.title,
+                                          style: GoogleFonts.inter(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      Text(latestSong.genre,
+                                          style: GoogleFonts.inter(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ],
@@ -189,7 +184,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 30, top: 20, bottom: 10),
+                  padding: const EdgeInsets.only(left: 30, top: 15, bottom: 10),
                   child: Text("Artist's Hub",
                       style: GoogleFonts.inter(
                         color: Colors.white,
@@ -200,9 +195,9 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Scrollbar(
+                child: Scrollbar(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
                         CardTile(
@@ -249,10 +244,36 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
     );
   }
 
+  Align userText2() {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 31),
+        child: Text(user?.username ?? '',
+            style: GoogleFonts.inter(
+                color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
+      ),
+    );
+  } 
+
+  Align userText() {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 31),
+        child: Text(
+          user?.username ?? '',
+          style: GoogleFonts.inter(
+              color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
   Positioned editButton() {
     return Positioned(
       right: 12,
-      bottom: 95,
+      bottom: 65,
       child: Stack(
         children: [
           Container(
@@ -282,17 +303,20 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
     );
   }
 
-  Padding profilePic() {
-    return Padding(
-      padding: const EdgeInsets.all(30),
-      child: Stack(
-        children: [
-          SizedBox(
-            width: 100,
-            height: 120,
-            child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
-          ),
-        ],
+  Align profilePic() {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, left: 30, bottom: 10),
+        child: Stack(
+          children: [
+            SizedBox(
+              width: 100,
+              height: 120,
+              child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+            ),
+          ],
+        ),
       ),
     );
   }
