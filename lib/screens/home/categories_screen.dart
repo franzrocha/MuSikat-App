@@ -15,7 +15,6 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-
   @override
  Widget build(BuildContext context) {
   return Scaffold(

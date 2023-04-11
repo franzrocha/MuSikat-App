@@ -11,7 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,87 +35,159 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/opm_logo.png"),
-                                  fit: BoxFit.cover, //change image fill type
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25, top: 10),
+                      child: Column(
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                width: 160,
+                                height: 160,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color.fromARGB(
+                                        255, 124, 131, 127),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/homescreen/opm_logo.png"),
+                                    fit: BoxFit.cover, //change image fill type
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              const Align(
+                                alignment: Alignment.bottomLeft,
+                                child: const Text(
+                                  "Daily Mix 1",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    height: 2,
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                "By Musikat",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/album1.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25, top: 10),
+                      child: Column(
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                width: 160,
+                                height: 160,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color.fromARGB(
+                                        255, 124, 131, 127),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/homescreen/album1.jpg"),
+                                    fit: BoxFit.cover, //change image fill type
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              const Align(
+                                alignment: Alignment.bottomLeft,
+                                child: const Text(
+                                  "Daily Mix 2",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    height: 2,
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                "By Musikat",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/arnel.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25, top: 10),
+                      child: Column(
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                width: 160,
+                                height: 160,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  border: Border.all(
+                                    color: const Color.fromARGB(
+                                        255, 124, 131, 127),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/homescreen/arnel.jpg"),
+                                    fit: BoxFit.cover, //change image fill type
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                              const Align(
+                                alignment: Alignment.bottomLeft,
+                                child: const Text(
+                                  "Daily Mix 3",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    height: 2,
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                "By Musikat",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
               Container(
@@ -134,96 +205,179 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              // onTap: () => Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //       builder: (context) =>
-                              //           const MusicPlayerScreen(
-                              //             songId: 'songId',
-                              //           )),
-                              // ),
-                              child: Container(
-                                width: 160,
-                                height: 160,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 124, 131, 127),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/albumdes.jpg"),
-                                    fit: BoxFit.cover, //change image fill type
-                                  ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25, top: 10),
+                            child: Column(
+                              children: [
+                                Column(
+                                  children: [
+                                    GestureDetector(
+                                      // onTap: () => Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) =>
+                                      //           const MusicPlayerScreen(
+                                      //             songId: 'songId',
+                                      //           )),
+                                      // ),
+                                      child: Container(
+                                        width: 160,
+                                        height: 160,
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          border: Border.all(
+                                            color: const Color.fromARGB(
+                                                255, 124, 131, 127),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/albumdes.jpg"),
+                                            fit: BoxFit
+                                                .cover, //change image fill type
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: const Text(
+                                        "Daily Mix 3",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                          height: 2,
+                                        ),
+                                      ),
+                                    ),
+                                    const Text(
+                                      "By Musikat",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25, top: 10),
+                            child: Column(
+                              children: [
+                                Column(
+                                  children: [
+                                    Container(
+                                      width: 160,
+                                      height: 160,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        border: Border.all(
+                                          color: const Color.fromARGB(
+                                              255, 124, 131, 127),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                        image: const DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/homescreen/album2.jpg"),
+                                          fit: BoxFit
+                                              .cover, //change image fill type
+                                        ),
+                                      ),
+                                    ),
+                                    const Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: const Text(
+                                        "Daily Mix 3",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                          height: 2,
+                                        ),
+                                      ),
+                                    ),
+                                    const Text(
+                                      "By Musikat",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25, top: 10),
+                            child: Column(
+                              children: [
+                                Column(
+                                  children: [
+                                    Container(
+                                      width: 160,
+                                      height: 160,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        border: Border.all(
+                                          color: const Color.fromARGB(
+                                              255, 124, 131, 127),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                        image: const DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/homescreen/ticket3.jpg"),
+                                          fit: BoxFit
+                                              .cover, //change image fill type
+                                        ),
+                                      ),
+                                    ),
+                                    const Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: const Text(
+                                        "Daily Mix 3",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                          height: 2,
+                                        ),
+                                      ),
+                                    ),
+                                    const Text(
+                                      "By Musikat",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/album2.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/ticket3.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               Container(
@@ -249,22 +403,39 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(left: 25, top: 10),
                         child: Column(
                           children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                border: Border.all(
-                                  color: const Color.fromARGB(255, 0, 0, 0),
-                                  width: 1.0,
+                            Column(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    border: Border.all(
+                                      color: const Color.fromARGB(255, 0, 0, 0),
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    image: const DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/homescreen/range.jpg"),
+                                      fit:
+                                          BoxFit.cover, //change image fill type
+                                    ),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(50),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/range.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                                const Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: const Text(
+                                    "Juan Bautista",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      height: 2,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                           ],
                         ),
@@ -273,22 +444,39 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(left: 25, top: 10),
                         child: Column(
                           children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                border: Border.all(
-                                  color: const Color.fromARGB(255, 0, 0, 0),
-                                  width: 1.0,
+                            Column(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    border: Border.all(
+                                      color: const Color.fromARGB(255, 0, 0, 0),
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    image: const DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/homescreen/rpg.jpg"),
+                                      fit:
+                                          BoxFit.cover, //change image fill type
+                                    ),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(50),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/rpg.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                                const Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: const Text(
+                                    "Jacob Reyes",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      height: 2,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                           ],
                         ),
@@ -297,22 +485,39 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(left: 25, top: 10),
                         child: Column(
                           children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                border: Border.all(
-                                  color: const Color.fromARGB(255, 0, 0, 0),
-                                  width: 1.0,
+                            Column(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    border: Border.all(
+                                      color: const Color.fromARGB(255, 0, 0, 0),
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    image: const DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/homescreen/jeper.jpg"),
+                                      fit:
+                                          BoxFit.cover, //change image fill type
+                                    ),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(50),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/jeper.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                                const Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: const Text(
+                                    "Ezekiel Dy",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      height: 2,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                           ],
                         ),
@@ -321,22 +526,39 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(left: 25, top: 10),
                         child: Column(
                           children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                border: Border.all(
-                                  color: const Color.fromARGB(255, 0, 0, 0),
-                                  width: 1.0,
+                            Column(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    border: Border.all(
+                                      color: const Color.fromARGB(255, 0, 0, 0),
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    image: const DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/homescreen/winston.jpg"),
+                                      fit:
+                                          BoxFit.cover, //change image fill type
+                                    ),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(50),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/winston.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                                const Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: const Text(
+                                    "Gabriel Garcia",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      height: 2,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                           ],
                         ),

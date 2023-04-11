@@ -16,7 +16,7 @@ class AvatarImage extends StatelessWidget {
           if (snap.error != null || !snap.hasData) {
             return tempProfile(context);
           } else {
-            if (snap.data!.image.isEmpty) {
+            if (snap.data!.profileImage.isEmpty) {
               return tempProfile(context);
             } else if (snap.connectionState == ConnectionState.waiting) {
               return tempProfile(context);
@@ -24,7 +24,7 @@ class AvatarImage extends StatelessWidget {
               return FittedBox(
                 child: CircleAvatar(
                   radius: radius,
-                  backgroundImage: NetworkImage(snap.data!.image),
+                  backgroundImage: NetworkImage(snap.data!.profileImage),
                 ),
               );
             }

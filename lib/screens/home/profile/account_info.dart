@@ -193,13 +193,14 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
       ),
       actions: [
         IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const Icon(
-          Icons.edit,
-          size: 20,
-        ),),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.edit,
+            size: 20,
+          ),
+        ),
       ],
     );
   }

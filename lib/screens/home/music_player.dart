@@ -34,6 +34,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   bool isPlaying = false;
   bool isLoadingAudio = false;
 
+<<<<<<< HEAD
  @override
 void initState() {
   super.initState();
@@ -64,6 +65,33 @@ void initState() {
   // Listen for when the current song finishes processing
  player.playerStateStream.listen((playerState) {
     if (playerState.playing && playerState.processingState == ProcessingState.completed) {
+=======
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex ?? 0;
+    setAudio();
+    player.playerStateStream.listen((playerState) async {
+      if (mounted) {
+        setState(() {
+          isPlaying = playerState.playing;
+        });
+        if (playerState.playing == false &&
+            playerState.processingState == ProcessingState.completed) {
+          await playNext();
+        }
+      }
+    });
+    player.durationStream.listen((newDuration) {
+      if (mounted) {
+        setState(() {
+          duration = newDuration ?? Duration.zero;
+        });
+      }
+    });
+
+    player.positionStream.listen((newPosition) {
+>>>>>>> main
       if (mounted) {
         setState(() {
           // Play the next song
@@ -78,9 +106,9 @@ void initState() {
   @override
   void dispose() {
     player.dispose();
-    player.playerStateStream.listen(null);
-    player.durationStream.listen(null);
-    player.positionStream.listen(null);
+    player.playerStateStream.listen((_) {}).cancel();
+    player.durationStream.listen((_) {}).cancel();
+    player.positionStream.listen((_) {}).cancel();
     super.dispose();
   }
 
@@ -137,6 +165,7 @@ void initState() {
     } else {
       currentIndex = widget.songs.length - 1;
     }
+    position = Duration.zero; // Reset position to zero
     try {
       await setAudio();
     } on PlayerInterruptedException catch (_) {
@@ -154,6 +183,7 @@ void initState() {
     } else {
       currentIndex = 0;
     }
+    position = Duration.zero; // Reset position to zero
     try {
       await setAudio();
     } on PlayerInterruptedException catch (_) {
@@ -177,7 +207,7 @@ void initState() {
                     children: [
                       Container(
                         width: 280,
-                        height: 260,
+                        height: 280,
                         decoration: BoxDecoration(
                           color: Colors.blue,
                           border: Border.all(
@@ -195,7 +225,7 @@ void initState() {
                     ],
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 23),
@@ -327,8 +357,39 @@ void initState() {
                     ],
                   ),
                   const SizedBox(height: 15),
+<<<<<<< HEAD
                  
                   
+=======
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text(
+                      'INFO',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                        height: 3,
+                      ),
+                    ),
+                  ]
+
+                      // const SizedBox(width: 50),
+                      // const FaIcon(
+                      //   FontAwesomeIcons.heart,
+                      //   color: Colors.white,
+                      // ),
+                      // const SizedBox(width: 50),
+                      // Text(
+                      //   'INFO',
+                      //   textAlign: TextAlign.center,
+                      //   style: GoogleFonts.inter(
+                      //     color: Colors.white,
+                      //     fontSize: 20,
+                      //   ),
+                      // ),
+                      //  ],
+                      ),
+>>>>>>> main
                 ],
               )),
               

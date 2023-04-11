@@ -47,48 +47,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 profilePic(),
                 userName(),
                 const SizedBox(height: 30),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Text(
-                //       '-- \n FOLLOWERS',
-                //       textAlign: TextAlign.center,
-                //       style: GoogleFonts.inter(
-                //         color: Colors.white,
-                //         fontSize: 13,
-                //       ),
-                //     ),
-                //     const SizedBox(width: 20),
-                //     Text(
-                //       '-- \n FOLLOWING',
-                //       textAlign: TextAlign.center,
-                //       style: GoogleFonts.inter(
-                //         color: Colors.white,
-                //         fontSize: 13,
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // const SizedBox(height: 20),
                 TileList(
                   icon: Icons.queue_music,
                   text: 'Playlist',
-                  ontap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => const AccountInfoScreen()),
-                    );
-                  },
+                  ontap: () {},
                 ),
                 TileList(
                   icon: FontAwesomeIcons.heart,
                   text: 'Liked Songs',
-                  ontap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => const AccountInfoScreen()),
-                    );
-                  },
+                  ontap: () {},
                 ),
                 TileList(
                   icon: Icons.account_box,
@@ -103,22 +70,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 TileList(
                   icon: Icons.people,
                   text: 'Following/Follower',
-                  ontap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => const AccountInfoScreen()),
-                    );
-                  },
+                  ontap: () {},
                 ),
                 TileList(
                   icon: Icons.info,
                   text: 'About us',
-                  ontap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => const AccountInfoScreen()),
-                    );
-                  },
+                  ontap: () {},
                 ),
                 TileList(
                   icon: Icons.logout,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/controllers/navigation/navigation_service.dart';
+import 'package:musikat_app/screens/authentication/registration_second_screen.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
@@ -18,18 +20,15 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailCon = TextEditingController(),
-      _passCon = TextEditingController(),
-      _pass2Con = TextEditingController(),
-      _usernameCon = TextEditingController(),
-      _ageCon = TextEditingController();
+  final TextEditingController _usernameCon = TextEditingController(),
+      _ageCon = TextEditingController(),
+      _firstNameCon = TextEditingController(),
+      _lastNameCon = TextEditingController();
 
   bool checkMe = false;
 
   final genderList = ["Prefer not to say", "Male", "Female", "Others"];
   String dropdownValue = 'Prefer not to say';
-  bool _passwordVisible = false;
-  bool _conPassVisible = false;
 
   final AuthController _authController = locator<AuthController>();
 
@@ -50,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           } else {
             return Scaffold(
               appBar: appBar(context),
-              backgroundColor: const Color(0xff262525),
+              backgroundColor: musikatBackgroundColor,
               body: SafeArea(
                 child: Center(
                   child: SingleChildScrollView(
@@ -87,9 +86,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                               child: Column(
                                 children: [
-                                  emailForm(),
-                                  passForm(),
-                                  conPassForm(),
+                                  Row(
+                                    children: [
+                                      lastNameForm(),
+                                      firstNameForm(),
+                                    ],
+                                  ),
                                   usernameForm(),
                                   ageForm(),
                                   genderDropDown(context),
@@ -98,41 +100,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 18,
-                              height: 18,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(5.0),
-                                ),
-                              ),
-                              child: checkBox(),
-                            ),
-                            const SizedBox(width: 15.0),
-                            Text(
-                              'By signing up you accept the MuSikat \n Term of Service and Piracy Policy.',
-                              style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Text(
-                            prompts,
-                            style: GoogleFonts.inter(
-                              color: Colors.red,
-                              fontSize: 12,
-                            ),
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Align(
+                              alignment: Alignment.centerRight,
+                              child: nextButton(context)),
                         ),
-                        registerButton(),
                         const SizedBox(
                           height: 20,
                         )
@@ -146,15 +119,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
   }
 
-  Checkbox checkBox() {
-    return Checkbox(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0))),
-        activeColor: Colors.orange,
-        value: checkMe,
-        onChanged: (bool? value) {
-          setState(() => checkMe = value ?? false);
-        });
+  Container nextButton(BuildContext context) {
+    return Container(
+      width: 200,
+      height: 63,
+      decoration: BoxDecoration(
+          color: musikatColor, borderRadius: BorderRadius.circular(60)),
+      child: TextButton(
+        onPressed: () {
+          if (isFieldEmpty()) {
+            ToastMessage.show(context, 'Please fill in all fields');
+          } else {
+            Navigator.of(context).push(
+              FadeRoute(
+                page: RegistrationSecondScreen(
+                  lastName: _lastNameCon.text.trim(),
+                  firstName: _firstNameCon.text.trim(),
+                  age: _ageCon.text.trim(),
+                  gender: dropdownValue,
+                  username: _usernameCon.text.trim(),
+                ),
+                settings: const RouteSettings(),
+              ),
+            );
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Next',
+              style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const FaIcon(
+              FontAwesomeIcons.angleRight,
+              size: 20,
+              color: Colors.white,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   AppBar appBar(BuildContext context) {
@@ -179,80 +190,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  CustomTextField emailForm() {
-    return CustomTextField(
-      obscureText: false,
-      controller: _emailCon,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return null;
-        } else {
-          return null;
-        }
-      },
-      hintText: 'Email',
-      prefixIcon: const Icon(Icons.email),
-    );
-  }
-
-  CustomTextField passForm() {
-    return CustomTextField(
-      obscureText: !_passwordVisible,
-      controller: _passCon,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return null;
-        } else if (value.length < 6) {
-          return "Password should be atleast 6 characters";
-        } else if (value.length > 15) {
-          return "Password should not be greater than 15 characters";
-        } else {
-          return null;
-        }
-      },
-      hintText: "Password",
-      prefixIcon: const Icon(Icons.lock),
-      suffixIcon: GestureDetector(
-        onTap: () {
-          setState(() {
-            _passwordVisible = !_passwordVisible;
-          });
-        },
-        child: Icon(
-          _passwordVisible ? Icons.visibility : Icons.visibility_off,
-          color: Colors.grey,
+  Padding firstNameForm() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: SizedBox(
+        width: 180,
+        child: TextFormField(
+          style: GoogleFonts.inter(
+            color: Colors.black,
+            fontSize: 15,
+          ),
+          controller: _firstNameCon,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return null;
+            } else {
+              return null;
+            }
+          },
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            hintText: 'First name',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  CustomTextField conPassForm() {
-    return CustomTextField(
-      obscureText: !_conPassVisible,
-      controller: _pass2Con,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return null;
-        } else if (_passCon.text != _pass2Con.text) {
-          return 'Passwords do not match!';
-        } else if (value.length < 6) {
-          return "Password should be atleast 6 characters";
-        } else if (value.length > 15) {
-          return "Password should not be greater than 15 characters";
-        }
-        return null;
-      },
-      hintText: "Confirm Password",
-      prefixIcon: const Icon(Icons.lock_outline_sharp),
-      suffixIcon: GestureDetector(
-        onTap: () {
-          setState(() {
-            _conPassVisible = !_conPassVisible;
-          });
-        },
-        child: Icon(
-          _conPassVisible ? Icons.visibility : Icons.visibility_off,
-          color: Colors.grey,
+  Padding lastNameForm() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: SizedBox(
+        width: 189,
+        child: TextFormField(
+          style: GoogleFonts.inter(
+            color: Colors.black,
+            fontSize: 15,
+          ),
+          controller: _lastNameCon,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return null;
+            } else {
+              return null;
+            }
+          },
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            hintText: 'Last name',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none,
+            ),
+            prefixIcon: const Icon(Icons.person),
+          ),
         ),
       ),
     );
@@ -274,7 +271,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       },
       hintText: "Username",
-      prefixIcon: const Icon(Icons.person),
+      prefixIcon: const Icon(Icons.person_pin_circle),
     );
   }
 
@@ -303,13 +300,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Container genderDropDown(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      // padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
-            // color: Theme.of(context).colorScheme.primary,
             width: 1.0,
           ),
           borderRadius: BorderRadius.circular(15)),
@@ -351,60 +346,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Container registerButton() {
-    return Container(
-      width: 318,
-      height: 63,
-      decoration: BoxDecoration(
-          color: musikatColor,
-          borderRadius: BorderRadius.circular(60)),
-      child: TextButton(
-        onPressed: () {
-          if (isFieldEmpty()) {
-            ToastMessage.show(context, 'Please fill in all fields');
-          } else if (!checkMe) {
-            ToastMessage.show(
-                context, 'Please accept the terms and conditions');
-          } else {
-            if (_formKey.currentState!.validate()) {
-              setState(() {
-                register();
-              });
-            } else {
-              ToastMessage.show(context, 'Please fill in all fields correctly');
-            }
-          }
-        },
-        child: Text(
-          'Register',
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-        ),
-      ),
-    );
-  }
-
-  Future<void> register() async {
-    try {
-      await _authController.register(
-        email: _emailCon.text.trim(),
-        password: _passCon.text.trim(),
-        username: _usernameCon.text.trim(),
-        age: _ageCon.text.trim(),
-        gender: dropdownValue,
-      );
-      // ignore: use_build_context_synchronously
-
-    } catch (error) {
-      setState(() {
-        prompts = error.toString();
-      });
-    }
-  }
-
   bool isFieldEmpty() {
-    if (_emailCon.text.isEmpty ||
-        _passCon.text.isEmpty ||
+    if (_lastNameCon.text.isEmpty ||
+        _firstNameCon.text.isEmpty ||
         _usernameCon.text.isEmpty ||
         _ageCon.text.isEmpty) {
       return true;

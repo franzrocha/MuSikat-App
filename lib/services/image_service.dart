@@ -27,7 +27,7 @@ class ImageService {
         FirebaseFirestore.instance
             .collection('users')
             .doc(FirebaseAuth.instance.currentUser!.uid)
-            .update({'image': publicUrl});
+            .update({'profileImage': publicUrl});
 
         ToastMessage.show(context, 'Profile image updated successfully');
       } else {}
