@@ -257,7 +257,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 31),
         child: Text(
-          user?.username ?? '',
+          '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
           style: GoogleFonts.inter(
               color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
         ),

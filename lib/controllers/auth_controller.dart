@@ -26,7 +26,7 @@ class AuthController with ChangeNotifier {
     super.dispose();
   }
 
- handleAuthUserChanges(User? event) {
+  handleAuthUserChanges(User? event) {
     if (event == null) {
       print('No logged in user');
       nav.popUntilFirst();
@@ -42,7 +42,6 @@ class AuthController with ChangeNotifier {
     currentUser = event;
     notifyListeners();
   }
-
 
   Future<void> login(String email, String password) async {
     try {
@@ -91,20 +90,33 @@ class AuthController with ChangeNotifier {
     return;
   }
 
-  Future register(
-      {required String email,
-      required String password,
-      required String username,
-      required String age,
-      required String gender}) async {
+  Future register({
+    required String email,
+    required String password,
+    required String username,
+    required String lastName,
+    required String firstName,
+    required String age,
+    required String gender,
+  }) async {
     try {
       working = true;
       notifyListeners();
       UserCredential createdUser = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       if (createdUser.user != null) {
-        UserModel userModel = UserModel(createdUser.user!.uid, username, email,
-            age, gender, '', '', Timestamp.now(), Timestamp.now());
+        UserModel userModel = UserModel(
+            createdUser.user!.uid,
+            username,
+            lastName,
+            firstName,
+            email,
+            age,
+            gender,
+            '',
+            '',
+            Timestamp.now(),
+            Timestamp.now());
         return FirebaseFirestore.instance
             .collection('users')
             .doc(userModel.uid)

@@ -2,11 +2,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel {
-  final String uid, username, email, image, age, gender, headerImage;
+  final String uid,
+      username,
+      lastName,
+      firstName,
+      email,
+      profileImage,
+      age,
+      gender,
+      headerImage;
   Timestamp created, updated;
 
-  UserModel(this.uid, this.username, this.email, this.age, this.gender,
-      this.image, this.headerImage, this.created, this.updated);
+  UserModel(
+      this.uid,
+      this.username,
+      this.lastName,
+      this.firstName,
+      this.email,
+      this.age,
+      this.gender,
+      this.profileImage,
+      this.headerImage,
+      this.created,
+      this.updated);
 
   static UserModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = {};
@@ -16,10 +34,12 @@ class UserModel {
     return UserModel(
       snap.id,
       json['username'] ?? '',
+      json['lastName'] ?? '',
+      json['firstName'] ?? '',
       json['email'] ?? '',
       json['age'] ?? '',
       json['gender'] ?? '',
-      json['image'] ?? '',
+      json['profileImage'] ?? '',
       json['headerImage'] ?? '',
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
@@ -29,10 +49,12 @@ class UserModel {
   Map<String, dynamic> get json => {
         'uid': uid,
         'username': username,
+        'lastName': lastName,
+        'firstName': firstName,
         'email': email,
         'age': age,
         'gender': gender,
-        'image': image,
+        'profileImage': profileImage,
         'headerImage': headerImage,
         'created': created,
         'updated': updated,

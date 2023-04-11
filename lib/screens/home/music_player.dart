@@ -44,6 +44,10 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         setState(() {
           isPlaying = playerState.playing;
         });
+        if (playerState.playing == false &&
+            playerState.processingState == ProcessingState.completed) {
+          await playNext();
+        }
       }
     });
     player.durationStream.listen((newDuration) {
@@ -53,6 +57,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         });
       }
     });
+
     player.positionStream.listen((newPosition) {
       if (mounted) {
         setState(() {
@@ -65,9 +70,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   @override
   void dispose() {
     player.dispose();
-    player.playerStateStream.listen(null);
-    player.durationStream.listen(null);
-    player.positionStream.listen(null);
+    player.playerStateStream.listen((_) {}).cancel();
+    player.durationStream.listen((_) {}).cancel();
+    player.positionStream.listen((_) {}).cancel();
     super.dispose();
   }
 
@@ -119,6 +124,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     } else {
       currentIndex = widget.songs.length - 1;
     }
+    position = Duration.zero; // Reset position to zero
     try {
       await setAudio();
     } on PlayerInterruptedException catch (_) {
@@ -136,6 +142,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     } else {
       currentIndex = 0;
     }
+    position = Duration.zero; // Reset position to zero
     try {
       await setAudio();
     } on PlayerInterruptedException catch (_) {
