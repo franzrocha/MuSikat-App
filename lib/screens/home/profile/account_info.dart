@@ -7,7 +7,6 @@ import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/services/image_service.dart';
 import 'package:musikat_app/widgets/avatar.dart';
 
 class AccountInfoScreen extends StatefulWidget {

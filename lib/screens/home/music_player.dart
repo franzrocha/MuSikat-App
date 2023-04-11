@@ -34,34 +34,47 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   bool isPlaying = false;
   bool isLoadingAudio = false;
 
-  @override
-  void initState() {
-    super.initState();
-    currentIndex = widget.initialIndex ?? 0;
-    setAudio();
-    player.playerStateStream.listen((playerState) async {
-      if (mounted) {
-        setState(() {
-          isPlaying = playerState.playing;
-        });
-      }
-    });
-    player.durationStream.listen((newDuration) {
-      if (mounted) {
-        setState(() {
-          duration = newDuration ?? Duration.zero;
-        });
-      }
-    });
-    player.positionStream.listen((newPosition) {
-      if (mounted) {
-        setState(() {
-          position = newPosition;
-        });
-      }
-    });
-  }
+ @override
+void initState() {
+  super.initState();
+  currentIndex = widget.initialIndex ?? 0;
+  setAudio();
+  player.playingStream.listen((isPlaying) {
+    if (mounted) {
+      setState(() {
+        this.isPlaying = isPlaying;
+      });
+    }
+  });
+  player.durationStream.listen((newDuration) {
+    if (mounted) {
+      setState(() {
+        duration = newDuration ?? Duration.zero;
+      });
+    }
+  });
+  player.positionStream.listen((newPosition) {
+    if (mounted) {
+      setState(() {
+        position = newPosition;
+      });
+    }
+  });
 
+  // Listen for when the current song finishes processing
+ player.playerStateStream.listen((playerState) {
+    if (playerState.playing && playerState.processingState == ProcessingState.completed) {
+      if (mounted) {
+        setState(() {
+          // Play the next song
+          currentIndex = (currentIndex + 1) % widget.songs.length;
+          playNext();
+        });
+      }
+    }
+  });
+}
+  
   @override
   void dispose() {
     player.dispose();
@@ -98,17 +111,22 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     );
 
     try {
-      await player.setAudioSource(source);
-      await player.play();
-    } catch (e) {
-      if (e is PlatformException) {
-        await Future.delayed(const Duration(seconds: 2));
-        await setAudio();
-      } else {
-        rethrow;
+    await player.setAudioSource(source);
+    await player.play();
+    player.playerStateStream.listen((playerState) {
+      if (playerState.processingState == ProcessingState.completed) {
+        playNext();
       }
+    });
+  } catch (e) {
+    if (e is PlatformException) {
+      await Future.delayed(const Duration(seconds: 2));
+      await setAudio();
+    } else {
+      rethrow;
     }
   }
+}
 
   Future<void> playPrevious() async {
     if (isLoadingAudio) {
@@ -309,36 +327,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    //children: [
-                    // Text(
-                    //   'LYRICS',
-                    //   textAlign: TextAlign.center,
-                    //   style: GoogleFonts.inter(
-                    //     color: Colors.white,
-                    //     fontSize: 20,
-                    //   ),
-                    // ),
-                    // const SizedBox(width: 50),
-                    // const FaIcon(
-                    //   FontAwesomeIcons.heart,
-                    //   color: Colors.white,
-                    // ),
-                    // const SizedBox(width: 50),
-                    // Text(
-                    //   'INFO',
-                    //   textAlign: TextAlign.center,
-                    //   style: GoogleFonts.inter(
-                    //     color: Colors.white,
-                    //     fontSize: 20,
-                    //   ),
-                    // ),
-                    //  ],
-                  ),
+                 
+                  
                 ],
               )),
+              
         ));
+        
   }
 
   AppBar appbar(BuildContext context) {
