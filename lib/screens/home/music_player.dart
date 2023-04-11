@@ -159,7 +159,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     children: [
                       Container(
                         width: 280,
-                        height: 260,
+                        height: 280,
                         decoration: BoxDecoration(
                           color: Colors.blue,
                           border: Border.all(
@@ -177,7 +177,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     ],
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 23),
@@ -309,33 +309,34 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    //children: [
-                    // Text(
-                    //   'LYRICS',
-                    //   textAlign: TextAlign.center,
-                    //   style: GoogleFonts.inter(
-                    //     color: Colors.white,
-                    //     fontSize: 20,
-                    //   ),
-                    // ),
-                    // const SizedBox(width: 50),
-                    // const FaIcon(
-                    //   FontAwesomeIcons.heart,
-                    //   color: Colors.white,
-                    // ),
-                    // const SizedBox(width: 50),
-                    // Text(
-                    //   'INFO',
-                    //   textAlign: TextAlign.center,
-                    //   style: GoogleFonts.inter(
-                    //     color: Colors.white,
-                    //     fontSize: 20,
-                    //   ),
-                    // ),
-                    //  ],
-                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text(
+                      'INFO',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                        height: 3,
+                      ),
+                    ),
+                  ]
+
+                      // const SizedBox(width: 50),
+                      // const FaIcon(
+                      //   FontAwesomeIcons.heart,
+                      //   color: Colors.white,
+                      // ),
+                      // const SizedBox(width: 50),
+                      // Text(
+                      //   'INFO',
+                      //   textAlign: TextAlign.center,
+                      //   style: GoogleFonts.inter(
+                      //     color: Colors.white,
+                      //     fontSize: 20,
+                      //   ),
+                      // ),
+                      //  ],
+                      ),
                 ],
               )),
         ));

@@ -227,11 +227,6 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                           icon: Icons.stacked_bar_chart,
                           text: 'Insights',
                         ),
-                        CardTile(
-                          onTap: () {},
-                          icon: Icons.monetization_on,
-                          text: 'Patreon',
-                        ),
                       ],
                     ),
                   ),
@@ -254,7 +249,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                 color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
       ),
     );
-  } 
+  }
 
   Align userText() {
     return Align(
