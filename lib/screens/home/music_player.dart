@@ -34,38 +34,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   bool isPlaying = false;
   bool isLoadingAudio = false;
 
-<<<<<<< HEAD
- @override
-void initState() {
-  super.initState();
-  currentIndex = widget.initialIndex ?? 0;
-  setAudio();
-  player.playingStream.listen((isPlaying) {
-    if (mounted) {
-      setState(() {
-        this.isPlaying = isPlaying;
-      });
-    }
-  });
-  player.durationStream.listen((newDuration) {
-    if (mounted) {
-      setState(() {
-        duration = newDuration ?? Duration.zero;
-      });
-    }
-  });
-  player.positionStream.listen((newPosition) {
-    if (mounted) {
-      setState(() {
-        position = newPosition;
-      });
-    }
-  });
-
-  // Listen for when the current song finishes processing
- player.playerStateStream.listen((playerState) {
-    if (playerState.playing && playerState.processingState == ProcessingState.completed) {
-=======
   @override
   void initState() {
     super.initState();
@@ -91,18 +59,14 @@ void initState() {
     });
 
     player.positionStream.listen((newPosition) {
->>>>>>> main
       if (mounted) {
         setState(() {
-          // Play the next song
-          currentIndex = (currentIndex + 1) % widget.songs.length;
-          playNext();
+          position = newPosition;
         });
       }
-    }
-  });
-}
-  
+    });
+  }
+
   @override
   void dispose() {
     player.dispose();
@@ -139,22 +103,17 @@ void initState() {
     );
 
     try {
-    await player.setAudioSource(source);
-    await player.play();
-    player.playerStateStream.listen((playerState) {
-      if (playerState.processingState == ProcessingState.completed) {
-        playNext();
+      await player.setAudioSource(source);
+      await player.play();
+    } catch (e) {
+      if (e is PlatformException) {
+        await Future.delayed(const Duration(seconds: 2));
+        await setAudio();
+      } else {
+        rethrow;
       }
-    });
-  } catch (e) {
-    if (e is PlatformException) {
-      await Future.delayed(const Duration(seconds: 2));
-      await setAudio();
-    } else {
-      rethrow;
     }
   }
-}
 
   Future<void> playPrevious() async {
     if (isLoadingAudio) {
@@ -357,10 +316,6 @@ void initState() {
                     ],
                   ),
                   const SizedBox(height: 15),
-<<<<<<< HEAD
-                 
-                  
-=======
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Text(
                       'INFO',
@@ -389,12 +344,9 @@ void initState() {
                       // ),
                       //  ],
                       ),
->>>>>>> main
                 ],
               )),
-              
         ));
-        
   }
 
   AppBar appbar(BuildContext context) {
