@@ -50,6 +50,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         }
       }
     });
+
     player.durationStream.listen((newDuration) {
       if (mounted) {
         setState(() {
@@ -102,6 +103,17 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       ),
     );
 
+    player.playerStateStream.listen((playerState) async {
+      if (mounted) {
+        setState(() {
+          isPlaying = playerState.playing;
+        });
+        if (playerState.playing == false &&
+            playerState.processingState == ProcessingState.completed) {
+          await playNext();
+        }
+      }
+    });
     try {
       await player.setAudioSource(source);
       await player.play();
