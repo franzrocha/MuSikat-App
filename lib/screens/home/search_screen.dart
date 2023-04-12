@@ -40,7 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 BuildContext context,
                 AsyncSnapshot<List<UserModel>> snapshot,
               ) {
-                if (!snapshot.hasData) {
+                if (!snapshot.hasData) {                     
                   return const SizedBox();
                 }
 

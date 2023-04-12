@@ -58,8 +58,8 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   profilePic(),
                 ]),
               ),
-              userText(),
-              userText2(),
+              fullnameText(),
+              usernameText(),
               const SizedBox(height: 10),
               Divider(
                   height: 20,
@@ -195,41 +195,37 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Scrollbar(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        CardTile(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const AudioUploaderScreen(),
-                            ));
-                          },
-                          icon: Icons.upload_file,
-                          text: 'Upload a file',
-                        ),
-                        CardTile(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const LibraryScreen(),
-                            ));
-                          },
-                          icon: Icons.library_music,
-                          text: 'Library',
-                        ),
-                        CardTile(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const InsightsScreen(),
-                            ));
-                          },
-                          icon: Icons.stacked_bar_chart,
-                          text: 'Insights',
-                        ),
-                      ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CardTile(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AudioUploaderScreen(),
+                        ));
+                      },
+                      icon: Icons.upload_file,
+                      text: 'Upload a file',
                     ),
-                  ),
+                    CardTile(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const LibraryScreen(),
+                        ));
+                      },
+                      icon: Icons.library_music,
+                      text: 'Library',
+                    ),
+                    CardTile(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const InsightsScreen(),
+                        ));
+                      },
+                      icon: Icons.stacked_bar_chart,
+                      text: 'Insights',
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -239,7 +235,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
     );
   }
 
-  Align userText2() {
+  Align usernameText() {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
@@ -251,7 +247,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
     );
   }
 
-  Align userText() {
+  Align fullnameText() {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
@@ -259,7 +255,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
         child: Text(
           '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
           style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
     );

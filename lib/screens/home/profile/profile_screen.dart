@@ -49,17 +49,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 30),
                 TileList(
                   icon: Icons.queue_music,
-                  text: 'Playlist',
+                  title: 'Playlist',
                   ontap: () {},
                 ),
                 TileList(
                   icon: FontAwesomeIcons.heart,
-                  text: 'Liked Songs',
+                  title: 'Liked Songs',
                   ontap: () {},
                 ),
                 TileList(
                   icon: Icons.account_box,
-                  text: 'Account Info',
+                  title: 'Account Info',
                   ontap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -69,17 +69,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 TileList(
                   icon: Icons.people,
-                  text: 'Following/Follower',
+                  title: 'Following/Follower',
                   ontap: () {},
                 ),
                 TileList(
                   icon: Icons.info,
-                  text: 'About us',
+                  title: 'About us',
                   ontap: () {},
                 ),
                 TileList(
                   icon: Icons.logout,
-                  text: 'Log-out',
+                  title: 'Log-out',
                   ontap: () async {
                     _auth.logout();
                   },

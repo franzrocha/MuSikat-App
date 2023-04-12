@@ -8,6 +8,7 @@ import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/avatar.dart';
+import 'package:musikat_app/widgets/tile_list.dart';
 
 class AccountInfoScreen extends StatefulWidget {
   const AccountInfoScreen({Key? key}) : super(key: key);
@@ -45,123 +46,46 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
               children: [
                 profilePic(context),
                 const SizedBox(height: 20),
-                const Divider(height: 20, indent: 1.0, color: listileColor),
-                usernameTile(),
-                const Divider(height: 20, indent: 1.0, color: listileColor),
-                emailTile(),
-                const Divider(height: 20, indent: 1.0, color: listileColor),
-                ageTile(),
-                const Divider(height: 20, indent: 1.0, color: listileColor),
-                genderTile(),
-                const Divider(height: 20, indent: 1.0, color: listileColor),
-                accountCreatedTile(),
+                TileList(
+                  icon: Icons.person,
+                  title: 'Name',
+                  subtitle: '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
+                ),
+                TileList(
+                  icon: Icons.person_pin,
+                  title: 'Username',
+                  subtitle: user?.username ?? '',
+                ),
+                TileList(
+                  icon: Icons.email,
+                  title: 'Email',
+                  subtitle: user?.email ?? '',
+                ),
+                TileList(
+                  icon: Icons.numbers,
+                  title: 'Age',
+                  subtitle: user?.age ?? '',
+                ),
+                TileList(
+                  icon: FontAwesomeIcons.marsAndVenus,
+                  title: 'Gender',
+                  subtitle: user?.gender ?? '',
+                ),
+                TileList(
+                  icon: FontAwesomeIcons.calendar,
+                  title: 'Account created',
+                  subtitle: user?.created == null
+                      ? "..."
+                      : DateFormat("MMMM dd, yyyy").format(
+                          user!.created.toDate(),
+                        ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  ListTile emailTile() {
-    return ListTile(
-      leading: const Icon(Icons.email, color: Colors.white, size: 25),
-      title: Text(
-        'Email',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-        ),
-      ),
-      subtitle: Text(
-        user?.email ?? '...',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 15,
-        ),
-      ),
-    );
-  }
-
-  ListTile usernameTile() {
-    return ListTile(
-      leading: const Icon(
-        Icons.person,
-        color: Colors.white,
-        size: 30,
-      ),
-      title: Text(
-        'Username',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-        ),
-      ),
-      subtitle: Text(
-        user?.username ?? '...',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 15,
-        ),
-      ),
-    );
-  }
-
-  ListTile ageTile() {
-    return ListTile(
-      leading: const Icon(
-        Icons.numbers,
-        color: Colors.white,
-        size: 30,
-      ),
-      title: Text(
-        'Age',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-        ),
-      ),
-      subtitle: Row(
-        children: [
-          Text(
-            user?.age ?? '...',
-            style: GoogleFonts.inter(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-          const SizedBox(width: 5),
-          Text(
-            'years old',
-            style: GoogleFonts.inter(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  ListTile genderTile() {
-    return ListTile(
-      leading: const FaIcon(
-        FontAwesomeIcons.marsAndVenus,
-        color: Colors.white,
-        size: 30,
-      ),
-      title: Text(
-        'Gender',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-        ),
-      ),
-      subtitle: Text(
-        user?.gender ?? '...',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 15,
         ),
       ),
     );
@@ -202,31 +126,6 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  ListTile accountCreatedTile() {
-    return ListTile(
-      leading: const FaIcon(FontAwesomeIcons.calendar,
-          color: Colors.white, size: 25),
-      title: Text(
-        'Account created',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-        ),
-      ),
-      subtitle: Text(
-        user?.created == null
-            ? "..."
-            : DateFormat("MMMM dd, yyyy").format(
-                user!.created.toDate(),
-              ),
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 15,
-        ),
-      ),
     );
   }
 

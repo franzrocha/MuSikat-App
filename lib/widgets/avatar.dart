@@ -41,7 +41,7 @@ class AvatarImage extends StatelessWidget {
         //   color: Colors.white,
         //   size: radius,
         // ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white24,
       ),
     );
   }

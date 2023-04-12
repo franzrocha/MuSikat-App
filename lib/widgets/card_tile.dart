@@ -20,7 +20,7 @@ class CardTile extends StatelessWidget {
       onTap: onTap,
       child: SizedBox(
         height: 150,
-        width: 150,
+        width: 130,
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),

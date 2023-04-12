@@ -56,7 +56,7 @@ class _NavBarState extends State<NavBar> {
               if (index != 2) {
                 setState(() {
                   pageIndex = index;
-                });
+                });  
               } else {
                 Navigator.of(context).push(
                   MaterialPageRoute(

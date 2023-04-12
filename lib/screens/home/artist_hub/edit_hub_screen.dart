@@ -28,20 +28,18 @@ class _EditHubScreenState extends State<EditHubScreen> {
                 height: 200,
                 child: Stack(
                   children: [
+                    HeaderImage(
+                        uid: FirebaseAuth.instance.currentUser!.uid),
                     InkWell(
-                      onTap: () {
-                        ImageService.updateHeaderImage(context);
-                      },
-                      child: HeaderImage(
-                          uid: FirebaseAuth.instance.currentUser!.uid),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 40),
-                      child: Center(
-                        child: Icon(
-                          Icons.camera_alt,
-                          color: Colors.white.withOpacity(0.8),
-                          size: 70,
+                      onTap: () => ImageService.updateHeaderImage(context),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 40),
+                        child: Center(
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.white.withOpacity(0.8),
+                            size: 70,
+                          ),
                         ),
                       ),
                     ),

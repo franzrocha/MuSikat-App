@@ -115,4 +115,5 @@ class SongService {
   void cancelUpload() {
     _uploadProgressStreamController.close();
   }
+
 }

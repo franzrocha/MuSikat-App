@@ -6,11 +6,14 @@ class TileList extends StatelessWidget {
   const TileList(
       {Key? key,
       required this.icon,
-      required this.text, this.ontap})
+      required this.title,
+      this.ontap,
+      this.subtitle})
       : super(key: key);
 
   final IconData icon;
-  final String text;
+  final String title;
+  final String? subtitle;
   final void Function()? ontap;
 
   @override
@@ -34,13 +37,20 @@ class TileList extends StatelessWidget {
               ),
             ),
             title: Text(
-              text,
+              title,
               style: GoogleFonts.inter(fontSize: 17, color: Colors.white),
+            ),
+            subtitle:  subtitle != null
+                ? Text(
+                    subtitle!,
+                    style:
+                        GoogleFonts.inter(fontSize: 12, color: Colors.white70),
+                  )
+                : null,
             ),
           ),
         ),
-      ),
+      
     );
   }
 }
-
