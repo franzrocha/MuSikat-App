@@ -15,8 +15,8 @@ class UploadDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        "Uploading...",
-        style: GoogleFonts.inter(fontSize: 18),
+        "Uploading",
+        style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       content: StreamBuilder<double>(
         stream: songService.uploadProgressStream,
@@ -34,16 +34,23 @@ class UploadDialog extends StatelessWidget {
                   backgroundColor: Colors.grey.shade300,
                 ),
                 const SizedBox(height: 10.0),
-                Text('${uploadPercent.toStringAsFixed(0)}% uploaded'),
+                Text(
+                  '${uploadPercent.toStringAsFixed(0)}% uploaded',
+                  style: GoogleFonts.inter(fontSize: 15),
+                ),
                 const SizedBox(height: 10.0),
-                ElevatedButton(
+                TextButton(
                   onPressed: () {
                     songService.cancelUpload();
                     Navigator.of(context).pop();
                   },
+                  style: ButtonStyle(
+                    overlayColor:
+                        MaterialStateProperty.all(Colors.grey.shade300),
+                  ),
                   child: Text(
                     'Cancel',
-                    style: GoogleFonts.inter(color: Colors.white),
+                    style: GoogleFonts.inter(color: Colors.black),
                   ),
                 ),
               ],

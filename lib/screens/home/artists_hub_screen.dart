@@ -157,12 +157,18 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(latestSong.title,
-                                          style: GoogleFonts.inter(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          )),
+                                      Text(
+                                        latestSong.title.length > 20
+                                            ? '${latestSong.title.substring(0, 20)}...'
+                                            : latestSong.title,
+                                        style: GoogleFonts.inter(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                       Text(latestSong.genre,
                                           style: GoogleFonts.inter(
                                             color: Colors.grey,
@@ -193,39 +199,47 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                       )),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CardTile(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AudioUploaderScreen(),
-                        ));
-                      },
-                      icon: Icons.upload_file,
-                      text: 'Upload a file',
-                    ),
-                    CardTile(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const LibraryScreen(),
-                        ));
-                      },
-                      icon: Icons.library_music,
-                      text: 'Library',
-                    ),
-                    CardTile(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const InsightsScreen(),
-                        ));
-                      },
-                      icon: Icons.stacked_bar_chart,
-                      text: 'Insights',
-                    ),
-                  ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CardTile(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const AudioUploaderScreen(),
+                          ));
+                        },
+                        icon: Icons.upload_file,
+                        text: 'Upload a file',
+                      ),
+                      CardTile(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const LibraryScreen(),
+                          ));
+                        },
+                        icon: Icons.library_music,
+                        text: 'Library',
+                      ),
+                      CardTile(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const InsightsScreen(),
+                          ));
+                        },
+                        icon: Icons.stacked_bar_chart,
+                        text: 'Insights',
+                      ),
+                      CardTile(
+                        onTap: () {},
+                        icon: Icons.money,
+                        text: 'Support',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

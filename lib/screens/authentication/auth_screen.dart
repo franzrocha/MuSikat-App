@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/screens/authentication/new_welcome_screen.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/widgets/loading_indicator.dart';
@@ -11,9 +10,8 @@ import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/widgets/custom_text_field.dart';
 import '../../controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/screens/authentication/forgot_password.dart';
-import 'package:musikat_app/screens/authentication/new_welcome_screen.dart';
-
 import '../../widgets/toast_msg.dart';
+
 
 class AuthScreen extends StatefulWidget {
   static const String route = 'auth-screen';

@@ -154,7 +154,10 @@ class NavigationService {
   material.PageRoute getRoute(RouteSettings settings) {
     if (FirebaseAuth.instance.currentUser != null) {
       return FadeRoute(page: const NavBar(), settings: settings);
-    } else {
+    } 
+    
+    
+    else {
       return FadeRoute(page: const WelcomeScreen(), settings: settings);
     }
   }

@@ -116,4 +116,31 @@ class SongService {
     _uploadProgressStreamController.close();
   }
 
+  Future<void> deleteSong(String songId) async {
+    try {
+      final DocumentReference songRef = _db.collection('songs').doc(songId);
+      final DocumentSnapshot songSnapshot = await songRef.get();
+
+      if (songSnapshot.exists) {
+        // delete the song document from the songs collection
+        await songRef.delete();
+
+        // delete the song file from Firebase Storage
+        final Map<String, dynamic> songData =
+            songSnapshot.data() as Map<String, dynamic>;
+        final String audioUrl = songData['audio'];
+        final String albumCoverUrl = songData['album_cover'];
+
+        final Reference audioRef =
+            FirebaseStorage.instance.refFromURL(audioUrl);
+        final Reference albumCoverRef =
+            FirebaseStorage.instance.refFromURL(albumCoverUrl);
+
+        await audioRef.delete();
+        await albumCoverRef.delete();
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

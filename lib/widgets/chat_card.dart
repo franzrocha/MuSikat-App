@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:musikat_app/utils/constants.dart';
 
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/widgets/bottom_field.dart';
+import 'package:musikat_app/widgets/chat_bottom_field.dart';
 
 import '../models/chat_message_model.dart';
 
@@ -217,7 +217,6 @@ class _ChatCardState extends State<ChatCard> {
     return showModalBottomSheet(
       context: context,
       builder: (context) => SingleChildScrollView(
-          // controller: ModalScrollController.of(context),
           child: BottomField(
         chat: chat[index],
       )),

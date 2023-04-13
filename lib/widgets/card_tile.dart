@@ -20,7 +20,7 @@ class CardTile extends StatelessWidget {
       onTap: onTap,
       child: SizedBox(
         height: 150,
-        width: 130,
+        width: 135,
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
@@ -41,7 +41,7 @@ class CardTile extends StatelessWidget {
                 Text(
                   text,
                   style: GoogleFonts.inter(
-                    fontSize: 17,
+                    fontSize: 15,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),

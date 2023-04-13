@@ -103,17 +103,17 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       ),
     );
 
-    player.playerStateStream.listen((playerState) async {
-      if (mounted) {
-        setState(() {
-          isPlaying = playerState.playing;
-        });
-        if (playerState.playing == false &&
-            playerState.processingState == ProcessingState.completed) {
-          await playNext();
-        }
-      }
-    });
+    // player.playerStateStream.listen((playerState) async {
+    //   if (mounted) {
+    //     setState(() {
+    //       isPlaying = playerState.playing;
+    //     });
+    //     if (playerState.playing == false &&
+    //         playerState.processingState == ProcessingState.completed) {
+    //       await playNext();
+    //     }
+    //   }
+    // });
     try {
       await player.setAudioSource(source);
       await player.play();
@@ -136,7 +136,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     } else {
       currentIndex = widget.songs.length - 1;
     }
-    position = Duration.zero; // Reset position to zero
+    position = Duration.zero; 
     try {
       await setAudio();
     } on PlayerInterruptedException catch (_) {
@@ -328,34 +328,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text(
-                      'INFO',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 20,
-                        height: 3,
-                      ),
-                    ),
-                  ]
-
-                      // const SizedBox(width: 50),
-                      // const FaIcon(
-                      //   FontAwesomeIcons.heart,
-                      //   color: Colors.white,
-                      // ),
-                      // const SizedBox(width: 50),
-                      // Text(
-                      //   'INFO',
-                      //   textAlign: TextAlign.center,
-                      //   style: GoogleFonts.inter(
-                      //     color: Colors.white,
-                      //     fontSize: 20,
-                      //   ),
-                      // ),
-                      //  ],
-                      ),
+                
                 ],
               )),
         ));

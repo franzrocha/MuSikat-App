@@ -65,6 +65,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     fontStyle: FontStyle.normal),
               ),
             ),
+
+              
           ]),
         ),
       ),

@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -295,8 +296,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 25, top: 10),
                         child: Column(
-                           mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               width: 160,
@@ -304,22 +305,21 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.blue,
                                 border: Border.all(
-                                  color: const Color.fromARGB(
-                                      255, 124, 131, 127),
+                                  color:
+                                      const Color.fromARGB(255, 124, 131, 127),
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                                 image: const DecorationImage(
                                   image: AssetImage(
                                       "assets/images/homescreen/ticket3.jpg"),
-                                  fit:
-                                      BoxFit.cover, //change image fill type
+                                  fit: BoxFit.cover, //change image fill type
                                 ),
                               ),
                             ),
                             const Align(
                               alignment: Alignment.bottomLeft,
-                              child:  Text(
+                              child: Text(
                                 "Daily Mix 3",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
