@@ -42,8 +42,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               return const LoadingIndicator();
             } else {
               final songs = snapshot.data!
-                  .where((song) =>
-                      song.uid == FirebaseAuth.instance.currentUser?.uid)
+                  // .where((song) =>
+                  //     song.uid == FirebaseAuth.instance.currentUser?.uid)
                   .toList();
 
               return songs.isEmpty
