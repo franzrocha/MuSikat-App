@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
-import 'package:musikat_app/screens/authentication/new_welcome_screen.dart';
 import 'package:musikat_app/widgets/nav_bar.dart';
 import 'dart:developer' as developer;
 import '../../screens/authentication/welcome_screen.dart';
@@ -154,10 +153,7 @@ class NavigationService {
   material.PageRoute getRoute(RouteSettings settings) {
     if (FirebaseAuth.instance.currentUser != null) {
       return FadeRoute(page: const NavBar(), settings: settings);
-    } 
-    
-    
-    else {
+    } else {
       return FadeRoute(page: const WelcomeScreen(), settings: settings);
     }
   }

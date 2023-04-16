@@ -7,6 +7,7 @@ import 'package:musikat_app/widgets/toast_msg.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({Key? key}) : super(key: key);
+  
 
   @override
   State<LanguageSelectionScreen> createState() =>
@@ -69,7 +70,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             Navigator.pop(context, selectedLanguages);
           }
         },
-        child: const Icon(Icons.save),
+        child: const Icon(Icons.arrow_forward_ios),
       ),
     );
   }

@@ -131,7 +131,6 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                           fontSize: 14,
                         ),
                         controller: _messageController,
-                        // maxLines: null,
                         decoration: InputDecoration(
                           hintText: 'Type a message....',
                           hintStyle: GoogleFonts.inter(

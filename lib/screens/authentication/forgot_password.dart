@@ -51,16 +51,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         padding: const EdgeInsets.only(top: 5, bottom: 15),
                         child: Image.asset(
                           "assets/images/Forgot_password.png",
-                          width: 240,
-                          height: 240,
+                          width: 200,
+                          height: 220,
                         ),
                       ),
-                      Text('Forgot your password?',
-                          textAlign: TextAlign.left,
-                          style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Forgot your password?',
+                             
+                              style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      ),
                       const SizedBox(height: 15),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -69,20 +75,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             textAlign: TextAlign.justify,
                             style: GoogleFonts.inter(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 14,
                             )),
                       ),
                       const SizedBox(height: 20),
                       emailForm(),
                       const Padding(
                         padding: EdgeInsets.only(top: 20, bottom: 30),
-                        // child: Text(
-                        //   prompts,
-                        //   style: GoogleFonts.inter(
-                        //     color: Colors.red,
-                        //     fontSize: 12,
-                        //   ),
-                        // ),
+                       
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 45),

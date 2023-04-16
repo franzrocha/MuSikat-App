@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/screens/home/artist_hub/description_selection_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/genre_selection_screen.dart';
 import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/utils/constants.dart';
@@ -27,9 +29,12 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
   final TextEditingController _titleCon = TextEditingController(),
       _writerCon = TextEditingController(),
       _producerCon = TextEditingController();
+
+  final SongsController _songCon = SongsController();
   final List<String> _writers = [];
   final List<String> _producers = [];
   List<String>? selectedLanguage;
+  List<String>? selectedDescription;
   String? selectedGenre;
 
   FirebaseStorage storage = FirebaseStorage.instance;
@@ -149,7 +154,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       );
 
       // Get the song model with the uploaded file data
-      final SongModel song = await songService.getSongById(songId);
+      final SongModel song = await _songCon.getSongById(songId);
 
       // Close progress dialog
       Navigator.of(context).pop();
@@ -318,10 +323,53 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                     ),
                   ),
                   languageTile(context),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Describe the track',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                  ),
+                  descriptionTile(context),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox descriptionTile(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      child: ListTile(
+        onTap: () async {
+          final result = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const DescriptionSelectionScreen(),
+            ),
+          );
+          if (result != null) {
+            setState(() {
+              selectedDescription = result;
+            });
+          }
+        },
+        title: Text(
+          selectedDescription != null
+              ? selectedDescription!.map((item) => '#$item').join('  ')
+              : 'Describe what your track is about...',
+          style: GoogleFonts.inter(
+            color: selectedDescription != null ? Colors.white : Colors.grey,
+            fontSize: 13,
+          ),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          color: Colors.grey,
+          size: 15,
         ),
       ),
     );

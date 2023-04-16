@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -19,7 +20,7 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
-  final SongService songService = SongService();
+  final SongsController _songCon = SongsController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       backgroundColor: musikatBackgroundColor,
       body: Center(
         child: StreamBuilder<List<SongModel>>(
-          stream: songService.getSongsStream(),
+          stream: _songCon.getSongsStream(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
               return const LoadingIndicator();
@@ -42,8 +43,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               return const LoadingIndicator();
             } else {
               final songs = snapshot.data!
-                  // .where((song) =>
-                  //     song.uid == FirebaseAuth.instance.currentUser?.uid)
+                  .where((song) =>
+                      song.uid == FirebaseAuth.instance.currentUser?.uid)
                   .toList();
 
               return songs.isEmpty

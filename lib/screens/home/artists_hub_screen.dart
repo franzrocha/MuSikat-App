@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/artist_hub/library_screen.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/utils/constants.dart';
-import 'package:musikat_app/screens/home/artist_hub/insights.dart';
+import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
 import 'package:musikat_app/widgets/avatar.dart';
 import 'package:musikat_app/widgets/card_tile.dart';
@@ -25,7 +25,7 @@ class ArtistsHubScreen extends StatefulWidget {
 
 class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
   final AuthController _auth = locator<AuthController>();
-  final SongService songService = SongService();
+  final SongsController _songCon = SongsController();
 
   UserModel? user;
 
@@ -73,7 +73,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   children: [
                     const SizedBox(height: 10),
                     StreamBuilder<List<SongModel>>(
-                      stream: songService.getLatestSong(
+                      stream: _songCon.getLatestSong(
                           FirebaseAuth.instance.currentUser!.uid),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data == null) {

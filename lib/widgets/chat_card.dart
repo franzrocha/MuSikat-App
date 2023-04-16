@@ -72,7 +72,7 @@ class _ChatCardState extends State<ChatCard> {
                 child: Padding(
                   padding: const EdgeInsets.all(5),
                   child: Text(
-                    '(edited)', 
+                    '(edited)',
                     style:
                         GoogleFonts.inter(fontSize: 9, color: Colors.white70),
                   ),
@@ -123,7 +123,7 @@ class _ChatCardState extends State<ChatCard> {
                           border: Border.all(
                               color: chat[index].isDeleted
                                   ? Colors.white
-                                  : Colors.transparent),
+                                  : musikatColor4),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(20)),
                           color: chat[index].isDeleted
@@ -215,9 +215,10 @@ class _ChatCardState extends State<ChatCard> {
 
   Future<dynamic> bottomModal(BuildContext context) {
     return showModalBottomSheet(
+      backgroundColor: musikatColor4,
       context: context,
       builder: (context) => SingleChildScrollView(
-          child: BottomField(
+          child: ChatBottomField(
         chat: chat[index],
       )),
     );

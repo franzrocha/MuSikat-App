@@ -1,17 +1,24 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/services/song_service.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/widgets/toast_msg.dart';
 
-class SongBottomField extends StatelessWidget {
+class SongBottomField extends StatefulWidget {
   final String songId;
   const SongBottomField({
     super.key,
     required this.songId,
   });
 
+  @override
+  State<SongBottomField> createState() => _SongBottomFieldState();
+}
+
+class _SongBottomFieldState extends State<SongBottomField> {
+  final SongsController _songCon = SongsController();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -21,6 +28,17 @@ class SongBottomField extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              ListTile(
+                leading: const FaIcon(
+                  FontAwesomeIcons.heart,
+                  color: Colors.grey,
+                ),
+                title: Text(
+                  "Like",
+                  style: GoogleFonts.inter(color: Colors.black, fontSize: 16),
+                ),
+                onTap: () {},
+              ),
               ListTile(
                 leading: const Icon(
                   Icons.playlist_add,
@@ -93,7 +111,8 @@ class SongBottomField extends StatelessWidget {
                                   TextButton(
                                     onPressed: () async {
                                       try {
-                                        await SongService().deleteSong(songId);
+                                        await _songCon
+                                            .deleteSong(widget.songId);
 
                                         Navigator.of(context).pop();
                                         ToastMessage.show(context,

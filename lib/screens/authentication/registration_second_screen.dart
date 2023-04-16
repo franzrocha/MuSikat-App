@@ -151,7 +151,9 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
           } else {
             if (_formKey.currentState!.validate()) {
               setState(() {
+                
                 register();
+               
               });
             } else {
               ToastMessage.show(context, 'Please fill in all fields correctly');

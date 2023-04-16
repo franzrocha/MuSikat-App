@@ -32,6 +32,7 @@ class AuthController with ChangeNotifier {
       nav.popUntilFirst();
       nav.pushReplacementNamed(WelcomeScreen.route);
     }
+    
     if (event != null) {
       print('Logged in user');
       print(event.email);

@@ -51,7 +51,7 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
             Navigator.pop(context, selectedGenre);
           }
         },
-        child: const Icon(Icons.save),
+       child: const Icon(Icons.arrow_forward_ios),
       ),
     );
   }

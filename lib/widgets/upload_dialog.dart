@@ -14,9 +14,11 @@ class UploadDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        "Uploading",
-        style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold),
+      title: Center(
+        child: Text(
+          "Uploading",
+          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
       content: StreamBuilder<double>(
         stream: songService.uploadProgressStream,
