@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/utils/constants.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';
@@ -11,7 +9,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

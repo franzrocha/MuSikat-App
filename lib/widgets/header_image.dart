@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/utils/constants.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class HeaderImage extends StatelessWidget {
   const HeaderImage({super.key, required this.uid});
@@ -37,7 +36,7 @@ class HeaderImage extends StatelessWidget {
   Widget tempHeader(BuildContext context) {
     return Container(
       height: 150,
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         color: musikatBackgroundColor.withOpacity(0.5),
       ),
     );

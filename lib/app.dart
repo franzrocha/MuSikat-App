@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/utils/constants.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -18,6 +17,7 @@ class MyApp extends StatelessWidget {
               primary: musikatColor2,
             ),
       ),
+      color: Colors.white,
       builder: (context, Widget? child) => child as Widget,
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: locator<NavigationService>().getRoute,

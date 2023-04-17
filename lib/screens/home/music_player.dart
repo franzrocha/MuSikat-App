@@ -1,16 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:just_audio_background/just_audio_background.dart';
-import 'package:marquee_text/marquee_direction.dart';
-import 'package:marquee_text/marquee_text.dart';
 
-import 'package:musikat_app/utils/constants.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/services/song_service.dart';
-import 'package:musikat_app/widgets/loading_indicator.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
@@ -360,13 +355,10 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           onPressed: player.pause,
                         ),
                       );
+                    } else if (processingState == ProcessingState.completed) {
+                      playNext();
+                      return const LoadingIndicator();
                     } else {
-                      player.playbackEventStream.listen((event) {
-                        if (event.processingState ==
-                            ProcessingState.completed) {
-                          playNext();
-                        }
-                      });
                       return IconButton(
                         icon: const Icon(Icons.replay),
                         iconSize: 64.0,

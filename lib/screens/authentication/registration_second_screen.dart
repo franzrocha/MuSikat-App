@@ -1,12 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/utils/constants.dart';
-import 'package:musikat_app/widgets/custom_text_field.dart';
-import 'package:musikat_app/widgets/loading_indicator.dart';
-import 'package:musikat_app/widgets/toast_msg.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class RegistrationSecondScreen extends StatefulWidget {
   const RegistrationSecondScreen(
@@ -151,9 +146,7 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
           } else {
             if (_formKey.currentState!.validate()) {
               setState(() {
-                
                 register();
-               
               });
             } else {
               ToastMessage.show(context, 'Please fill in all fields correctly');

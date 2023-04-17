@@ -67,6 +67,7 @@ final List<String> languages = [
   'Wakan',
 ];
 
+//description list
 final List<String> descriptions = [
   'sad',
   'gaming',

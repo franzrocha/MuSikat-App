@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/utils/constants.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class CardTile extends StatelessWidget {
   const CardTile({

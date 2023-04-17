@@ -1,12 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/categories_screen.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
-import 'package:musikat_app/widgets/avatar.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -40,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 BuildContext context,
                 AsyncSnapshot<List<UserModel>> snapshot,
               ) {
-                if (!snapshot.hasData) {                     
+                if (!snapshot.hasData) {
                   return const SizedBox();
                 }
 

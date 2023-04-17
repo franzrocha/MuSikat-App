@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import 'package:musikat_app/utils/constants.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class InsightsScreen extends StatefulWidget {
   static const String route = 'artists-screen';
@@ -11,7 +7,6 @@ class InsightsScreen extends StatefulWidget {
   @override
   State<InsightsScreen> createState() => _InsightsScreenState();
 }
-
 
 class _InsightsScreenState extends State<InsightsScreen> {
   @override
@@ -65,8 +60,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     fontStyle: FontStyle.normal),
               ),
             ),
-
-              
           ]),
         ),
       ),

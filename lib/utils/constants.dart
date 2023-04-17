@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 const musikatBackgroundColor = Color(0xff262525);
 
-
 //listile
 const listileColor = Color.fromARGB(255, 123, 123, 123);
 
@@ -20,4 +19,6 @@ const musikatColor4 = Color.fromARGB(255, 71, 68, 68);
 const deleteColor = Colors.red;
 const cancelColor = Color.fromARGB(255, 125, 123, 123);
 
+//musikat text color
+const musikatTextColor = Colors.white;
 

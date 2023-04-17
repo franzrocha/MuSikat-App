@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/utils/constants.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/widgets/custom_text_field.dart';
-import 'package:musikat_app/widgets/toast_msg.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -30,7 +28,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context),
+      appBar: const CustomAppBar(title: 'Forgot Password'),
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
         child: Center(
@@ -60,7 +58,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text('Forgot your password?',
-                             
                               style: GoogleFonts.inter(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -82,7 +79,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       emailForm(),
                       const Padding(
                         padding: EdgeInsets.only(top: 20, bottom: 30),
-                       
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 45),
@@ -136,50 +132,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      title: Text("Forgot Password",
-          textAlign: TextAlign.right,
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
-        ),
-      ),
-    );
-  }
-
   bool isFieldEmpty() {
     return !(isEmailEmpty);
   }
 
-// ignore_for_file: use_build_context_synchronously
-Future<void> resetPass() async {
-  try {
-    if (_emailCon.text.trim().isEmpty) {
-      ToastMessage.show(context, 'Please enter an email address');
-    } else {
-      bool result = await auth.resetPassword(email: _emailCon.text.trim());
-      if (result) {
-        FocusScope.of(context).unfocus();
-        ToastMessage.show(context, 'Password reset link sent');
-        _emailCon.clear();
+  Future<void> resetPass() async {
+    try {
+      if (_emailCon.text.trim().isEmpty) {
+        ToastMessage.show(context, 'Please enter an email address');
+      } else {
+        bool result = await auth.resetPassword(email: _emailCon.text.trim());
+        if (result) {
+          FocusScope.of(context).unfocus();
+          ToastMessage.show(context, 'Password reset link sent');
+          _emailCon.clear();
+        }
       }
+    } catch (error) {
+      setState(() {
+        ToastMessage.show(context, error.toString());
+      });
     }
-  } catch (error) {
-    setState(() {
-      ToastMessage.show(context, error.toString());
-    }); 
   }
-}
-
 }

@@ -1,11 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/utils/constants.dart';
+// ignore_for_file: must_be_immutable
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/widgets/avatar.dart';
-import 'package:musikat_app/widgets/header_image.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 
-// ignore: must_be_immutable
 class ArtistsProfileScreen extends StatefulWidget {
   ArtistsProfileScreen({Key? key, required this.selectedUserUID})
       : super(key: key);
@@ -72,7 +69,6 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                 ),
               ]),
             ),
-          
           ],
         ),
       )),

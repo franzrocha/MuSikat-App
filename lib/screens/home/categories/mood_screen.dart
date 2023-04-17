@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/widgets/toast_msg.dart';
-
-import '../../../utils/constants.dart';
-
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class MoodsScreen extends StatefulWidget {
   const MoodsScreen({Key? key}) : super(key: key);
@@ -27,7 +21,7 @@ class _MoodsScreenState extends State<MoodsScreen> {
       "name": "Sad",
       "color": const Color.fromARGB(255, 22, 22, 16),
     },
-     {
+    {
       "name": "Happy",
       "color": const Color.fromARGB(255, 68, 18, 23),
     },
@@ -51,9 +45,7 @@ class _MoodsScreenState extends State<MoodsScreen> {
           final String roomName = roomData['name'];
           final Color roomColor = roomData['color'];
           return GestureDetector(
-           onTap: () {                          
-            
-  },                      
+            onTap: () {},
             child: SizedBox(
               height: 200,
               child: Container(
@@ -92,30 +84,29 @@ class _MoodsScreenState extends State<MoodsScreen> {
   }
 }
 
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      title: Text(
-        "Moods",
-        textAlign: TextAlign.right,
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
+AppBar appbar(BuildContext context) {
+  return AppBar(
+    toolbarHeight: 75,
+    title: Text(
+      "Moods",
+      textAlign: TextAlign.right,
+      style: GoogleFonts.inter(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
       ),
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
-        ),
+    ),
+    elevation: 0.0,
+    backgroundColor: Colors.transparent,
+    automaticallyImplyLeading: false,
+    leading: IconButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      icon: const FaIcon(
+        FontAwesomeIcons.angleLeft,
+        size: 20,
       ),
-    );
-  }
-
+    ),
+  );
+}

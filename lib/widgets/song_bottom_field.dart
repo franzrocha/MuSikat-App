@@ -1,10 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
-import 'package:musikat_app/widgets/toast_msg.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
+
 
 class SongBottomField extends StatefulWidget {
   final String songId;
@@ -22,6 +20,7 @@ class _SongBottomFieldState extends State<SongBottomField> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: SafeArea(
         top: false,
         child: Center(
@@ -31,61 +30,62 @@ class _SongBottomFieldState extends State<SongBottomField> {
               ListTile(
                 leading: const FaIcon(
                   FontAwesomeIcons.heart,
-                  color: Colors.grey,
+                  color: Colors.white,
                 ),
                 title: Text(
                   "Like",
-                  style: GoogleFonts.inter(color: Colors.black, fontSize: 16),
+                  style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
                 ),
                 onTap: () {},
               ),
               ListTile(
                 leading: const Icon(
                   Icons.playlist_add,
-                  color: Colors.grey,
+                  color: Colors.white,
                 ),
                 title: Text(
                   "Add to playlist",
-                  style: GoogleFonts.inter(color: Colors.black, fontSize: 16),
+                  style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
                 ),
                 onTap: () {},
               ),
               ListTile(
                 leading: const Icon(
                   Icons.info,
-                  color: Colors.grey,
+                  color: Colors.white,
                 ),
                 title: Text(
                   "View song info",
-                  style: GoogleFonts.inter(color: Colors.black, fontSize: 16),
+                  style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
                 ),
                 onTap: () {},
               ),
               ListTile(
                 leading: const Icon(
                   Icons.edit,
-                  color: Colors.grey,
+                  color: Colors.white,
                 ),
                 title: Text(
                   "Edit",
-                  style: GoogleFonts.inter(color: Colors.black, fontSize: 16),
+                  style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
                 ),
                 onTap: () {},
               ),
               ListTile(
                 leading: const Icon(
                   Icons.delete,
-                  color: Colors.grey,
+                  color: Colors.white,
                 ),
                 title: Text(
                   "Delete",
-                  style: GoogleFonts.inter(color: Colors.black, fontSize: 16),
+                  style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
                 ),
                 onTap: () {
                   Navigator.of(context).pop();
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => Dialog(
+                      backgroundColor: musikatColor4,
                       child: SingleChildScrollView(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -95,12 +95,12 @@ class _SongBottomFieldState extends State<SongBottomField> {
                               Text(
                                 "Delete",
                                 style: GoogleFonts.inter(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                               ),
                               const SizedBox(height: 18),
                               Text(
                                 "Are you sure you want to delete this song?",
-                                style: GoogleFonts.inter(fontSize: 15),
+                                style: GoogleFonts.inter(fontSize: 15, color: Colors.white),
                               ),
                               const SizedBox(height: 15),
                               Row(
@@ -124,8 +124,7 @@ class _SongBottomFieldState extends State<SongBottomField> {
                                     },
                                     style: ButtonStyle(
                                       overlayColor: MaterialStateProperty.all(
-                                          const Color.fromARGB(
-                                              255, 244, 196, 196)),
+                                          const Color.fromARGB(255, 255, 105, 105)),
                                     ),
                                     child: Text(
                                       "Delete",
@@ -144,7 +143,7 @@ class _SongBottomFieldState extends State<SongBottomField> {
                                     child: Text(
                                       "Cancel",
                                       style: GoogleFonts.inter(
-                                          color: Colors.black),
+                                       color: Colors.white),
                                     ),
                                   ),
                                 ],

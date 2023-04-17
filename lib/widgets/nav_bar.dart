@@ -1,16 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musikat_app/screens/home/fer.dart';
-import 'package:musikat_app/utils/constants.dart';
-import 'package:musikat_app/controllers/auth_controller.dart';
+import 'package:musikat_app/screens/home/search_screen.dart';
 import 'package:musikat_app/screens/home/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/categories_screen.dart';
 import 'package:musikat_app/screens/home/chat_home_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
-import 'package:musikat_app/service_locators.dart';
-
-import '../screens/home/search_screen.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
@@ -25,9 +20,6 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    final AuthController auth = locator<AuthController>();
-
     final List<Widget> pages = [
       const HomeScreen(),
       const ArtistsHubScreen(),
@@ -37,72 +29,97 @@ class _NavBarState extends State<NavBar> {
     ];
 
     return Scaffold(
+      backgroundColor: musikatBackgroundColor,
       resizeToAvoidBottomInset: false,
       appBar: appbar(context),
       body: pages[pageIndex],
       bottomNavigationBar: SafeArea(
-        child: SizedBox(
-          height: 70,
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: const Color(0xffE28D00),
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.white54,
-            currentIndex: pageIndex,
-            elevation: 3,
-            showUnselectedLabels: false,
-            showSelectedLabels: false,
-            onTap: (int index) {
-              if (index != 2) {
-                setState(() {
-                  pageIndex = index;
-                });  
-              } else {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const SearchScreen(),
-                  ),
-                );
-              }
-            },
-            items: [
-              const BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.house),
-                label: 'Home',
-              ),
-              const BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.music),
-                label: 'Artists Hub',
-              ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: musikatBackgroundColor,
-                  ),
-                  child: const CircleAvatar(
-                    backgroundColor: musikatBackgroundColor,
-                    child: FaIcon(
-                      FontAwesomeIcons.magnifyingGlassChart,
-                      color: Colors.white,
-                      size: 15,
+        child: Container(
+          height: 80,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+            boxShadow: [
+              BoxShadow(
+                  color: musikatBackgroundColor,
+                  spreadRadius: 0,
+                  blurRadius: 10),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(40.0),
+              topRight: Radius.circular(40.0),
+            ),
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: const Color(0xffE28D00),
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white54,
+              currentIndex: pageIndex,
+              elevation: 4,
+              showUnselectedLabels: false,
+              showSelectedLabels: true,
+              onTap: (int index) {
+                if (index != 2) {
+                  setState(() {
+                    pageIndex = index;
+                  });
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SearchScreen(),
+                    ),
+                  );
+                }
+              },
+              items: [
+                const BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.house),
+                  label: 'Home',
+                ),
+                const BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.music),
+                  label: 'Artists Hub',
+                ),
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: musikatBackgroundColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: musikatBackgroundColor,
+                          spreadRadius: 0,
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: const CircleAvatar(
+                      radius: 25,
+                      backgroundColor: musikatBackgroundColor,
+                      child: FaIcon(
+                        FontAwesomeIcons.magnifyingGlass,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                     ),
                   ),
+                  label: '',
                 ),
-                label: '',
-              ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.chat_bubble),
-                label: 'Chat',
-              ),
-              const BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person,
-                  size: 35,
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.chat_bubble),
+                  label: 'Chat',
                 ),
-                label: 'Profile',
-              ),
-            ],
+                const BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.person,
+                    size: 35,
+                  ),
+                  label: 'Profile',
+                ),
+              ],
+            ),
           ),
         ),
       ),

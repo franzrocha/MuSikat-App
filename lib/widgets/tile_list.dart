@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/utils/constants.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class TileList extends StatelessWidget {
   const TileList(
@@ -40,17 +38,16 @@ class TileList extends StatelessWidget {
               title,
               style: GoogleFonts.inter(fontSize: 17, color: Colors.white),
             ),
-            subtitle:  subtitle != null
+            subtitle: subtitle != null
                 ? Text(
                     subtitle!,
                     style:
                         GoogleFonts.inter(fontSize: 12, color: Colors.white70),
                   )
                 : null,
-            ),
           ),
         ),
-      
+      ),
     );
   }
 }

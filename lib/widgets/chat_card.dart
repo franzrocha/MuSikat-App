@@ -1,12 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:musikat_app/utils/constants.dart';
-
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/widgets/chat_bottom_field.dart';
-
+import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 import '../models/chat_message_model.dart';
 
 class ChatCard extends StatefulWidget {

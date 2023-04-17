@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:musikat_app/utils/constants.dart';
 import 'package:musikat_app/screens/authentication/register_screen.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 import 'auth_screen.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String route = 'welcome-screen';
@@ -35,7 +31,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     // ignore: unnecessary_null_comparison
     if (backgroundImage == null) {
-     return const SizedBox();
+      return const SizedBox();
     } else {
       return Scaffold(
         backgroundColor: musikatBackgroundColor,

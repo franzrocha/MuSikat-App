@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({Key? key, required this.image, required this.text})

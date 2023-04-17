@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../../utils/constants.dart';
+import 'package:musikat_app/utils/ui_exports.dart';
 
 class GenresScreen extends StatefulWidget {
   const GenresScreen({Key? key}) : super(key: key);
@@ -28,7 +24,7 @@ class _GenresScreenState extends State<GenresScreen> {
       "lights": "2 Lights",
       "color": Colors.yellow[100],
     },
-     {
+    {
       "name": "Livinedasg room",
       "lights": "2 Lights",
       "color": Colors.red[100],
