@@ -11,7 +11,6 @@ import 'package:musikat_app/screens/home/artist_hub/language_selection_screen.da
 import 'package:musikat_app/utils/ui_exports.dart';
 import 'package:musikat_app/utils/widgets_export.dart';
 
-
 class AudioUploaderScreen extends StatefulWidget {
   const AudioUploaderScreen({Key? key}) : super(key: key);
 
@@ -122,6 +121,11 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       return;
     }
 
+    if (selectedDescription == null) {
+      ToastMessage.show(context, 'Please select the description of the song');
+      return;
+    }
+
     final SongService songService = SongService();
 
     // shows progress during upload
@@ -146,6 +150,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
         selectedGenre!,
         user!.uid,
         selectedLanguage ?? [],
+        selectedDescription ?? [],
       );
 
       // Get the song model with the uploaded file data

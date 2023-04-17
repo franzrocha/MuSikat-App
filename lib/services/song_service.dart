@@ -22,6 +22,7 @@ class SongService {
       String genre,
       String uid,
       List<String> languages,
+       List<String> description,
       {String? albumCover}) async {
     try {
       // Retrieves the user's username from Firestore using the user's uid as a reference
@@ -66,6 +67,7 @@ class SongService {
         'genre': genre,
         'uid': uid,
         'languages': languages,
+        'description': description,
       };
 
       final DocumentReference docRef = _db.collection('songs').doc();

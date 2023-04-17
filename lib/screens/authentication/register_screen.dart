@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
           } else {
             return Scaffold(
-              appBar: appBar(context),
+              appBar: const CustomAppBar(title: 'Register', showLogo: false,),
               backgroundColor: musikatBackgroundColor,
               body: SafeArea(
                 child: Center(
@@ -158,28 +158,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               color: Colors.white,
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      title: Text("Register",
-          textAlign: TextAlign.right,
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
         ),
       ),
     );

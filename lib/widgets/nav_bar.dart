@@ -6,6 +6,7 @@ import 'package:musikat_app/screens/home/chat_home_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
@@ -31,7 +32,44 @@ class _NavBarState extends State<NavBar> {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
       resizeToAvoidBottomInset: false,
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        showLogo: true,
+        actions: [
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const CategoriesScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.category,
+                  size: 25,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const FERScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.camera_alt,
+                  size: 25,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+        ],
+      ),
       body: pages[pageIndex],
       bottomNavigationBar: SafeArea(
         child: Container(
@@ -123,58 +161,6 @@ class _NavBarState extends State<NavBar> {
           ),
         ),
       ),
-    );
-  }
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      backgroundColor: musikatBackgroundColor,
-      elevation: 0,
-      automaticallyImplyLeading: false,
-      toolbarHeight: 60,
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 20),
-        child: Image.asset(
-          "assets/images/musikat_logo.png",
-          width: 30,
-          height: 35,
-        ),
-      ),
-      actions: [
-        Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const CategoriesScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.category,
-                size: 25,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const FERScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.camera_alt,
-                size: 25,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-      ],
     );
   }
 }

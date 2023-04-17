@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
               primary: musikatColor2,
             ),
       ),
-      color: Colors.white,
       builder: (context, Widget? child) => child as Widget,
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: locator<NavigationService>().getRoute,

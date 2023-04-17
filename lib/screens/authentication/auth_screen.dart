@@ -64,7 +64,7 @@ class _AuthScreenState extends State<AuthScreen> {
             );
           } else {
             return Scaffold(
-              appBar:  const CustomAppBar(title: 'Login'),
+              appBar: const CustomAppBar(title: 'Login', showLogo: false),
               backgroundColor: musikatBackgroundColor,
               body: SafeArea(
                 child: SingleChildScrollView(
