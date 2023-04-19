@@ -1,9 +1,6 @@
-import 'dart:isolate';
-
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:musikat_app/controllers/music_player_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/services/song_service.dart';
@@ -12,7 +9,6 @@ import 'package:musikat_app/utils/widgets_export.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
-
   final String username;
   final int? initialIndex;
 
@@ -28,6 +24,7 @@ class MusicPlayerScreen extends StatefulWidget {
 }
 
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
+  final MusicPlayerController musicPlayerCon = MusicPlayerController();
   final AudioPlayer player = AudioPlayer();
   final songService = SongService();
   Duration duration = Duration.zero;
@@ -36,14 +33,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
   bool isPlaying = false;
   bool isLoadingAudio = false;
-  bool _isFavorite = false;
-  // bool _isShuffleClicked = false;
-
-  void _toggleFavorite() {
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
-  }
 
   @override
   void initState() {
@@ -75,69 +64,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     });
   }
 
-  void showSliderDialog({
-    required BuildContext context,
-    required String title,
-    required int divisions,
-    required double min,
-    required double max,
-    String valueSuffix = '',
-    // TODO: Replace these two by ValueStream.
-    required double value,
-    required Stream<double> stream,
-    required ValueChanged<double> onChanged,
-  }) {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title, textAlign: TextAlign.center),
-        content: StreamBuilder<double>(
-          stream: stream,
-          builder: (context, snapshot) => SizedBox(
-            height: 100.0,
-            child: Column(
-              children: [
-                Text(
-                    '${((snapshot.data ?? value) * 100).toStringAsFixed(0)}%$valueSuffix',
-                    style: const TextStyle(
-                        fontFamily: 'Fixed',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.0)),
-                Slider(
-                  divisions: divisions,
-                  min: min,
-                  max: max,
-                  value: snapshot.data ?? value,
-                  onChanged: onChanged,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     player.dispose();
-    super.dispose();
     player.playerStateStream.listen((_) {}).cancel();
     player.durationStream.listen((_) {}).cancel();
     player.positionStream.listen((_) {}).cancel();
-  }
-
-  String time(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = twoDigits(duration.inHours);
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-
-    return [
-      if (duration.inHours > 0) hours,
-      minutes,
-      seconds,
-    ].join(":");
+    super.dispose();
   }
 
   Future<void> setAudio() async {
@@ -199,6 +132,48 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       await Future.delayed(const Duration(milliseconds: 500));
       await setAudio();
     }
+  }
+
+  void showSliderDialog({
+    required BuildContext context,
+    required String title,
+    required int divisions,
+    required double min,
+    required double max,
+    String valueSuffix = '',
+    required double value,
+    required Stream<double> stream,
+    required ValueChanged<double> onChanged,
+  }) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title, textAlign: TextAlign.center),
+        content: StreamBuilder<double>(
+          stream: stream,
+          builder: (context, snapshot) => SizedBox(
+            height: 100.0,
+            child: Column(
+              children: [
+                Text(
+                    '${((snapshot.data ?? value) * 100).toStringAsFixed(0)}%$valueSuffix',
+                    style: const TextStyle(
+                        fontFamily: 'Fixed',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24.0)),
+                Slider(
+                  divisions: divisions,
+                  min: min,
+                  max: max,
+                  value: snapshot.data ?? value,
+                  onChanged: onChanged,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -297,11 +272,11 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    time(position),
+                    musicPlayerCon.time(position),
                     style: const TextStyle(color: Colors.white),
                   ),
                   Text(
-                    time(duration - position),
+                    musicPlayerCon.time(duration - position),
                     style: const TextStyle(color: Colors.white),
                   )
                 ],
@@ -311,7 +286,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
+                  IconButton(
                   icon: const Icon(
                     Icons.volume_up,
                     color: Colors.white,
@@ -330,22 +305,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   },
                 ),
                 const SizedBox(width: 35),
-                StreamBuilder<void>(
-                  stream: player
-                      .playerStateStream, // Replace `myStream` with your own stream
-                  builder:
-                      (BuildContext context, AsyncSnapshot<void> snapshot) {
-                    return InkWell(
-                      onTap: () {
-                        playPrevious();
-                      },
-                      child: const FaIcon(
-                        FontAwesomeIcons.backwardStep,
-                        size: 35,
-                        color: Colors.white,
-                      ),
-                    );
+                InkWell(
+                  onTap: () {
+                    playPrevious();
                   },
+                  child: const FaIcon(
+                    FontAwesomeIcons.backwardStep,
+                    size: 35,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(width: 30),
                 Container(),
@@ -423,29 +391,25 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   },
                 ),
                 const SizedBox(width: 30),
-                StreamBuilder<void>(
-                  stream: player
-                      .playerStateStream, // Replace `myStream` with your own stream
-                  builder:
-                      (BuildContext context, AsyncSnapshot<void> snapshot) {
-                    return InkWell(
-                      onTap: () {
-                        playNext();
-                      },
-                      child: const FaIcon(
-                        FontAwesomeIcons.forwardStep,
-                        size: 35,
-                        color: Colors.white,
-                      ),
-                    );
+                InkWell(
+                  onTap: () {
+                    playNext();
                   },
+                  child: const FaIcon(
+                    FontAwesomeIcons.forwardStep,
+                    size: 35,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(width: 40),
                 GestureDetector(
-                  onTap: _toggleFavorite,
+                  onTap: musicPlayerCon.toggleFavorite,
                   child: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: _isFavorite ? Colors.red : Colors.white,
+                    musicPlayerCon.isFavorite
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color:
+                        musicPlayerCon.isFavorite ? Colors.red : Colors.white,
                     size: 35.0,
                   ),
                 ),

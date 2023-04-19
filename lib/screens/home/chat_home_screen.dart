@@ -42,7 +42,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                 },
                 leading: FittedBox(
                   child: CircleAvatar(
-                    radius: 40,
+                    radius: 25,
                     backgroundColor: Colors.transparent,
                     child: Image.asset("assets/images/musikat_global.png"),
                   ),

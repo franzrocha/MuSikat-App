@@ -132,12 +132,9 @@ class _SearchScreenState extends State<SearchScreen> {
           fontSize: 16,
           color: Colors.white,
         ),
-        // ignore: prefer_const_constructors
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'Search',
-
           border: InputBorder.none,
-          // ignore: prefer_const_constructors
           hintStyle: TextStyle(fontSize: 16, color: Colors.white),
         ),
       ),

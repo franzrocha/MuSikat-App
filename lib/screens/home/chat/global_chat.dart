@@ -68,7 +68,27 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: appBar(context),
+      appBar: CustomAppBar(
+        title: Row(
+          children: [
+            FittedBox(
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.transparent,
+                child: Image.asset("assets/images/musikat_global.png"),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text("Global Chat",
+                textAlign: TextAlign.right,
+                style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+          ],
+        ),
+        showLogo: false,
+      ),
       backgroundColor: musikatBackgroundColor,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -176,41 +196,5 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
       _chatCon.sendMessage(message: _messageController.text.trim());
       _messageController.text = '';
     }
-  }
-
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      title: Row(
-        children: [
-          FittedBox(
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.transparent,
-              child: Image.asset("assets/images/musikat_global.png"),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text("Global Chat",
-              textAlign: TextAlign.right,
-              style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold)),
-        ],
-      ),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
-        ),
-      ),
-    );
   }
 }

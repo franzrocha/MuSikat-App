@@ -32,7 +32,15 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(),
+      appBar: CustomAppBar(
+        showLogo: false,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.chat),
+          ),
+        ],
+      ),
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
           child: SingleChildScrollView(
@@ -72,14 +80,6 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
           ],
         ),
       )),
-    );
-  }
-
-  AppBar appbar() {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0.0,
-      actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.chat))],
     );
   }
 

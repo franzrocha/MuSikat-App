@@ -6,7 +6,6 @@ import 'package:musikat_app/utils/ui_exports.dart';
 import 'package:musikat_app/utils/widgets_export.dart';
 import 'package:intl/intl.dart';
 
-
 class AccountInfoScreen extends StatefulWidget {
   const AccountInfoScreen({Key? key}) : super(key: key);
 
@@ -34,7 +33,28 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        title: Text(
+          'Account info',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.edit,
+              size: 20,
+            ),
+          ),
+        ],
+        showLogo: false,
+      ),
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -85,44 +105,6 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      title: Text(
-        "Account info",
-        textAlign: TextAlign.right,
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
-        ),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.edit,
-            size: 20,
-          ),
-        ),
-      ],
     );
   }
 

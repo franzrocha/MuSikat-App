@@ -182,7 +182,44 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        title: Text(
+          'Upload',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        showLogo: false,
+        actions: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Container(
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: const Color(0xfffca311),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: IconButton(
+                        onPressed: _uploadAudio,
+                        icon: const Icon(
+                          Icons.upload,
+                          size: 25,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
       backgroundColor: musikatBackgroundColor,
       body: Center(
         child: SingleChildScrollView(
@@ -508,15 +545,16 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                 runSpacing: 8.0,
                 children: _producers.map((producer) {
                   return Chip(
-                    backgroundColor: musikatColor,
+                    backgroundColor: musikatBackgroundColor.withOpacity(0.5),
                     label: Text(producer),
                     labelStyle: GoogleFonts.inter(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      // fontWeight: FontWeight.bold,
                     ),
                     deleteIcon: const Icon(
                       Icons.clear,
-                      color: Colors.white54,
+                      color: Colors.black87,
                     ),
                     onDeleted: () {
                       setState(() {
@@ -552,15 +590,15 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                 runSpacing: 8.0,
                 children: _writers.map((writer) {
                   return Chip(
-                    backgroundColor: musikatColor,
+                    backgroundColor: musikatBackgroundColor.withOpacity(0.5),
                     label: Text(writer),
                     labelStyle: GoogleFonts.inter(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
                     deleteIcon: const Icon(
                       Icons.clear,
-                      color: Colors.white54,
+                      color: Colors.black87,
                     ),
                     onDeleted: () {
                       setState(() {
@@ -657,56 +695,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      title: Text("Upload",
-          textAlign: TextAlign.right,
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-      elevation: 0.0,
-      backgroundColor: const Color(0xff262525),
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
-        ),
-      ),
-      actions: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Container(
-                    width: 50,
-                    // height: 10,
-                    decoration: BoxDecoration(
-                        color: const Color(0xfffca311),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: IconButton(
-                      onPressed: _uploadAudio,
-                      icon: const Icon(
-                        Icons.upload,
-                        size: 25,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

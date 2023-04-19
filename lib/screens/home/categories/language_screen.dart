@@ -1,5 +1,5 @@
 import 'package:musikat_app/utils/ui_exports.dart';
-
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class LanguagesScreen extends StatefulWidget {
   const LanguagesScreen({Key? key}) : super(key: key);
@@ -9,7 +9,7 @@ class LanguagesScreen extends StatefulWidget {
 }
 
 class _LanguagesScreenState extends State<LanguagesScreen> {
-List<Map<String, dynamic>> roomDataList = [
+  List<Map<String, dynamic>> roomDataList = [
     {
       "name": "Tagalog",
       "color": const Color.fromARGB(255, 97, 55, 13),
@@ -22,7 +22,7 @@ List<Map<String, dynamic>> roomDataList = [
       "name": "Waray",
       "color": const Color.fromARGB(255, 54, 54, 3),
     },
-     {
+    {
       "name": "Cebuano",
       "color": const Color.fromARGB(255, 158, 4, 20),
     },
@@ -38,7 +38,17 @@ List<Map<String, dynamic>> roomDataList = [
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        title: Text(
+          'Languages',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        showLogo: false,
+      ),
       backgroundColor: musikatBackgroundColor,
       body: GridView.count(
         crossAxisCount: 2,
@@ -46,9 +56,7 @@ List<Map<String, dynamic>> roomDataList = [
           final String roomName = roomData['name'];
           final Color roomColor = roomData['color'];
           return GestureDetector(
-           onTap: () {                          
-            
-  },                      
+            onTap: () {},
             child: SizedBox(
               height: 200,
               child: Container(
@@ -86,32 +94,3 @@ List<Map<String, dynamic>> roomDataList = [
     );
   }
 }
-
-
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      title: Text(
-        "Language",
-        textAlign: TextAlign.right,
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
-        ),
-      ),
-    );
-  }

@@ -1,4 +1,5 @@
 import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/widgets/custom_app_bart.dart';
 
 class GenresScreen extends StatefulWidget {
   const GenresScreen({Key? key}) : super(key: key);
@@ -33,7 +34,17 @@ class _GenresScreenState extends State<GenresScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        title: Text(
+          'Genres',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        showLogo: false,
+      ),
       backgroundColor: musikatBackgroundColor,
       body: GridView.count(
         crossAxisCount: 2,
@@ -73,33 +84,6 @@ class _GenresScreenState extends State<GenresScreen> {
             ),
           );
         }).toList(),
-      ),
-    );
-  }
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      title: Text(
-        "Genre",
-        textAlign: TextAlign.right,
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
-        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class InsightsScreen extends StatefulWidget {
   static const String route = 'artists-screen';
@@ -12,7 +13,17 @@ class _InsightsScreenState extends State<InsightsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        title: Text(
+          'Insights',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        showLogo: false,
+      ),
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
         child: Center(
@@ -61,28 +72,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
               ),
             ),
           ]),
-        ),
-      ),
-    );
-  }
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      title: Text("Insights",
-          textAlign: TextAlign.right,
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-      elevation: 0.0,
-      backgroundColor: const Color(0xff262525),
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
         ),
       ),
     );

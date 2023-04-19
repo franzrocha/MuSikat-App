@@ -1,4 +1,5 @@
 import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class MoodsScreen extends StatefulWidget {
   const MoodsScreen({Key? key}) : super(key: key);
@@ -37,7 +38,17 @@ class _MoodsScreenState extends State<MoodsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        title: Text(
+          'Moods',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        showLogo: false,
+      ),
       backgroundColor: musikatBackgroundColor,
       body: GridView.count(
         crossAxisCount: 2,

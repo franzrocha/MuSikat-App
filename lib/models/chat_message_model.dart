@@ -42,6 +42,8 @@ class ChatMessage {
         'ts': ts
       };
 
+
+
   static List<ChatMessage> fromQuerySnap(QuerySnapshot snap) {
     try {
       return snap.docs.map(ChatMessage.fromDocumentSnap).toList();

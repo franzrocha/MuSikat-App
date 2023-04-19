@@ -33,7 +33,17 @@ class _DescriptionSelectionScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        title: Text(
+          'Select a description',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        showLogo: false,
+      ),
       body: Column(
         children: [
           Padding(
@@ -116,31 +126,4 @@ class _DescriptionSelectionScreenState
       ),
     );
   }
-}
-
-AppBar appbar(BuildContext context) {
-  return AppBar(
-    toolbarHeight: 75,
-    title: Text(
-      "Select a description",
-      textAlign: TextAlign.right,
-      style: GoogleFonts.inter(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    elevation: 0.0,
-    backgroundColor: const Color(0xff262525),
-    automaticallyImplyLeading: false,
-    leading: IconButton(
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      icon: const Icon(
-        Icons.arrow_back_ios,
-        size: 20,
-      ),
-    ),
-  );
 }

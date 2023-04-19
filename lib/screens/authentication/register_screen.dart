@@ -43,7 +43,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
           } else {
             return Scaffold(
-              appBar: const CustomAppBar(title: 'Register', showLogo: false,),
+              appBar: CustomAppBar(
+                title: Text(
+                  'Register',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+                showLogo: false,
+              ),
               backgroundColor: musikatBackgroundColor,
               body: SafeArea(
                 child: Center(

@@ -28,7 +28,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Forgot Password', showLogo: false,),
+      appBar: CustomAppBar(
+        title: Text(
+          'Forgot Password',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        showLogo: false,
+      ),
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
         child: Center(

@@ -17,7 +17,17 @@ class _EditHubScreenState extends State<EditHubScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
-      appBar: appbar(context),
+      appBar: CustomAppBar(
+        title: Text(
+          'Edit Hub',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        showLogo: false,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -109,28 +119,6 @@ class _EditHubScreenState extends State<EditHubScreen> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      title: Text("Edit Hub",
-          textAlign: TextAlign.right,
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-      elevation: 0.0,
-      backgroundColor: const Color(0xff262525),
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
         ),
       ),
     );

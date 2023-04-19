@@ -50,7 +50,17 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
           } else {
             return Scaffold(
               backgroundColor: musikatBackgroundColor,
-              appBar: const CustomAppBar(title: 'Register', showLogo: false,),
+              appBar: CustomAppBar(
+                title: Text(
+                  'Register',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+                showLogo: false,
+              ),
               body: SafeArea(
                   child: Center(
                 child: SingleChildScrollView(

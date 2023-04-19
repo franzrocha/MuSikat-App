@@ -1,24 +1,24 @@
 import 'package:musikat_app/utils/ui_exports.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String? title;
+  final Widget? title;
   final bool showLogo;
   final List<Widget>? actions;
+  final bool? centerTitle;
 
-  const CustomAppBar({super.key, this.title, required this.showLogo, this.actions});
+  const CustomAppBar(
+      {super.key,
+      this.title,
+      required this.showLogo,
+      this.actions,
+      this.centerTitle});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 60,
-      title: title != null
-          ? Text(title!,
-              textAlign: TextAlign.right,
-              style: GoogleFonts.inter(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ))
-          : null,
+      toolbarHeight: 70,
+      title: (title != null) ? title : null,
+      centerTitle: centerTitle,
       elevation: 0.0,
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
@@ -40,7 +40,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 size: 20,
               ),
             ),
-            actions: actions ?? [],
+      actions: actions ?? [],
     );
   }
 

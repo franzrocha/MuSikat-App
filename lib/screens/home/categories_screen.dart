@@ -1,10 +1,8 @@
-
 import 'package:musikat_app/screens/home/categories/genres_screen.dart';
 import 'package:musikat_app/screens/home/categories/language_screen.dart';
 import 'package:musikat_app/screens/home/categories/mood_screen.dart';
 import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/widgets/category_card.dart';
-
+import 'package:musikat_app/utils/widgets_export.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
@@ -15,87 +13,70 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
- Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: appbar(context),
-    backgroundColor: musikatBackgroundColor,
-    body: SafeArea(
-      child: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const GenresScreen(),
-                    ),
-                  );
-                },
-                child: const CategoryCard(
-                  image: 'assets/images/category/genres.jpg',
-                  text: 'genres',
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LanguagesScreen(),
-                    ),
-                  );
-                },
-                child: const CategoryCard(
-                  image: 'assets/images/category/languages.jpg',
-                  text: 'languages',
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MoodsScreen(),
-                    ),
-                  );
-                },
-                child: const CategoryCard(
-                  image: 'assets/images/category/mood.jpg',
-                  text: 'moods',
-                ),
-              ),
-            ],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: Text(
+          'Account info',
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
           ),
         ),
+        showLogo: false,
       ),
-    ),
-  );
-}
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      title: Text(
-        "Categories",
-        textAlign: TextAlign.right,
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
+      backgroundColor: musikatBackgroundColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GenresScreen(),
+                      ),
+                    );
+                  },
+                  child: const CategoryCard(
+                    image: 'assets/images/category/genres.jpg',
+                    text: 'genres',
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LanguagesScreen(),
+                      ),
+                    );
+                  },
+                  child: const CategoryCard(
+                    image: 'assets/images/category/languages.jpg',
+                    text: 'languages',
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MoodsScreen(),
+                      ),
+                    );
+                  },
+                  child: const CategoryCard(
+                    image: 'assets/images/category/mood.jpg',
+                    text: 'moods',
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

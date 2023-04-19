@@ -34,7 +34,8 @@ class SongModel {
       genre: json['genre'] ?? '',
       uid: json['uid'] ?? '',
       languages: (json['languages'] as List<dynamic>?)?.cast<String>() ?? [],
-       description: (json['description'] as List<dynamic>?)?.cast<String>() ?? [],
+      description:
+          (json['description'] as List<dynamic>?)?.cast<String>() ?? [],
     );
   }
 
@@ -52,4 +53,22 @@ class SongModel {
         'languages': languages,
         'description': description,
       };
+
+  static Future<List<SongModel>> getSongs() async {
+    List<SongModel> songs = [];
+    await FirebaseFirestore.instance
+        .collection('songs')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        songs.add(SongModel.fromDocumentSnap(doc));
+      }
+    });
+
+    return songs;
+  }
+
+  searchTitle(String song) {
+    return title.toLowerCase().contains(song.toLowerCase());
+  }
 }
