@@ -49,6 +49,7 @@ dependencies:
   just_audio_background: ^0.0.1-beta.9
   intl: ^0.18.0
   marquee_text: ^2.5.0+1
+  audio_session: ^0.1.13
 
 dev_dependencies:
   flutter_test:

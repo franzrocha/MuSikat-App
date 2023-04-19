@@ -1,4 +1,7 @@
+import 'dart:isolate';
+
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -9,6 +12,7 @@ import 'package:musikat_app/utils/widgets_export.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
+
   final String username;
   final int? initialIndex;
 
@@ -33,7 +37,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   bool isPlaying = false;
   bool isLoadingAudio = false;
   bool _isFavorite = false;
-  bool _isShuffleClicked = false;
+  // bool _isShuffleClicked = false;
 
   void _toggleFavorite() {
     setState(() {
@@ -71,13 +75,56 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     });
   }
 
+  void showSliderDialog({
+    required BuildContext context,
+    required String title,
+    required int divisions,
+    required double min,
+    required double max,
+    String valueSuffix = '',
+    // TODO: Replace these two by ValueStream.
+    required double value,
+    required Stream<double> stream,
+    required ValueChanged<double> onChanged,
+  }) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title, textAlign: TextAlign.center),
+        content: StreamBuilder<double>(
+          stream: stream,
+          builder: (context, snapshot) => SizedBox(
+            height: 100.0,
+            child: Column(
+              children: [
+                Text(
+                    '${((snapshot.data ?? value) * 100).toStringAsFixed(0)}%$valueSuffix',
+                    style: const TextStyle(
+                        fontFamily: 'Fixed',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24.0)),
+                Slider(
+                  divisions: divisions,
+                  min: min,
+                  max: max,
+                  value: snapshot.data ?? value,
+                  onChanged: onChanged,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     player.dispose();
+    super.dispose();
     player.playerStateStream.listen((_) {}).cancel();
     player.durationStream.listen((_) {}).cancel();
     player.positionStream.listen((_) {}).cancel();
-    super.dispose();
   }
 
   String time(Duration duration) {
@@ -264,33 +311,41 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      _isShuffleClicked = !_isShuffleClicked;
-                    });
-                  },
-                  style: OutlinedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    side: const BorderSide(color: Colors.white),
-                    backgroundColor: _isShuffleClicked ? Colors.white : null,
-                  ),
-                  child: Icon(
-                    Icons.shuffle,
-                    color: _isShuffleClicked ? Colors.black : Colors.white,
-                    size: 20.0,
-                  ),
-                ),
-                const SizedBox(width: 35),
-                InkWell(
-                  onTap: () {
-                    playPrevious();
-                  },
-                  child: const FaIcon(
-                    FontAwesomeIcons.backwardStep,
-                    size: 35,
+                IconButton(
+                  icon: const Icon(
+                    Icons.volume_up,
                     color: Colors.white,
                   ),
+                  onPressed: () {
+                    showSliderDialog(
+                      context: context,
+                      title: "Adjust volume",
+                      divisions: 100,
+                      min: 0,
+                      max: 1,
+                      value: player.volume,
+                      stream: player.volumeStream,
+                      onChanged: player.setVolume,
+                    );
+                  },
+                ),
+                const SizedBox(width: 35),
+                StreamBuilder<void>(
+                  stream: player
+                      .playerStateStream, // Replace `myStream` with your own stream
+                  builder:
+                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    return InkWell(
+                      onTap: () {
+                        playPrevious();
+                      },
+                      child: const FaIcon(
+                        FontAwesomeIcons.backwardStep,
+                        size: 35,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(width: 30),
                 Container(),
@@ -368,15 +423,22 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   },
                 ),
                 const SizedBox(width: 30),
-                InkWell(
-                  onTap: () {
-                    playNext();
+                StreamBuilder<void>(
+                  stream: player
+                      .playerStateStream, // Replace `myStream` with your own stream
+                  builder:
+                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    return InkWell(
+                      onTap: () {
+                        playNext();
+                      },
+                      child: const FaIcon(
+                        FontAwesomeIcons.forwardStep,
+                        size: 35,
+                        color: Colors.white,
+                      ),
+                    );
                   },
-                  child: const FaIcon(
-                    FontAwesomeIcons.forwardStep,
-                    size: 35,
-                    color: Colors.white,
-                  ),
                 ),
                 const SizedBox(width: 40),
                 GestureDetector(
