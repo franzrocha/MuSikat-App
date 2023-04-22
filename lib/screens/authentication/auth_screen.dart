@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/screens/authentication/forgot_password.dart';
 
 class AuthScreen extends StatefulWidget {

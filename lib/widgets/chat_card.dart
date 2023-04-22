@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 import '../models/chat_message_model.dart';
 
 class ChatCard extends StatefulWidget {

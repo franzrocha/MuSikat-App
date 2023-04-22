@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:musikat_app/screens/authentication/register_screen.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/exports.dart';
 import 'auth_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {

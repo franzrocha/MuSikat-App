@@ -1,5 +1,4 @@
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class DescriptionSelectionScreen extends StatefulWidget {
   const DescriptionSelectionScreen({Key? key}) : super(key: key);

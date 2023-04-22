@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:musikat_app/controllers/songs_controller.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 
 class SongBottomField extends StatefulWidget {

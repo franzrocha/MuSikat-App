@@ -1,8 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:musikat_app/models/chat_message_model.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class ChatBottomField extends StatelessWidget {
   ChatBottomField({required this.chat, Key? key}) : super(key: key);

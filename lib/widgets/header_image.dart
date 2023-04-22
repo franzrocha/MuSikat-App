@@ -1,5 +1,5 @@
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class HeaderImage extends StatelessWidget {
   const HeaderImage({super.key, required this.uid});

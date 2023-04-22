@@ -1,4 +1,4 @@
-import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = 'home-screen';

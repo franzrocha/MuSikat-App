@@ -1,5 +1,5 @@
 import 'package:musikat_app/services/song_service.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class UploadDialog extends StatelessWidget {
   const UploadDialog({

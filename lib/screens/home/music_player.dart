@@ -4,18 +4,17 @@ import 'package:musikat_app/controllers/music_player_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/services/song_service.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
-  final String username;
+  // final String username;
   final int? initialIndex;
 
   const MusicPlayerScreen({
     Key? key,
     required this.songs,
-    required this.username,
+    // required this.username,
     this.initialIndex,
   }) : super(key: key);
 
@@ -80,7 +79,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       tag: MediaItem(
         id: widget.songs[currentIndex].songId,
         title: widget.songs[currentIndex].title,
-        artist: widget.username,
+        artist: widget.songs[currentIndex].artist,
         artUri: Uri.parse(widget.songs[currentIndex].albumCover),
       ),
     );
@@ -237,7 +236,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
               child: Row(
                 children: [
                   Text(
-                    widget.username,
+                    widget.songs[currentIndex].artist,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontWeight: FontWeight.normal,
@@ -262,6 +261,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 onChanged: (value) async {
                   final position = Duration(seconds: value.toInt());
                   await player.seek(position);
+                  
                   //  await player.play();
                 },
               ),
@@ -286,7 +286,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                  IconButton(
+                IconButton(
                   icon: const Icon(
                     Icons.volume_up,
                     color: Colors.white,
@@ -326,7 +326,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     if (processingState == ProcessingState.loading ||
                         processingState == ProcessingState.buffering) {
                       return Container(
-                        margin: const EdgeInsets.all(8.0),
+                        margin: const EdgeInsets.all(9.0),
                         width: 64.0,
                         height: 64.0,
                         child: const LoadingIndicator(),

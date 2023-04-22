@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/screens/home/categories_screen.dart';
+import 'package:musikat_app/screens/home/categories/categories_screen.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);

@@ -15,6 +15,7 @@ class SongService {
 
   Future<String> uploadSong(
       String title,
+      String artist,
       String filePath,
       String coverPath,
       List<String> writers,
@@ -22,7 +23,7 @@ class SongService {
       String genre,
       String uid,
       List<String> languages,
-       List<String> description,
+      List<String> description,
       {String? albumCover}) async {
     try {
       // Retrieves the user's username from Firestore using the user's uid as a reference
@@ -58,6 +59,7 @@ class SongService {
       final Map<String, dynamic> metadata = {
         'song_id': '',
         'title': title,
+        'artist': artist,
         'file_name': fileName,
         'created_at': FieldValue.serverTimestamp(),
         'audio': downloadUrl,
@@ -83,65 +85,7 @@ class SongService {
     }
   }
 
-  // Future<SongModel> getSongById(String songId) async {
-  //   final DocumentSnapshot snap =
-  //       await _db.collection('songs').doc(songId).get();
-  //   return SongModel.fromDocumentSnap(snap);
-  // }
-
-  // Stream<List<SongModel>> getSongsStream() {
-  //   return _db
-  //       .collection('songs')
-  //       .orderBy('created_at', descending: true)
-  //       .snapshots()
-  //       .map((QuerySnapshot querySnapshot) => querySnapshot.docs
-  //           .map((DocumentSnapshot documentSnapshot) =>
-  //               SongModel.fromDocumentSnap(documentSnapshot))
-  //           .toList());
-  // }
-
-  // Stream<List<SongModel>> getLatestSong(String uid) {
-  //   return _db
-  //       .collection('songs')
-  //       .where('uid', isEqualTo: uid)
-  //       .orderBy('created_at', descending: true)
-  //       .limit(1)
-  //       .snapshots()
-  //       .map((QuerySnapshot querySnapshot) => querySnapshot.docs
-  //           .map((DocumentSnapshot documentSnapshot) =>
-  //               SongModel.fromDocumentSnap(documentSnapshot))
-  //           .toList());
-  // }
-
   void cancelUpload() {
     _uploadProgressStreamController.close();
   }
-
-  // Future<void> deleteSong(String songId) async {
-  //   try {
-  //     final DocumentReference songRef = _db.collection('songs').doc(songId);
-  //     final DocumentSnapshot songSnapshot = await songRef.get();
-
-  //     if (songSnapshot.exists) {
-  //       // delete the song document from the songs collection
-  //       await songRef.delete();
-
-  //       // delete the song file from Firebase Storage
-  //       final Map<String, dynamic> songData =
-  //           songSnapshot.data() as Map<String, dynamic>;
-  //       final String audioUrl = songData['audio'];
-  //       final String albumCoverUrl = songData['album_cover'];
-
-  //       final Reference audioRef =
-  //           FirebaseStorage.instance.refFromURL(audioUrl);
-  //       final Reference albumCoverRef =
-  //           FirebaseStorage.instance.refFromURL(albumCoverUrl);
-
-  //       await audioRef.delete();
-  //       await albumCoverRef.delete();
-  //     }
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
 }

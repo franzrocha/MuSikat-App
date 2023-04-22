@@ -8,8 +8,7 @@ import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/artist_hub/language_selection_screen.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class AudioUploaderScreen extends StatefulWidget {
   const AudioUploaderScreen({Key? key}) : super(key: key);
@@ -143,12 +142,13 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       // starts uploading the file
       final String songId = await songService.uploadSong(
         title,
+        user!.username,
         _selectedFile!.path,
         _selectedAlbumCover!.path,
         trimmedWriters,
         trimmedProducers,
         selectedGenre!,
-        user!.uid,
+        user.uid,
         selectedLanguage ?? [],
         selectedDescription ?? [],
       );

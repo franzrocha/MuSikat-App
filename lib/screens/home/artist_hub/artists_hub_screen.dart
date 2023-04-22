@@ -8,9 +8,8 @@ import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
-import 'artist_hub/edit_hub_screen.dart';
+import 'package:musikat_app/utils/exports.dart';
+import 'edit_hub_screen.dart';
 
 class ArtistsHubScreen extends StatefulWidget {
   const ArtistsHubScreen({Key? key}) : super(key: key);
@@ -136,7 +135,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                                 builder: (context) =>
                                                     MusicPlayerScreen(
                                                       songs: [latestSong],
-                                                      username: user!.username,
+                                                      // username: latestSong.artist,
                                                     )));
                                       },
                                       child: Container(

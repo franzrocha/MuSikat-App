@@ -1,4 +1,4 @@
-import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class CardTile extends StatelessWidget {
   const CardTile({

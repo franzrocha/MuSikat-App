@@ -1,5 +1,4 @@
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/widgets/custom_app_bart.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class GenresScreen extends StatefulWidget {
   const GenresScreen({Key? key}) : super(key: key);

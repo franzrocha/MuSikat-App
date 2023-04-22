@@ -1,12 +1,11 @@
+import 'package:musikat_app/screens/home/chat/chat_home.dart';
 import 'package:musikat_app/screens/home/fer.dart';
 import 'package:musikat_app/screens/home/search_screen.dart';
-import 'package:musikat_app/screens/home/artists_hub_screen.dart';
-import 'package:musikat_app/screens/home/categories_screen.dart';
-import 'package:musikat_app/screens/home/chat_home_screen.dart';
+import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
+import 'package:musikat_app/screens/home/categories/categories_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 import '../screens/home/songs_search_screen.dart';
 

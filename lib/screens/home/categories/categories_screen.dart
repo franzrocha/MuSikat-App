@@ -1,8 +1,7 @@
 import 'package:musikat_app/screens/home/categories/genres_screen.dart';
 import 'package:musikat_app/screens/home/categories/language_screen.dart';
 import 'package:musikat_app/screens/home/categories/mood_screen.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text(
-          'Account info',
+          'Categories',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
             fontSize: 20,

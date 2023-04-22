@@ -1,6 +1,6 @@
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/screens/home/chat/global_chat.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class ChatHomeScreen extends StatefulWidget {
   const ChatHomeScreen({Key? key}) : super(key: key);
