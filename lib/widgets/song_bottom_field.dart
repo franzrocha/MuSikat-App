@@ -1,7 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/utils/exports.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SongBottomField extends StatefulWidget {
   final String songId;
@@ -16,6 +17,23 @@ class SongBottomField extends StatefulWidget {
 
 class _SongBottomFieldState extends State<SongBottomField> {
   final SongsController _songCon = SongsController();
+  bool _isLiked = false;
+  late SharedPreferences _prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadIsLiked();
+  }
+
+  void _loadIsLiked() async {
+    _prefs = await SharedPreferences.getInstance();
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    setState(() {
+      _isLiked = _prefs.getBool(uid + widget.songId) ?? false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -27,15 +45,32 @@ class _SongBottomFieldState extends State<SongBottomField> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const FaIcon(
-                  FontAwesomeIcons.heart,
-                  color: Colors.white,
+                leading: FaIcon(
+                  _isLiked
+                      ? FontAwesomeIcons.solidHeart
+                      : FontAwesomeIcons.heart,
+                  color: _isLiked ? Colors.red : Colors.white,
                 ),
                 title: Text(
-                  "Like",
+                  _isLiked ? "Remove Like" : "Like",
                   style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
                 ),
-                onTap: () {},
+                onTap: () async {
+                  setState(() {
+                    _isLiked = !_isLiked;
+                  });
+                  String uid = FirebaseAuth.instance.currentUser!.uid;
+                  await _prefs.setBool(uid + widget.songId, _isLiked);
+                  if (_isLiked) {
+                    // Add song to liked songs
+                    await _songCon.addToLikedSongs(widget.songId);
+                    ToastMessage.show(context, 'Song added to liked songs');
+                  } else {
+                    // Remove song from liked songs
+                    await _songCon.removeLikedSong(widget.songId);
+                    ToastMessage.show(context, 'Song removed from liked songs');
+                  }
+                },
               ),
               ListTile(
                 leading: const Icon(
@@ -94,12 +129,15 @@ class _SongBottomFieldState extends State<SongBottomField> {
                               Text(
                                 "Delete",
                                 style: GoogleFonts.inter(
-                                    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
                               ),
                               const SizedBox(height: 18),
                               Text(
                                 "Are you sure you want to delete this song?",
-                                style: GoogleFonts.inter(fontSize: 15, color: Colors.white),
+                                style: GoogleFonts.inter(
+                                    fontSize: 15, color: Colors.white),
                               ),
                               const SizedBox(height: 15),
                               Row(
@@ -123,7 +161,8 @@ class _SongBottomFieldState extends State<SongBottomField> {
                                     },
                                     style: ButtonStyle(
                                       overlayColor: MaterialStateProperty.all(
-                                          const Color.fromARGB(255, 255, 105, 105)),
+                                          const Color.fromARGB(
+                                              255, 255, 105, 105)),
                                     ),
                                     child: Text(
                                       "Delete",
@@ -142,7 +181,7 @@ class _SongBottomFieldState extends State<SongBottomField> {
                                     child: Text(
                                       "Cancel",
                                       style: GoogleFonts.inter(
-                                       color: Colors.white),
+                                          color: Colors.white),
                                     ),
                                   ),
                                 ],

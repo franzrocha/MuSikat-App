@@ -81,6 +81,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         title: widget.songs[currentIndex].title,
         artist: widget.songs[currentIndex].artist,
         artUri: Uri.parse(widget.songs[currentIndex].albumCover),
+        
       ),
     );
 

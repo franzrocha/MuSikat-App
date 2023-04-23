@@ -116,6 +116,7 @@ class AuthController with ChangeNotifier {
             gender,
             '',
             '',
+            List<String>.empty(), 
             Timestamp.now(),
             Timestamp.now());
         return FirebaseFirestore.instance

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -76,5 +77,43 @@ class SongsController with ChangeNotifier {
   void dispose() {
     super.dispose();
     _uploadProgressStreamController.close();
+  }
+
+  Future<void> addToLikedSongs(String songId) async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+      DocumentReference songRef = userRef.collection('likedSongs').doc(songId);
+      DocumentSnapshot songSnap = await songRef.get();
+      if (!songSnap.exists) {
+        // Add song to liked songs subcollection
+        SongModel song = await getSongById(songId);
+        await songRef.set({
+          'title': song.title,
+          'artist': song.artist,
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> removeLikedSong(String songId) async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentReference songRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('likedSongs')
+          .doc(songId);
+      DocumentSnapshot songSnap = await songRef.get();
+      if (songSnap.exists) {
+        // Remove song from liked songs subcollection
+        await songRef.delete();
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

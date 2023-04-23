@@ -1,6 +1,5 @@
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/service_locators.dart';
-
 import 'utils/exports.dart';
 
 class MyApp extends StatelessWidget {

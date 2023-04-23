@@ -50,6 +50,7 @@ dependencies:
   intl: ^0.18.0
   marquee_text: ^2.5.0+1
   provider: ^6.0.5
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:

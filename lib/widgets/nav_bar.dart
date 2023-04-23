@@ -7,7 +7,6 @@ import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 
-import '../screens/home/songs_search_screen.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
@@ -107,7 +106,7 @@ class _NavBarState extends State<NavBar> {
                 } else {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const SongSearchScreen(),
+                      builder: (context) => const SearchScreen(),
                     ),
                   );
                 }
