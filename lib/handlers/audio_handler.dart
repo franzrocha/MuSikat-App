@@ -13,7 +13,4 @@ Future<AudioHandler> initAudioService() async {
   );
 }
 
-class MyAudioHandler extends BaseAudioHandler {
-  final player = AudioPlayer();
-  final playlist = ConcatenatingAudioSource(children: []);
-}
+class MyAudioHandler extends BaseAudioHandler {}
