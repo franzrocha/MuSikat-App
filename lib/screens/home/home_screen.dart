@@ -1,3 +1,5 @@
+import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,6 +11,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final SongsController _songCon = SongsController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
         scrollDirection: Axis.vertical,
         child: SafeArea(
           child: Column(children: [
+            
             Container(
               padding: const EdgeInsets.only(left: 25, top: 25),
               alignment: Alignment.topLeft,
@@ -30,155 +35,81 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25, top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 160,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 124, 131, 127),
-                              width: 1.0,
+            StreamBuilder<List<SongModel>>(
+                stream: _songCon.getSongsStream(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<SongModel>> snapshot) {
+                  if (!snapshot.hasData || snapshot.data == null) {
+                    return const LoadingContainer();
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const LoadingContainer();
+                  } else {
+                    final songs = snapshot.data!;
+                    final randomSongs = songs..shuffle();
+                    final limitedSongs = randomSongs.take(5).toList();
+
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: limitedSongs.map((song) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 25, top: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 160,
+                                  height: 160,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 124, 131, 127),
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                      image: NetworkImage(song.albumCover),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  song.title,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    height: 2,
+                                  ),
+                                ),
+                                Text(
+                                  song.artist,
+                                  textAlign: TextAlign.left,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    height: 1.2,
+                                  ),
+                                ),
+                              ],
                             ),
-                            borderRadius: BorderRadius.circular(5),
-                            image: const DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/homescreen/opm_logo.png"),
-                              fit: BoxFit.cover, //change image fill type
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          "Daily Mix 1",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            height: 2,
-                          ),
-                        ),
-                        const Text(
-                          "Musikat",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                            fontSize: 13,
-                            height: 1.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25, top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 160,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 124, 131, 127),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                            image: const DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/homescreen/album1.jpg"),
-                              fit: BoxFit.cover, //change image fill type
-                            ),
-                          ),
-                        ),
-                        const Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            "Daily Mix 2",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              height: 2,
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          "Musikat",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                            fontSize: 13,
-                            height: 1.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25, top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 160,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 124, 131, 127),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                            image: const DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/homescreen/arnel.jpg"),
-                              fit: BoxFit.cover, //change image fill type
-                            ),
-                          ),
-                        ),
-                        const Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            "Daily Mix 3",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              height: 2,
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          "Musikat",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                            fontSize: 13,
-                            height: 1.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }
+                }),
             Container(
               padding: const EdgeInsets.only(left: 25, top: 25),
               alignment: Alignment.topLeft,
-              child: Text("What's Trending?",
+              child: Text("What's New?",
                   textAlign: TextAlign.right,
                   style: GoogleFonts.inter(
                       color: Colors.white,
@@ -532,3 +463,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

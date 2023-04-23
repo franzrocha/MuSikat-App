@@ -4,22 +4,12 @@ import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
-=======
-import 'package:musikat_app/screens/home/artist_hub/library_screen.dart';
-import 'package:musikat_app/screens/home/music_player.dart';
-import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
-import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
-import 'artist_hub/edit_hub_screen.dart';
->>>>>>> Stashed changes
 
-class ArtistsHubScreen extends StatefulWidget {
-  const ArtistsHubScreen({Key? key}) : super(key: key);
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
-  State<ArtistsHubScreen> createState() => _ArtistsHubScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
@@ -28,19 +18,6 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<List<UserModel>>? getUsers;
 
   UserModel? user;
-
-  @override
-  void initState() {
-    UserModel.fromUid(uid: _auth.currentUser!.uid).then((value) {
-      if (mounted) {
-        setState(() {
-          user = value;
-        });
-      }
-    });
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

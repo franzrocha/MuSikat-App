@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/profile/account_info.dart';
+import 'package:musikat_app/screens/home/profile/liked_songs_screen.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/utils/exports.dart';
-
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -51,7 +51,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 TileList(
                   icon: FontAwesomeIcons.heart,
                   title: 'Liked Songs',
-                  ontap: () {},
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const LikedSongsScreen()),
+                    );
+                  },
                 ),
                 TileList(
                   icon: Icons.account_box,
@@ -92,12 +97,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Text userName() {
-    return Text(user?.username ?? '',
-        style: GoogleFonts.inter(
-          color: Colors.white,
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-        ));
+    return Text(
+      user?.username ?? '',
+      style: GoogleFonts.inter(
+        color: Colors.white,
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+      ),
+    );
   }
 
   Padding profilePic() {

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ class SongBottomField extends StatefulWidget {
 
 class _SongBottomFieldState extends State<SongBottomField> {
   final SongsController _songCon = SongsController();
+  final LikedSongsController _likedCon = LikedSongsController();
   bool _isLiked = false;
   late SharedPreferences _prefs;
 
@@ -63,11 +65,11 @@ class _SongBottomFieldState extends State<SongBottomField> {
                   await _prefs.setBool(uid + widget.songId, _isLiked);
                   if (_isLiked) {
                     // Add song to liked songs
-                    await _songCon.addToLikedSongs(widget.songId);
+                    await _likedCon.addToLikedSongs(widget.songId);
                     ToastMessage.show(context, 'Song added to liked songs');
                   } else {
                     // Remove song from liked songs
-                    await _songCon.removeLikedSong(widget.songId);
+                    await _likedCon.removeLikedSong(widget.songId);
                     ToastMessage.show(context, 'Song removed from liked songs');
                   }
                 },

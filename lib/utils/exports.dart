@@ -1,7 +1,7 @@
 // This section contains all the widgets related imports and exports
 
 export 'package:musikat_app/widgets/custom_text_field.dart';
-export 'package:musikat_app/widgets/loading_indicator.dart';
+export 'package:musikat_app/widgets/loading_widgets.dart';
 export 'package:musikat_app/widgets/nav_bar.dart';
 export 'package:musikat_app/widgets/toast_msg.dart';
 export 'package:musikat_app/widgets/custom_app_bart.dart';

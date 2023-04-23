@@ -1,22 +1,17 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/screens/home/artist_hub/edit_hub_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/library_screen.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
-<<<<<<< Updated upstream:lib/screens/home/artist_hub/artists_hub_screen.dart
 import 'package:musikat_app/utils/exports.dart';
-import 'edit_hub_screen.dart';
-=======
-import 'package:musikat_app/utils/ui_exports.dart';
-import 'package:musikat_app/utils/widgets_export.dart';
-import 'artist_hub/edit_hub_screen.dart';
-import 'package:musikat_app/screens/home/artists_hub_screen.dart';
->>>>>>> Stashed changes:lib/screens/home/artists_hub_screen.dart
 
 class ArtistsHubScreen extends StatefulWidget {
   const ArtistsHubScreen({Key? key}) : super(key: key);
@@ -68,14 +63,14 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   Row(
                     children: [
                       fullnameText(),
-                      SizedBox(width: 5.0),
+                      const SizedBox(width: 5.0),
                     ],
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 20.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                      children: const  [
                         Text(
                           'Followers: ',
                           style: TextStyle(

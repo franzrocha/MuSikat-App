@@ -51,6 +51,7 @@ dependencies:
   marquee_text: ^2.5.0+1
   provider: ^6.0.5
   shared_preferences: ^2.1.0
+  shimmer_animation: ^2.1.0+1
 
 dev_dependencies:
   flutter_test:
