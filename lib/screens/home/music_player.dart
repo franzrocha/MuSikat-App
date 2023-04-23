@@ -1,5 +1,5 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/services.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/controllers/music_player_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:just_audio/just_audio.dart';
@@ -25,6 +25,7 @@ class MusicPlayerScreen extends StatefulWidget {
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final MusicPlayerController musicPlayerCon = MusicPlayerController();
   final AudioPlayer player = AudioPlayer();
+  late AudioHandler audioHandler;
   final songService = SongService();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
@@ -81,7 +82,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         title: widget.songs[currentIndex].title,
         artist: widget.songs[currentIndex].artist,
         artUri: Uri.parse(widget.songs[currentIndex].albumCover),
-        
       ),
     );
 
@@ -262,7 +262,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 onChanged: (value) async {
                   final position = Duration(seconds: value.toInt());
                   await player.seek(position);
-                  
+
                   //  await player.play();
                 },
               ),
@@ -307,8 +307,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 ),
                 const SizedBox(width: 35),
                 InkWell(
-                  onTap: () {
-                    playPrevious();
+                  onTap: () async {
+                    await playPrevious();
                   },
                   child: const FaIcon(
                     FontAwesomeIcons.backwardStep,
@@ -383,6 +383,21 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       playNext();
                       return const LoadingIndicator();
                     } else {
+                      BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.topRight,
+                          colors: [
+                            Color(0xfffca311),
+                            Color(0xff62DD69),
+                          ],
+                        ),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(50),
+                      );
                       return IconButton(
                         icon: const Icon(Icons.replay),
                         iconSize: 64.0,

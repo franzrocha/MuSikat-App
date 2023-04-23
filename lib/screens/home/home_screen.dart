@@ -1,5 +1,6 @@
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
         scrollDirection: Axis.vertical,
         child: SafeArea(
           child: Column(children: [
-            
             Container(
               padding: const EdgeInsets.only(left: 25, top: 25),
               alignment: Alignment.topLeft,
@@ -64,19 +64,28 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  width: 160,
-                                  height: 160,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 124, 131, 127),
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                    image: DecorationImage(
-                                      image: NetworkImage(song.albumCover),
-                                      fit: BoxFit.cover,
+                                GestureDetector(
+                                  onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => MusicPlayerScreen(
+                                              songs: songs,
+                                              initialIndex: null,
+                                            )),
+                                  ),
+                                  child: Container(
+                                    width: 160,
+                                    height: 160,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 124, 131, 127),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                        image: NetworkImage(song.albumCover),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -463,4 +472,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
