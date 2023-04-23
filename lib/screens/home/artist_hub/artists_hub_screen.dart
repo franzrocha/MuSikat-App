@@ -8,8 +8,15 @@ import 'package:musikat_app/screens/home/music_player.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
+<<<<<<< Updated upstream:lib/screens/home/artist_hub/artists_hub_screen.dart
 import 'package:musikat_app/utils/exports.dart';
 import 'edit_hub_screen.dart';
+=======
+import 'package:musikat_app/utils/ui_exports.dart';
+import 'package:musikat_app/utils/widgets_export.dart';
+import 'artist_hub/edit_hub_screen.dart';
+import 'package:musikat_app/screens/home/artists_hub_screen.dart';
+>>>>>>> Stashed changes:lib/screens/home/artists_hub_screen.dart
 
 class ArtistsHubScreen extends StatefulWidget {
   const ArtistsHubScreen({Key? key}) : super(key: key);
@@ -47,13 +54,64 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
             children: [
               SizedBox(
                 height: 200,
-                child: Stack(children: [
-                  HeaderImage(uid: FirebaseAuth.instance.currentUser!.uid),
-                  editButton(),
-                  profilePic(),
-                ]),
+                child: Stack(
+                  children: [
+                    HeaderImage(uid: FirebaseAuth.instance.currentUser!.uid),
+                    editButton(),
+                    profilePic(),
+                  ],
+                ),
               ),
-              fullnameText(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      fullnameText(),
+                      SizedBox(width: 5.0),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Followers: ',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        Text(
+                          '0',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        Text(
+                          'Following: ',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        Text(
+                          '0',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
               usernameText(),
               const SizedBox(height: 10),
               Divider(

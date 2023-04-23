@@ -26,6 +26,8 @@ class UserModel {
       this.created,
       this.updated);
 
+  get fullName => null;
+
   static UserModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = {};
     if (snap.data() != null) {
