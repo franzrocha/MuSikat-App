@@ -82,7 +82,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                 textAlign: TextAlign.right,
                 style: GoogleFonts.inter(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold)),
           ],
         ),

@@ -1,6 +1,8 @@
+
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
+
 import 'package:musikat_app/utils/exports.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -69,7 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MaterialPageRoute(
                                         builder: (context) => MusicPlayerScreen(
                                               songs: songs,
-                                              initialIndex: null,
+                                              initialIndex:
+                                                  limitedSongs.indexOf(song),
                                             )),
                                   ),
                                   child: Container(

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/utils/exports.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SongBottomField extends StatefulWidget {
   final String songId;
@@ -20,19 +19,18 @@ class _SongBottomFieldState extends State<SongBottomField> {
   final SongsController _songCon = SongsController();
   final LikedSongsController _likedCon = LikedSongsController();
   bool _isLiked = false;
-  late SharedPreferences _prefs;
 
   @override
   void initState() {
     super.initState();
-    _loadIsLiked();
+    checkIfSongIsLiked();
   }
 
-  void _loadIsLiked() async {
-    _prefs = await SharedPreferences.getInstance();
+  void checkIfSongIsLiked() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
+    bool isLiked = await _likedCon.isSongLikedByUser(widget.songId, uid);
     setState(() {
-      _isLiked = _prefs.getBool(uid + widget.songId) ?? false;
+      _isLiked = isLiked;
     });
   }
 
@@ -62,14 +60,17 @@ class _SongBottomFieldState extends State<SongBottomField> {
                     _isLiked = !_isLiked;
                   });
                   String uid = FirebaseAuth.instance.currentUser!.uid;
-                  await _prefs.setBool(uid + widget.songId, _isLiked);
                   if (_isLiked) {
-                    // Add song to liked songs
-                    await _likedCon.addToLikedSongs(widget.songId);
+                    await _likedCon.addLikedSong(
+                      uid,
+                      widget.songId,
+                    );
                     ToastMessage.show(context, 'Song added to liked songs');
                   } else {
-                    // Remove song from liked songs
-                    await _likedCon.removeLikedSong(widget.songId);
+                    await _likedCon.removeLikedSong(
+                      uid,
+                      widget.songId,
+                    );
                     ToastMessage.show(context, 'Song removed from liked songs');
                   }
                 },

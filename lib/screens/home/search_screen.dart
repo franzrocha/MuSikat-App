@@ -80,13 +80,31 @@ class _SearchScreenState extends State<SearchScreen> {
                   combinedResults.addAll(userSearchResult);
                   combinedResults.addAll(songSearchResult);
                   combinedResults.sort((a, b) {
-                    if (a is UserModel && b is SongModel) {
-                      return -1;
-                    } else if (a is SongModel && b is UserModel) {
-                      return 1;
-                    } else {
-                      return 0;
+                    String query = _textCon.text.toLowerCase();
+                    int relevanceA = 0;
+                    int relevanceB = 0;
+
+                    if (a is UserModel) {
+                      UserModel user = a;
+                      relevanceA +=
+                          user.username.toLowerCase().split(query).length - 1;
+                    } else if (a is SongModel) {
+                      SongModel song = a;
+                      relevanceA +=
+                          song.title.toLowerCase().split(query).length - 1;
                     }
+
+                    if (b is UserModel) {
+                      UserModel user = b;
+                      relevanceB +=
+                          user.username.toLowerCase().split(query).length - 1;
+                    } else if (b is SongModel) {
+                      SongModel song = b;
+                      relevanceB +=
+                          song.title.toLowerCase().split(query).length - 1;
+                    }
+
+                    return relevanceB.compareTo(relevanceA);
                   });
 
                   return combinedResults.isEmpty

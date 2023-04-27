@@ -1,8 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:musikat_app/handlers/page_manager.dart';
-
 import '../models/song_model.dart';
 
 Future<AudioHandler> initAudioService() async {

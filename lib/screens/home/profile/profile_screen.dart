@@ -71,7 +71,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 TileList(
                   icon: Icons.people,
                   title: 'Following/Follower',
-                  ontap: () {},
+                  ontap: () {
+                 
+                    
+                  },
                 ),
                 TileList(
                   icon: Icons.info,

@@ -1,7 +1,8 @@
-// ignore_for_file: deprecated_member_use
-
+// ignore_for_file: use_build_context_synchronously
 import 'package:audio_service/audio_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/controllers/music_player_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:just_audio/just_audio.dart';
@@ -10,13 +11,11 @@ import 'package:musikat_app/utils/exports.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
-  // final String username;
   final int? initialIndex;
 
   const MusicPlayerScreen({
     Key? key,
     required this.songs,
-    // required this.username,
     this.initialIndex,
   }) : super(key: key);
 
@@ -26,8 +25,9 @@ class MusicPlayerScreen extends StatefulWidget {
 
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final MusicPlayerController musicPlayerCon = MusicPlayerController();
+  final LikedSongsController likedCon = LikedSongsController();
   final AudioPlayer player = AudioPlayer();
-  late AudioHandler audioHandler;
+
   final songService = SongService();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
@@ -36,11 +36,14 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   bool isPlaying = false;
   bool isLoadingAudio = false;
 
+  bool _isLiked = false;
+
   @override
   void initState() {
     super.initState();
     currentIndex = widget.initialIndex ?? 0;
     setAudio();
+
     player.playerStateStream.listen((playerState) async {
       if (mounted) {
         setState(() {
@@ -63,6 +66,16 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
           position = newPosition;
         });
       }
+    });
+    checkIfSongIsLiked();
+  }
+
+  void checkIfSongIsLiked() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    bool isLiked = await likedCon.isSongLikedByUser(
+        widget.songs[currentIndex].songId, uid);
+    setState(() {
+      _isLiked = isLiked;
     });
   }
 
@@ -109,8 +122,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     } else {
       currentIndex = widget.songs.length - 1;
     }
-    position = Duration.zero; // Reset position to zero
+    position = Duration.zero;
     try {
+      checkIfSongIsLiked();
       await setAudio();
     } on PlayerInterruptedException catch (_) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -129,6 +143,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     }
     position = Duration.zero;
     try {
+      checkIfSongIsLiked();
       await setAudio();
     } on PlayerInterruptedException catch (_) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -358,7 +373,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                         ),
                       );
                     } else if (processingState != ProcessingState.completed) {
-                      // playNext();
                       return Container(
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
@@ -421,13 +435,31 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 ),
                 const SizedBox(width: 40),
                 GestureDetector(
-                  onTap: musicPlayerCon.toggleFavorite,
-                  child: Icon(
-                    musicPlayerCon.isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color:
-                        musicPlayerCon.isFavorite ? Colors.red : Colors.white,
+                  onTap: () async {
+                    setState(() {
+                      _isLiked = !_isLiked;
+                    });
+                    String uid = FirebaseAuth.instance.currentUser!.uid;
+                    if (_isLiked) {
+                      await likedCon.addLikedSong(
+                        uid,
+                        widget.songs[currentIndex].songId,
+                      );
+                      ToastMessage.show(context, 'Song added to liked songs');
+                    } else {
+                      await likedCon.removeLikedSong(
+                        uid,
+                        widget.songs[currentIndex].songId,
+                      );
+                      ToastMessage.show(
+                          context, 'Song removed from liked songs');
+                    }
+                  },
+                  child: FaIcon(
+                    _isLiked
+                        ? FontAwesomeIcons.solidHeart
+                        : FontAwesomeIcons.heart,
+                    color: _isLiked ? Colors.red : Colors.white,
                     size: 35.0,
                   ),
                 ),

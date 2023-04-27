@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
@@ -114,7 +115,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                   return SingleChildScrollView(
                                     child: SongBottomField(
                                       songId: song.songId,
-                                      
                                     ),
                                   );
                                 });
@@ -135,7 +135,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
                             height: 50,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(song.albumCover),
+                                image:
+                                    CachedNetworkImageProvider(song.albumCover),
                                 fit: BoxFit.cover,
                               ),
                             ),

@@ -40,8 +40,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       ),
                     );
                   },
-                  child: const CategoryCard(
-                    image: 'assets/images/category/genres.jpg',
+                  child: CategoryCard(
+                    image: genrePic,
                     text: 'genres',
                   ),
                 ),
@@ -54,8 +54,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       ),
                     );
                   },
-                  child: const CategoryCard(
-                    image: 'assets/images/category/languages.jpg',
+                  child: CategoryCard(
+                    image: languagePic,
                     text: 'languages',
                   ),
                 ),
@@ -68,8 +68,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       ),
                     );
                   },
-                  child: const CategoryCard(
-                    image: 'assets/images/category/mood.jpg',
+                  child: CategoryCard(
+                    image: moodPic,
                     text: 'moods',
                   ),
                 ),

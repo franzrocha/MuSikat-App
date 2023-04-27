@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -20,8 +21,8 @@ class CategoryCard extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              image:
-                  DecorationImage(fit: BoxFit.cover, image: AssetImage(image))),
+              image: DecorationImage(
+                  fit: BoxFit.cover, image: CachedNetworkImageProvider(image))),
           child: Align(
             alignment: Alignment.bottomLeft,
             child: Padding(

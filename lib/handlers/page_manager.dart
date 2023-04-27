@@ -1,7 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:musikat_app/service_locators.dart';
-import 'package:musikat_app/handlers/audio_handler.dart';
 
 final audioHandler = locator<AudioHandler>();
 

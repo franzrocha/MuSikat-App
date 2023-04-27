@@ -1,4 +1,5 @@
 // ignore_for_file: sort_child_properties_last
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musikat_app/models/user_model.dart';
 
@@ -14,7 +15,7 @@ class AvatarImage extends StatelessWidget {
         stream: UserModel.fromUidStream(uid: uid),
         builder: (context, AsyncSnapshot<UserModel?> snap) {
           if (snap.error != null || !snap.hasData) {
-            return tempProfile(context);
+            return tempProfile(context);  
           } else {
             if (snap.data!.profileImage.isEmpty) {
               return tempProfile(context);
@@ -24,7 +25,7 @@ class AvatarImage extends StatelessWidget {
               return FittedBox(
                 child: CircleAvatar(
                   radius: radius,
-                  backgroundImage: NetworkImage(snap.data!.profileImage),
+                  backgroundImage: CachedNetworkImageProvider(snap.data!.profileImage),
                 ),
               );
             }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
@@ -22,17 +23,18 @@ class HeaderImage extends StatelessWidget {
               height: 150,
               width: double.infinity,
               child: Container(
-                  decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(snap.data!.headerImage),
-                  fit: BoxFit.cover,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(snap.data!.headerImage),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              )),
+              ),
             );
           }
         });
   }
-
+  
   Widget tempHeader(BuildContext context) {
     return Container(
       height: 150,

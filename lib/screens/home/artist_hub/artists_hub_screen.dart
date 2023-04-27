@@ -186,7 +186,6 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                                 builder: (context) =>
                                                     MusicPlayerScreen(
                                                       songs: [latestSong],
-                                                      // username: latestSong.artist,
                                                     )));
                                       },
                                       child: Container(

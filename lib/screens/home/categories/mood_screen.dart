@@ -34,89 +34,66 @@ class _MoodsScreenState extends State<MoodsScreen> {
       "color": const Color.fromARGB(255, 141, 38, 48),
     },
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: Text(
-          'Moods',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
-        showLogo: false,
-      ),
       backgroundColor: musikatBackgroundColor,
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: roomDataList.map((roomData) {
-          final String roomName = roomData['name'];
-          final Color roomColor = roomData['color'];
-          return GestureDetector(
-            onTap: () {},
-            child: SizedBox(
-              height: 200,
-              child: Container(
-                height: 200,
-                margin: const EdgeInsets.all(16.0),
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: roomColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black,
-                      spreadRadius: 0.5,
-                      offset: Offset(2.0, 2.0),
-                      blurRadius: 5.0,
+      body: CustomScrollView(
+        slivers: [
+          CustomSliverBar(
+            image: moodPic,
+            title: 'Moods',
+            caption: 'Let your mood guide your next listening choice.',
+          ),
+          SliverFillRemaining(
+            child: GridView.count(
+              crossAxisCount: 2,
+              children: roomDataList.map((roomData) {
+                final String roomName = roomData['name'];
+                final Color roomColor = roomData['color'];
+                return GestureDetector(
+                  onTap: () {},
+                  child: SizedBox(
+                    height: 200,
+                    child: Container(
+                      height: 200,
+                      margin: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: roomColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20.0)),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            roomName,
+                            style: const TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(roomName,
-                        style: const TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              }).toList(),
             ),
-          );
-        }).toList(),
+          ),
+        ],
       ),
     );
   }
-}
-
-AppBar appbar(BuildContext context) {
-  return AppBar(
-    toolbarHeight: 75,
-    title: Text(
-      "Moods",
-      textAlign: TextAlign.right,
-      style: GoogleFonts.inter(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    elevation: 0.0,
-    backgroundColor: Colors.transparent,
-    automaticallyImplyLeading: false,
-    leading: IconButton(
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      icon: const FaIcon(
-        FontAwesomeIcons.angleLeft,
-        size: 20,
-      ),
-    ),
-  );
 }
