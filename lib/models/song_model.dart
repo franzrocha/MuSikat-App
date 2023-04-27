@@ -23,6 +23,7 @@ class SongModel {
 
   static SongModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
+
     return SongModel(
       songId: snap.id,
       title: json['title'] ?? '',
@@ -73,5 +74,11 @@ class SongModel {
 
   searchTitle(String song) {
     return title.toLowerCase().contains(song.toLowerCase());
+  }
+
+  static Future<SongModel> fromUid({required String uid}) async {
+    DocumentSnapshot snap =
+        await FirebaseFirestore.instance.collection('songs').doc(uid).get();
+    return SongModel.fromDocumentSnap(snap);
   }
 }

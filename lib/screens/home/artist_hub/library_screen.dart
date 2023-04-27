@@ -19,134 +19,132 @@ class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: Text(
-          'Library',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
-        showLogo: false,
-      ),
       backgroundColor: musikatBackgroundColor,
-      body: Center(
-        child: StreamBuilder<List<SongModel>>(
-          stream: _songCon.getSongsStream(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData || snapshot.data == null) {
-              return const LoadingIndicator();
-            }
+      body: CustomScrollView(slivers: [
+        CustomSliverBar(
+          image: libraryPic,
+          title: 'Library',
+          caption: 'All Musics that you upload here',
+        ),
+        SliverFillRemaining(
+          child: Center(
+            child: StreamBuilder<List<SongModel>>(
+              stream: _songCon.getSongsStream(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return const LoadingIndicator();
+                }
 
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingIndicator();
-            } else {
-              final songs = snapshot.data!
-                  .where((song) =>
-                      song.uid == FirebaseAuth.instance.currentUser?.uid)
-                  .toList();
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const LoadingIndicator();
+                } else {
+                  final songs = snapshot.data!
+                      .where((song) =>
+                          song.uid == FirebaseAuth.instance.currentUser?.uid)
+                      .toList();
 
-              return songs.isEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 70),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25),
-                            child: Image.asset("assets/images/no_music.png",
-                                width: 230, height: 230),
-                          ),
-                          Text(
-                            "No songs found in your library",
-                            style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: 40),
-                          Container(
-                            width: 200,
-                            height: 63,
-                            decoration: BoxDecoration(
-                                color: musikatColor,
-                                borderRadius: BorderRadius.circular(60)),
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AudioUploaderScreen()),
-                                );
-                              },
-                              child: Text(
-                                'Upload a file',
+                  return songs.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 70),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Image.asset("assets/images/no_music.png",
+                                    width: 230, height: 230),
+                              ),
+                              Text(
+                                "No songs found in your library",
                                 style: GoogleFonts.inter(
                                     color: Colors.white,
-                                    fontSize: 18,
                                     fontWeight: FontWeight.w500),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: songs.length,
-                      itemBuilder: (context, index) {
-                        final song = songs[index];
-
-                        return ListTile(
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => MusicPlayerScreen(
-                                      songs: songs,
-                                      initialIndex: index,
-                                    )),
-                          ),
-                          onLongPress: () {
-                            showModalBottomSheet(
-                                backgroundColor: musikatColor4,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return SingleChildScrollView(
-                                    child: SongBottomField(
-                                      songId: song.songId,
-                                    ),
-                                  );
-                                });
-                          },
-                          title: Text(
-                            song.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.inter(
-                                color: Colors.white, fontSize: 16),
-                          ),
-                          subtitle: Text(song.artist,
-                              style: GoogleFonts.inter(
-                                  color: Colors.white.withOpacity(0.5),
-                                  fontSize: 14)),
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image:
-                                    CachedNetworkImageProvider(song.albumCover),
-                                fit: BoxFit.cover,
+                              const SizedBox(height: 40),
+                              Container(
+                                width: 200,
+                                height: 63,
+                                decoration: BoxDecoration(
+                                    color: musikatColor,
+                                    borderRadius: BorderRadius.circular(60)),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AudioUploaderScreen()),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Upload a file',
+                                    style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        );
-                      });
-            }
-          },
+                        )
+                      : ListView.builder(
+                          itemCount: songs.length,
+                          itemBuilder: (context, index) {
+                            final song = songs[index];
+
+                            return ListTile(
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => MusicPlayerScreen(
+                                          songs: songs,
+                                          initialIndex: index,
+                                        )),
+                              ),
+                              onLongPress: () {
+                                showModalBottomSheet(
+                                    backgroundColor: musikatColor4,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SingleChildScrollView(
+                                        child: SongBottomField(
+                                          songId: song.songId,
+                                        ),
+                                      );
+                                    });
+                              },
+                              title: Text(
+                                song.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                              subtitle: Text(song.artist,
+                                  style: GoogleFonts.inter(
+                                      color: Colors.white.withOpacity(0.5),
+                                      fontSize: 14)),
+                              leading: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                        song.albumCover),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                }
+              },
+            ),
+          ),
         ),
-      ),
+      ]),
     );
   }
 }

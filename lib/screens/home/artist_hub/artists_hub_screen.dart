@@ -61,7 +61,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                 children: [
                   Row(
                     children: [
-                      fullnameText(),
+                      usernameText(),
                     ],
                   ),
                   // Padding(
@@ -105,7 +105,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   // ),
                 ],
               ),
-              usernameText(),
+              fullnameText(),
               const SizedBox(height: 10),
               Divider(
                   height: 20,
@@ -313,7 +313,9 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 31),
         child: Text(user?.username ?? '',
             style: GoogleFonts.inter(
-                color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -326,7 +328,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
         child: Text(
           '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
           style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+              color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold),
         ),
       ),
     );

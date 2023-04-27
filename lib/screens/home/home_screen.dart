@@ -1,6 +1,8 @@
+import 'dart:math';
 
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
 
 import 'package:musikat_app/utils/exports.dart';
@@ -289,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               padding: const EdgeInsets.only(left: 25, top: 25),
               alignment: Alignment.topLeft,
-              child: Text("Artist Of The Week",
+              child: Text("Artist Of The Day",
                   textAlign: TextAlign.right,
                   style: GoogleFonts.inter(
                       color: Colors.white,
@@ -299,175 +301,81 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, top: 10),
-                      child: Column(
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  border: Border.all(
-                                    color: const Color.fromARGB(255, 0, 0, 0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50),
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/homescreen/range.jpg"),
-                                    fit: BoxFit.cover, //change image fill type
-                                  ),
+            StreamBuilder<List<UserModel>>(
+              stream: UserModel.getUsers().asStream(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                List<UserModel> users = snapshot.data!;
+                Random random = Random(
+                    DateTime.now().day); // Initialize random with today's day
+
+                users.shuffle(
+                    random); // Shuffle the list of users using the random object
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: users
+                          .take(5) // Take only the first 5 users
+                          .map((user) => Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 25, top: 10),
+                                child: Column(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(
+                                          width: 100,
+                                          height: 100,
+                                          decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                                255, 77, 69, 69),
+                                            border: Border.all(
+                                              color: const Color.fromARGB(
+                                                  255, 0, 0, 0),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            image: user.profileImage.isNotEmpty
+                                                ? DecorationImage(
+                                                    image: NetworkImage(
+                                                        user.profileImage),
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : null,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: Text(
+                                            user.username,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.white,
+                                              fontSize: 13,
+                                              height: 2,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  "Juan Bautista",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    height: 2,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              ))
+                          .toList(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, top: 10),
-                      child: Column(
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  border: Border.all(
-                                    color: const Color.fromARGB(255, 0, 0, 0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50),
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/homescreen/rpg.jpg"),
-                                    fit: BoxFit.cover, //change image fill type
-                                  ),
-                                ),
-                              ),
-                              const Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  "Jacob Reyes",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    height: 2,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, top: 10),
-                      child: Column(
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  border: Border.all(
-                                    color: const Color.fromARGB(255, 0, 0, 0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50),
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/homescreen/jeper.jpg"),
-                                    fit: BoxFit.cover, //change image fill type
-                                  ),
-                                ),
-                              ),
-                              const Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  "Ezekiel Dy",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    height: 2,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, top: 10),
-                      child: Column(
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  border: Border.all(
-                                    color: const Color.fromARGB(255, 0, 0, 0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50),
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/homescreen/winston.jpg"),
-                                    fit: BoxFit.cover, //change image fill type
-                                  ),
-                                ),
-                              ),
-                              const Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  "Gabriel Garcia",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    height: 2,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
           ]),
         ),
