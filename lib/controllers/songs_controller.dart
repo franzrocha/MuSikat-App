@@ -69,6 +69,48 @@ class SongsController with ChangeNotifier {
     }
   }
 
+  Future<List<SongModel>> getDescriptionSongs(String description) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('songs')
+        .where('description')
+        .get();
+
+    final songs = querySnapshot.docs
+        .map((doc) => SongModel.fromDocumentSnap(doc))
+        .where((song) => song.description.isNotEmpty)
+        .toList();
+
+    return songs;
+  }
+
+  Future<List<SongModel>> getGenreSongs(String genre) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('songs')
+        .where('genre', isEqualTo: genre)
+        .get();
+
+    final songs = querySnapshot.docs
+        .map((doc) => SongModel.fromDocumentSnap(doc))
+        .where((song) => song.languages.isNotEmpty)
+        .toList();
+
+    return songs;
+  }
+
+  Future<List<SongModel>> getAllLanguageSongs(String languages) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('songs')
+        .where('languages')
+        .get();
+
+    final songs = querySnapshot.docs
+        .map((doc) => SongModel.fromDocumentSnap(doc))
+        .where((song) => song.languages.isNotEmpty)
+        .toList();
+
+    return songs;
+  }
+
   Stream<double> get uploadProgressStream =>
       _uploadProgressStreamController.stream;
 

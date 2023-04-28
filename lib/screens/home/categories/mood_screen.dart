@@ -1,4 +1,11 @@
+import 'dart:math';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/utils/exports.dart';
+
+import '../music_player.dart';
 
 class MoodsScreen extends StatefulWidget {
   const MoodsScreen({Key? key}) : super(key: key);
@@ -8,32 +15,35 @@ class MoodsScreen extends StatefulWidget {
 }
 
 class _MoodsScreenState extends State<MoodsScreen> {
-  List<Map<String, dynamic>> roomDataList = [
-    {
-      "name": "Romance",
-      "color": const Color.fromARGB(255, 70, 69, 68),
-    },
-    {
-      "name": "Gaming",
-      "color": const Color.fromARGB(255, 18, 40, 58),
-    },
-    {
-      "name": "Sad",
-      "color": const Color.fromARGB(255, 22, 22, 16),
-    },
-    {
-      "name": "Happy",
-      "color": const Color.fromARGB(255, 68, 18, 23),
-    },
-    {
-      "name": "Relaxing",
-      "color": const Color.fromARGB(255, 182, 111, 118),
-    },
-    {
-      "name": "Studying",
-      "color": const Color.fromARGB(255, 141, 38, 48),
-    },
-  ];
+  LinearGradient generateRandomGradient() {
+    final random = Random();
+    final color1 = Color.fromARGB(
+      255,
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+    );
+    final color2 = Color.fromARGB(
+      255,
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+    );
+    return LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [color1, color2],
+    );
+  }
+
+  void _showDescriptionSongs(String description) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DescriptionSongsScreen(description: description),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,22 +56,18 @@ class _MoodsScreenState extends State<MoodsScreen> {
             title: 'Moods',
             caption: 'Let your mood guide your next listening choice.',
           ),
-          SliverFillRemaining(
-            child: GridView.count(
-              crossAxisCount: 2,
-              children: roomDataList.map((roomData) {
-                final String roomName = roomData['name'];
-                final Color roomColor = roomData['color'];
-                return GestureDetector(
-                  onTap: () {},
+          SliverGrid.count(
+            crossAxisCount: 2,
+            children: descriptions.map((descriptions) {
+              return GestureDetector(
+                  onTap: () => _showDescriptionSongs(descriptions),
                   child: SizedBox(
                     height: 200,
                     child: Container(
-                      height: 200,
                       margin: const EdgeInsets.all(16.0),
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
-                        color: roomColor,
+                        gradient: generateRandomGradient(),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20.0)),
                         boxShadow: const [
@@ -78,21 +84,86 @@ class _MoodsScreenState extends State<MoodsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            roomName,
+                            descriptions,
                             style: const TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                              fontSize: 20.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
-            ),
+                  ));
+            }).toList(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class DescriptionSongsScreen extends StatelessWidget {
+  final String description;
+  DescriptionSongsScreen({Key? key, required this.description})
+      : super(key: key);
+  final SongsController _songsCon = SongsController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: musikatBackgroundColor,
+        title: Text(description),
+      ),
+      backgroundColor: musikatBackgroundColor,
+      body: FutureBuilder<List<SongModel>>(
+        future: _songsCon.getDescriptionSongs(description),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final descriptionSongs = snapshot.data!;
+            return ListView.builder(
+              itemCount: descriptionSongs.length,
+              itemBuilder: (context, index) {
+                final song = descriptionSongs[index];
+                return ListTile(
+                  leading: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(song.albumCover),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    song.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
+                  ),
+                  subtitle: Text(song.artist,
+                      style: GoogleFonts.inter(
+                          color: Colors.white.withOpacity(0.5), fontSize: 14)),
+                  onTap: () {
+                    () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => MusicPlayerScreen(
+                                    songs: descriptionSongs,
+                                    initialIndex: index,
+                                  )),
+                        );
+                  },
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
