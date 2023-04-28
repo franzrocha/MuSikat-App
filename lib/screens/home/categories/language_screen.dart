@@ -125,42 +125,68 @@ class LanguageSongsScreen extends StatelessWidget {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             final languageSongs = snapshot.data!;
-            return ListView.builder(
-              itemCount: languageSongs.length,
-              itemBuilder: (context, index) {
-                final song = languageSongs[index];
-                return ListTile(
-                  leading: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(song.albumCover),
-                        fit: BoxFit.cover,
+            return languageSongs.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 150),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 25),
+                            child: Image.asset("assets/images/no_music.png",
+                                width: 230, height: 230),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "No $languages songs yet",
+                            style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  title: Text(
-                    song.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
-                  ),
-                  subtitle: Text(song.artist,
-                      style: GoogleFonts.inter(
-                          color: Colors.white.withOpacity(0.5), fontSize: 14)),
-                  onTap: () {
-                    () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => MusicPlayerScreen(
-                                    songs: languageSongs,
-                                    initialIndex: index,
-                                  )),
-                        );
-                  },
-                );
-              },
-            );
+                  )
+                : ListView.builder(
+                    itemCount: languageSongs.length,
+                    itemBuilder: (context, index) {
+                      final song = languageSongs[index];
+                      return ListTile(
+                        leading: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  CachedNetworkImageProvider(song.albumCover),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          song.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                              color: Colors.white, fontSize: 16),
+                        ),
+                        subtitle: Text(song.artist,
+                            style: GoogleFonts.inter(
+                                color: Colors.white.withOpacity(0.5),
+                                fontSize: 14)),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => MusicPlayerScreen(
+                                      songs: languageSongs,
+                                      initialIndex: index,
+                                    )),
+                          );
+                        },
+                      );
+                    },
+                  );
           }
         },
       ),
