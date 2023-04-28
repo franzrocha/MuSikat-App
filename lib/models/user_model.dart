@@ -12,7 +12,6 @@ class UserModel {
       gender,
       headerImage;
   Timestamp created, updated;
-  List<String> likedSongs;
 
   UserModel(
       this.uid,
@@ -24,7 +23,6 @@ class UserModel {
       this.gender,
       this.profileImage,
       this.headerImage,
-      this.likedSongs,
       this.created,
       this.updated);
 
@@ -43,7 +41,6 @@ class UserModel {
       json['gender'] ?? '',
       json['profileImage'] ?? '',
       json['headerImage'] ?? '',
-      (json['likedSongs'] as List<dynamic>?)?.cast<String>() ?? [],
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
     );
@@ -59,7 +56,6 @@ class UserModel {
         'gender': gender,
         'profileImage': profileImage,
         'headerImage': headerImage,
-        'likedSongs': likedSongs,
         'created': created,
         'updated': updated,
       };

@@ -24,7 +24,7 @@ class MusicPlayerScreen extends StatefulWidget {
 }
 
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
-  final MusicPlayerController musicPlayerCon = MusicPlayerController();
+  MusicPlayerController musicPlayerCon = MusicPlayerController();
   final LikedSongsController likedCon = LikedSongsController();
   final AudioPlayer player = AudioPlayer();
 
@@ -89,7 +89,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   }
 
   Future<void> setAudio() async {
-    player.setLoopMode(LoopMode.off);
     final source = AudioSource.uri(
       Uri.parse(widget.songs[currentIndex].audio),
       tag: MediaItem(

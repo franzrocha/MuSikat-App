@@ -8,7 +8,7 @@ class GenresScreen extends StatefulWidget {
 }
 
 class _GenresScreenState extends State<GenresScreen> {
-  List<Map<String, dynamic>> roomDataList = [
+  List<Map<String, dynamic>> genreData = [
     {
       "name": "Bed room",
       "color": const Color.fromARGB(255, 70, 69, 68),
@@ -40,7 +40,7 @@ class _GenresScreenState extends State<GenresScreen> {
           SliverFillRemaining(
             child: GridView.count(
               crossAxisCount: 2,
-              children: roomDataList.map((roomData) {
+              children: genreData.map((genre) {
                 return SizedBox(
                   height: 200,
                   child: Container(
@@ -48,23 +48,19 @@ class _GenresScreenState extends State<GenresScreen> {
                     margin: const EdgeInsets.all(16.0),
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: roomData["color"],
+                      border: Border.all(
+                        color: const Color.fromARGB(255, 124, 131, 127),
+                        width: 1.0,
+                      ),
+                      color: genre["color"],
                       borderRadius:
                           const BorderRadius.all(Radius.circular(20.0)),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black,
-                          spreadRadius: 0.5,
-                          offset: Offset(2.0, 2.0),
-                          blurRadius: 5.0,
-                        ),
-                      ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(roomData["name"],
+                        Text(genre["name"],
                             style: const TextStyle(
                                 fontSize: 20.0,
                                 color: Colors.white,

@@ -24,7 +24,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         CustomSliverBar(
           image: libraryPic,
           title: 'Library',
-          caption: 'All Musics that you upload here',
+          caption: 'All the music you uploaded.',
         ),
         SliverFillRemaining(
           child: Center(

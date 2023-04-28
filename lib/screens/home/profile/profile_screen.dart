@@ -41,6 +41,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               children: [
                 profilePic(),
+                fullnameText(),
+                const SizedBox(height: 10),
                 userName(),
                 const SizedBox(height: 30),
                 TileList(
@@ -71,10 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 TileList(
                   icon: Icons.people,
                   title: 'Following/Follower',
-                  ontap: () {
-                 
-                    
-                  },
+                  ontap: () {},
                 ),
                 TileList(
                   icon: Icons.info,
@@ -100,6 +99,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Text userName() {
+    return Text(
+      '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
+      style: GoogleFonts.inter(
+        color: Colors.grey,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Text fullnameText() {
     return Text(
       user?.username ?? '',
       style: GoogleFonts.inter(

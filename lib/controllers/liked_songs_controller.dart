@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/liked_songs_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musikat_app/models/song_model.dart';
 
 class LikedSongsController with ChangeNotifier {
   final bool _isLiked = false;
@@ -78,32 +79,25 @@ class LikedSongsController with ChangeNotifier {
     return false;
   }
 
-  Future<List<Map<String, dynamic>>> getLikedSongs() async {
-    List<Map<String, dynamic>> likedSongs = [];
-    try {
-      String uid = FirebaseAuth.instance.currentUser!.uid;
-      final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
-      final querySnapshot =
-          await collectionRef.where('uid', isEqualTo: uid).get();
+  Future<List<SongModel>> getLikedSongs() async {
+  List<SongModel> likedSongs = [];
+  try {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
+    final querySnapshot = await collectionRef.where('uid', isEqualTo: uid).get();
 
-      for (final doc in querySnapshot.docs) {
-        final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
-        for (final songId in songIdList) {
-          final song = await _songCon.getSongById(songId);
-          final songData = {
-            'id': doc.id,
-            'title': song.title,
-            'artist': song.artist,
-            'albumCover': song.albumCover,
-            'audio': song.audio,
-          };
-          likedSongs.add(songData);
-        }
+    for (final doc in querySnapshot.docs) {
+      final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
+      for (final songId in songIdList) {
+        final song = await _songCon.getSongById(songId);
+        likedSongs.add(song);
       }
-      return likedSongs;
-    } catch (e) {
-      print(e.toString());
-      return likedSongs;
     }
+    return likedSongs;
+  } catch (e) {
+    print(e.toString());
+    return likedSongs;
   }
+}
+
 }

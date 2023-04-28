@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/music_player/music_player_screen.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
 
 import 'package:musikat_app/utils/exports.dart';
@@ -64,55 +66,58 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: limitedSongs.map((song) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 25, top: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => MusicPlayerScreen(
-                                              songs: songs,
-                                              initialIndex:
-                                                  limitedSongs.indexOf(song),
-                                            )),
-                                  ),
-                                  child: Container(
-                                    width: 160,
-                                    height: 160,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: const Color.fromARGB(
-                                            255, 124, 131, 127),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5),
-                                      image: DecorationImage(
-                                        image: NetworkImage(song.albumCover),
-                                        fit: BoxFit.cover,
+                            child: GestureDetector(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MusicPlayerScreen(
+                                                songs: songs,
+                                                initialIndex:
+                                                    limitedSongs.indexOf(song),
+                                              )),
+                                    ),
+                                    child: Container(
+                                      width: 160,
+                                      height: 160,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: const Color.fromARGB(
+                                              255, 124, 131, 127),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                        image: DecorationImage(
+                                          image: NetworkImage(song.albumCover),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  song.title,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                    height: 2,
+                                  Text(
+                                    song.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      height: 2,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  song.artist,
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    height: 1.2,
+                                  Text(
+                                    song.artist,
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      height: 1.2,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         }).toList(),
@@ -304,77 +309,75 @@ class _HomeScreenState extends State<HomeScreen> {
             StreamBuilder<List<UserModel>>(
               stream: UserModel.getUsers().asStream(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return const LoadingCircularContainer();
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
                 }
 
-                List<UserModel> users = snapshot.data!;
-                Random random = Random(
-                    DateTime.now().day); // Initialize random with today's day
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const LoadingCircularContainer();
+                } else {
+                  List<UserModel> users = snapshot.data!;
+                  Random random = Random(DateTime.now().day);
 
-                users.shuffle(
-                    random); // Shuffle the list of users using the random object
+                  users = users
+                      .where((user) =>
+                          user.uid != FirebaseAuth.instance.currentUser!.uid)
+                      .toList();
+                  users.shuffle(random);
 
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: users
-                          .take(5) // Take only the first 5 users
-                          .map((user) => Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 25, top: 10),
-                                child: Column(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Container(
-                                          width: 100,
-                                          height: 100,
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 77, 69, 69),
-                                            border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 0, 0, 0),
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            image: user.profileImage.isNotEmpty
-                                                ? DecorationImage(
-                                                    image: NetworkImage(
-                                                        user.profileImage),
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : null,
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: users
+                            .take(5)
+                            .map((user) => Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 25, top: 10),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 130,
+                                        height: 130,
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                              255, 77, 69, 69),
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          image: user.profileImage.isNotEmpty
+                                              ? DecorationImage(
+                                                  image: NetworkImage(
+                                                      user.profileImage),
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : null,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Text(
+                                          user.username,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                            fontSize: 13,
+                                            height: 2,
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
-                                        Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Text(
-                                            user.username,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.white,
-                                              fontSize: 13,
-                                              height: 2,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ))
-                          .toList(),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               },
             ),
           ]),

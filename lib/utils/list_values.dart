@@ -4,7 +4,6 @@ final genres = [
   "Ambient",
   "Avant-garde",
   "Blues",
-  "Bossa nova",
   "Celtic",
   "Choral",
   "Christian",

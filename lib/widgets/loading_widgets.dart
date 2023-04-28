@@ -47,3 +47,37 @@ class LoadingContainer extends StatelessWidget {
     );
   }
 }
+
+class LoadingCircularContainer extends StatelessWidget {
+  const LoadingCircularContainer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: List.generate(
+            5,
+            (index) => Padding(
+              padding: const EdgeInsets.only(left: 25, top: 10),
+              child: Container(
+                width: 130,
+                height: 130,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.grey[300],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+

@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:musikat_app/models/song_model.dart';
 
 class MusicPlayerController with ChangeNotifier {
-  final AudioPlayer player = AudioPlayer();
+  AudioPlayer player = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+  int currentIndex = 0;
+  List<SongModel> songs = [];
+
+  MusicPlayerController() {
+    player = AudioPlayer();
+  }
 
   String time(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
@@ -19,4 +26,10 @@ class MusicPlayerController with ChangeNotifier {
       seconds,
     ].join(":");
   }
+
+  //getter
+  bool get getIsPlaying => isPlaying;
+  Duration get getDuration => duration;
+  Duration get getPosition => position;
+  int get getCurrentIndex => currentIndex;
 }

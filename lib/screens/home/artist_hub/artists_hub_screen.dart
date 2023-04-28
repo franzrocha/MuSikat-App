@@ -64,45 +64,6 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                       usernameText(),
                     ],
                   ),
-                  // Padding(
-                  //   padding: EdgeInsets.only(right: 20.0),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.end,
-                  //     children: [
-                  //       Text(
-                  //         'Followers: ',
-                  //         style: TextStyle(
-                  //           color: Colors.grey,
-                  //           fontSize: 13.0,
-                  //         ),
-                  //       ),
-                  //       Text(
-                  //         '0',
-                  //         style: TextStyle(
-                  //           color: Colors.white,
-                  //           fontSize: 16.0,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //       SizedBox(width: 10.0),
-                  //       Text(
-                  //         'Following: ',
-                  //         style: TextStyle(
-                  //           color: Colors.grey,
-                  //           fontSize: 13.0,
-                  //         ),
-                  //       ),
-                  //       Text(
-                  //         '0',
-                  //         style: TextStyle(
-                  //           color: Colors.white,
-                  //           fontSize: 16.0,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
               fullnameText(),
