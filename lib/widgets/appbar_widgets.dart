@@ -49,7 +49,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(60);
 }
 
-
 class CustomSliverBar extends StatelessWidget {
   const CustomSliverBar({
     super.key,
@@ -65,6 +64,14 @@ class CustomSliverBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      // title: Text(
+      //   title,
+      //   style: const TextStyle(
+      //     fontSize: 20,
+      //     fontWeight: FontWeight.bold,
+      //     color: Colors.white,
+      //   ),
+      // ),
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);

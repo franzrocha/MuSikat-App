@@ -42,7 +42,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                 },
                 leading: FittedBox(
                   child: CircleAvatar(
-                    radius: 25,
+                    radius: 22,
                     backgroundColor: Colors.transparent,
                     child: Image.asset("assets/images/musikat_global.png"),
                   ),
@@ -51,7 +51,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                   "Global Chat",
                   style: GoogleFonts.inter(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
               ),

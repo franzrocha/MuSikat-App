@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
@@ -76,32 +77,73 @@ class _SearchScreenState extends State<SearchScreen> {
                     }
                   }
 
+                  bool isVowel(String letter, String searchLetter) {
+                    String vowels = 'aeiou';
+                    int vowelIndex = vowels.indexOf(letter);
+                    int searchIndex = vowels.indexOf(searchLetter);
+                    return vowelIndex >= 0 && vowelIndex < searchIndex;
+                  }
+
                   List<Object> combinedResults = [];
                   combinedResults.addAll(userSearchResult);
                   combinedResults.addAll(songSearchResult);
+                  String query = _textCon.text.toLowerCase();
+                  String searchLetter =
+                      query.isNotEmpty ? query.substring(0, 1) : '';
                   combinedResults.sort((a, b) {
-                    String query = _textCon.text.toLowerCase();
                     int relevanceA = 0;
                     int relevanceB = 0;
 
                     if (a is UserModel) {
                       UserModel user = a;
-                      relevanceA +=
-                          user.username.toLowerCase().split(query).length - 1;
+                      String username = user.username.toLowerCase();
+                      if (username.startsWith(searchLetter)) {
+                        relevanceA += 2;
+                      } else if (username.contains(searchLetter)) {
+                        relevanceA += 1;
+                      }
+                      if (isVowel(username[0], searchLetter)) {
+                        relevanceA += 1;
+                      }
+                      relevanceA += username.split(query).length - 1;
                     } else if (a is SongModel) {
                       SongModel song = a;
-                      relevanceA +=
-                          song.title.toLowerCase().split(query).length - 1;
+                      String title = song.title.toLowerCase();
+                      if (title.startsWith(searchLetter)) {
+                        relevanceA += 2;
+                      } else if (title.contains(searchLetter)) {
+                        relevanceA += 1;
+                      }
+                      if (isVowel(title[0], searchLetter)) {
+                        relevanceA += 1;
+                      }
+                      relevanceA += title.split(query).length - 1;
                     }
 
                     if (b is UserModel) {
                       UserModel user = b;
-                      relevanceB +=
-                          user.username.toLowerCase().split(query).length - 1;
+                      String username = user.username.toLowerCase();
+                      if (username.startsWith(searchLetter)) {
+                        relevanceB += 2;
+                      } else if (username.contains(searchLetter)) {
+                        relevanceB += 1;
+                      }
+                      if (isVowel(username[0], searchLetter)) {
+                        relevanceB += 1;
+                      }
+                      relevanceB += username.split(query).length - 1;
                     } else if (b is SongModel) {
                       SongModel song = b;
-                      relevanceB +=
-                          song.title.toLowerCase().split(query).length - 1;
+                      String title = song.title.toLowerCase();
+                      if (title.startsWith(searchLetter)) {
+                        relevanceB += 2;
+                      } else if (title.contains(searchLetter)) {
+                        relevanceB += 1;
+                      }
+                      if (isVowel(title[0], searchLetter)) {
+                        relevanceB += 1;
+                      }
+                      relevanceB += title.split(query).length - 1;
                     }
 
                     return relevanceB.compareTo(relevanceA);
@@ -140,11 +182,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ? ListTile(
                                       onTap: () {
                                         Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ArtistsProfileScreen(
+                                          FadeRoute(
+                                            page: ArtistsProfileScreen(
                                               selectedUserUID: user.uid,
                                             ),
+                                            settings: const RouteSettings(),
                                           ),
                                         );
                                       },
@@ -167,14 +209,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ? ListTile(
                                       onTap: () {
                                         Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                MusicPlayerScreen(
+                                          FadeRoute(
+                                            page: MusicPlayerScreen(
                                               songs: songSearchResult
                                                   .where((s) =>
                                                       s.songId == song.songId)
                                                   .toList(),
                                             ),
+                                            settings: const RouteSettings(),
                                           ),
                                         );
                                       },

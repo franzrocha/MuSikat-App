@@ -121,7 +121,7 @@ class GenreSongsScreen extends StatelessWidget {
         future: _songsCon.getGenreSongs(genre),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: LoadingIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {

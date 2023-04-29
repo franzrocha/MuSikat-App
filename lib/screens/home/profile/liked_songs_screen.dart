@@ -23,9 +23,8 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
       backgroundColor: musikatBackgroundColor,
       body: CustomScrollView(
         slivers: [
-          const CustomSliverBar(
-            image:
-                "https://images.unsplash.com/photo-1569513586164-80529357ad6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+          CustomSliverBar(
+            image: likedSongsPic,
             title: "Liked Songs",
             caption: 'All your liked songs in one place.',
           ),
@@ -74,7 +73,6 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                       builder: (context) => MusicPlayerScreen(
                                             songs: likedSongs,
                                             initialIndex: index,
-                                            //likedSongs.indexOf(songData),
                                           )),
                                 );
                               },
@@ -109,7 +107,7 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                     songData.songId,
                                   );
                                   setState(() {
-                                    likedSongs.removeAt(index);
+                                    likedSongs.removeAt(index); 
                                   });
                                   ToastMessage.show(
                                       context, 'Song removed from liked songs');

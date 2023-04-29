@@ -61,3 +61,71 @@ class UploadDialog extends StatelessWidget {
     );
   }
 }
+
+class SliderDialog extends StatelessWidget {
+  final String title;
+  final int divisions;
+  final double min;
+  final double max;
+  final String valueSuffix;
+  final double value;
+  final Stream<double> stream;
+  final ValueChanged<double> onChanged;
+  final BuildContext context;
+
+  const SliderDialog({
+    super.key,
+    required this.title,
+    required this.divisions,
+    required this.min,
+    required this.max,
+    this.valueSuffix = '',
+    required this.value,
+    required this.stream,
+    required this.onChanged, required this.context,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+       shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50), // Set border radius
+      ),
+      backgroundColor: musikatBackgroundColor,
+      title: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.inter(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: StreamBuilder<double>(
+        stream: stream,
+        builder: (context, snapshot) => SizedBox(
+          height: 100.0,
+          child: Column(
+            children: [
+              Text(
+                '${((snapshot.data ?? value) * 100).toStringAsFixed(0)}%$valueSuffix',
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                ),
+              ),
+              Slider(
+                divisions: divisions,
+                min: min,
+                max: max,
+                value: snapshot.data ?? value,
+                onChanged: onChanged,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

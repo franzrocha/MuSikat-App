@@ -3,6 +3,7 @@ import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/profile/account_info.dart';
 import 'package:musikat_app/screens/home/profile/liked_songs_screen.dart';
+import 'package:musikat_app/screens/home/profile/playlist_screen.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/utils/exports.dart';
 
@@ -42,13 +43,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 profilePic(),
                 fullnameText(),
-                const SizedBox(height: 10),
+                const SizedBox(height: 4),
                 userName(),
-                const SizedBox(height: 30),
+                const SizedBox(height: 15),
                 TileList(
                   icon: Icons.queue_music,
                   title: 'Playlist',
-                  ontap: () {},
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const PlaylistScreen()),
+                    );
+                  },
                 ),
                 TileList(
                   icon: FontAwesomeIcons.heart,
@@ -103,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
       style: GoogleFonts.inter(
         color: Colors.grey,
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -114,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       user?.username ?? '',
       style: GoogleFonts.inter(
         color: Colors.white,
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: FontWeight.bold,
       ),
     );

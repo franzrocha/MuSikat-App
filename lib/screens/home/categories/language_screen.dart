@@ -120,7 +120,7 @@ class LanguageSongsScreen extends StatelessWidget {
         future: _songsCon.getAllLanguageSongs(languages),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: LoadingIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {

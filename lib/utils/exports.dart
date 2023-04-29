@@ -5,7 +5,7 @@ export 'package:musikat_app/widgets/loading_widgets.dart';
 export 'package:musikat_app/widgets/nav_bar.dart';
 export 'package:musikat_app/widgets/toast_msg.dart';
 export 'package:musikat_app/widgets/appbar_widgets.dart';
-export 'package:musikat_app/widgets/upload_dialog.dart';
+export 'package:musikat_app/widgets/dialog_widgets.dart';
 export 'package:musikat_app/widgets/avatar.dart';
 export 'package:musikat_app/widgets/header_image.dart';
 export 'package:musikat_app/widgets/song_bottom_field.dart';

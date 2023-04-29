@@ -104,7 +104,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       await player.play();
     } catch (e) {
       if (e is PlatformException) {
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 5));
         await setAudio();
       } else {
         rethrow;
@@ -150,47 +150,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     }
   }
 
-  void showSliderDialog({
-    required BuildContext context,
-    required String title,
-    required int divisions,
-    required double min,
-    required double max,
-    String valueSuffix = '',
-    required double value,
-    required Stream<double> stream,
-    required ValueChanged<double> onChanged,
-  }) {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title, textAlign: TextAlign.center),
-        content: StreamBuilder<double>(
-          stream: stream,
-          builder: (context, snapshot) => SizedBox(
-            height: 100.0,
-            child: Column(
-              children: [
-                Text(
-                    '${((snapshot.data ?? value) * 100).toStringAsFixed(0)}%$valueSuffix',
-                    style: const TextStyle(
-                        fontFamily: 'Fixed',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.0)),
-                Slider(
-                  divisions: divisions,
-                  min: min,
-                  max: max,
-                  value: snapshot.data ?? value,
-                  onChanged: onChanged,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,8 +163,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             Column(
               children: [
                 Container(
-                  width: 280,
-                  height: 280,
+                  width: 320,
+                  height: 320,
                   decoration: BoxDecoration(
                     color: Colors.blue,
                     border: Border.all(
@@ -216,17 +175,14 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     image: DecorationImage(
                       image:
                           NetworkImage(widget.songs[currentIndex].albumCover),
-                      fit: BoxFit.cover, //change image fill type
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
             Padding(
-              padding: const EdgeInsets.only(left: 23, right: 23),
+              padding: const EdgeInsets.only(left: 23, right: 23, top: 25),
               child: Row(
                 children: [
                   Expanded(
@@ -237,7 +193,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
-                          color: musikatColor),
+                          color: Colors.white),
                       marqueeDirection: MarqueeDirection.rtl,
                       speed: 25,
                     ),
@@ -255,10 +211,10 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   Text(
                     widget.songs[currentIndex].artist,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 15,
-                        color: Colors.white),
+                        color: Colors.white.withOpacity(0.5)),
                   ),
                 ],
               ),
@@ -278,8 +234,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 onChanged: (value) async {
                   final position = Duration(seconds: value.toInt());
                   await player.seek(position);
-
-                  //  await player.play();
                 },
               ),
             ),
@@ -306,18 +260,22 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 IconButton(
                   icon: const Icon(
                     Icons.volume_up,
+                    size: 35,
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    showSliderDialog(
+                    showDialog(
                       context: context,
-                      title: "Adjust volume",
-                      divisions: 100,
-                      min: 0,
-                      max: 1,
-                      value: player.volume,
-                      stream: player.volumeStream,
-                      onChanged: player.setVolume,
+                      builder: (context) => SliderDialog(
+                        title: "Adjust volume",
+                        divisions: 100,
+                        min: 0,
+                        max: 1,
+                        value: player.volume,
+                        stream: player.volumeStream,
+                        onChanged: player.setVolume,
+                        context: context,
+                      ),
                     );
                   },
                 ),
@@ -459,7 +417,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                         ? FontAwesomeIcons.solidHeart
                         : FontAwesomeIcons.heart,
                     color: _isLiked ? Colors.red : Colors.white,
-                    size: 35.0,
+                    size: 30,
                   ),
                 ),
               ],
@@ -474,7 +432,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       centerTitle: true,
       title: Text("Now Playing",
           style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,

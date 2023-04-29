@@ -98,8 +98,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Text(
-                                    song.title,
-                                    style: const TextStyle(
+                                    song.title.length > 19
+                                        ? '${song.title.substring(0, 19)}..'
+                                        : song.title,
+                                    style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
                                       height: 2,
@@ -108,9 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     song.artist,
                                     textAlign: TextAlign.left,
-                                    style: const TextStyle(
+                                    style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w400,
-                                      color: Colors.white,
+                                      color: Colors.white.withOpacity(0.5),
                                       fontSize: 13,
                                       height: 1.2,
                                     ),
@@ -163,27 +165,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                 image: const DecorationImage(
                                   image:
                                       AssetImage("assets/images/albumdes.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            const Align(
+                            Align(
                               alignment: Alignment.bottomLeft,
                               child: Text(
                                 "Daily Mix 3",
-                                style: TextStyle(
+                                style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                   height: 2,
                                 ),
                               ),
                             ),
-                            const Text(
+                            Text(
                               "Musikat",
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w400,
-                                color: Colors.white,
+                                color: Colors.white.withOpacity(0.5),
                                 fontSize: 13,
                                 height: 1.2,
                               ),
@@ -211,27 +213,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                 image: const DecorationImage(
                                   image: AssetImage(
                                       "assets/images/homescreen/album2.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            const Align(
+                            Align(
                               alignment: Alignment.bottomLeft,
                               child: Text(
                                 "Daily Mix 3",
-                                style: TextStyle(
+                                style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                   height: 2,
                                 ),
                               ),
                             ),
-                            const Text(
+                            Text(
                               "Musikat",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w400,
-                                color: Colors.white,
+                                color: Colors.white.withOpacity(0.5),
                                 fontSize: 13,
                                 height: 1.2,
                               ),
@@ -259,27 +260,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                 image: const DecorationImage(
                                   image: AssetImage(
                                       "assets/images/homescreen/ticket3.jpg"),
-                                  fit: BoxFit.cover, //change image fill type
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            const Align(
+                            Align(
                               alignment: Alignment.bottomLeft,
                               child: Text(
                                 "Daily Mix 3",
-                                style: TextStyle(
+                                style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                   height: 2,
                                 ),
                               ),
                             ),
-                            const Text(
+                            Text(
                               "Musikat",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w400,
-                                color: Colors.white,
+                                color: Colors.white.withOpacity(0.5),
                                 fontSize: 13,
                                 height: 1.2,
                               ),
@@ -295,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               padding: const EdgeInsets.only(left: 25, top: 25),
               alignment: Alignment.topLeft,
-              child: Text("Artist Of The Day",
+              child: Text("Artist to Look Out For",
                   textAlign: TextAlign.right,
                   style: GoogleFonts.inter(
                       color: Colors.white,
@@ -333,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: users
-                            .take(5) // Take only the first 5 users
+                            .take(5)
                             .map((user) => Padding(
                                   padding:
                                       const EdgeInsets.only(left: 25, top: 10),
@@ -362,8 +362,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           alignment: Alignment.bottomLeft,
                                           child: Text(
                                             user.username,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w400,
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w700,
                                               color: Colors.white,
                                               fontSize: 13,
                                               height: 2,
