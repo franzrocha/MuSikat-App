@@ -35,10 +35,12 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
   }
 
   void _showLanguageSongs(String languages) {
+    final gradient = generateRandomGradient();
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LanguageSongsScreen(languages: languages),
+        builder: (context) =>
+            LanguageSongsScreen(languages: languages, gradient: gradient),
       ),
     );
   }
@@ -104,91 +106,103 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
 
 class LanguageSongsScreen extends StatelessWidget {
   final String languages;
-  LanguageSongsScreen({Key? key, required this.languages}) : super(key: key);
+  final LinearGradient gradient;
+  LanguageSongsScreen(
+      {Key? key, required this.languages, required this.gradient})
+      : super(key: key);
 
   final SongsController _songsCon = SongsController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: musikatBackgroundColor,
-        title: Text(languages),
-      ),
       backgroundColor: musikatBackgroundColor,
-      body: FutureBuilder<List<SongModel>>(
-        future: _songsCon.getAllLanguageSongs(languages),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: LoadingIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final languageSongs = snapshot.data!;
-            return languageSongs.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 150),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25),
-                            child: Image.asset("assets/images/no_music.png",
-                                width: 230, height: 230),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            "No $languages songs yet",
-                            style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: languageSongs.length,
-                    itemBuilder: (context, index) {
-                      final song = languageSongs[index];
-                      return ListTile(
-                        leading: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image:
-                                  CachedNetworkImageProvider(song.albumCover),
-                              fit: BoxFit.cover,
+      body: CustomScrollView(
+        slivers: [
+          CustomSliverBar(
+            linearGradient: gradient,
+            title: languages,
+          ),
+          SliverFillRemaining(
+            child: FutureBuilder<List<SongModel>>(
+              future: _songsCon.getAllLanguageSongs(languages),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: LoadingIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final languageSongs = snapshot.data!;
+                  return languageSongs.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 100),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 25),
+                                  child: Image.asset(
+                                      "assets/images/no_music.png",
+                                      width: 230,
+                                      height: 230),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                 "No songs found for $languages.",
+                                  style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        title: Text(
-                          song.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                              color: Colors.white, fontSize: 16),
-                        ),
-                        subtitle: Text(song.artist,
-                            style: GoogleFonts.inter(
-                                color: Colors.white.withOpacity(0.5),
-                                fontSize: 14)),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => MusicPlayerScreen(
-                                      songs: languageSongs,
-                                      initialIndex: index,
-                                    )),
-                          );
-                        },
-                      );
-                    },
-                  );
-          }
-        },
+                        )
+                      : ListView.builder(
+                          itemCount: languageSongs.length,
+                          itemBuilder: (context, index) {
+                            final song = languageSongs[index];
+                            return ListTile(
+                              leading: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                        song.albumCover),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                song.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                              subtitle: Text(song.artist,
+                                  style: GoogleFonts.inter(
+                                      color: Colors.white.withOpacity(0.5),
+                                      fontSize: 14)),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            songs: languageSongs,
+                                            initialIndex: index,
+                                          )),
+                                );
+                              },
+                            );
+                          },
+                        );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

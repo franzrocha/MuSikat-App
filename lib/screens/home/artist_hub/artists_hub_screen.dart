@@ -176,8 +176,8 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        latestSong.title.length > 20
-                                            ? '${latestSong.title.substring(0, 20)}...'
+                                        latestSong.title.length > 30
+                                            ? '${latestSong.title.substring(0, 30)}...'
                                             : latestSong.title,
                                         style: GoogleFonts.inter(
                                           color: Colors.white,

@@ -37,10 +37,12 @@ class _MoodsScreenState extends State<MoodsScreen> {
   }
 
   void _showDescriptionSongs(String description) {
+    final gradient = generateRandomGradient();
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DescriptionSongsScreen(description: description),
+        builder: (context) => DescriptionSongsScreen(
+            description: description, gradient: gradient),
       ),
     );
   }
@@ -105,91 +107,102 @@ class _MoodsScreenState extends State<MoodsScreen> {
 
 class DescriptionSongsScreen extends StatelessWidget {
   final String description;
-  DescriptionSongsScreen({Key? key, required this.description})
+  final LinearGradient gradient;
+  DescriptionSongsScreen(
+      {Key? key, required this.description, required this.gradient})
       : super(key: key);
   final SongsController _songsCon = SongsController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: musikatBackgroundColor,
-        title: Text(description),
-      ),
       backgroundColor: musikatBackgroundColor,
-      body: FutureBuilder<List<SongModel>>(
-        future: _songsCon.getDescriptionSongs(description),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: LoadingIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final descriptionSongs = snapshot.data!;
-            return descriptionSongs.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 150),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25),
-                            child: Image.asset("assets/images/no_music.png",
-                                width: 230, height: 230),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            "No $description songs yet",
-                            style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: descriptionSongs.length,
-                    itemBuilder: (context, index) {
-                      final song = descriptionSongs[index];
-                      return ListTile(
-                        leading: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image:
-                                  CachedNetworkImageProvider(song.albumCover),
-                              fit: BoxFit.cover,
+      body: CustomScrollView(
+        slivers: [
+          CustomSliverBar(
+            linearGradient: gradient,
+            title: description,
+          ),
+          SliverFillRemaining(
+            child: FutureBuilder<List<SongModel>>(
+              future: _songsCon.getDescriptionSongs(description),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: LoadingIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final descriptionSongs = snapshot.data!;
+                  return descriptionSongs.isEmpty
+                      ? Padding(
+                             padding: const EdgeInsets.symmetric(vertical: 100),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 25),
+                                  child: Image.asset(
+                                      "assets/images/no_music.png",
+                                      width: 230,
+                                      height: 230),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                 "No songs found related to $description yet.",
+                                  style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        title: Text(
-                          song.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                              color: Colors.white, fontSize: 16),
-                        ),
-                        subtitle: Text(song.artist,
-                            style: GoogleFonts.inter(
-                                color: Colors.white.withOpacity(0.5),
-                                fontSize: 14)),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => MusicPlayerScreen(
-                                      songs: descriptionSongs,
-                                      initialIndex: index,
-                                    )),
-                          );
-                        },
-                      );
-                    },
-                  );
-          }
-        },
+                        )
+                      : ListView.builder(
+                          itemCount: descriptionSongs.length,
+                          itemBuilder: (context, index) {
+                            final song = descriptionSongs[index];
+                            return ListTile(
+                              leading: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                        song.albumCover),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                song.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                              subtitle: Text(song.artist,
+                                  style: GoogleFonts.inter(
+                                      color: Colors.white.withOpacity(0.5),
+                                      fontSize: 14)),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            songs: descriptionSongs,
+                                            initialIndex: index,
+                                          )),
+                                );
+                              },
+                            );
+                          },
+                        );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

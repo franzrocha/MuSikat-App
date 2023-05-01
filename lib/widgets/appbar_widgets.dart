@@ -51,27 +51,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class CustomSliverBar extends StatelessWidget {
   const CustomSliverBar({
-    super.key,
-    required this.image,
+    Key? key,
     required this.title,
-    required this.caption,
-  });
+    this.caption,
+    this.image,
+    this.linearGradient
+  }) : super(key: key);
 
-  final String image;
   final String title;
-  final String caption;
+  final String? caption;
+  final String? image;
+  final LinearGradient? linearGradient;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      // title: Text(
-      //   title,
-      //   style: const TextStyle(
-      //     fontSize: 20,
-      //     fontWeight: FontWeight.bold,
-      //     color: Colors.white,
-      //   ),
-      // ),
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);
@@ -89,10 +83,13 @@ class CustomSliverBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(image),
-              fit: BoxFit.cover,
-            ),
+            image: image != null
+                ? DecorationImage(
+                    image: CachedNetworkImageProvider(image!),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+            gradient: linearGradient,
           ),
           child: Container(
             decoration: BoxDecoration(
@@ -120,11 +117,11 @@ class CustomSliverBar extends StatelessWidget {
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                    ),
+                    ), 
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    caption,
+                    caption ?? "",
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.5),

@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: Image.asset(
                             "assets/images/register_bg.png",
                             width: 250,
-                            height: 230,
+                            height: 220,
                           ),
                         ),
                         Container(
@@ -110,9 +110,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               alignment: Alignment.centerRight,
                               child: nextButton(context)),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        )
                       ],
                     ),
                   ),
@@ -125,8 +122,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Container nextButton(BuildContext context) {
     return Container(
-      width: 200,
-      height: 63,
+      width: 190,
+      height: 50,
       decoration: BoxDecoration(
           color: musikatColor, borderRadius: BorderRadius.circular(60)),
       child: TextButton(

@@ -5,6 +5,7 @@ import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
+import 'package:musikat_app/screens/home/other_artist_screen.dart';
 
 import 'package:musikat_app/utils/exports.dart';
 
@@ -340,21 +341,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Column(
                                     children: [
                                       Column(children: [
-                                        Container(
-                                          width: 100,
-                                          height: 100,
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 77, 69, 69),
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            image: user.profileImage.isNotEmpty
-                                                ? DecorationImage(
-                                                    image: NetworkImage(
-                                                        user.profileImage),
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : null,
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ArtistsProfileScreen(
+                                                          selectedUserUID:
+                                                              user.uid,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            width: 100,
+                                            height: 100,
+                                            decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  255, 77, 69, 69),
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              image:
+                                                  user.profileImage.isNotEmpty
+                                                      ? DecorationImage(
+                                                          image: NetworkImage(
+                                                              user.profileImage),
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : null,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(height: 10),

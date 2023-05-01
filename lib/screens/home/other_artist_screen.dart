@@ -161,13 +161,17 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                             }
 
                             if (snapshot.data!.isEmpty) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 50),
-                                child: Text(
-                                  "No songs found in your library",
-                                  style: GoogleFonts.inter(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: Text(
+                                    "The user hasn't uploaded any songs yet.",
+                                    style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                             fontSize: 18,
+                                        ),
+                                  ),
                                 ),
                               );
                             }
