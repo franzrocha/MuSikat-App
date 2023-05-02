@@ -17,8 +17,8 @@ class TileList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
-      width: 380,
+      height: 75,
+      width: 350,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),

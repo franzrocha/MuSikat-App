@@ -21,5 +21,3 @@ const cancelColor = Color.fromARGB(255, 125, 123, 123);
 
 //musikat text color
 const musikatTextColor = Colors.white;
-
-//pictures

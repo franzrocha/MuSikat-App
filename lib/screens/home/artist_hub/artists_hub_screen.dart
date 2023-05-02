@@ -218,6 +218,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                 ),
               ),
               SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),

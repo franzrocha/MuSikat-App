@@ -198,7 +198,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                           fontSize: 15,
                                         ),
                                       ),
-                                      subtitle: null,
+                                      subtitle: Text(
+                                        'User',
+                                        style: GoogleFonts.inter(
+                                          color: Colors.white.withOpacity(0.5),
+                                          fontSize: 14,
+                                        ),
+                                      ),
                                     )
                                   : const SizedBox();
                             } else if (combinedResults[index] is SongModel) {
@@ -252,12 +258,25 @@ class _SearchScreenState extends State<SearchScreen> {
                                           ),
                                         ),
                                       ),
-                                      subtitle: Text(
-                                        song.artist,
-                                        style: GoogleFonts.inter(
-                                          color: Colors.white.withOpacity(0.5),
-                                          fontSize: 14,
-                                        ),
+                                      subtitle: Row(
+                                        children: [
+                                          Text(
+                                            song.artist,
+                                            style: GoogleFonts.inter(
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            ' • Song',
+                                            style: GoogleFonts.inter(
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                              fontSize: 14,
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     )
                                   : const SizedBox();

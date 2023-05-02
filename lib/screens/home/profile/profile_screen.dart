@@ -38,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Center(
             child: Column(
               children: [

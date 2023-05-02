@@ -54,9 +54,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 showLogo: false,
               ),
               backgroundColor: musikatBackgroundColor,
+              resizeToAvoidBottomInset: true,
               body: SafeArea(
                 child: Center(
                   child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
                         Padding(
@@ -90,12 +92,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                               child: Column(
                                 children: [
-                                  Row(
-                                    children: [
-                                      lastNameForm(),
-                                      firstNameForm(),
-                                    ],
-                                  ),
+                                  firstNameForm(),
+                                  lastNameForm(),
                                   usernameForm(),
                                   ageForm(),
                                   genderDropDown(context),
@@ -110,6 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               alignment: Alignment.centerRight,
                               child: nextButton(context)),
                         ),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -169,68 +168,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Padding firstNameForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: SizedBox(
-        width: 180,
-        child: TextFormField(
-          style: GoogleFonts.inter(
-            color: Colors.black,
-            fontSize: 15,
-          ),
-          controller: _firstNameCon,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return null;
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: 'First name',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide.none,
-            ),
-          ),
-        ),
-      ),
+  CustomTextField firstNameForm() {
+    return CustomTextField(
+      hintText: 'First Name',
+      controller: _firstNameCon,
+      obscureText: false,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      prefixIcon: const Icon(Icons.label_important),
     );
   }
 
-  Padding lastNameForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: SizedBox(
-        width: 189,
-        child: TextFormField(
-          style: GoogleFonts.inter(
-            color: Colors.black,
-            fontSize: 15,
-          ),
-          controller: _lastNameCon,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return null;
-            } else {
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: 'Last name',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide.none,
-            ),
-            prefixIcon: const Icon(Icons.person),
-          ),
-        ),
-      ),
+  CustomTextField lastNameForm() {
+    return CustomTextField(
+      hintText: 'Last Name',
+      controller: _lastNameCon,
+      obscureText: false,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      prefixIcon: const Icon(Icons.label),
     );
   }
 

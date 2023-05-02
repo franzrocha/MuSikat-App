@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -108,6 +109,15 @@ class SongsController with ChangeNotifier {
         .toList();
 
     return songs;
+  }
+
+  Future<int> getUserSongCount() async {
+    final String uid = FirebaseAuth.instance.currentUser!.uid;
+    final CollectionReference songsCollection =
+        FirebaseFirestore.instance.collection('songs');
+    QuerySnapshot snapshot =
+        await songsCollection.where('uid', isEqualTo: uid).get();
+    return snapshot.docs.length;
   }
 
   Stream<double> get uploadProgressStream =>

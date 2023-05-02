@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/screens/home/music_player.dart';
@@ -16,7 +15,7 @@ class LikedSongsScreen extends StatefulWidget {
 
 class _LikedSongsScreenState extends State<LikedSongsScreen> {
   final LikedSongsController _likedCon = LikedSongsController();
-  final AudioPlayer player = AudioPlayer();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,9 +76,9 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                 );
                               },
                               title: Text(
-                                 songData.title.length > 30
-                                        ? '${songData.title.substring(0, 30)}..'
-                                        : songData.title,
+                                songData.title.length > 35
+                                    ? '${songData.title.substring(0, 35)}..'
+                                    : songData.title,
                                 style: GoogleFonts.inter(
                                     fontSize: 16, color: Colors.white),
                               ),
@@ -90,6 +89,7 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                   color: Colors.white.withOpacity(0.5),
                                 ),
                               ),
+                              
                               leading: Container(
                                 width: 50,
                                 height: 50,
@@ -109,7 +109,7 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                     songData.songId,
                                   );
                                   setState(() {
-                                    likedSongs.removeAt(index); 
+                                    likedSongs.removeAt(index);
                                   });
                                   ToastMessage.show(
                                       context, 'Song removed from liked songs');

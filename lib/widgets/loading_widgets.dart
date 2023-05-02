@@ -63,10 +63,10 @@ class LoadingCircularContainer extends StatelessWidget {
           children: List.generate(
             5,
             (index) => Padding(
-              padding: const EdgeInsets.only(left: 25, top: 10),
+              padding: const EdgeInsets.only(left: 30, top: 10),
               child: Container(
-                width: 130,
-                height: 130,
+                width: 100,
+                height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.grey[300],
@@ -79,5 +79,3 @@ class LoadingCircularContainer extends StatelessWidget {
     );
   }
 }
-
-

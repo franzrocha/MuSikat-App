@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: SafeArea(
           child: Column(children: [
@@ -60,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     final limitedSongs = randomSongs.take(5).toList();
 
                     return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -141,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 10,
             ),
             SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               child: Column(
                 children: [
@@ -329,6 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   users.shuffle(random);
 
                   return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

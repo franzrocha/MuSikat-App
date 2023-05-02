@@ -57,6 +57,7 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Center(
             child: Column(
               children: [

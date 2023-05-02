@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PlaylistModel {
-  final String playlistId, title, description, playlistImg, uid;
+  final String playlistId, title, uid;
   final DateTime createdAt;
-  final List<String> songs;
+  List<String> songs;
+  String? description;
+  final String playlistImg;
 
   PlaylistModel({
     required this.playlistId,
     required this.title,
-    required this.description,
-    required this.playlistImg,
     required this.createdAt,
     required this.songs,
     required this.uid,
+    this.description,
+    required this.playlistImg,
   });
 
   static PlaylistModel fromDocumentSnap(DocumentSnapshot snap) {
@@ -21,8 +23,8 @@ class PlaylistModel {
     return PlaylistModel(
       playlistId: snap.id,
       title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      playlistImg: json['playlistImg'] ?? '',
+      description: json['description'],
+      playlistImg: json['playlistImg'],
       createdAt: json['created_at']?.toDate() ?? DateTime.now(),
       songs: (json['songs'] as List<dynamic>?)?.cast<String>() ?? [],
       uid: json['uid'] ?? '',

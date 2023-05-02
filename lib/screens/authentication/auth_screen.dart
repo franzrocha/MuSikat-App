@@ -74,15 +74,17 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   showLogo: false),
               backgroundColor: musikatBackgroundColor,
-              body: SafeArea(
+              resizeToAvoidBottomInset: true,
+              body: Center(
                 child: SingleChildScrollView(
-                  child: Center(
+                  physics: const BouncingScrollPhysics(),
+                  child: SafeArea(
                     child: Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 25),
                           child: Image.asset("assets/images/login_bg.png",
-                              width: 210, height: 210),
+                              width: 210, height: 190),
                         ),
                         Container(
                           padding: const EdgeInsets.only(
@@ -110,7 +112,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   emailForm(),
-                                  const SizedBox(height: 10),
                                   passForm(),
                                   forgotPass(context),
                                 ],
@@ -119,7 +120,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                         loginButton(),
-                        const SizedBox(height: 20),
+                    
                       ],
                     ),
                   ),

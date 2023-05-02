@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class InsightsScreen extends StatefulWidget {
@@ -9,6 +12,10 @@ class InsightsScreen extends StatefulWidget {
 }
 
 class _InsightsScreenState extends State<InsightsScreen> {
+  final SongsController _songCon = SongsController();
+
+  UserModel? user;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +34,19 @@ class _InsightsScreenState extends State<InsightsScreen> {
       body: SafeArea(
         child: Center(
           child: Column(children: [
+            FutureBuilder<int>(
+              future: _songCon.getUserSongCount(),
+              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Text('Songs uploaded: ${snapshot.data}',
+                      style: const TextStyle(color: Colors.white));
+                }
+              },
+            ),
             ListTile(
               trailing: const FaIcon(FontAwesomeIcons.chevronRight,
                   color: Colors.white, size: 18),
@@ -61,15 +81,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
               ),
             ),
             const SizedBox(height: 150),
-            ListTile(
-              title: Text(
-                'Top Location',
-                style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontStyle: FontStyle.normal),
-              ),
-            ),
           ]),
         ),
       ),
