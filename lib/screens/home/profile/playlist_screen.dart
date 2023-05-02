@@ -56,7 +56,10 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const LoadingIndicator();
               } else {
-                final playlists = snapshot.data!;
+                final playlists = snapshot.data!
+                    .where((playlist) =>
+                        playlist.uid == FirebaseAuth.instance.currentUser!.uid)
+                    .toList();
 
                 return ListView.builder(
                   itemCount: playlists.length,
@@ -67,12 +70,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                         title: Text(playlist.title,
                             style: GoogleFonts.inter(
                                 color: Colors.white, fontSize: 16)),
-                        subtitle: playlist.description == null
-                            ? null
-                            : Text(playlist.description!,
-                                style: GoogleFonts.inter(
-                                    color: Colors.white.withOpacity(0.5),
-                                    fontSize: 14)),
                         leading: Container(
                           width: 50,
                           height: 50,
