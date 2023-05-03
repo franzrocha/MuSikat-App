@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/screens/home/profile/create_playlist_screen.dart';
+import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class PlaylistScreen extends StatefulWidget {
@@ -61,12 +61,23 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                         playlist.uid == FirebaseAuth.instance.currentUser!.uid)
                     .toList();
 
-                return ListView.builder(
+                return ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 4),
                   itemCount: playlists.length,
                   itemBuilder: (context, index) {
                     final playlist = playlists[index];
 
-                    return ListTile(
+                    return ListTile(  
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => PlaylistDetailScreen(
+                              playlist: playlist,
+                            ),
+                          ),
+                        );
+                      },
                         title: Text(playlist.title,
                             style: GoogleFonts.inter(
                                 color: Colors.white, fontSize: 16)),

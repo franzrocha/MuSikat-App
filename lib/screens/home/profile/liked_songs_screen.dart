@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -89,7 +88,6 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                   color: Colors.white.withOpacity(0.5),
                                 ),
                               ),
-                              
                               leading: Container(
                                 width: 50,
                                 height: 50,

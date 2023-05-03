@@ -4,7 +4,6 @@ import 'package:musikat_app/utils/exports.dart';
 
 class PlaylistController with ChangeNotifier {
   Stream<List<PlaylistModel>> getPlaylistStream() {
-
     CollectionReference<Map<String, dynamic>> playlistsRef =
         FirebaseFirestore.instance.collection('playlists');
 
@@ -13,5 +12,16 @@ class PlaylistController with ChangeNotifier {
         return PlaylistModel.fromDocumentSnap(doc);
       }).toList();
     });
+  }
+
+  Future<void> addSongToPlaylist(String playlistId, String songId) async {
+    DocumentReference playlistRef =
+        FirebaseFirestore.instance.collection('playlists').doc(playlistId);
+    DocumentSnapshot playlistSnap = await playlistRef.get();
+    PlaylistModel playlist = PlaylistModel.fromDocumentSnap(playlistSnap);
+
+    playlist.songs.add(songId);
+
+    await playlistRef.update(playlist.json);
   }
 }

@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
+import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/utils/exports.dart';
+import 'package:musikat_app/widgets/owned_playlist.dart';
 
 class SongBottomField extends StatefulWidget {
   final String songId;
@@ -18,6 +20,7 @@ class SongBottomField extends StatefulWidget {
 class _SongBottomFieldState extends State<SongBottomField> {
   final SongsController _songCon = SongsController();
   final LikedSongsController _likedCon = LikedSongsController();
+  final PlaylistController _playlistCon = PlaylistController();
   bool _isLiked = false;
 
   @override
@@ -84,7 +87,21 @@ class _SongBottomFieldState extends State<SongBottomField> {
                   "Add to playlist",
                   style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        backgroundColor: musikatColor4,
+                        child: OwnedPlaylist(
+                          playlistCon: _playlistCon,
+                          songId: widget.songId,
+                        )),
+                  );
+                },
               ),
               ListTile(
                 leading: const Icon(
@@ -122,6 +139,9 @@ class _SongBottomFieldState extends State<SongBottomField> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       backgroundColor: musikatColor4,
                       child: SingleChildScrollView(
                         child: Padding(

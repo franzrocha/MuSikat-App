@@ -12,10 +12,18 @@ class UploadDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: musikatBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       title: Center(
         child: Text(
           "Uploading",
-          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold),
+          style: GoogleFonts.inter(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
       content: StreamBuilder<double>(
@@ -36,7 +44,11 @@ class UploadDialog extends StatelessWidget {
                 const SizedBox(height: 10.0),
                 Text(
                   '${uploadPercent.toStringAsFixed(0)}% uploaded',
-                  style: GoogleFonts.inter(fontSize: 15),
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 10.0),
                 TextButton(
@@ -50,7 +62,7 @@ class UploadDialog extends StatelessWidget {
                   ),
                   child: Text(
                     'Cancel',
-                    style: GoogleFonts.inter(color: Colors.black),
+                    style: GoogleFonts.inter(color: Colors.white),
                   ),
                 ),
               ],
@@ -82,14 +94,15 @@ class SliderDialog extends StatelessWidget {
     this.valueSuffix = '',
     required this.value,
     required this.stream,
-    required this.onChanged, required this.context,
+    required this.onChanged,
+    required this.context,
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50), // Set border radius
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
       backgroundColor: musikatBackgroundColor,
       title: Text(

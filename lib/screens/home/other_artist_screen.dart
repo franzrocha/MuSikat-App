@@ -118,7 +118,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                           children: [
                             const SizedBox(width: 30.0),
                             SizedBox(
-                              width: 190.0,
+                              width: 130.0,
                               child: FollowButton(
                                 isFollowing: isFollowing,
                                 onFollowChanged: (bool isFollowing) {
@@ -135,7 +135,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                             ),
                             const SizedBox(width: 15.0),
                             SizedBox(
-                              width: 190.0,
+                              width: 130.0,
                               child: ElevatedButton(
                                 onPressed: () {},
                                 child: const Text('Support'),

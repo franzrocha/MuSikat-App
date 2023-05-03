@@ -26,6 +26,7 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
         showLogo: false,
       ),
       body: ListView.builder(
+            physics: const BouncingScrollPhysics(),
         itemCount: genres.length,
         itemBuilder: (BuildContext context, int index) {
           String genre = genres[index];

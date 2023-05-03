@@ -50,13 +50,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class CustomSliverBar extends StatelessWidget {
-  const CustomSliverBar({
-    Key? key,
-    required this.title,
-    this.caption,
-    this.image,
-    this.linearGradient
-  }) : super(key: key);
+  const CustomSliverBar(
+      {Key? key,
+      required this.title,
+      this.caption,
+      this.image,
+      this.linearGradient})
+      : super(key: key);
 
   final String title;
   final String? caption;
@@ -111,13 +111,16 @@ class CustomSliverBar extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ), 
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Text(

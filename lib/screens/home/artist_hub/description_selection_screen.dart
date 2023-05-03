@@ -74,6 +74,7 @@ class _DescriptionSelectionScreenState
           const SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
+               physics: const BouncingScrollPhysics(),
               itemCount: descriptions.length,
               itemBuilder: (BuildContext context, int index) {
                 String description = descriptions[index];

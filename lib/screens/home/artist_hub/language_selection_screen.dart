@@ -35,6 +35,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         showLogo: false,
       ),
       body: ListView.builder(
+            physics: const BouncingScrollPhysics(),
         itemCount: languages.length,
         itemBuilder: (BuildContext context, int index) {
           String language = languages[index];
