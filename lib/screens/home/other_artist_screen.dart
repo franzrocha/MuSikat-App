@@ -2,7 +2,8 @@
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/screens/home/music_player.dart';
+import 'package:musikat_app/music_player/music_player.dart';
+
 import 'package:musikat_app/utils/exports.dart';
 
 class ArtistsProfileScreen extends StatefulWidget {

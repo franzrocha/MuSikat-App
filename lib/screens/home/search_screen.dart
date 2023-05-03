@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/screens/home/music_player.dart';
+import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 
@@ -233,7 +233,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             builder: (BuildContext context) {
                                               return SingleChildScrollView(
                                                 child: SongBottomField(
-                                                  songId: song.songId,
+                                                  song: song,
                                                 ),
                                               );
                                             });

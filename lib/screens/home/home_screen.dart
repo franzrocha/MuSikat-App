@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/screens/home/music_player.dart';
+import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
 
 import 'package:musikat_app/utils/exports.dart';
@@ -69,34 +69,43 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => MusicPlayerScreen(
+                                          songs: songs,
+                                          initialIndex:
+                                              limitedSongs.indexOf(song),
+                                        )),
+                              ),
+                              onLongPress: () {
+                                showModalBottomSheet(
+                                    backgroundColor: musikatColor4,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SingleChildScrollView(
+                                        child: SongBottomField(
+                                          song: song,
+                                        ),
+                                      );
+                                    });
+                              },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              MusicPlayerScreen(
-                                                songs: songs,
-                                                initialIndex:
-                                                    limitedSongs.indexOf(song),
-                                              )),
-                                    ),
-                                    child: Container(
-                                      width: 160,
-                                      height: 160,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: const Color.fromARGB(
-                                              255, 124, 131, 127),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: BorderRadius.circular(5),
-                                        image: DecorationImage(
-                                          image: NetworkImage(song.albumCover),
-                                          fit: BoxFit.cover,
-                                        ),
+                                  Container(
+                                    width: 160,
+                                    height: 160,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 124, 131, 127),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                        image: NetworkImage(song.albumCover),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),

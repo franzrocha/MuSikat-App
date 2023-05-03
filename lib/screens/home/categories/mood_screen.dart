@@ -5,7 +5,7 @@ import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
-import '../music_player.dart';
+import '../../../music_player/music_player.dart';
 
 class MoodsScreen extends StatefulWidget {
   const MoodsScreen({Key? key}) : super(key: key);

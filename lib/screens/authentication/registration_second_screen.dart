@@ -147,6 +147,7 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
           color: musikatColor, borderRadius: BorderRadius.circular(60)),
       child: TextButton(
         onPressed: () {
+          
           if (isFieldEmpty()) {
             ToastMessage.show(context, 'Please fill in all fields');
           } else if (!checkMe) {
