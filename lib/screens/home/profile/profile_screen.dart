@@ -4,6 +4,7 @@ import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/profile/account_info.dart';
 import 'package:musikat_app/screens/home/profile/liked_songs_screen.dart';
 import 'package:musikat_app/screens/home/profile/playlist_screen.dart';
+import 'package:musikat_app/screens/home/profile/about_us.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/utils/exports.dart';
 
@@ -85,7 +86,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 TileList(
                   icon: Icons.info,
                   title: 'About us',
-                  ontap: () {},
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const AboutUsScreen()),
+                    );
+                  },
                 ),
                 TileList(
                   icon: Icons.logout,
