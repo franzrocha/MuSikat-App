@@ -57,7 +57,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   @override
   void dispose() {
     player.dispose();
-    // musicHandler.dispose();
     super.dispose();
   }
 
@@ -113,26 +112,23 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Column(
-                children: [
-                  Container(
-                    width: 320,
-                    height: 320,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      border: Border.all(
-                        color: const Color.fromARGB(255, 124, 131, 127),
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image:
-                            NetworkImage(widget.songs[currentIndex].albumCover),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+              Container(
+  width: MediaQuery.of(context).size.width * 0.8, // set width to 90% of screen width
+  height: MediaQuery.of(context).size.width * 0.8, // set height to 90% of screen width
+  // other properties
+
+                decoration: BoxDecoration(
+                  color: musikatBackgroundColor,
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 124, 131, 127),
+                    width: 1.0,
                   ),
-                ],
+                  borderRadius: BorderRadius.circular(5),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.songs[currentIndex].albumCover),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 23, right: 23, top: 25),
@@ -183,7 +179,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   IconButton(
                     icon: const Icon(
                       Icons.volume_up,
-                      size: 35,
+                      size: 25,
                       color: Colors.white,
                     ),
                     onPressed: () {
@@ -202,8 +198,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       );
                     },
                   ),
-                  const SizedBox(width: 35),
-                  
+                  const SizedBox(width: 25),
                   InkWell(
                     onTap: () async {
                       await playPrevious();
@@ -214,7 +209,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 30),
+                  const SizedBox(width: 25),
                   StreamBuilder<PlayerState>(
                     stream: player.playerStateStream,
                     builder: (context, snapshot) {
@@ -302,7 +297,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       }
                     },
                   ),
-                  const SizedBox(width: 30),
+                  const SizedBox(width: 25),
                   InkWell(
                     onTap: () {
                       playNext();
@@ -313,7 +308,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 40),
+                  const SizedBox(width: 30),
                   GestureDetector(
                     onTap: () async {
                       setState(() {
@@ -340,7 +335,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           ? FontAwesomeIcons.solidHeart
                           : FontAwesomeIcons.heart,
                       color: _isLiked ? Colors.red : Colors.white,
-                      size: 30,
+                      size: 25,
                     ),
                   ),
                 ],

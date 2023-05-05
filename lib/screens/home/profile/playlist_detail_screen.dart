@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/utils/exports.dart';
 
@@ -27,9 +28,34 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
             image: widget.playlist.playlistImg,
             title: widget.playlist.title,
             caption: widget.playlist.description,
-          
+            children: [
+              FutureBuilder<UserModel>(
+                future:
+                    _playlistCon.getUserForPlaylist(widget.playlist.playlistId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Colors.white24,
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    UserModel user = snapshot.data!;
+                    return Row(
+                      children: [
+                        AvatarImage(uid: user.uid, radius: 12),
+                        const SizedBox(width: 5),
+                        Text(user.username,
+                            style: GoogleFonts.inter(
+                                fontSize: 12, color: Colors.white)),
+                      ],
+                    );
+                  }
+                },
+              ),
+            ],
           ),
-        
           SliverFillRemaining(
             child: FutureBuilder<List<SongModel>>(
               future:
@@ -53,9 +79,12 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                           song.title.length > 35
                               ? '${song.title.substring(0, 35)}..'
                               : song.title,
+                              
                           style: GoogleFonts.inter(
                               fontSize: 16, color: Colors.white),
+                              maxLines: 1,
                         ),
+                        
                         subtitle: Text(
                           song.artist,
                           style: GoogleFonts.inter(
@@ -74,7 +103,7 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                             ),
                           ),
                         ),
-                        onTap: (){
+                        onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => MusicPlayerScreen(

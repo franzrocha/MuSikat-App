@@ -50,22 +50,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class CustomSliverBar extends StatelessWidget {
-  const CustomSliverBar(
-      {Key? key,
-      required this.title,
-      this.caption,
-      this.image,
-      this.linearGradient})
-      : super(key: key);
+  const CustomSliverBar({
+    Key? key,
+    required this.title,
+    this.caption,
+    this.image,
+    this.linearGradient,
+    this.actions,
+    this.children,
+  }) : super(key: key);
 
   final String title;
   final String? caption;
   final String? image;
   final LinearGradient? linearGradient;
+  final List<Widget>? actions;
+  final List<Widget>? children;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      actions: actions,
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);
@@ -122,13 +127,16 @@ class CustomSliverBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5),
                   Text(
                     caption ?? "",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white,
                     ),
+                  ),
+                    const SizedBox(height: 6),
+                  Row(
+                    children: children ?? [],
                   ),
                   const SizedBox(height: 10),
                 ],

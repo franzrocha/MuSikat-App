@@ -68,19 +68,22 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                   itemBuilder: (context, index) {
                     final playlist = playlists[index];
 
-                    return ListTile(  
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => PlaylistDetailScreen(
-                              playlist: playlist,
+                    return ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PlaylistDetailScreen(
+                                playlist: playlist,
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
                         title: Text(playlist.title,
+                            maxLines: 1,
                             style: GoogleFonts.inter(
-                                color: Colors.white, fontSize: 16)),
+                              color: Colors.white,
+                              fontSize: 16,
+                            )),
                         leading: Container(
                           width: 50,
                           height: 50,

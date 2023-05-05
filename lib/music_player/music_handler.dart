@@ -12,14 +12,12 @@ class MusicHandler with ChangeNotifier {
   int currentIndex = 0;
   List<SongModel> songs = [];
 
-  MediaItem _createMediaItem(SongModel song) {
-    return MediaItem(
-      id: song.songId,
-      title: song.title,
-      artist: song.artist,
-      artUri: Uri.parse(song.albumCover),
-    );
-  }
+  MediaItem _createMediaItem(SongModel song) => MediaItem(
+        id: song.songId,
+        title: song.title,
+        artist: song.artist,
+        artUri: Uri.parse(song.albumCover),
+      );
 
   Future<void> setAudioSource(AudioPlayer player, SongModel song) async {
     final source = AudioSource.uri(
@@ -48,14 +46,10 @@ class MusicHandler with ChangeNotifier {
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
 
-    return [
-      if (duration.inHours > 0) hours,
-      minutes,
-      seconds,
-    ].join(":");
+    return [if (duration.inHours > 0) hours, minutes, seconds].join(":");
   }
 
-  //getter
+  // Getters
   bool get getIsPlaying => isPlaying;
   Duration get getDuration => duration;
   Duration get getPosition => position;

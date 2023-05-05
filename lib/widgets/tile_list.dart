@@ -17,8 +17,8 @@ class TileList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 75,
-      width: 350,
+      height: MediaQuery.of(context).size.height * 0.1,
+      width: MediaQuery.of(context).size.width * 0.9,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
@@ -36,7 +36,7 @@ class TileList extends StatelessWidget {
             ),
             title: Text(
               title,
-              style: GoogleFonts.inter(fontSize: 17, color: Colors.white),
+              style: GoogleFonts.inter(fontSize: 15, color: Colors.white),
             ),
             subtitle: subtitle != null
                 ? Text(

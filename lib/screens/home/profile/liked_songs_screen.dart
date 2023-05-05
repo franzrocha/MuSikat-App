@@ -77,11 +77,12 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                   );
                                 },
                                 title: Text(
-                                  songData.title.length > 35
-                                      ? '${songData.title.substring(0, 35)}..'
+                                  songData.title.length > 30
+                                      ? '${songData.title.substring(0, 30)}..'
                                       : songData.title,
                                   style: GoogleFonts.inter(
                                       fontSize: 16, color: Colors.white),
+                                      maxLines: 1,
                                 ),
                                 subtitle: Text(
                                   songData.artist,

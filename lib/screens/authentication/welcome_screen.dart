@@ -58,10 +58,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   children: [
                     Center(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 20),
+                            padding: const EdgeInsets.only(top: 10),
                             child: Image.asset(
                               "assets/images/musikat_logo.png",
                               width: 141,
@@ -73,11 +72,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             style: GoogleFonts.montserrat(
                               color: Colors.white,
                               fontSize: 38,
-                              height: 2,
+                              height: 1.5,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Text(
                             "LISTEN TO YOUR FAVOURITE \n OPM TRACKS HERE ",
                             textAlign: TextAlign.center,
@@ -85,7 +84,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                            ),  
+                            ),
                           ),
                         ],
                       ),
