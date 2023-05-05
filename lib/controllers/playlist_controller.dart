@@ -59,4 +59,26 @@ class PlaylistController with ChangeNotifier {
 
     return user;
   }
+
+  Future<void> deletePlaylist(String playlistId) async {
+    await FirebaseFirestore.instance
+        .collection('playlists')
+        .doc(playlistId)
+        .delete();
+  }
+
+  Future<int> getSongCount(String playlistId) async {
+    final snap = await FirebaseFirestore.instance
+        .collection('playlists')
+        .doc(playlistId)
+        .get();
+    final data = snap.data();
+    if (data != null && data['songs'] != null) {
+      return List<String>.from(data['songs']).length;
+    } else {
+      return 0;
+    }
+  }
+
+  
 }

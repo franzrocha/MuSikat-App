@@ -25,7 +25,7 @@ class PlaylistModel {
       title: json['title'] ?? '',
       description: json['description'],
       playlistImg: json['playlistImg'],
-      createdAt: json['created_at']?.toDate() ?? DateTime.now(),
+      createdAt: json['createdAt']?.toDate() ?? DateTime.now(),
       songs: (json['songs'] as List<dynamic>?)?.cast<String>() ?? [],
       uid: json['uid'] ?? '',
     );
@@ -40,4 +40,6 @@ class PlaylistModel {
         'songs': songs,
         'uid': uid,
       };
+
+  
 }

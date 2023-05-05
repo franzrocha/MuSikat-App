@@ -116,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
       style: GoogleFonts.inter(
         color: Colors.grey,
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -127,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       user?.username ?? '',
       style: GoogleFonts.inter(
         color: Colors.white,
-        fontSize: 25,
+        fontSize: 22,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -140,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           SizedBox(
             width: 180,
-            height: 180,
+            height: 160,
             child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
           ),
         ],

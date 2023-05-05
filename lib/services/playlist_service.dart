@@ -79,4 +79,51 @@ class PlaylistService {
     }
     Navigator.pop(context);
   }
+
+  static Future<void> editPlaylist(
+      BuildContext context,
+      PlaylistModel playlist,
+      TextEditingController titleCon,
+      TextEditingController descriptionCon,
+      dynamic selectedPlaylistCover) async {
+    try {
+      // Create a new Firestore instance
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      final String title = titleCon.text.trim();
+      final String description = descriptionCon.text.trim();
+
+      String playlistImg = playlist.playlistImg;
+      if (selectedPlaylistCover != null) {
+        final String fileName = selectedPlaylistCover!.path.split('/').last;
+        final Reference storageRef = FirebaseStorage.instance
+            .ref('users/${playlist.uid}/playlistCover/$fileName');
+
+        final UploadTask uploadTask =
+            storageRef.putFile(selectedPlaylistCover!);
+        final TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+
+        playlistImg = await taskSnapshot.ref.getDownloadURL();
+      }
+
+      // Set the title field to the existing title if it's null or empty
+      final String playlistTitle = title.isNotEmpty ? title : playlist.title;
+
+      // Set the description field to the existing description if it's null or empty
+      final String playlistDescription =
+          description.isNotEmpty ? description : playlist.description ?? '';
+
+      // Update the playlist's fields in Firestore
+      await firestore.collection('playlists').doc(playlist.playlistId).update({
+        'title': playlistTitle,
+        'description': playlistDescription,
+        'playlistImg': playlistImg,
+      });
+
+      ToastMessage.show(context, 'Playlist updated successfully');
+    } catch (e) {
+      ToastMessage.show(context, 'Error editing playlist: $e');
+    }
+    Navigator.pop(context);
+  }
 }

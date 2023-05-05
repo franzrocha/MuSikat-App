@@ -95,9 +95,13 @@ class _NavBarState extends State<NavBar> {
               selectedItemColor: Colors.white,
               unselectedItemColor: Colors.white54,
               currentIndex: pageIndex,
-              elevation: 4,
+              elevation: 2,
               showUnselectedLabels: false,
               showSelectedLabels: true,
+              selectedLabelStyle: GoogleFonts.inter(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
               onTap: (int index) {
                 if (index != 2) {
                   setState(() {
@@ -113,8 +117,9 @@ class _NavBarState extends State<NavBar> {
               },
               items: [
                 const BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.house),
+                  icon: FaIcon(FontAwesomeIcons.house,   size: 20,),
                   label: 'Home',
+                  
                 ),
                 const BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.music),
@@ -152,7 +157,7 @@ class _NavBarState extends State<NavBar> {
                 const BottomNavigationBarItem(
                   icon: Icon(
                     Icons.person,
-                    size: 35,
+                    size: 30,
                   ),
                   label: 'Profile',
                 ),

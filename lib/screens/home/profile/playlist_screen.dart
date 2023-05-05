@@ -4,6 +4,7 @@ import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/screens/home/profile/create_playlist_screen.dart';
 import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
+import 'package:musikat_app/widgets/playlist_bottom_field.dart';
 
 class PlaylistScreen extends StatefulWidget {
   const PlaylistScreen({Key? key}) : super(key: key);
@@ -69,6 +70,16 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     final playlist = playlists[index];
 
                     return ListTile(
+                        onLongPress: () {
+                          showModalBottomSheet(
+                              backgroundColor: musikatColor4,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SingleChildScrollView(
+                                  child: PlaylistBottomField(playlist: playlist,)
+                                );
+                              });
+                        },
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
