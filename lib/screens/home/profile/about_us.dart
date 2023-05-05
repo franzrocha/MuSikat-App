@@ -18,58 +18,52 @@ class AboutUsScreen extends StatelessWidget {
         showLogo: false,
       ),
       backgroundColor: musikatBackgroundColor,
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: const [
                   Text(
                     'Meet the Team.',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 25,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                   Text(
                     'We are a group of passionate individuals who love music and technology. Our goal is to create an app that helps promote Filipino musicians to a wider audience.',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       color: Colors.grey,
                     ),
+                    textAlign: TextAlign.justify,
                   ),
                 ],
               ),
             ),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                children: [
-                  _DeveloperTile(
-                      name: 'Franz Lesly Rocha',
-                      role: 'Lead Developer',
-                      description:
-                          'Franz is an experienced mobile app developer who specializes in using Flutter to build high-quality, user-friendly apps. He has a passion for music and believes that the Musikat app can help promote Filipino musicians to a wider audience.',
-                      photoUrl: 'assets/images/furanzu.jpg'),
-                  _DeveloperTile(
-                      name: 'Hazel Lopez',
-                      role: 'UI/UX Designer',
-                      description:
-                          'Hazel is a talented designer who loves creating beautiful and intuitive interfaces that enhance the user experience. She worked closely with the development team to ensure that the Musikat app looks and feels great for users.',
-                      photoUrl: 'assets/images/hazel.jpg'),
-                  _DeveloperTile(
-                      name: 'Fabian Miguel Canizares',
-                      role: 'Marketing Specialist',
-                      description:
-                          'Fabian is a seasoned marketer with a keen eye for branding and promotion. He helped develop the marketing strategy for the Musikat app and continues to work closely with the team to ensure that it reaches as many Filipino musicians as possible.',
-                      photoUrl: 'assets/images/fabian.jpg'),
-                ],
-              ),
-            ),
+            const DeveloperTile(
+                name: 'Franz Lesly Rocha',
+                role: 'Lead Developer',
+                description:
+                    'Franz is a mobile app developer who specializes in using Flutter to build high-quality, user-friendly apps. He has a passion for music and believes that the Musikat app can help promote Filipino musicians to a wider audience.',
+                photoUrl: 'assets/images/furanzu.jpg'),
+            const DeveloperTile(
+                name: 'Fabian Miguel Canizares',
+                role: 'Software Developer',
+                description:
+                    'Fabian is a mobile app developer who also happens to be a music enthusiast. He has a creative approach to problem-solving and enjoys brainstorming innovative solutions with his team. In addition to his technical skills, Fabian is also a great communicator and collaborator, making him a valuable asset of the team.',
+                photoUrl: 'assets/images/fabian.jpg'),
+            const DeveloperTile(
+                name: 'Hazel Lopez',
+                role: 'UI/UX Designer',
+                description:
+                    'Hazel is a talented designer who loves creating beautiful and intuitive interfaces that enhance the user experience. She worked closely with the development team to ensure that the Musikat app looks and feels great for users.',
+                photoUrl: 'assets/images/hazel.jpg'),
           ],
         ),
       ),
@@ -77,8 +71,8 @@ class AboutUsScreen extends StatelessWidget {
   }
 }
 
-class _DeveloperTile extends StatelessWidget {
-  const _DeveloperTile({
+class DeveloperTile extends StatelessWidget {
+  const DeveloperTile({
     Key? key,
     required this.name,
     required this.role,
@@ -94,32 +88,33 @@ class _DeveloperTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
-        color: Color(0xff353434),
+        color: const Color(0xff353434),
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
             blurRadius: 10,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(right: 20, left: 10), // add left padding
+              padding: const EdgeInsets.only(right: 20, left: 10),
               child: Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
                   image: DecorationImage(
-                    image: AssetImage(photoUrl), // updated image path
+                    image: AssetImage(photoUrl),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -127,14 +122,14 @@ class _DeveloperTile extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(right: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Text(
                       name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -142,20 +137,21 @@ class _DeveloperTile extends StatelessWidget {
                     ),
                     Text(
                       role,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       description,
-                      style: TextStyle(
+                       textAlign: TextAlign.justify,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                   ],
                 ),
               ),

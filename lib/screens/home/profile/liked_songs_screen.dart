@@ -28,106 +28,105 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
             caption: 'All your liked songs in one place.',
           ),
           SliverFillRemaining(
-           
-              child: FutureBuilder<List<SongModel>>(
-                future: _likedCon.getLikedSongs(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: LoadingIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else {
-                    List<SongModel> likedSongs = snapshot.data!;
-            
-                    return likedSongs.isEmpty
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 70),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 25),
-                                  child: Image.asset("assets/images/no_music.png",
-                                      width: 230, height: 230),
+            child: FutureBuilder<List<SongModel>>(
+              future: _likedCon.getLikedSongs(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: LoadingIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  List<SongModel> likedSongs = snapshot.data!;
+
+                  return likedSongs.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 70),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Image.asset("assets/images/no_music.png",
+                                    width: 230, height: 230),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                "No liked songs yet",
+                                style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: likedSongs.length,
+                          itemBuilder: (context, index) {
+                            SongModel songData = likedSongs[index];
+                            return ListTile(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            songs: likedSongs,
+                                            initialIndex: index,
+                                          )),
+                                );
+                              },
+                              title: Text(
+                                songData.title.length > 30
+                                    ? '${songData.title.substring(0, 25)}..'
+                                    : songData.title,
+                                style: GoogleFonts.inter(
+                                    fontSize: 16, color: Colors.white),
+                                maxLines: 1,
+                              ),
+                              subtitle: Text(
+                                songData.artist,
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  color: Colors.white.withOpacity(0.5),
                                 ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  "No liked songs yet",
-                                  style: GoogleFonts.inter(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                              ),
+                              leading: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                        songData.albumCover),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ],
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: likedSongs.length,
-                            itemBuilder: (context, index) {
-                              SongModel songData = likedSongs[index];
-                              return ListTile(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => MusicPlayerScreen(
-                                              songs: likedSongs,
-                                              initialIndex: index,
-                                            )),
+                              ),
+                              trailing: IconButton(
+                                onPressed: () async {
+                                  String uid =
+                                      FirebaseAuth.instance.currentUser!.uid;
+                                  await _likedCon.removeLikedSong(
+                                    uid,
+                                    songData.songId,
                                   );
+                                  setState(() {
+                                    likedSongs.removeAt(index);
+                                  });
+                                  ToastMessage.show(
+                                      context, 'Song removed from liked songs');
                                 },
-                                title: Text(
-                                  songData.title.length > 30
-                                      ? '${songData.title.substring(0, 30)}..'
-                                      : songData.title,
-                                  style: GoogleFonts.inter(
-                                      fontSize: 16, color: Colors.white),
-                                      maxLines: 1,
+                                icon: const Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
                                 ),
-                                subtitle: Text(
-                                  songData.artist,
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.white.withOpacity(0.5),
-                                  ),
-                                ),
-                                leading: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: CachedNetworkImageProvider(songData.albumCover),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                trailing: IconButton(
-                                  onPressed: () async {
-                                    String uid =
-                                        FirebaseAuth.instance.currentUser!.uid;
-                                    await _likedCon.removeLikedSong(
-                                      uid,
-                                      songData.songId,
-                                    );
-                                    setState(() {
-                                      likedSongs.removeAt(index);
-                                    });
-                                    ToastMessage.show(
-                                        context, 'Song removed from liked songs');
-                                  },
-                                  icon: const Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                  }
-                },
-              ),
+                              ),
+                            );
+                          },
+                        );
+                }
+              },
             ),
-          
+          ),
         ],
       ),
     );
