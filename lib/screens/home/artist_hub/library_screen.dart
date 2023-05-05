@@ -20,8 +20,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
-      body: CustomScrollView(
-        slivers: [
+      body: CustomScrollView(slivers: [
         CustomSliverBar(
           image: libraryPic,
           title: 'Library',

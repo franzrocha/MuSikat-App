@@ -4,6 +4,7 @@ class SongModel {
   final String songId, title, artist, fileName, audio, albumCover, genre, uid;
   final DateTime createdAt;
   final List<String> writers, producers, languages, description;
+  final int playCount; // Added field
 
   SongModel({
     required this.songId,
@@ -19,7 +20,12 @@ class SongModel {
     required this.uid,
     required this.languages,
     required this.description,
+    required this.playCount, // Added field
   });
+
+  set rank(int rank) {}
+
+  set isLiked(bool isLiked) {}
 
   static SongModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
@@ -39,6 +45,7 @@ class SongModel {
       languages: (json['languages'] as List<dynamic>?)?.cast<String>() ?? [],
       description:
           (json['description'] as List<dynamic>?)?.cast<String>() ?? [],
+      playCount: json['playCount'] ?? 0,
     );
   }
 
@@ -56,8 +63,8 @@ class SongModel {
         'uid': uid,
         'languages': languages,
         'description': description,
+        'playCount': playCount,
       };
-
 
   static Future<List<SongModel>> getSongs() async {
     List<SongModel> songs = [];

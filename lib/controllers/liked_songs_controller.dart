@@ -80,24 +80,24 @@ class LikedSongsController with ChangeNotifier {
   }
 
   Future<List<SongModel>> getLikedSongs() async {
-  List<SongModel> likedSongs = [];
-  try {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
-    final querySnapshot = await collectionRef.where('uid', isEqualTo: uid).get();
+    List<SongModel> likedSongs = [];
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
+      final querySnapshot =
+          await collectionRef.where('uid', isEqualTo: uid).get();
 
-    for (final doc in querySnapshot.docs) {
-      final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
-      for (final songId in songIdList) {
-        final song = await _songCon.getSongById(songId);
-        likedSongs.add(song);
+      for (final doc in querySnapshot.docs) {
+        final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
+        for (final songId in songIdList) {
+          final song = await _songCon.getSongById(songId);
+          likedSongs.add(song);
+        }
       }
+      return likedSongs;
+    } catch (e) {
+      print(e.toString());
+      return likedSongs;
     }
-    return likedSongs;
-  } catch (e) {
-    print(e.toString());
-    return likedSongs;
   }
-}
-
 }

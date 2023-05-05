@@ -62,8 +62,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                 return const Center(child: LoadingIndicator());
               } else {
                 return SingleChildScrollView(
-                  child: Column(
-                    children: [
+                  child: Column(children: [
                     SizedBox(
                       height: 200,
                       child: Stack(

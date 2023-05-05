@@ -7,7 +7,6 @@ import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 
-
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
   const NavBar({Key? key}) : super(key: key);

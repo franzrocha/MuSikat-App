@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -35,18 +36,18 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   bool isLoadingAudio = false;
 
   bool _isLiked = false;
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
     super.initState();
     currentIndex = widget.initialIndex ?? 0;
-    musicHandler.setAudioSource(player, widget.songs[currentIndex]);
+    musicHandler.setAudioSource(player, widget.songs[currentIndex], uid);
 
     checkIfSongIsLiked();
   }
 
   void checkIfSongIsLiked() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
     bool isLiked = await likedCon.isSongLikedByUser(
         widget.songs[currentIndex].songId, uid);
     setState(() {
@@ -72,10 +73,12 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
     try {
       checkIfSongIsLiked();
-      await musicHandler.setAudioSource(player, widget.songs[currentIndex]);
+      await musicHandler.setAudioSource(
+          player, widget.songs[currentIndex], uid);
     } on PlayerInterruptedException catch (_) {
       await Future.delayed(const Duration(milliseconds: 500));
-      await musicHandler.setAudioSource(player, widget.songs[currentIndex]);
+      await musicHandler.setAudioSource(
+          player, widget.songs[currentIndex], uid);
     }
   }
 
@@ -91,10 +94,12 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
     try {
       checkIfSongIsLiked();
-      await musicHandler.setAudioSource(player, widget.songs[currentIndex]);
+      await musicHandler.setAudioSource(
+          player, widget.songs[currentIndex], uid);
     } on PlayerInterruptedException catch (_) {
       await Future.delayed(const Duration(milliseconds: 500));
-      await musicHandler.setAudioSource(player, widget.songs[currentIndex]);
+      await musicHandler.setAudioSource(
+          player, widget.songs[currentIndex], uid);
     }
   }
 
@@ -112,178 +117,187 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: Column(children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.width * 0.8,
-                    decoration: BoxDecoration(
-                      color: musikatBackgroundColor,
-                      border: Border.all(
-                        color: const Color.fromARGB(255, 124, 131, 127),
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image:
-                            NetworkImage(widget.songs[currentIndex].albumCover),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 23, right: 23, top: 25),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: MarqueeText(
-                            text: TextSpan(
-                              text: widget.songs[currentIndex].title,
-                            ),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.white),
-                            marqueeDirection: MarqueeDirection.rtl,
-                            speed: 25,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 23),
-                    child: Row(
-                      children: [
-                        Text(
-                          widget.songs[currentIndex].artist,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 15,
-                              color: Colors.white.withOpacity(0.5)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  SliderControls(player: player),
-                  const SizedBox(height: 10),
-                  Row(
+                child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.volume_up,
-                          size: 25,
-                          color: Colors.white,
+                      Container(
+                        width: MediaQuery.of(context).size.width *
+                            0.8, // set width to 90% of screen width
+                        height: MediaQuery.of(context).size.width *
+                            0.8, // set height to 90% of screen width
+                        // other properties
+
+                        decoration: BoxDecoration(
+                          color: musikatBackgroundColor,
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 124, 131, 127),
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                widget.songs[currentIndex].albumCover),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => SliderDialog(
-                              title: "Adjust volume",
-                              divisions: 100,
-                              min: 0,
-                              max: 1,
-                              value: player.volume,
-                              stream: player.volumeStream,
-                              onChanged: player.setVolume,
-                              context: context,
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 23, right: 23, top: 25),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: MarqueeText(
+                                text: TextSpan(
+                                  text: widget.songs[currentIndex].title,
+                                ),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.white),
+                                marqueeDirection: MarqueeDirection.rtl,
+                                speed: 25,
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 25),
-                      InkWell(
-                        onTap: () async {
-                          await playPrevious();
-                        },
-                        child: const FaIcon(
-                          FontAwesomeIcons.backwardStep,
-                          size: 30,
-                          color: Colors.white,
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 25),
-                      StreamBuilder<PlayerState>(
-                        stream: player.playerStateStream,
-                        builder: (context, snapshot) {
-                          final playerState = snapshot.data;
-                          final processingState = playerState?.processingState;
-                          final playing = playerState?.playing;
-                          if (processingState == ProcessingState.loading ||
-                              processingState == ProcessingState.buffering) {
-                            return Container(
-                              margin: const EdgeInsets.all(9.0),
-                              width: 50,
-                              height: 50,
-                              child: const LoadingIndicator(),
-                            );
-                          } else if (playing != true) {
-                            return playButton();
-                          } else if (processingState !=
-                              ProcessingState.completed) {
-                            return pauseButton();
-                          } else if (processingState ==
-                              ProcessingState.completed) {
-                            playNext();
-                            return const LoadingIndicator();
-                          } else {
-                            return pauseButton();
-                          }
-                        },
+                      const SizedBox(
+                        height: 5,
                       ),
-                      const SizedBox(width: 25),
-                      InkWell(
-                        onTap: () {
-                          playNext();
-                        },
-                        child: const FaIcon(
-                          FontAwesomeIcons.forwardStep,
-                          size: 30,
-                          color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 23),
+                        child: Row(
+                          children: [
+                            Text(
+                              widget.songs[currentIndex].artist,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 15,
+                                  color: Colors.white.withOpacity(0.5)),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 30),
-                      GestureDetector(
-                        onTap: () async {
-                          setState(() {
-                            _isLiked = !_isLiked;
-                          });
-                          String uid = FirebaseAuth.instance.currentUser!.uid;
-                          if (_isLiked) {
-                            await likedCon.addLikedSong(
-                              uid,
-                              widget.songs[currentIndex].songId,
-                            );
-                            ToastMessage.show(
-                                context, 'Song added to liked songs');
-                          } else {
-                            await likedCon.removeLikedSong(
-                              uid,
-                              widget.songs[currentIndex].songId,
-                            );
-                            ToastMessage.show(
-                                context, 'Song removed from liked songs');
-                          }
-                        },
-                        child: FaIcon(
-                          _isLiked
-                              ? FontAwesomeIcons.solidHeart
-                              : FontAwesomeIcons.heart,
-                          color: _isLiked ? Colors.red : Colors.white,
-                          size: 25,
-                        ),
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ],
-                  )
-                ]),
+                      SliderControls(player: player),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.volume_up,
+                              size: 25,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => SliderDialog(
+                                  title: "Adjust volume",
+                                  divisions: 100,
+                                  min: 0,
+                                  max: 1,
+                                  value: player.volume,
+                                  stream: player.volumeStream,
+                                  onChanged: player.setVolume,
+                                  context: context,
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 25),
+                          InkWell(
+                            onTap: () async {
+                              await playPrevious();
+                            },
+                            child: const FaIcon(
+                              FontAwesomeIcons.backwardStep,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 25),
+                          StreamBuilder<PlayerState>(
+                            stream: player.playerStateStream,
+                            builder: (context, snapshot) {
+                              final playerState = snapshot.data;
+                              final processingState =
+                                  playerState?.processingState;
+                              final playing = playerState?.playing;
+                              if (processingState == ProcessingState.loading ||
+                                  processingState ==
+                                      ProcessingState.buffering) {
+                                return Container(
+                                  margin: const EdgeInsets.all(9.0),
+                                  width: 50,
+                                  height: 50,
+                                  child: const LoadingIndicator(),
+                                );
+                              } else if (playing != true) {
+                                return playButton();
+                              } else if (processingState !=
+                                  ProcessingState.completed) {
+                                return pauseButton();
+                              } else if (processingState ==
+                                  ProcessingState.completed) {
+                                playNext();
+                                return const LoadingIndicator();
+                              } else {
+                                return pauseButton();
+                              }
+                            },
+                          ),
+                          const SizedBox(width: 25),
+                          InkWell(
+                            onTap: () {
+                              playNext();
+                            },
+                            child: const FaIcon(
+                              FontAwesomeIcons.forwardStep,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 30),
+                          GestureDetector(
+                            onTap: () async {
+                              setState(() {
+                                _isLiked = !_isLiked;
+                              });
+                              String uid =
+                                  FirebaseAuth.instance.currentUser!.uid;
+                              if (_isLiked) {
+                                await likedCon.addLikedSong(
+                                  uid,
+                                  widget.songs[currentIndex].songId,
+                                );
+                                ToastMessage.show(
+                                    context, 'Song added to liked songs');
+                              } else {
+                                await likedCon.removeLikedSong(
+                                  uid,
+                                  widget.songs[currentIndex].songId,
+                                );
+                                ToastMessage.show(
+                                    context, 'Song removed from liked songs');
+                              }
+                            },
+                            child: FaIcon(
+                              _isLiked
+                                  ? FontAwesomeIcons.solidHeart
+                                  : FontAwesomeIcons.heart,
+                              color: _isLiked ? Colors.red : Colors.white,
+                              size: 25,
+                            ),
+                          ),
+                        ],
+                      )
+                    ]),
               ),
             ),
           ));

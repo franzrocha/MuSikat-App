@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:musikat_app/models/listen_history_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 
-class MusicHandler with ChangeNotifier {
+class MusicHandler with ChangeNotifier, RouteAware {
   final AudioPlayer player = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
@@ -19,7 +22,8 @@ class MusicHandler with ChangeNotifier {
         artUri: Uri.parse(song.albumCover),
       );
 
-  Future<void> setAudioSource(AudioPlayer player, SongModel song) async {
+  Future<void> setAudioSource(
+      AudioPlayer player, SongModel song, String uid) async {
     final source = AudioSource.uri(
       Uri.parse(song.audio),
       tag: _createMediaItem(song),
@@ -30,10 +34,16 @@ class MusicHandler with ChangeNotifier {
       await player.play();
       isPlaying = true;
       notifyListeners();
+
+      // Update the SongModel in the Firestore database
+      await FirebaseFirestore.instance
+          .collection('songs')
+          .doc(song.songId)
+          .update({'playCount': FieldValue.increment(1)});
     } catch (e) {
       if (e is PlatformException) {
         await Future.delayed(const Duration(seconds: 5));
-        await setAudioSource(player, song);
+        await setAudioSource(player, song, uid);
       } else {
         rethrow;
       }
@@ -58,5 +68,33 @@ class MusicHandler with ChangeNotifier {
   void dispose() {
     player.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPush() {
+    player.play();
+    isPlaying = true;
+    notifyListeners();
+  }
+
+  @override
+  void didPopNext() {
+    player.play();
+    isPlaying = true;
+    notifyListeners();
+  }
+
+  @override
+  void didPop() {
+    player.pause();
+    isPlaying = false;
+    notifyListeners();
+  }
+
+  @override
+  void didPushNext() {
+    player.pause();
+    isPlaying = false;
+    notifyListeners();
   }
 }

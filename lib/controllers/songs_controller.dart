@@ -120,6 +120,20 @@ class SongsController with ChangeNotifier {
     return snapshot.docs.length;
   }
 
+  Future<List<SongModel>> getRankedSongs() async {
+    final QuerySnapshot snapshot = await _db
+        .collection('songs')
+        .orderBy('playCount', descending: true)
+        .get();
+
+    final List<SongModel> songs = snapshot.docs
+        .map((DocumentSnapshot documentSnapshot) =>
+            SongModel.fromDocumentSnap(documentSnapshot))
+        .toList();
+
+    return songs;
+  }
+
   Stream<double> get uploadProgressStream =>
       _uploadProgressStreamController.stream;
 
