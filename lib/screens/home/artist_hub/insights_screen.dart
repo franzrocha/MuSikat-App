@@ -3,12 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/artist_hub/song_plays_screen.dart';
+import 'package:musikat_app/screens/home/artist_hub/user_like_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 import '../../../models/song_model.dart';
 
 class InsightsScreen extends StatefulWidget {
   static const String route = 'artists-screen';
+
   const InsightsScreen({Key? key}) : super(key: key);
 
   @override
@@ -17,7 +19,7 @@ class InsightsScreen extends StatefulWidget {
 
 class _InsightsScreenState extends State<InsightsScreen> {
   final SongsController _songCon = SongsController();
-
+  //SongModel? song;
   UserModel? user;
 
   @override
@@ -98,6 +100,13 @@ class _InsightsScreenState extends State<InsightsScreen> {
                   fontSize: 20,
                 ),
               ),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const UserLikeScreen(),
+                  ),
+                );
+              },
             ),
             const Divider(height: 20, indent: 1.0, color: listileColor),
             ListTile(

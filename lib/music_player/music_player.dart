@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
@@ -276,6 +277,11 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                                   uid,
                                   widget.songs[currentIndex].songId,
                                 );
+                                await FirebaseFirestore.instance
+                                    .collection('songs')
+                                    .doc(widget.songs[currentIndex].songId)
+                                    .update(
+                                        {'likeCount': FieldValue.increment(1)});
                                 ToastMessage.show(
                                     context, 'Song added to liked songs');
                               } else {
@@ -283,6 +289,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                                   uid,
                                   widget.songs[currentIndex].songId,
                                 );
+                                await FirebaseFirestore.instance
+                                    .collection('songs')
+                                    .doc(widget.songs[currentIndex].songId)
+                                    .update({
+                                  'likeCount': FieldValue.increment(-1)
+                                });
+
                                 ToastMessage.show(
                                     context, 'Song removed from liked songs');
                               }

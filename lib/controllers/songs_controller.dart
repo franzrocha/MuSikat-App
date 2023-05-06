@@ -134,6 +134,15 @@ class SongsController with ChangeNotifier {
     return songs;
   }
 
+  Future<int> getLikeSongCount() async {
+    final String uid = FirebaseAuth.instance.currentUser!.uid;
+    final CollectionReference songsCollection =
+        FirebaseFirestore.instance.collection('likedSongs');
+    QuerySnapshot snapshot =
+        await songsCollection.where('songId', isEqualTo: uid).get();
+    return snapshot.docs.length;
+  }
+
   Stream<double> get uploadProgressStream =>
       _uploadProgressStreamController.stream;
 

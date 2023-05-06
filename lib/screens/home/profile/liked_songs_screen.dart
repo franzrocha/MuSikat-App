@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -111,6 +112,12 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                   );
                                   setState(() {
                                     likedSongs.removeAt(index);
+                                  });
+                                  await FirebaseFirestore.instance
+                                      .collection('songs')
+                                      .doc(songData.songId)
+                                      .update({
+                                    'likeCount': FieldValue.increment(-1)
                                   });
                                   ToastMessage.show(
                                       context, 'Song removed from liked songs');

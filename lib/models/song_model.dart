@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
 
 class SongModel {
   final String songId, title, artist, fileName, audio, albumCover, genre, uid;
   final DateTime createdAt;
   final List<String> writers, producers, languages, description;
   final int playCount; // Added field
-
+  final int likeCount;
   SongModel({
     required this.songId,
     required this.title,
@@ -21,6 +22,7 @@ class SongModel {
     required this.languages,
     required this.description,
     required this.playCount, // Added field
+    required this.likeCount,
   });
 
   set rank(int rank) {}
@@ -46,6 +48,7 @@ class SongModel {
       description:
           (json['description'] as List<dynamic>?)?.cast<String>() ?? [],
       playCount: json['playCount'] ?? 0,
+      likeCount: json['likeCount'] ?? 0,
     );
   }
 
@@ -64,6 +67,7 @@ class SongModel {
         'languages': languages,
         'description': description,
         'playCount': playCount,
+        'likeCount': likeCount,
       };
 
   static Future<List<SongModel>> getSongs() async {
