@@ -58,33 +58,6 @@ class _EditPlaylistScreenState extends State<EditPlaylistScreen> {
           ),
         ),
         showLogo: false,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Container(
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: const Color(0xfffca311),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: IconButton(
-                        onPressed: _onEditPlaylist,
-                        icon: const Icon(
-                          Icons.check,
-                          size: 25,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 50),
@@ -154,6 +127,11 @@ class _EditPlaylistScreenState extends State<EditPlaylistScreen> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: musikatColor,
+        onPressed: _onEditPlaylist,
+        child: const Icon(Icons.create),
       ),
     );
   }

@@ -93,7 +93,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                             maxLines: 1,
                             style: GoogleFonts.inter(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 15,
                             )),
                         leading: Container(
                           width: 50,

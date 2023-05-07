@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -55,16 +56,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      usernameText(),
-                    ],
-                  ),
-                ],
-              ),
+              usernameText(),
               fullnameText(),
               const SizedBox(height: 10),
               Divider(
@@ -122,35 +114,33 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                       )),
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 30),
-                                    child: InkWell(
-                                      onLongPress: () {
-                                        showModalBottomSheet(
-                                            backgroundColor: musikatColor4,
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return SingleChildScrollView(
-                                                child: SongBottomField(
-                                                  song: latestSong,
-                                                ),
-                                              );
-                                            });
-                                      },
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MusicPlayerScreen(
-                                                      songs: [latestSong],
-                                                    )));
-                                      },
+                              InkWell(
+                                onLongPress: () {
+                                  showModalBottomSheet(
+                                      backgroundColor: musikatColor4,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return SingleChildScrollView(
+                                          child: SongBottomField(
+                                            song: latestSong,
+                                          ),
+                                        );
+                                      });
+                                },
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            songs: [latestSong],
+                                          )));
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 30),
                                       child: Container(
-                                        height: 105,
-                                        width: 110,
+                                        height: 95,
+                                        width: 95,
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                             image: NetworkImage(
@@ -166,35 +156,37 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        latestSong.title.length > 30
-                                            ? '${latestSong.title.substring(0, 30)}...'
-                                            : latestSong.title,
-                                        style: GoogleFonts.inter(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(latestSong.genre,
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          latestSong.title.length > 30
+                                              ? '${latestSong.title.substring(0, 30)}...'
+                                              : latestSong.title,
                                           style: GoogleFonts.inter(
-                                            color: Colors.grey,
-                                            fontSize: 14,
+                                            color: Colors.white,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
-                                          )),
-                                    ],
-                                  ),
-                                ],
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          DateFormat("y")
+                                              .format(latestSong.createdAt),
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           );

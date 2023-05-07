@@ -40,6 +40,4 @@ class PlaylistModel {
         'songs': songs,
         'uid': uid,
       };
-
-  
 }

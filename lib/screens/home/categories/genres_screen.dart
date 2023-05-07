@@ -89,7 +89,7 @@ class _GenresScreenState extends State<GenresScreen> {
                           Text(
                             genre,
                             style: const TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 15,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -137,28 +137,13 @@ class GenreSongsScreen extends StatelessWidget {
                   final genreSongs = snapshot.data!;
 
                   return genreSongs.isEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 100),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 25),
-                                  child: Image.asset(
-                                      "assets/images/no_music.png",
-                                      width: 230,
-                                      height: 230),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                    "No songs found for $genre.",
-                                  style: GoogleFonts.inter(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                      ? Center(
+                          child: Text(
+                            "No songs found for $genre.",
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         )

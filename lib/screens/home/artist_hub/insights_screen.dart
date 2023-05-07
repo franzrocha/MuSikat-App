@@ -54,10 +54,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     trailing: Text(
                       '${snapshot.data}',
                       style: const TextStyle(
-                        fontSize:
-                            20, // change the font size as per your requirement
-                        color: Colors
-                            .white, // change the color as per your requirement
+                        fontSize: 20,
+                        color: Colors.white,
                       ),
                     ),
                     title: Text(
@@ -130,7 +128,11 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<SongModel>> snapshot) {
                   if (snapshot.hasData) {
-                    final List<SongModel> songs = snapshot.data!;
+                    final List<SongModel> songs = snapshot.data!
+                        .where((song) =>
+                            song.uid == FirebaseAuth.instance.currentUser?.uid)
+                        .toList();
+
                     return ListView.separated(
                       itemCount: songs.length > 5 ? 5 : songs.length,
                       separatorBuilder: (BuildContext context, int index) =>

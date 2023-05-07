@@ -85,6 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       return SingleChildScrollView(
                                         child: SongBottomField(
                                           song: song,
+                                          hideEdit: true,
+                                          hideDelete: true,
                                         ),
                                       );
                                     });
@@ -94,8 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    width: 160,
-                                    height: 160,
+                                    width: 130,
+                                    height: 130,
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: const Color.fromARGB(
@@ -117,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
                                       height: 2,
+                                      fontSize: 11,
                                     ),
                                   ),
                                   Text(
@@ -125,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w400,
                                       color: Colors.white.withOpacity(0.5),
-                                      fontSize: 13,
+                                      fontSize: 10,
                                       height: 1.2,
                                     ),
                                   ),
@@ -151,160 +154,105 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image:
-                                      AssetImage("assets/images/albumdes.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
+            StreamBuilder<List<SongModel>>(
+                stream: _songCon.getSongsStream(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<SongModel>> snapshot) {
+                  if (!snapshot.hasData || snapshot.data == null) {
+                    return const LoadingContainer();
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const LoadingContainer();
+                  } else {
+                    final songs = snapshot.data!;
+
+                    final limitedSongs = songs.take(5).toList();
+
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: limitedSongs.map((song) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 25, top: 10),
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => MusicPlayerScreen(
+                                          songs: songs,
+                                          initialIndex:
+                                              limitedSongs.indexOf(song),
+                                        )),
+                              ),
+                              onLongPress: () {
+                                showModalBottomSheet(
+                                    backgroundColor: musikatColor4,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SingleChildScrollView(
+                                        child: SongBottomField(
+                                          song: song,
+                                          hideEdit: true,
+                                          hideDelete: true,
+                                        ),
+                                      );
+                                    });
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 130,
+                                    height: 130,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 124, 131, 127),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                        image: NetworkImage(song.albumCover),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    song.title.length > 19
+                                        ? '${song.title.substring(0, 19)}..'
+                                        : song.title,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      height: 2,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                  Text(
+                                    song.artist,
+                                    textAlign: TextAlign.left,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white.withOpacity(0.5),
+                                      fontSize: 10,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                "Daily Mix 3",
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                  height: 2,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              "Musikat",
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white.withOpacity(0.5),
-                                fontSize: 13,
-                                height: 1.2,
-                              ),
-                            ),
-                          ],
-                        ),
+                          );
+                        }).toList(),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/album2.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                "Daily Mix 3",
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                  height: 2,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              "Musikat",
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white.withOpacity(0.5),
-                                fontSize: 13,
-                                height: 1.2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 124, 131, 127),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/homescreen/ticket3.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                "Daily Mix 3",
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                  height: 2,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              "Musikat",
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white.withOpacity(0.5),
-                                fontSize: 13,
-                                height: 1.2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                    );
+                  }
+                }),
             Container(
               padding: const EdgeInsets.only(left: 25, top: 25),
               alignment: Alignment.topLeft,
@@ -390,9 +338,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: Text(
                                             user.username,
                                             style: GoogleFonts.inter(
-                                              fontWeight: FontWeight.w700,
+                                              fontWeight: FontWeight.w500,
                                               color: Colors.white,
-                                              fontSize: 13,
+                                              fontSize: 11,
                                               height: 2,
                                             ),
                                           ),

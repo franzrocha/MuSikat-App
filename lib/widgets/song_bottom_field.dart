@@ -1,19 +1,28 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, must_be_immutable
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/owned_playlist.dart';
 
 class SongBottomField extends StatefulWidget {
   final SongModel song;
-  const SongBottomField({
-    super.key,
-    required this.song,
-  });
+  PlaylistModel? playlist;
+  bool? hideAddtoPlaylist;
+  bool? hideEdit;
+  bool? hideDelete;
+
+  SongBottomField(
+      {super.key,
+      required this.song,
+      this.playlist,
+      this.hideAddtoPlaylist,
+      this.hideDelete,
+      this.hideEdit});
 
   @override
   State<SongBottomField> createState() => _SongBottomFieldState();
@@ -50,13 +59,22 @@ class _SongBottomFieldState extends State<SongBottomField> {
             mainAxisSize: MainAxisSize.min,
             children: [
               likeSong(context),
-              addToPlaylist(context),
+              Visibility(
+                visible: widget.hideAddtoPlaylist == true ? false : true,
+                child: addToPlaylist(context),
+              ),
               viewSongInfo(),
               if (FirebaseAuth.instance.currentUser != null &&
                   widget.song.uid ==
                       FirebaseAuth.instance.currentUser!.uid) ...[
-                editSong(),
-                deleteSong(context),
+                Visibility(
+                  visible: widget.hideEdit == true ? false : true,
+                  child: editSong(),
+                ),
+                Visibility(
+                  visible: widget.hideEdit == true ? false : true,
+                  child: deleteSong(context),
+                ),
               ],
             ],
           ),
@@ -101,7 +119,7 @@ class _SongBottomFieldState extends State<SongBottomField> {
                     Text(
                       "Are you sure you want to delete this song?",
                       style:
-                          GoogleFonts.inter(fontSize: 15, color: Colors.white),
+                          GoogleFonts.inter(fontSize: 12, color: Colors.white),
                     ),
                     const SizedBox(height: 15),
                     Row(

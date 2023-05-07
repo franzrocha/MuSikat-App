@@ -143,6 +143,13 @@ class SongsController with ChangeNotifier {
     return snapshot.docs.length;
   }
 
+  Future<void> updateSongPlayCount(String songId) async {
+    await FirebaseFirestore.instance
+        .collection('songs')
+        .doc(songId)
+        .update({'playCount': FieldValue.increment(1)});
+  }
+
   Stream<double> get uploadProgressStream =>
       _uploadProgressStreamController.stream;
 

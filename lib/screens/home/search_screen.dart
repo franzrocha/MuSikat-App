@@ -234,6 +234,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                               return SingleChildScrollView(
                                                 child: SongBottomField(
                                                   song: song,
+                                                  hideEdit: true,
+                                                  hideDelete: true,
                                                 ),
                                               );
                                             });
@@ -244,7 +246,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.inter(
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 15,
                                         ),
                                       ),
                                       leading: Container(
@@ -292,14 +294,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         Image.asset(
                           "assets/images/search.png",
-                          width: 254,
-                          height: 254,
+                          width: 250,
+                          height: 220,
                         ),
                         Text(
                           'Search for your favourite music or your friends',
                           style: GoogleFonts.inter(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: 13,
                               fontWeight: FontWeight.bold),
                         ),
                       ],

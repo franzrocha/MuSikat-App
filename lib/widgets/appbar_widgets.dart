@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Image.asset(
                 "assets/images/musikat_logo.png",
                 width: 30,
-                height: 35,
+                height: 30,
               ),
             )
           : IconButton(

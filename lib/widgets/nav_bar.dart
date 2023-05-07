@@ -1,5 +1,4 @@
 import 'package:musikat_app/screens/home/chat/chat_home.dart';
-import 'package:musikat_app/screens/home/fer.dart';
 import 'package:musikat_app/screens/home/search_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/categories/categories_screen.dart';
@@ -46,20 +45,20 @@ class _NavBarState extends State<NavBar> {
                 },
                 icon: const Icon(
                   Icons.category,
-                  size: 25,
+                  size: 20,
                 ),
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const FERScreen(),
-                    ),
-                  );
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const CameraApp(),
+                  //   ),
+                  // );
                 },
                 icon: const Icon(
                   Icons.camera_alt,
-                  size: 25,
+                  size: 20,
                 ),
               ),
             ],

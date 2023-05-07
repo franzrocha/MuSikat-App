@@ -4,7 +4,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'firebase_options.dart';
 import 'app.dart';
-import 'music_player/music_player_screen.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

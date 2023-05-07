@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:musikat_app/controllers/songs_controller.dart';
 
 class SongModel {
   final String songId, title, artist, fileName, audio, albumCover, genre, uid;
@@ -25,13 +24,12 @@ class SongModel {
     required this.likeCount,
   });
 
-  set rank(int rank) {}
-
-  set isLiked(bool isLiked) {}
 
   static SongModel fromDocumentSnap(DocumentSnapshot snap) {
-    Map<String, dynamic> json = snap.data() as Map<String, dynamic>;
-
+    Map<String, dynamic> json = {};
+    if (snap.data() != null) {
+      json = snap.data() as Map<String, dynamic>;
+    }
     return SongModel(
       songId: snap.id,
       title: json['title'] ?? '',

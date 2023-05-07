@@ -51,7 +51,7 @@ class _OwnedPlaylistState extends State<OwnedPlaylist> {
                   const SizedBox(height: 20),
                   Container(
                     width: 200,
-                    height: 45,
+                    height: 43,
                     decoration: BoxDecoration(
                         color: musikatColor,
                         borderRadius: BorderRadius.circular(60)),
@@ -68,7 +68,7 @@ class _OwnedPlaylistState extends State<OwnedPlaylist> {
                         'Create Playlist',
                         style: GoogleFonts.inter(
                             color: Colors.white,
-                            fontSize: 15,
+                            fontSize: 13,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -86,12 +86,12 @@ class _OwnedPlaylistState extends State<OwnedPlaylist> {
                       return ListTile(
                           title: Text(playlist.title,
                               style: GoogleFonts.inter(
-                                  color: Colors.white, fontSize: 16)),
+                                  color: Colors.white, fontSize: 12)),
                           onTap: () async {
                             try {
                               await _playlistCon.addSongToPlaylist(
                                   playlist.playlistId, widget.songId);
-                              Navigator.pop(context);
+                              Navigator.pop(context, true);
                               ToastMessage.show(
                                   context, 'Song added to playlist');
                             } catch (e) {

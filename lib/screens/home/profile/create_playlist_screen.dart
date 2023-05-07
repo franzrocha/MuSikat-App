@@ -47,33 +47,6 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
           ),
         ),
         showLogo: false,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Container(
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: const Color(0xfffca311),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: IconButton(
-                        onPressed: _onCreatePlaylist,
-                        icon: const Icon(
-                          Icons.check,
-                          size: 25,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 50),
@@ -139,6 +112,11 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: musikatColor,
+        onPressed: _onCreatePlaylist,
+        child: const Icon(Icons.create),
       ),
     );
   }

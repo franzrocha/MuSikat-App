@@ -17,7 +17,7 @@ class CardTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        height: 150,
+        height: 140,
         width: 130,
         child: Card(
           shape: RoundedRectangleBorder(
@@ -39,9 +39,9 @@ class CardTile extends StatelessWidget {
                 Text(
                   text,
                   style: GoogleFonts.inter(
-                    fontSize: 15,
+                    fontSize: 13,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],

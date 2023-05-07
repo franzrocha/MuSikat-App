@@ -87,8 +87,8 @@ class _MoodsScreenState extends State<MoodsScreen> {
                         children: [
                           Text(
                             descriptions,
-                            style: const TextStyle(
-                              fontSize: 20.0,
+                            style: GoogleFonts.inter(
+                              fontSize: 15,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -134,28 +134,15 @@ class DescriptionSongsScreen extends StatelessWidget {
                 } else {
                   final descriptionSongs = snapshot.data!;
                   return descriptionSongs.isEmpty
-                      ? Padding(
-                             padding: const EdgeInsets.symmetric(vertical: 100),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 25),
-                                  child: Image.asset(
-                                      "assets/images/no_music.png",
-                                      width: 230,
-                                      height: 230),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                 "No songs found related to $description yet.",
-                                  style: GoogleFonts.inter(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                      ? Center(
+                          child: Text(
+
+                            "No songs found related \nto $description yet.",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                                     fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         )

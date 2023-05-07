@@ -32,7 +32,12 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
             child: FutureBuilder<List<SongModel>>(
               future: _likedCon.getLikedSongs(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return const Center(
+                    child: LoadingIndicator(),
+                  );
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
                   return const Center(
                     child: LoadingIndicator(),
                   );
@@ -56,7 +61,7 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                 "No liked songs yet",
                                 style: GoogleFonts.inter(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold),
                               ),
                             ],

@@ -106,6 +106,14 @@ class PlaylistService {
         playlistImg = await taskSnapshot.ref.getDownloadURL();
       }
 
+      // Check if the playlist's fields are the same as the existing fields
+      if (title == playlist.title &&
+          description == playlist.description &&
+          playlistImg == playlist.playlistImg) {
+        ToastMessage.show(context, 'Playlist details are the same');
+        return;
+      }
+
       // Set the title field to the existing title if it's null or empty
       final String playlistTitle = title.isNotEmpty ? title : playlist.title;
 

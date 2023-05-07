@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -122,12 +121,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width *
-                            0.8, // set width to 90% of screen width
-                        height: MediaQuery.of(context).size.width *
-                            0.8, // set height to 90% of screen width
-                        // other properties
-
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.width * 0.8,
                         decoration: BoxDecoration(
                           color: musikatBackgroundColor,
                           border: Border.all(

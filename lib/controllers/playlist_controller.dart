@@ -80,5 +80,14 @@ class PlaylistController with ChangeNotifier {
     }
   }
 
-  
+  Future<void> removeSongFromPlaylist(String playlistId, String songId) async {
+    DocumentReference playlistRef =
+        FirebaseFirestore.instance.collection('playlists').doc(playlistId);
+    DocumentSnapshot playlistSnap = await playlistRef.get();
+    PlaylistModel playlist = PlaylistModel.fromDocumentSnap(playlistSnap);
+
+    playlist.songs.remove(songId);
+
+    await playlistRef.update(playlist.json);
+  }
 }

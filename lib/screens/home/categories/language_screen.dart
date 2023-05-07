@@ -87,7 +87,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
                           Text(
                             languages,
                             style: const TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 15,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -134,28 +134,13 @@ class LanguageSongsScreen extends StatelessWidget {
                 } else {
                   final languageSongs = snapshot.data!;
                   return languageSongs.isEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 100),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 25),
-                                  child: Image.asset(
-                                      "assets/images/no_music.png",
-                                      width: 230,
-                                      height: 230),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                 "No songs found for $languages.",
-                                  style: GoogleFonts.inter(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                      ? Center(
+                          child: Text(
+                            "No songs found for $languages.",
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         )

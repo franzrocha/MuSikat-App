@@ -1,6 +1,8 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 import 'dart:io';
+import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/screens/home/artist_hub/description_selection_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/genre_selection_screen.dart';
@@ -48,11 +50,27 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
   void _pickAlbumCover() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null) {
-      setState(() {
-        _selectedAlbumCover = File(result.files.single.path!);
-      });
-    } else {
-      ToastMessage.show(context, 'No image selected');
+      final cropResult = await ImageCropper().cropImage(
+        sourcePath: result.files.single.path!,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        maxWidth: 300,
+        maxHeight: 300,
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Crop album cover',
+              toolbarColor: musikatBackgroundColor,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+        ],
+      );
+      if (cropResult != null) {
+        setState(() {
+          _selectedAlbumCover = File(cropResult.path);
+        });
+      } else {
+        ToastMessage.show(context, 'No image selected');
+      }
     }
   }
 

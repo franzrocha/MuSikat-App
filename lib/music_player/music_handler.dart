@@ -1,14 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:musikat_app/models/listen_history_model.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 
 class MusicHandler with ChangeNotifier, RouteAware {
   final AudioPlayer player = AudioPlayer();
+  final SongsController _songCon = SongsController();
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
@@ -35,11 +34,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
       isPlaying = true;
       notifyListeners();
 
-      // Update the SongModel in the Firestore database
-      await FirebaseFirestore.instance
-          .collection('songs')
-          .doc(song.songId)
-          .update({'playCount': FieldValue.increment(1)});
+      await _songCon.updateSongPlayCount(song.songId);
     } catch (e) {
       if (e is PlatformException) {
         await Future.delayed(const Duration(seconds: 5));
