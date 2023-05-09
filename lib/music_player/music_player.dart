@@ -149,7 +149,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                                 ),
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     color: Colors.white),
                                 marqueeDirection: MarqueeDirection.rtl,
                                 speed: 25,
@@ -376,7 +376,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       automaticallyImplyLeading: false,
       leading: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          Future.delayed(const Duration(milliseconds: 100), () {
+            Navigator.pop(context);
+          });
         },
         icon: const FaIcon(
           FontAwesomeIcons.angleLeft,

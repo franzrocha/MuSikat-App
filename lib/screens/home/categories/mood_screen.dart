@@ -136,12 +136,11 @@ class DescriptionSongsScreen extends StatelessWidget {
                   return descriptionSongs.isEmpty
                       ? Center(
                           child: Text(
-
                             "No songs found related \nto $description yet.",
                             textAlign: TextAlign.center,
                             style: GoogleFonts.inter(
                               color: Colors.white,
-                                     fontSize: 15,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -181,6 +180,21 @@ class DescriptionSongsScreen extends StatelessWidget {
                                             initialIndex: index,
                                           )),
                                 );
+                              },
+                              onLongPress: () {
+                                showModalBottomSheet(
+                                    backgroundColor: musikatColor4,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SingleChildScrollView(
+                                        child: SongBottomField(
+                                          song: song,
+                                          hideRemoveToPlaylist: true,
+                                          hideDelete: true,
+                                          hideEdit: true,
+                                        ),
+                                      );
+                                    });
                               },
                             );
                           },

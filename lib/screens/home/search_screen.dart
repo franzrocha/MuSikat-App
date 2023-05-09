@@ -236,6 +236,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   song: song,
                                                   hideEdit: true,
                                                   hideDelete: true,
+                                                  hideRemoveToPlaylist: true,
                                                 ),
                                               );
                                             });

@@ -27,23 +27,23 @@ class PlaylistController with ChangeNotifier {
     await playlistRef.update(playlist.json);
   }
 
-  Future<List<SongModel>> getSongsForPlaylist(String playlistId) async {
-    DocumentReference playlistRef =
+  Stream<List<SongModel>> getSongsForPlaylist(String playlistId) {
+    final playlistRef =
         FirebaseFirestore.instance.collection('playlists').doc(playlistId);
-    DocumentSnapshot playlistSnap = await playlistRef.get();
-    PlaylistModel playlist = PlaylistModel.fromDocumentSnap(playlistSnap);
+    return playlistRef.snapshots().asyncMap((playlistSnap) async {
+      final playlist = PlaylistModel.fromDocumentSnap(playlistSnap);
 
-    List<SongModel> songs = [];
+      final songs = <SongModel>[];
+      for (final songId in playlist.songs) {
+        final songRef =
+            FirebaseFirestore.instance.collection('songs').doc(songId);
+        final songSnap = await songRef.get();
+        final song = SongModel.fromDocumentSnap(songSnap);
+        songs.add(song);
+      }
 
-    for (String songId in playlist.songs) {
-      DocumentReference songRef =
-          FirebaseFirestore.instance.collection('songs').doc(songId);
-      DocumentSnapshot songSnap = await songRef.get();
-      SongModel song = SongModel.fromDocumentSnap(songSnap);
-      songs.add(song);
-    }
-
-    return songs;
+      return songs;
+    });
   }
 
   Future<UserModel> getUserForPlaylist(String playlistId) async {

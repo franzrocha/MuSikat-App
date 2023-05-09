@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, must_be_immutable
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
@@ -12,7 +13,7 @@ import 'package:musikat_app/widgets/owned_playlist.dart';
 class SongBottomField extends StatefulWidget {
   final SongModel song;
   PlaylistModel? playlist;
-  bool? hideAddtoPlaylist;
+  bool? hideRemoveToPlaylist;
   bool? hideEdit;
   bool? hideDelete;
 
@@ -20,7 +21,7 @@ class SongBottomField extends StatefulWidget {
       {super.key,
       required this.song,
       this.playlist,
-      this.hideAddtoPlaylist,
+      this.hideRemoveToPlaylist,
       this.hideDelete,
       this.hideEdit});
 
@@ -59,11 +60,12 @@ class _SongBottomFieldState extends State<SongBottomField> {
             mainAxisSize: MainAxisSize.min,
             children: [
               likeSong(context),
-              Visibility(
-                visible: widget.hideAddtoPlaylist == true ? false : true,
-                child: addToPlaylist(context),
-              ),
+              addToPlaylist(context),
               viewSongInfo(),
+              Visibility(
+                visible: widget.hideRemoveToPlaylist == true ? false : true,
+                child: removeSongFromPlaylist(context),
+              ),
               if (FirebaseAuth.instance.currentUser != null &&
                   widget.song.uid ==
                       FirebaseAuth.instance.currentUser!.uid) ...[
@@ -80,6 +82,31 @@ class _SongBottomFieldState extends State<SongBottomField> {
           ),
         ),
       ),
+    );
+  }
+
+  ListTile removeSongFromPlaylist(BuildContext context) {
+    return ListTile(
+      leading: const Icon(
+        Icons.remove_circle_outline,
+        color: Colors.white,
+      ),
+      title: Text(
+        "Remove song from playlist",
+        style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
+      ),
+      onTap: () async {
+        try {
+          await _playlistCon.removeSongFromPlaylist(
+              widget.playlist!.playlistId, widget.song.songId);
+
+          Navigator.of(context).pop();
+
+          ToastMessage.show(context, 'Removed from playlist');
+        } catch (e) {
+          ToastMessage.show(context, 'Error removing song');
+        }
+      },
     );
   }
 
@@ -196,7 +223,76 @@ class _SongBottomFieldState extends State<SongBottomField> {
         "View song info",
         style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              backgroundColor: musikatColor4,
+              child: SingleChildScrollView(
+                  child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      image: DecorationImage(
+                        image: NetworkImage(widget.song.albumCover),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.song.title,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  Text(
+                    widget.song.artist,
+                    style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: Colors.white.withOpacity(0.5),
+                        fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 15),
+                  _buildInfoRow('Released at:',
+                      DateFormat("MMMM d, y").format(widget.song.createdAt)),
+                  _buildInfoRow('Genre:', widget.song.genre),
+                  _buildInfoRow('Languages:', widget.song.languages.join(", ")),
+                  _buildInfoRow('Writers:', widget.song.writers.join(", ")),
+                  _buildInfoRow('Producers:', widget.song.producers.join(", ")),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: Wrap(
+                      spacing: 5,
+                      children: widget.song.description
+                          .map((e) => Chip(
+                                label: Text(
+                                  e,
+                                  style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                backgroundColor: musikatColor3,
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ))),
+        );
+      },
     );
   }
 
@@ -269,4 +365,29 @@ class _SongBottomFieldState extends State<SongBottomField> {
       },
     );
   }
+}
+
+Widget _buildInfoRow(String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.inter(
+              fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 5),
+        Text(
+          value,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.inter(
+            fontSize: 12,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ),
+  );
 }

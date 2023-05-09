@@ -111,6 +111,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                       return SingleChildScrollView(
                                         child: SongBottomField(
                                           song: song,
+                                          hideRemoveToPlaylist: true,
                                         ),
                                       );
                                     });

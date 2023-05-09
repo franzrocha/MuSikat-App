@@ -180,6 +180,21 @@ class LanguageSongsScreen extends StatelessWidget {
                                           )),
                                 );
                               },
+                                onLongPress: () {
+                                showModalBottomSheet(
+                                    backgroundColor: musikatColor4,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SingleChildScrollView(
+                                        child: SongBottomField(
+                                          song: song,
+                                          hideRemoveToPlaylist: true,
+                                          hideDelete: true,
+                                          hideEdit: true,
+                                        ),
+                                      );
+                                    });
+                              },
                             );
                           },
                         );

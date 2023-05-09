@@ -97,8 +97,8 @@ class _NavBarState extends State<NavBar> {
               showUnselectedLabels: false,
               showSelectedLabels: true,
               selectedLabelStyle: GoogleFonts.inter(
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                fontSize: 10,
               ),
               onTap: (int index) {
                 if (index != 2) {
@@ -115,9 +115,11 @@ class _NavBarState extends State<NavBar> {
               },
               items: [
                 const BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.house,   size: 20,),
+                  icon: FaIcon(
+                    FontAwesomeIcons.house,
+                    size: 20,
+                  ),
                   label: 'Home',
-                  
                 ),
                 const BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.music),

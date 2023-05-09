@@ -87,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           song: song,
                                           hideEdit: true,
                                           hideDelete: true,
+                                          hideRemoveToPlaylist: true,
                                         ),
                                       );
                                     });
@@ -199,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           song: song,
                                           hideEdit: true,
                                           hideDelete: true,
+                                             hideRemoveToPlaylist: true,
                                         ),
                                       );
                                     });
@@ -332,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 5),
                                         Align(
                                           alignment: Alignment.bottomLeft,
                                           child: Text(

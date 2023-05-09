@@ -187,7 +187,7 @@ class _PlaylistBottomFieldState extends State<PlaylistBottomField> {
                           Text(
                             'Created by:',
                             style: GoogleFonts.inter(
-                                fontSize: 15,
+                                fontSize: 12,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -206,7 +206,7 @@ class _PlaylistBottomFieldState extends State<PlaylistBottomField> {
                           Text(
                             'Created at:',
                             style: GoogleFonts.inter(
-                                fontSize: 15,
+                                fontSize: 12,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -223,7 +223,7 @@ class _PlaylistBottomFieldState extends State<PlaylistBottomField> {
                           Text(
                             'Songs:',
                             style: GoogleFonts.inter(
-                                fontSize: 15,
+                                fontSize: 12,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),

@@ -123,6 +123,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                         return SingleChildScrollView(
                                           child: SongBottomField(
                                             song: latestSong,
+                                               hideRemoveToPlaylist: true,
                                           ),
                                         );
                                       });
@@ -164,8 +165,8 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          latestSong.title.length > 30
-                                              ? '${latestSong.title.substring(0, 30)}...'
+                                          latestSong.title.length > 20
+                                              ? '${latestSong.title.substring(0, 20)}...'
                                               : latestSong.title,
                                           style: GoogleFonts.inter(
                                             color: Colors.white,
@@ -245,7 +246,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                       ),
                       CardTile(
                         onTap: () {},
-                        icon: Icons.money,
+                        icon: Icons.monetization_on,
                         text: 'Support',
                       ),
                     ],
