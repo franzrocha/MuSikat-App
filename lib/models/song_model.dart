@@ -23,7 +23,6 @@ class SongModel {
     required this.likeCount,
   });
 
-
   static SongModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = {};
     if (snap.data() != null) {

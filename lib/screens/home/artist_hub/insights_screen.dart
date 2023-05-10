@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/screens/home/artist_hub/song_charts.dart';
 import 'package:musikat_app/screens/home/artist_hub/song_plays_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/user_like_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -19,7 +20,7 @@ class InsightsScreen extends StatefulWidget {
 
 class _InsightsScreenState extends State<InsightsScreen> {
   final SongsController _songCon = SongsController();
-  //SongModel? song;
+  //late List<SongModel> songs;
   UserModel? user;
 
   @override
@@ -115,11 +116,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     fontSize: 20,
                     fontStyle: FontStyle.normal),
               ),
-              // onTap: () {
-              //   Navigator.of(context).push(
-              //     MaterialPageRoute(builder: (context) => SongRankingPage()),
-              //   );
-              // },
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -140,6 +136,13 @@ class _InsightsScreenState extends State<InsightsScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         final SongModel song = songs[index];
                         return ListTile(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SongPlayCountChart(songs: songs)),
+                            );
+                          },
                           leading: Container(
                             width: 50,
                             height: 50,

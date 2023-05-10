@@ -55,6 +55,11 @@ dependencies:
   audio_service: ^0.18.9
   camera: ^0.10.5
   image_cropper: ^3.0.3
+  shimmer: ^2.0.0
+  badges: ^3.1.1
+  flutter_riverpod: ^2.3.6
+  miniplayer: ^1.0.1
+  syncfusion_flutter_charts: ^21.2.3
   
 dev_dependencies:
   flutter_test:
