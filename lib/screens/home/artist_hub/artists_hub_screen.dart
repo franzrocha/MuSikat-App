@@ -165,12 +165,12 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          latestSong.title.length > 20
-                                              ? '${latestSong.title.substring(0, 20)}...'
+                                          latestSong.title.length > 25
+                                              ? '${latestSong.title.substring(0, 25)}...'
                                               : latestSong.title,
                                           style: GoogleFonts.inter(
                                             color: Colors.white,
-                                            fontSize: 16,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.bold,
                                           ),
                                           maxLines: 1,
@@ -180,7 +180,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                           DateFormat("y")
                                               .format(latestSong.createdAt),
                                           style: GoogleFonts.inter(
-                                            fontSize: 12,
+                                            fontSize: 10,
                                             color: Colors.white,
                                           ),
                                         ),

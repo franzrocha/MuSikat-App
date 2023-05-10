@@ -4,8 +4,7 @@ class SongModel {
   final String songId, title, artist, fileName, audio, albumCover, genre, uid;
   final DateTime createdAt;
   final List<String> writers, producers, languages, description;
-  final int playCount; // Added field
-  final int likeCount;
+  final int playCount, likeCount;
   SongModel({
     required this.songId,
     required this.title,
@@ -20,7 +19,7 @@ class SongModel {
     required this.uid,
     required this.languages,
     required this.description,
-    required this.playCount, // Added field
+    required this.playCount, 
     required this.likeCount,
   });
 
@@ -86,9 +85,4 @@ class SongModel {
     return title.toLowerCase().contains(song.toLowerCase());
   }
 
-  static Future<SongModel> fromUid({required String uid}) async {
-    DocumentSnapshot snap =
-        await FirebaseFirestore.instance.collection('songs').doc(uid).get();
-    return SongModel.fromDocumentSnap(snap);
-  }
 }

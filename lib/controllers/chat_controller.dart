@@ -29,9 +29,16 @@ class ChatController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future sendMessage({required String message}) {
-    return FirebaseFirestore.instance.collection('chats').add(ChatMessage(
-            sentBy: FirebaseAuth.instance.currentUser!.uid, message: message)
-        .json);
-  }
+Future sendMessage({required String message}) async {
+  final globalChatRef = FirebaseFirestore.instance.collection('chats').doc('globalChat');
+  await globalChatRef.collection('messages').add(
+    ChatMessage(
+      sentBy: FirebaseAuth.instance.currentUser!.uid,
+      message: message,
+      chatRoomId: 'globalChat',
+      ts: Timestamp.now(),
+    ).json,
+  );
+}
+
 }

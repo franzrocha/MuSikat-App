@@ -113,9 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Text(
-                                    song.title.length > 19
+                                    song.title
+                                    .length > 19
                                         ? '${song.title.substring(0, 19)}..'
                                         : song.title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,

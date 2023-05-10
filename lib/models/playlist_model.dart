@@ -40,4 +40,24 @@ class PlaylistModel {
         'songs': songs,
         'uid': uid,
       };
+
+//   static Future<List<PlaylistModel>> getPlaylists() async {
+//     List<PlaylistModel> playlists = [];
+//     await FirebaseFirestore.instance
+//         .collection('playlists')
+//         .get()
+//         .then((QuerySnapshot querySnapshot) {
+//       for (var doc in querySnapshot.docs) {
+//         playlists.add(PlaylistModel.fromDocumentSnap(doc));
+//       }
+//     });
+
+//     return playlists;
+//   }
+
+//  searchPlaylist(String query) {
+//     String lowerCaseQuery = query.toLowerCase();
+//     String lowerCaseTitle = title.toLowerCase();
+//     return lowerCaseTitle.contains(lowerCaseQuery);
+//   }
 }

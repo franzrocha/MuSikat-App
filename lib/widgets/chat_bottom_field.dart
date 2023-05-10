@@ -18,82 +18,90 @@ class ChatBottomField extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text(
-                  'Edit',
-                  style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
-                ),
-                leading: const Icon(Icons.edit, color: Colors.white),
-                onTap: () => {
-                  _textController.text = chat.message,
-                  Navigator.of(context).pop(),
-                  showModalBottomSheet(
-                    backgroundColor: musikatColor4,
-                    context: context,
-                    builder: (context) => SingleChildScrollView(
-                      child: SafeArea(
-                        top: false,
+            children: [editMessage(context), deleteMessage(context)],
+          ),
+        ),
+      ),
+    );
+  }
+
+  ListTile deleteMessage(BuildContext context) {
+    return ListTile(
+      title: Text('Delete',
+          style: GoogleFonts.inter(color: Colors.white, fontSize: 16)),
+      leading: const Icon(
+        Icons.delete,
+        color: Colors.white,
+      ),
+      onTap: () => {
+        Navigator.of(context).pop(),
+        chat.deleteMessage(),
+      },
+    );
+  }
+
+  ListTile editMessage(BuildContext context) {
+    return ListTile(
+      title: Text(
+        'Edit',
+        style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
+      ),
+      leading: const Icon(Icons.edit, color: Colors.white),
+      onTap: () => {
+        _textController.text = chat.message,
+        Navigator.of(context).pop(),
+        showDialog(
+          context: context,
+          builder: (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: musikatColor4,
+            child: SingleChildScrollView(
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Form(
+                        key: _formKey,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Form(
-                                key: _formKey,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "Edit message",
-                                      style: GoogleFonts.inter(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Container(
-                                      width: double.infinity,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: editForm(),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    editButton(context),
-                                  ],
-                                ),
-                              ),
+                            Text(
+                              "Edit message",
+                              style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
+                            const SizedBox(height: 16),
+                            Container(
+                              width: double.infinity,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: editForm(),
+                            ),
+                            const SizedBox(height: 16),
+                            editButton(context),
                           ],
                         ),
                       ),
                     ),
-                  )
-                },
-              ),
-              ListTile(
-                title: Text('Delete',
-                    style:
-                        GoogleFonts.inter(color: Colors.white, fontSize: 16)),
-                leading: const Icon(
-                  Icons.delete,
-                  color: Colors.white,
+                  ],
                 ),
-                onTap: () => {
-                  Navigator.of(context).pop(),
-                  chat.deleteMessage(),
-                },
-              )
-            ],
+              ),
+            ),
           ),
-        ),
-      ),
+        )
+      },
     );
   }
 
@@ -109,7 +117,7 @@ class ChatBottomField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'Type a message....',
         hintStyle: GoogleFonts.inter(
-          fontSize: 14,
+          fontSize: 10,
           color: Colors.grey,
         ),
         isDense: true,

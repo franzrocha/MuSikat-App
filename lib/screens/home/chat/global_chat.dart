@@ -69,10 +69,11 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
       resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             FittedBox(
               child: CircleAvatar(
-                radius: 20,
+                radius: 15,
                 backgroundColor: Colors.transparent,
                 child: Image.asset("assets/images/musikat_global.png"),
               ),
@@ -81,9 +82,10 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
             Text("Global Chat",
                 textAlign: TextAlign.right,
                 style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold)),
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                )),
           ],
         ),
         showLogo: false,
@@ -139,18 +141,18 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                           borderRadius: BorderRadius.circular(12)),
                       child: TextFormField(
                         onFieldSubmitted: (String text) {
-                          send();
+                          sendMessage();
                         },
                         focusNode: _messageFN,
                         style: GoogleFonts.inter(
                           color: Colors.black,
-                          fontSize: 14,
+                          fontSize: 10,
                         ),
                         controller: _messageController,
                         decoration: InputDecoration(
                           hintText: 'Type a message....',
                           hintStyle: GoogleFonts.inter(
-                            fontSize: 14,
+                            fontSize: 10,
                             color: Colors.grey,
                           ),
                           isDense: true,
@@ -177,7 +179,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                         Icons.send_rounded,
                         color: Colors.white,
                       ),
-                      onPressed: send,
+                      onPressed: sendMessage,
                     ),
                   )
                 ],
@@ -189,7 +191,7 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
     );
   }
 
-  send() {
+  void sendMessage() {
     _messageFN.unfocus();
     if (_messageController.text.isNotEmpty) {
       _chatCon.sendMessage(message: _messageController.text.trim());

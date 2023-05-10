@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/screens/home/other_artist_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import '../models/chat_message_model.dart';
 
@@ -47,7 +48,7 @@ class _ChatCardState extends State<ChatCard> {
                     .format(chat[index].ts.toDate()),
                 style: GoogleFonts.inter(
                   color: Colors.white70,
-                  fontSize: 12,
+                  fontSize: 8,
                 ),
               ),
             ),
@@ -65,11 +66,11 @@ class _ChatCardState extends State<ChatCard> {
                         FirebaseAuth.instance.currentUser?.uid
                     : false,
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
                     '(edited)',
                     style:
-                        GoogleFonts.inter(fontSize: 9, color: Colors.white70),
+                        GoogleFonts.inter(fontSize: 7, color: Colors.white70),
                   ),
                 ),
               ),
@@ -104,37 +105,74 @@ class _ChatCardState extends State<ChatCard> {
                             builder: (context, AsyncSnapshot<UserModel> snap) {
                               return Container(
                                   padding: const EdgeInsets.only(
-                                      left: 10, top: 5, bottom: 3),
-                                  child: Text(
-                                    '${snap.data?.username}',
-                                    style: GoogleFonts.inter(
-                                        fontSize: 12, color: Colors.white70),
+                                      left: 10, top: 5, bottom: 5),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ArtistsProfileScreen(
+                                            selectedUserUID: chat[index].sentBy,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          child: (chat[index].sentBy !=
+                                                      FirebaseAuth.instance
+                                                          .currentUser?.uid) &&
+                                                  (index == 0 ||
+                                                      chat[index - 1].sentBy !=
+                                                          chat[index].sentBy)
+                                              ? AvatarImage(
+                                                  uid: chat[index].sentBy,
+                                                  radius: 10,
+                                                )
+                                              : Container(),
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          '${snap.data?.username}',
+                                          style: GoogleFonts.inter(
+                                              fontSize: 10,
+                                              color: Colors.white70),
+                                        ),
+                                      ],
+                                    ),
                                   ));
                             }),
-                      Container(
-                        constraints: const BoxConstraints(maxWidth: 320),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: chat[index].isDeleted
-                                  ? Colors.white
-                                  : musikatColor4),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          color: chat[index].isDeleted
-                              ? Colors.transparent
-                              : chat[index].sentBy ==
-                                      FirebaseAuth.instance.currentUser?.uid
-                                  ? yourChat
-                                  : otherChat,
-                        ),
-                        child: Text(
-                          chat[index].message,
-                          style: TextStyle(
-                            fontSize: 17,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 7),
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 320),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: chat[index].isDeleted
+                                    ? Colors.white
+                                    : musikatColor4),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
                             color: chat[index].isDeleted
-                                ? Colors.white70
-                                : Colors.white,
+                                ? Colors.transparent
+                                : chat[index].sentBy ==
+                                        FirebaseAuth.instance.currentUser?.uid
+                                    ? yourChat
+                                    : otherChat,
+                          ),
+                          child: Text(
+                            chat[index].message,
+                            style: GoogleFonts.inter(
+                              fontSize: 10,
+                              color: chat[index].isDeleted
+                                  ? Colors.white70
+                                  : Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -150,10 +188,12 @@ class _ChatCardState extends State<ChatCard> {
                         : true
                     : false,
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Text('(edited)',
-                      style: GoogleFonts.inter(
-                          fontSize: 9, color: Colors.white70)),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    '(edited)',
+                    style:
+                        GoogleFonts.inter(fontSize: 7, color: Colors.white70),
+                  ),
                 ),
               ),
             ],
@@ -178,10 +218,11 @@ class _ChatCardState extends State<ChatCard> {
                           ? "Seen by 4+ "
                           : "Seen by ",
                       style:
-                          GoogleFonts.inter(fontSize: 9, color: Colors.white70),
+                          GoogleFonts.inter(fontSize: 8, color: Colors.white70),
                     ),
                     if (chat[index].seenBy.length < 5)
                       for (String uid in chat[index].seenBy)
+                          
                         FutureBuilder(
                             future: UserModel.fromUid(uid: uid),
                             builder: (context, AsyncSnapshot snap) {
@@ -192,7 +233,7 @@ class _ChatCardState extends State<ChatCard> {
                                 return Text(
                                   '$username$separator',
                                   style: GoogleFonts.inter(
-                                      fontSize: 9, color: Colors.white70),
+                                      fontSize: 8, color: Colors.white70),
                                 );
                               }
                               return const SizedBox();
