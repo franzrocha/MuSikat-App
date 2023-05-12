@@ -6,13 +6,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLogo;
   final List<Widget>? actions;
   final bool? centerTitle;
+  final PreferredSizeWidget? bottom;
 
   const CustomAppBar(
       {super.key,
       this.title,
       required this.showLogo,
       this.actions,
-      this.centerTitle});
+      this.centerTitle, this.bottom});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0.0,
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
+      bottom: bottom,
       leading: showLogo
           ? Padding(
               padding: const EdgeInsets.only(left: 20),

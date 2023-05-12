@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatMessage {
-  final String uid, sentBy, message, chatRoomId;
+  final String uid, sentBy, message;
   final Timestamp ts;
   String? previousChatID;
   List<String> seenBy;
@@ -15,7 +15,6 @@ class ChatMessage {
     this.message = '',
     this.isDeleted = false,
     this.isEdited = false,
-    required this.chatRoomId,
     ts,
   }) : ts = ts ?? Timestamp.now();
 
@@ -31,7 +30,6 @@ class ChatMessage {
       isDeleted: json['isDeleted'] ?? false,
       isEdited: json['isEdited'] ?? false,
       ts: json['ts'] ?? Timestamp.now(),
-      chatRoomId: json['chatRoomId'] ?? '',
     );
   }
 
@@ -41,7 +39,6 @@ class ChatMessage {
     return ChatMessage(
       uid: snap.id,
       sentBy: json['sentBy'] ?? '',
-      chatRoomId: roomId,
       seenBy: json['seenBy'] != null
           ? List<String>.from(json['seenBy'])
           : <String>[],
@@ -53,7 +50,6 @@ class ChatMessage {
   }
 
   Map<String, dynamic> get json => {
-        'chatRoomId': chatRoomId,
         'sentBy': sentBy,
         'message': message,
         'seenBy': seenBy,
@@ -79,12 +75,24 @@ class ChatMessage {
     return !seenBy.contains(uid);
   }
 
-Future updateSeen(String userID) async {
-  final globalChatRef = FirebaseFirestore.instance.collection('chats').doc('globalChat');
-  await globalChatRef.collection('messages').doc(uid).update({
-    'seenBy': FieldValue.arrayUnion([userID]),
-  });
-}
+  Future individualUpdateSeen(String userID, String chatroom) {
+    return FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chatroom)
+        .collection('messages')
+        .doc(uid)
+        .update({
+      'seenBy': FieldValue.arrayUnion([userID])
+    });
+  }
+
+  Future updateSeen(String userID) async {
+    final globalChatRef =
+        FirebaseFirestore.instance.collection('chats').doc('globalChat');
+    await globalChatRef.collection('messages').doc(uid).update({
+      'seenBy': FieldValue.arrayUnion([userID]),
+    });
+  }
 
   static Stream<List<ChatMessage>> currentChats() {
     final globalChatRef =
@@ -96,19 +104,43 @@ Future updateSeen(String userID) async {
             .toList());
   }
 
- Future updateMessage(String newMessage) async {
-  final globalChatRef = FirebaseFirestore.instance.collection('chats').doc('globalChat');
-  await globalChatRef.collection('messages').doc(uid).update({
-    'message': newMessage,
-    'isEdited': true,
-  });
-}
+  // static Stream<List<ChatMessage>> individualCurrentChats(String chatroomId) {
+  //   final chatroomRef =
+  //       FirebaseFirestore.instance.collection('chats').doc(chatroomId);
+  //   return chatroomRef
+  //       .collection('messages')
+  //       .orderBy('ts', descending: false)
+  //       .snapshots()
+  //       .map((querySnapshot) => querySnapshot.docs
+  //           .map((doc) =>
+  //               ChatMessage.fromDocumentSnapWithRoomId(doc, chatroomId))
+  //           .toList());
+  // }
 
- Future deleteMessage() async {
-  final globalChatRef = FirebaseFirestore.instance.collection('chats').doc('globalChat');
-  await globalChatRef.collection('messages').doc(uid).update({
-    'message': 'message deleted',
-    'isDeleted': true,
-  });
-}
+  static Stream<List<ChatMessage>> individualCurrentChats(String chatroom) =>
+      FirebaseFirestore.instance
+          .collection('chats')
+          .doc(chatroom)
+          .collection('messages')
+          .orderBy('ts')
+          .snapshots()
+          .map(ChatMessage.fromQuerySnap);
+
+  Future updateMessage(String newMessage) async {
+    final globalChatRef =
+        FirebaseFirestore.instance.collection('chats').doc('globalChat');
+    await globalChatRef.collection('messages').doc(uid).update({
+      'message': newMessage,
+      'isEdited': true,
+    });
+  }
+
+  Future deleteMessage() async {
+    final globalChatRef =
+        FirebaseFirestore.instance.collection('chats').doc('globalChat');
+    await globalChatRef.collection('messages').doc(uid).update({
+      'message': 'message deleted',
+      'isDeleted': true,
+    });
+  }
 }

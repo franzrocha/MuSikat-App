@@ -13,7 +13,9 @@ class SongService {
   Stream<double> get uploadProgressStream =>
       _uploadProgressStreamController.stream;
 
-  Future<String> uploadSong(
+  UploadTask? _uploadTask;
+
+  Future<UploadTask> uploadSong(
       String title,
       String artist,
       String filePath,
@@ -42,16 +44,16 @@ class SongService {
           .ref('users/$username/albumCovers/$coverFileName');
 
       // Upload the audio and album cover files to Firebase Storage
-      final UploadTask uploadTask = audioRef.putFile(File(filePath));
-      final UploadTask coverUploadTask = coverRef.putFile(File(coverPath));
+      _uploadTask = audioRef.putFile(File(filePath));
 
-      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+      _uploadTask!.snapshotEvents.listen((TaskSnapshot snapshot) {
         final double progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         _uploadProgressStreamController.sink.add(progress);
       });
 
-      final TaskSnapshot taskSnapshot = await uploadTask;
+      final TaskSnapshot taskSnapshot = await _uploadTask!;
+      final UploadTask coverUploadTask = coverRef.putFile(File(coverPath));
       final TaskSnapshot coverTaskSnapshot = await coverUploadTask;
       final String downloadUrl = await audioRef.getDownloadURL();
       final String coverDownloadUrl = await coverRef.getDownloadURL();
@@ -76,16 +78,19 @@ class SongService {
       await docRef.set(metadata);
       await docRef.update({'song_id': docRef.id});
 
-      return docRef.id;
+      return _uploadTask!;
     } catch (e) {
       print(e.toString());
-      return '';
+      return _uploadTask!;
     } finally {
       _uploadProgressStreamController.close();
     }
   }
 
   void cancelUpload() {
-    _uploadProgressStreamController.close();
+    if (_uploadTask != null) {
+      _uploadTask!.cancel();
+      _uploadTask = null;
+    }
   }
 }

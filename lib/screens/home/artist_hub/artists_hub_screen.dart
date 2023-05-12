@@ -5,12 +5,12 @@ import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
+import 'package:musikat_app/screens/home/artist_hub/edit_profile_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/library_screen.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
-import 'edit_hub_screen.dart';
 
 class ArtistsHubScreen extends StatefulWidget {
   const ArtistsHubScreen({Key? key}) : super(key: key);
@@ -123,7 +123,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                         return SingleChildScrollView(
                                           child: SongBottomField(
                                             song: latestSong,
-                                               hideRemoveToPlaylist: true,
+                                            hideRemoveToPlaylist: true,
                                           ),
                                         );
                                       });
@@ -297,7 +297,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
           InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const EditHubScreen(),
+                builder: (context) => const EditProfileScreen(),
               ));
             },
             child: Container(

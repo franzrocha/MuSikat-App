@@ -20,7 +20,6 @@ class InsightsScreen extends StatefulWidget {
 
 class _InsightsScreenState extends State<InsightsScreen> {
   final SongsController _songCon = SongsController();
-  //late List<SongModel> songs;
   UserModel? user;
 
   @override
@@ -39,142 +38,148 @@ class _InsightsScreenState extends State<InsightsScreen> {
       ),
       backgroundColor: musikatBackgroundColor,
       body: SafeArea(
-        child: Center(
-          child: Column(children: [
-            FutureBuilder<int>(
-              future: _songCon.getUserSongCount(),
-              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container();
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Text(
+            'Overview',
+            textAlign: TextAlign.start,
+            style: GoogleFonts.inter(
+                color: Colors.white,
+                fontSize: 20,
+                height: 2,
+                fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Top Tracks',
+            textAlign: TextAlign.start,
+            style: GoogleFonts.inter(
+                color: Colors.white,
+                fontSize: 15,
+                height: 1.5,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 15),
+          Expanded(
+            child: FutureBuilder(
+              future: _songCon.getRankedSongs(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<SongModel>> snapshot) {
+                if (snapshot.hasData) {
+                  final List<SongModel> songs = snapshot.data!
+                      .where((song) =>
+                          song.uid == FirebaseAuth.instance.currentUser?.uid)
+                      .toList();
+          
+                  return ListView.separated(
+                    itemCount: songs.length > 5 ? 5 : songs.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (BuildContext context, int index) {
+                      final SongModel song = songs[index];
+                      return ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SongPlayCountChart(songs: songs)),
+                          );
+                        },
+                        leading: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  CachedNetworkImageProvider(song.albumCover),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          song.title,
+                          style: GoogleFonts.inter(
+                              color: Colors.white, fontSize: 15),
+                        ),
+                      );
+                    },
+                  );
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
                 } else {
-                  // return Text('Songs uploaded: ${snapshot.data}',
-                  //     style: const TextStyle(color: Colors.white));
-                  return ListTile(
-                    trailing: Text(
-                      '${snapshot.data}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                    title: Text(
-                      'Songs Uploaded',
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
+                  return const Center(
+                    child: LoadingIndicator(),
                   );
                 }
               },
             ),
-            const Divider(height: 20, indent: 1.0, color: listileColor),
-            ListTile(
-              trailing: const FaIcon(FontAwesomeIcons.chevronRight,
-                  color: Colors.white, size: 18),
-              title: Text(
-                'Song Plays',
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const SongPlaysScreen()),
-                );
-              },
-            ),
-            const Divider(height: 20, indent: 1.0, color: listileColor),
-            ListTile(
-              trailing: const FaIcon(FontAwesomeIcons.chevronRight,
-                  color: Colors.white, size: 18),
-              title: Text(
-                'Likes',
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const UserLikeScreen(),
+          ),
+          FutureBuilder<int>(
+            future: _songCon.getUserSongCount(),
+            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return ListTile(
+                  trailing: Text(
+                    '${snapshot.data}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text(
+                    'Songs Uploaded',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
                 );
-              },
-            ),
-            const Divider(height: 20, indent: 1.0, color: listileColor),
-            ListTile(
-              title: Text(
-                'Top Tracks',
-                style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontStyle: FontStyle.normal),
+              }
+            },
+          ),
+          const Divider(height: 20, indent: 1.0, color: listileColor),
+          ListTile(
+            trailing: const FaIcon(FontAwesomeIcons.chevronRight,
+                color: Colors.white, size: 18),
+            title: Text(
+              'Song Plays',
+              style: GoogleFonts.inter(
+                color: Colors.white,
+                fontSize: 20,
               ),
             ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: FutureBuilder(
-                future: _songCon.getRankedSongs(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<SongModel>> snapshot) {
-                  if (snapshot.hasData) {
-                    final List<SongModel> songs = snapshot.data!
-                        .where((song) =>
-                            song.uid == FirebaseAuth.instance.currentUser?.uid)
-                        .toList();
-
-                    return ListView.separated(
-                      itemCount: songs.length > 5 ? 5 : songs.length,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const SizedBox(height: 10),
-                      itemBuilder: (BuildContext context, int index) {
-                        final SongModel song = songs[index];
-                        return ListTile(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SongPlayCountChart(songs: songs)),
-                            );
-                          },
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image:
-                                    CachedNetworkImageProvider(song.albumCover),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          title: Text(
-                            song.title,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
-                  } else {
-                    return const Center(
-                      child: LoadingIndicator(),
-                    );
-                  }
-                },
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const SongPlaysScreen()),
+              );
+            },
+          ),
+          const Divider(height: 20, indent: 1.0, color: listileColor),
+          ListTile(
+            trailing: const FaIcon(FontAwesomeIcons.chevronRight,
+                color: Colors.white, size: 18),
+            title: Text(
+              'Likes',
+              style: GoogleFonts.inter(
+                color: Colors.white,
+                fontSize: 20,
               ),
             ),
-          ]),
-        ),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const UserLikeScreen(),
+                ),
+              );
+            },
+          ),
+          const Divider(height: 20, indent: 1.0, color: listileColor),
+        ]),
       ),
     );
   }

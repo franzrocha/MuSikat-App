@@ -11,10 +11,12 @@ class ChatCard extends StatefulWidget {
     required this.index,
     required this.scrollController,
     required this.chat,
+
   }) : super(key: key);
   final ScrollController scrollController;
   final int index;
   final List<ChatMessage> chat;
+  
 
   @override
   State<ChatCard> createState() => _ChatCardState();

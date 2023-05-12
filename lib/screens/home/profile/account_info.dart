@@ -41,17 +41,17 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
             color: Colors.white,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.edit,
-              size: 20,
-            ),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       Navigator.pop(context);
+        //     },
+        //     icon: const Icon(
+        //       Icons.edit,
+        //       size: 20,
+        //     ),
+        //   ),
+        // ],
         showLogo: false,
       ),
       backgroundColor: musikatBackgroundColor,

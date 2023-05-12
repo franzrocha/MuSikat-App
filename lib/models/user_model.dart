@@ -12,19 +12,22 @@ class UserModel {
       gender,
       headerImage;
   Timestamp created, updated;
+  List<String> chatrooms;
 
   UserModel(
-      this.uid,
-      this.username,
-      this.lastName,
-      this.firstName,
-      this.email,
-      this.age,
-      this.gender,
-      this.profileImage,
-      this.headerImage,
-      this.created,
-      this.updated);
+    this.uid,
+    this.username,
+    this.lastName,
+    this.firstName,
+    this.email,
+    this.age,
+    this.gender,
+    this.profileImage,
+    this.headerImage,
+    this.created,
+    this.updated,
+    this.chatrooms,
+  );
 
   static UserModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = {};
@@ -43,6 +46,9 @@ class UserModel {
       json['headerImage'] ?? '',
       json['created'] ?? Timestamp.now(),
       json['updated'] ?? Timestamp.now(),
+      json['chatrooms'] != null
+          ? List<String>.from(json['chatrooms'])
+          : <String>[],
     );
   }
 

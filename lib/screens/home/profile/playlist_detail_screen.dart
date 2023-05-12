@@ -82,7 +82,7 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                       return songs.isEmpty
                           ? Center(
                               child: Text(
-                              'No songs in your playlist for now.',
+                              'No songs in the playlist for now.',
                               style: GoogleFonts.inter(
                                   color: Colors.white,
                                   fontSize: 15,

@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musikat_app/models/chat_message_model.dart';
 
-class ChatController with ChangeNotifier {
+class GlobalChatController with ChangeNotifier {
   late StreamSubscription _chatSub;
   List<ChatMessage> chats = [];
   String? previousChatID;
 
-  ChatController() {
+  GlobalChatController() {
     _chatSub = ChatMessage.currentChats().listen(chatUpdateHandler);
   }
 
@@ -29,16 +29,15 @@ class ChatController with ChangeNotifier {
     notifyListeners();
   }
 
-Future sendMessage({required String message}) async {
-  final globalChatRef = FirebaseFirestore.instance.collection('chats').doc('globalChat');
-  await globalChatRef.collection('messages').add(
-    ChatMessage(
-      sentBy: FirebaseAuth.instance.currentUser!.uid,
-      message: message,
-      chatRoomId: 'globalChat',
-      ts: Timestamp.now(),
-    ).json,
-  );
-}
-
+  Future sendMessage({required String message}) async {
+    final globalChatRef =
+        FirebaseFirestore.instance.collection('chats').doc('globalChat');
+    await globalChatRef.collection('messages').add(
+          ChatMessage(
+            sentBy: FirebaseAuth.instance.currentUser!.uid,
+            message: message,
+            ts: Timestamp.now(),
+          ).json,
+        );
+  }
 }

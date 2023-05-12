@@ -34,6 +34,7 @@ class ImageService {
         print(result);
         String publicUrl = await profileRef.getDownloadURL();
         print(publicUrl);
+
         FirebaseFirestore.instance
             .collection('users')
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -53,7 +54,6 @@ class ImageService {
       if (image != null) {
         final storageRef = FirebaseStorage.instance.ref();
 
-
         final String? uid = FirebaseAuth.instance.currentUser?.uid;
         final DocumentSnapshot userSnapshot =
             await FirebaseFirestore.instance.collection('users').doc(uid).get();
@@ -61,7 +61,8 @@ class ImageService {
         final String username = user.username;
 
         final headerRef = storageRef.child(
-           'users/$username/headerImage/${image.path.split('/').last}',);
+          'users/$username/headerImage/${image.path.split('/').last}',
+        );
         print(headerRef.fullPath);
         File file = File(image.path);
         print(image.path);

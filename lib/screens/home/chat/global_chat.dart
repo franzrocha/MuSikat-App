@@ -1,5 +1,5 @@
 import 'package:musikat_app/controllers/auth_controller.dart';
-import 'package:musikat_app/controllers/chat_controller.dart';
+import 'package:musikat_app/controllers/global_chat_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -13,7 +13,7 @@ class GlobalChatScreen extends StatefulWidget {
 
 class _GlobalChatScreenState extends State<GlobalChatScreen> {
   final AuthController _auth = locator<AuthController>();
-  final ChatController _chatCon = ChatController();
+  final GlobalChatController _chatCon = GlobalChatController();
 
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
@@ -146,13 +146,13 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                         focusNode: _messageFN,
                         style: GoogleFonts.inter(
                           color: Colors.black,
-                          fontSize: 10,
+                          fontSize: 12,
                         ),
                         controller: _messageController,
                         decoration: InputDecoration(
                           hintText: 'Type a message....',
                           hintStyle: GoogleFonts.inter(
-                            fontSize: 10,
+                            fontSize: 12,
                             color: Colors.grey,
                           ),
                           isDense: true,

@@ -2,15 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/services/image_service.dart';
 import 'package:musikat_app/utils/exports.dart';
 
-class EditHubScreen extends StatefulWidget {
-  const EditHubScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
 
   @override
-  State<EditHubScreen> createState() => _EditHubScreenState();
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditHubScreenState extends State<EditHubScreen> {
-  final TextEditingController _usernameCon = TextEditingController();
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  final TextEditingController _usernameCon = TextEditingController(),
+      _lastNameCon = TextEditingController(),
+      _firstNameCon = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class _EditHubScreenState extends State<EditHubScreen> {
       backgroundColor: musikatBackgroundColor,
       appBar: CustomAppBar(
         title: Text(
-          'Edit Hub',
+          'Edit Profile',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -55,7 +57,11 @@ class _EditHubScreenState extends State<EditHubScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: usernameForm(),
+                child: Column(children: [
+                  usernameForm(),
+                  lastNameForm(),
+                  firstNameForm()
+                ]),
               ),
             ],
           ),
@@ -88,6 +94,38 @@ class _EditHubScreenState extends State<EditHubScreen> {
       },
       hintText: "Username",
       prefixIcon: const Icon(Icons.person_pin_circle),
+    );
+  }
+
+  CustomTextField firstNameForm() {
+    return CustomTextField(
+      hintText: 'First Name',
+      controller: _firstNameCon,
+      obscureText: false,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      prefixIcon: const Icon(Icons.label_important),
+    );
+  }
+
+  CustomTextField lastNameForm() {
+    return CustomTextField(
+      hintText: 'Last Name',
+      controller: _lastNameCon,
+      obscureText: false,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      prefixIcon: const Icon(Icons.label),
     );
   }
 

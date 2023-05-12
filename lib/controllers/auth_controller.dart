@@ -117,7 +117,8 @@ class AuthController with ChangeNotifier {
             '',
             '',
             Timestamp.now(),
-            Timestamp.now());
+            Timestamp.now(),
+            []);
         return FirebaseFirestore.instance
             .collection('users')
             .doc(userModel.uid)

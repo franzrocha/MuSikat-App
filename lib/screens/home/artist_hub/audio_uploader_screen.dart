@@ -157,7 +157,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       final UserModel? user = await UserModel.getCurrentUser();
 
       // starts uploading the file
-      final String songId = await songService.uploadSong(
+      final UploadTask songId = await songService.uploadSong(
         title,
         user!.username,
         _selectedFile!.path,
@@ -171,7 +171,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       );
 
       // Get the song model with the uploaded file data
-      final SongModel song = await _songCon.getSongById(songId);
+      final SongModel song = await _songCon.getSongById(songId as String);
 
       // Close progress dialog
       Navigator.of(context).pop();
@@ -209,33 +209,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
           ),
         ),
         showLogo: false,
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Container(
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: const Color(0xfffca311),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: IconButton(
-                        onPressed: _uploadAudio,
-                        icon: const Icon(
-                          Icons.upload,
-                          size: 25,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+       
       ),
       backgroundColor: musikatBackgroundColor,
       body: Center(
@@ -392,6 +366,11 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: musikatColor,
+        onPressed: _uploadAudio,
+        child: const Icon(Icons.upload),
       ),
     );
   }

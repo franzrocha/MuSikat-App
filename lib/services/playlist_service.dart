@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/toast_msg.dart';
 
 class PlaylistService {
@@ -53,6 +54,7 @@ class PlaylistService {
         ToastMessage.show(context, 'Please choose an image for the playlist');
         return;
       }
+
       // Set the description field to an empty string if it's null or empty
       final String playlistDescription =
           description.isNotEmpty ? description : '';
@@ -71,22 +73,45 @@ class PlaylistService {
       // Convert the PlaylistModel to a JSON object
       Map<String, dynamic> json = newPlaylist.json;
 
+      // Show a loading indicator while adding the playlist
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(child: LoadingIndicator());
+        },
+      );
+
       await playlistRef.set(json);
+
+      // Hide the loading indicator
+      Navigator.pop(context);
 
       ToastMessage.show(context, 'Playlist created successfully');
     } catch (e) {
+      // Hide the loading indicator on error
+      Navigator.pop(context);
       ToastMessage.show(context, 'Error adding playlist: $e');
     }
     Navigator.pop(context);
   }
 
   static Future<void> editPlaylist(
-      BuildContext context, 
+      BuildContext context,
       PlaylistModel playlist,
       TextEditingController titleCon,
       TextEditingController descriptionCon,
       dynamic selectedPlaylistCover) async {
     try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(child: LoadingIndicator());
+        },
+      );
+
       // Create a new Firestore instance
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -131,6 +156,9 @@ class PlaylistService {
       ToastMessage.show(context, 'Playlist updated successfully');
     } catch (e) {
       ToastMessage.show(context, 'Error editing playlist: $e');
+    } finally {
+      // Hide loading indicator
+      Navigator.pop(context);
     }
     Navigator.pop(context);
   }
