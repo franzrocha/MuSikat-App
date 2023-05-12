@@ -41,231 +41,259 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: musikatBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 200,
-                child: Stack(
-                  children: [
-                    HeaderImage(uid: FirebaseAuth.instance.currentUser!.uid),
-                    editButton(),
-                    profilePic(),
-                  ],
-                ),
-              ),
-              usernameText(),
-              fullnameText(),
-              const SizedBox(height: 10),
-              Divider(
-                  height: 20,
-                  indent: 1.0,
-                  color: listileColor.withOpacity(0.4)),
-              SizedBox(
-                height: 170,
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    StreamBuilder<List<SongModel>>(
-                      stream: _songCon.getLatestSong(
-                          FirebaseAuth.instance.currentUser!.uid),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData || snapshot.data == null) {
-                          return Container();
-                        }
+        backgroundColor: musikatBackgroundColor,
+        body: SafeArea(
+          child: StreamBuilder<UserModel>(
+            stream: UserModel.fromUidStream(
+                uid: FirebaseAuth.instance.currentUser!.uid),
+            builder: (context, AsyncSnapshot<UserModel?> snapshot) {
+              if (!snapshot.hasData || snapshot.data == null) {
+                return Container();
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
 
-                        if (snapshot.data!.isEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 50),
-                            child: Text(
-                              "No songs found in your library",
-                              style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          );
-                        }
-                        if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Container();
-                        } else {
-                          final latestSong = snapshot.data!.first;
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              } else {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        child: Stack(
+                          children: [
+                            HeaderImage(
+                                uid: FirebaseAuth.instance.currentUser!.uid),
+                            editButton(snapshot),
+                            profilePic(),
+                          ],
+                        ),
+                      ),
+                      usernameText(snapshot),
+                      fullnameText(snapshot),
+                      const SizedBox(height: 10),
+                      Divider(
+                          height: 20,
+                          indent: 1.0,
+                          color: listileColor.withOpacity(0.4)),
+                      SizedBox(
+                        height: 170,
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10),
+                            StreamBuilder<List<SongModel>>(
+                              stream: _songCon.getLatestSong(
+                                  FirebaseAuth.instance.currentUser!.uid),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData ||
+                                    snapshot.data == null) {
+                                  return Container();
+                                }
 
-                          return Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 30, top: 10, bottom: 15),
-                                  child: Text('Latest Release',
+                                if (snapshot.data!.isEmpty) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 50),
+                                    child: Text(
+                                      "No songs found in your library",
                                       style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ),
-                              ),
-                              InkWell(
-                                onLongPress: () {
-                                  showModalBottomSheet(
-                                      backgroundColor: musikatColor4,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return SingleChildScrollView(
-                                          child: SongBottomField(
-                                            song: latestSong,
-                                            hideRemoveToPlaylist: true,
-                                          ),
-                                        );
-                                      });
-                                },
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => MusicPlayerScreen(
-                                            songs: [latestSong],
-                                          )));
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 30),
-                                      child: Container(
-                                        height: 95,
-                                        width: 95,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                                latestSong.albumCover),
-                                            fit: BoxFit.cover,
-                                          ),
-                                          color: Colors.grey.withOpacity(0.5),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: Colors.grey.withOpacity(0.5),
-                                          ),
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Container();
+                                } else {
+                                  final latestSong = snapshot.data!.first;
+
+                                  return Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 30, top: 10, bottom: 15),
+                                          child: Text('Latest Release',
+                                              style: GoogleFonts.inter(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              )),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          latestSong.title.length > 25
-                                              ? '${latestSong.title.substring(0, 25)}...'
-                                              : latestSong.title,
-                                          style: GoogleFonts.inter(
-                                            color: Colors.white,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                      InkWell(
+                                        onLongPress: () {
+                                          showModalBottomSheet(
+                                              backgroundColor: musikatColor4,
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return SingleChildScrollView(
+                                                  child: SongBottomField(
+                                                    song: latestSong,
+                                                    hideRemoveToPlaylist: true,
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MusicPlayerScreen(
+                                                        songs: [latestSong],
+                                                      )));
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 30),
+                                              child: Container(
+                                                height: 95,
+                                                width: 95,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        latestSong.albumCover),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: Colors.grey
+                                                        .withOpacity(0.5),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  latestSong.title.length > 25
+                                                      ? '${latestSong.title.substring(0, 25)}...'
+                                                      : latestSong.title,
+                                                  style: GoogleFonts.inter(
+                                                    color: Colors.white,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                Text(
+                                                  DateFormat("y").format(
+                                                      latestSong.createdAt),
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 10,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          DateFormat("y")
-                                              .format(latestSong.createdAt),
-                                          style: GoogleFonts.inter(
-                                            fontSize: 10,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
+                                    ],
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, top: 15, bottom: 10),
+                          child: Text("Artist's Hub",
+                              style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CardTile(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AudioUploaderScreen(),
+                                  ));
+                                },
+                                icon: Icons.upload_file,
+                                text: 'Upload a file',
+                              ),
+                              CardTile(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const LibraryScreen(),
+                                  ));
+                                },
+                                icon: Icons.library_music,
+                                text: 'Library',
+                              ),
+                              CardTile(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const InsightsScreen(),
+                                  ));
+                                },
+                                icon: Icons.stacked_bar_chart,
+                                text: 'Insights',
+                              ),
+                              CardTile(
+                                onTap: () {},
+                                icon: Icons.monetization_on,
+                                text: 'Support',
                               ),
                             ],
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30, top: 15, bottom: 10),
-                  child: Text("Artist's Hub",
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ),
-              ),
-              SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CardTile(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const AudioUploaderScreen(),
-                          ));
-                        },
-                        icon: Icons.upload_file,
-                        text: 'Upload a file',
-                      ),
-                      CardTile(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const LibraryScreen(),
-                          ));
-                        },
-                        icon: Icons.library_music,
-                        text: 'Library',
-                      ),
-                      CardTile(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const InsightsScreen(),
-                          ));
-                        },
-                        icon: Icons.stacked_bar_chart,
-                        text: 'Insights',
-                      ),
-                      CardTile(
-                        onTap: () {},
-                        icon: Icons.monetization_on,
-                        text: 'Support',
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ),
-            ],
+                );
+              }
+            },
           ),
-        ),
-      ),
-    );
+        ));
   }
 
-  Align usernameText() {
+  Align usernameText(snapshot) {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 31),
-        child: Text(user?.username ?? '',
+        child: Text(snapshot.data!.username,
             style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 16,
@@ -274,13 +302,13 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
     );
   }
 
-  Align fullnameText() {
+  Align fullnameText(snapshot) {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 31),
         child: Text(
-          '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
+          '${snapshot.data!.firstName} ${snapshot.data!.lastName}',
           style: GoogleFonts.inter(
               color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold),
         ),
@@ -288,7 +316,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
     );
   }
 
-  Positioned editButton() {
+  Positioned editButton(snapshot) {
     return Positioned(
       right: 12,
       bottom: 65,
@@ -297,7 +325,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
           InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const EditProfileScreen(),
+                builder: (context) => EditProfileScreen(user: snapshot.data!),
               ));
             },
             child: Container(

@@ -106,4 +106,17 @@ class UserModel {
     }
     return null;
   }
+
+  Future<void> updateProfile(
+    String? username,
+    String? lastName,
+    String? firstName,
+  ) async {
+    final data = <String, dynamic>{};
+    if (username != null) data['username'] = username;
+
+    if (lastName != null) data['lastName'] = lastName;
+    if (firstName != null) data['firstName'] = firstName;
+    await FirebaseFirestore.instance.collection('users').doc(uid).update(data);
+  }
 }

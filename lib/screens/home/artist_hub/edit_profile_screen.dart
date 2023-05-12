@@ -1,18 +1,30 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/services/image_service.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+  const EditProfileScreen({super.key, required this.user});
+  final UserModel user;
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController _usernameCon = TextEditingController(),
-      _lastNameCon = TextEditingController(),
-      _firstNameCon = TextEditingController();
+  TextEditingController? _usernameCon, _lastNameCon, _firstNameCon;
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameCon = TextEditingController(text: widget.user.username);
+    _lastNameCon = TextEditingController(text: widget.user.lastName);
+    _firstNameCon = TextEditingController(text: widget.user.firstName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +67,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(children: [
-                  usernameForm(),
-                  lastNameForm(),
-                  firstNameForm()
-                ]),
+              Form(
+                onChanged: () {
+                  _formKey.currentState?.validate();
+                  if (mounted) {
+                    setState(() {});
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(children: [
+                    usernameForm(),
+                    lastNameForm(),
+                    firstNameForm()
+                  ]),
+                ),
               ),
             ],
           ),
@@ -70,7 +90,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: musikatColor,
         onPressed: () {
-          Navigator.pop(context);
+          String newUsername = _usernameCon!.text.trim();
+          String newLastName = _lastNameCon!.text.trim();
+          String newFirstName = _firstNameCon!.text.trim();
+
+          if (widget.user.username == newUsername &&
+              widget.user.lastName == newLastName &&
+              widget.user.firstName == newFirstName) {
+            ToastMessage.show(context, 'User details are already up to date');
+          } else {
+            widget.user
+                .updateProfile(newUsername, newLastName, newFirstName)
+                .then((value) {
+              ToastMessage.show(context, 'User profile updated successfully');
+              Navigator.pop(context);
+            }).catchError((error) {
+              ToastMessage.show(context, 'Error updating user profile $error');
+            });
+          }
         },
         child: const Icon(Icons.save),
       ),

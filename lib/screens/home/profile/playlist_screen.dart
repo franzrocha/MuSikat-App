@@ -76,8 +76,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                               context: context,
                               builder: (BuildContext context) {
                                 return SingleChildScrollView(
-                                  child: PlaylistBottomField(playlist: playlist,)
-                                );
+                                    child: PlaylistBottomField(
+                                  playlist: playlist,
+                                ));
                               });
                         },
                         onTap: () {

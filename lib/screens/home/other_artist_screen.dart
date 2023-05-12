@@ -206,32 +206,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                   .toList();
 
               return playlists.isEmpty
-                  ? Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 30, bottom: 10, top: 20),
-                            child: Text('Playlists',
-                                style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ),
-                        ),
-                        Center(
-                            child: Text(
-                          'User has no playlist yet.',
-                          style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 15,
-                              height: 5,
-                              fontWeight: FontWeight.w500),
-                        ))
-                      ],
-                    )
+                  ? Container()
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
