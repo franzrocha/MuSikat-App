@@ -4,15 +4,29 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/service_locators.dart';
 
 class MusicHandler with ChangeNotifier, RouteAware {
   final AudioPlayer player = AudioPlayer();
   final SongsController _songCon = SongsController();
+  //final MusicHandler _musicHandler = locator<MusicHandler>();
+
+  //list of songs declared
+  List<SongModel> currentSongs = [];
+
+  List<SongModel> genreSongs = [];
+  List<SongModel> descriptionSongs = [];
+  List<SongModel> latestSong = [];
+  List<SongModel> languageSongs = [];
+  List<SongModel> songSearchResult = [];
+  List<SongModel> likedSongs = [];
+
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+
   int currentIndex = 0;
-  List<SongModel> songs = [];
+  SongModel? currentSong;
 
   MediaItem _createMediaItem(SongModel song) => MediaItem(
         id: song.songId,
@@ -21,26 +35,27 @@ class MusicHandler with ChangeNotifier, RouteAware {
         artUri: Uri.parse(song.albumCover),
       );
 
-  Future<void> setAudioSource(
-      AudioPlayer player, SongModel song, String uid) async {
+  Future<void> setAudioSource(SongModel song, String uid) async {
     final source = AudioSource.uri(
       Uri.parse(song.audio),
       tag: _createMediaItem(song),
     );
-
     try {
-      await player.setAudioSource(source);
+      if (!isPlaying ||
+          (currentSong != null && currentSong?.songId != song.songId)) {
+        await player.setAudioSource(source);
+        isPlaying = true;
+        currentSong = song;
+      }
       await player.play();
-      isPlaying = true;
       notifyListeners();
-
       await _songCon.updateSongPlayCount(song.songId);
     } catch (e) {
       if (e is PlatformException) {
         await Future.delayed(const Duration(seconds: 5));
-        await setAudioSource(player, song, uid);
+        await setAudioSource(song, uid);
       } else {
-            rethrow;
+        rethrow;
       }
     }
   }
@@ -59,11 +74,11 @@ class MusicHandler with ChangeNotifier, RouteAware {
   Duration get getDuration => duration;
   Duration get getPosition => position;
 
-  @override
-  void dispose() {
-    player.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   player.dispose();
+  //   super.dispose();
+  // }
 
   @override
   void didPush() {

@@ -3,11 +3,14 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:musikat_app/widgets/nav_bar.dart';
 import 'dart:developer' as developer;
+import '../../music_player/music_handler.dart';
 import '../../screens/authentication/welcome_screen.dart';
+import 'package:musikat_app/service_locators.dart';
 part 'navigation_animations.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final MusicHandler musicHandler = locator.get<MusicHandler>();
   List<String> routeStack = [WelcomeScreen.route];
   String get currentRoute {
     String result = '';
@@ -152,7 +155,11 @@ class NavigationService {
 
   material.PageRoute getRoute(RouteSettings settings) {
     if (FirebaseAuth.instance.currentUser != null) {
-      return FadeRoute(page: const NavBar(), settings: settings);
+      return FadeRoute(
+          page: NavBar(
+            musicHandler: musicHandler,
+          ),
+          settings: settings);
     } else {
       return FadeRoute(page: const WelcomeScreen(), settings: settings);
     }

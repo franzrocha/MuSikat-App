@@ -19,7 +19,7 @@ class SongModel {
     required this.uid,
     required this.languages,
     required this.description,
-    required this.playCount, 
+    required this.playCount,
     required this.likeCount,
   });
 
@@ -66,6 +66,20 @@ class SongModel {
         'likeCount': likeCount,
       };
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SongModel &&
+        other.songId == songId &&
+        other.title == title; // add other fields that make a song unique
+  }
+
+  @override
+  int get hashCode =>
+      songId.hashCode ^
+      title.hashCode; // add hashCodes of other fields that make a song unique
+
   static Future<List<SongModel>> getSongs() async {
     List<SongModel> songs = [];
     await FirebaseFirestore.instance
@@ -83,5 +97,4 @@ class SongModel {
   searchTitle(String song) {
     return title.toLowerCase().contains(song.toLowerCase());
   }
-
 }

@@ -5,7 +5,6 @@ import 'package:musikat_app/service_locators.dart';
 import 'firebase_options.dart';
 import 'app.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -20,7 +19,7 @@ Future<void> main() async {
     androidNotificationIcon: 'mipmap/musikat_launcher',
   );
 
-  setupLocators();
+  await setupLocators();
 
   runApp(const MyApp());
 }

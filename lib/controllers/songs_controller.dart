@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class SongsController with ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -81,6 +82,45 @@ class SongsController with ChangeNotifier {
         .toList();
 
     return songs;
+  }
+
+  Future<List<SongModel>> getEmotionSongs(String description) async {
+    List<String> emotion = [];
+
+    if (description == 'happy') {
+      emotion.addAll(happy);
+    } else if (description == 'sad') {
+      emotion.addAll(sad);
+    } else {
+      emotion.addAll(normal);
+    }
+
+    const chunkSize = 10;
+    final chunkedEmotions = <List<String>>[];
+
+    for (var i = 0; i < emotion.length; i += chunkSize) {
+      final end =
+          (i + chunkSize < emotion.length) ? i + chunkSize : emotion.length;
+      final chunk = emotion.sublist(i, end);
+      chunkedEmotions.add(chunk);
+    }
+
+    final Set<SongModel> songs = {};
+
+    for (final chunk in chunkedEmotions) {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('songs')
+          .where('description', arrayContainsAny: chunk)
+          .get();
+
+      final chunkSongs = querySnapshot.docs
+          .map((doc) => SongModel.fromDocumentSnap(doc))
+          .toSet();
+
+      songs.addAll(chunkSongs);
+    }
+
+    return songs.toList();
   }
 
   Future<List<SongModel>> getGenreSongs(String genre) async {

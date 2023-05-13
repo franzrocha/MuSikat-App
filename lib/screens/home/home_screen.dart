@@ -9,9 +9,13 @@ import 'package:musikat_app/screens/home/other_artist_screen.dart';
 
 import 'package:musikat_app/utils/exports.dart';
 
+import '../../music_player/music_handler.dart';
+
 class HomeScreen extends StatefulWidget {
+  final MusicHandler musicHandler;
   static const String route = 'home-screen';
-  const HomeScreen({Key? key}) : super(key: key);
+
+  const HomeScreen({Key? key, required this.musicHandler}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -56,9 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const LoadingContainer();
                   } else {
-                    final songs = snapshot.data!;
-                    final randomSongs = songs..shuffle();
-                    final limitedSongs = randomSongs.take(5).toList();
+                    widget.musicHandler.currentSongs = snapshot.data!;
+                    final randomSongs = widget.musicHandler
+                      ..currentSongs.shuffle();
+                    final limitedSongs =
+                        randomSongs.currentSongs.take(5).toList();
 
                     return SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -72,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (context) => MusicPlayerScreen(
-                                          songs: songs,
+                                          songs: [song],
                                           initialIndex:
                                               limitedSongs.indexOf(song),
                                         )),
@@ -113,8 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Text(
-                                    song.title
-                                    .length > 19
+                                    song.title.length > 19
                                         ? '${song.title.substring(0, 19)}..'
                                         : song.title,
                                     overflow: TextOverflow.ellipsis,
@@ -188,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (context) => MusicPlayerScreen(
-                                          songs: songs,
+                                          songs: [song],
                                           initialIndex:
                                               limitedSongs.indexOf(song),
                                         )),
@@ -203,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           song: song,
                                           hideEdit: true,
                                           hideDelete: true,
-                                             hideRemoveToPlaylist: true,
+                                          hideRemoveToPlaylist: true,
                                         ),
                                       );
                                     });
