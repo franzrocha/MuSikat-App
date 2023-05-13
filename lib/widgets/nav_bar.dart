@@ -12,6 +12,7 @@ import 'package:musikat_app/widgets/mini_player.dart';
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
   const NavBar({Key? key, required this.musicHandler}) : super(key: key);
+
   final MusicHandler musicHandler;
 
   @override
@@ -91,7 +92,8 @@ class _NavBarState extends State<NavBar> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const MiniPlayer(),
+              if (widget.musicHandler.currentSongs.isNotEmpty)
+                const MiniPlayer(),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40.0),

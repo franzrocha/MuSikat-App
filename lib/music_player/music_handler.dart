@@ -20,6 +20,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
   List<SongModel> languageSongs = [];
   List<SongModel> songSearchResult = [];
   List<SongModel> likedSongs = [];
+  List<SongModel> randomSongs = [];
 
   bool isPlaying = false;
   Duration duration = Duration.zero;

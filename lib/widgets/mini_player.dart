@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
-import 'package:musikat_app/utils/constants.dart';
 
 import '../service_locators.dart';
 
@@ -12,7 +11,7 @@ class MiniPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MusicHandler _musicHandler = locator<MusicHandler>();
+    final MusicHandler musicHandler = locator.get<MusicHandler>();
 
     const double borderRadius = 10;
     return Container(
@@ -38,21 +37,11 @@ class MiniPlayer extends StatelessWidget {
             //tuhmbnail
             Expanded(
                 flex: 1,
-                child: Container(
-                    //   decoration: BoxDecoration(
-                    //     color: musikatBackgroundColor,
-                    //     border: Border.all(
-                    //       color: const Color.fromARGB(255, 124, 131, 127),
-                    //     ),
-                    //     borderRadius: BorderRadius.circular(5),
-                    //     image: DecorationImage(
-                    //       image: NetworkImage(
-                    //           _musicHandler[_musicHandler.currentIndex].albumCover),
-                    //       fit: BoxFit.cover,
-                    //     ),
-                    //   ),
-
-                    )),
+                child: SizedBox(
+                  child: Image(
+                      image:
+                          NetworkImage(musicHandler.currentSong!.albumCover)),
+                )),
             //Text
             const Expanded(
               flex: 5,

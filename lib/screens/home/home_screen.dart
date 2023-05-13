@@ -60,11 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const LoadingContainer();
                   } else {
-                    widget.musicHandler.currentSongs = snapshot.data!;
-                    final randomSongs = widget.musicHandler
-                      ..currentSongs.shuffle();
-                    final limitedSongs =
-                        randomSongs.currentSongs.take(5).toList();
+                    final List<SongModel> songs = snapshot.data!;
+                    final randomSongs = songs..shuffle();
+                    final limitedSongs = randomSongs.take(5).toList();
+                    widget.musicHandler.randomSongs = limitedSongs;
 
                     return SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -75,14 +74,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => MusicPlayerScreen(
-                                          songs: [song],
-                                          initialIndex:
-                                              limitedSongs.indexOf(song),
-                                        )),
-                              ),
+                              onTap: () {
+                                widget.musicHandler.currentSongs =
+                                    widget.musicHandler.randomSongs;
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            songs: limitedSongs,
+                                            initialIndex:
+                                                limitedSongs.indexOf(song),
+                                          )),
+                                );
+                              },
                               onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,
@@ -178,8 +181,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const LoadingContainer();
                   } else {
                     final songs = snapshot.data!;
-
                     final limitedSongs = songs.take(5).toList();
+                    widget.musicHandler.latestSong = songs;
 
                     return SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -190,14 +193,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => MusicPlayerScreen(
-                                          songs: [song],
-                                          initialIndex:
-                                              limitedSongs.indexOf(song),
-                                        )),
-                              ),
+                              onTap: () {
+                                widget.musicHandler.currentSongs = songs;
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            songs: limitedSongs,
+                                            initialIndex:
+                                                limitedSongs.indexOf(song),
+                                          )),
+                                );
+                              },
                               onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,

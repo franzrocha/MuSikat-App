@@ -44,16 +44,17 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   @override
   void initState() {
     super.initState();
+    _musicHandler.currentSongs = widget.songs;
     _musicHandler.currentIndex = widget.initialIndex ?? 0;
-    _musicHandler.setAudioSource(
-        _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
+    _musicHandler.setAudioSource(widget.songs[widget.initialIndex!], uid);
+    print(widget.initialIndex);
 
     checkIfSongIsLiked();
   }
 
   void checkIfSongIsLiked() async {
     bool isLiked = await likedCon.isSongLikedByUser(
-        _musicHandler.currentSongs[_musicHandler.currentIndex].songId, uid);
+        widget.songs[_musicHandler.currentIndex].songId, uid);
     setState(() {
       _isLiked = isLiked;
     });
@@ -134,8 +135,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             ),
                             borderRadius: BorderRadius.circular(5),
                             image: DecorationImage(
-                              image: NetworkImage(_musicHandler
-                                  .currentSongs[_musicHandler.currentIndex]
+                              image: NetworkImage(widget
+                                  .songs[_musicHandler.currentIndex]
                                   .albumCover),
                               fit: BoxFit.cover,
                             ),
@@ -149,9 +150,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                               Expanded(
                                 child: MarqueeText(
                                   text: TextSpan(
-                                    text: _musicHandler
-                                        .currentSongs[
-                                            _musicHandler.currentIndex]
+                                    text: widget
+                                        .songs[_musicHandler.currentIndex]
                                         .title,
                                   ),
                                   style: const TextStyle(
@@ -173,9 +173,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           child: Row(
                             children: [
                               Text(
-                                _musicHandler
-                                    .currentSongs[_musicHandler.currentIndex]
-                                    .artist,
+                                widget.songs[_musicHandler.currentIndex].artist,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.normal,
@@ -280,9 +278,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                                 if (_isLiked) {
                                   await likedCon.addLikedSong(
                                     uid,
-                                    _musicHandler
-                                        .currentSongs[
-                                            _musicHandler.currentIndex]
+                                    widget.songs[_musicHandler.currentIndex]
                                         .songId,
                                   );
                                   await FirebaseFirestore.instance
@@ -299,16 +295,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                                 } else {
                                   await likedCon.removeLikedSong(
                                     uid,
-                                    _musicHandler
-                                        .currentSongs[
-                                            _musicHandler.currentIndex]
+                                    widget.songs[_musicHandler.currentIndex]
                                         .songId,
                                   );
                                   await FirebaseFirestore.instance
                                       .collection('songs')
-                                      .doc(_musicHandler
-                                          .currentSongs[
-                                              _musicHandler.currentIndex]
+                                      .doc(widget
+                                          .songs[_musicHandler.currentIndex]
                                           .songId)
                                       .update({
                                     'likeCount': FieldValue.increment(-1)
