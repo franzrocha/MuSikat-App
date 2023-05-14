@@ -360,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                           padding: const EdgeInsets.only(left: 30, bottom: 10),
                           child: buildCustomContainer(
-                              'Check out these artists...')),
+                              'Artists to look out for...')),
                     ),
                     SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -398,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 image:
                                                     user.profileImage.isNotEmpty
                                                         ? DecorationImage(
-                                                            image: NetworkImage(
+                                                            image: CachedNetworkImageProvider(
                                                                 user.profileImage),
                                                             fit: BoxFit.cover,
                                                           )

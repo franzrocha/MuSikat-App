@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/screens/home/emotion_screen.dart';
+import 'package:musikat_app/utils/exports.dart';
 import '../../models/song_model.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -47,7 +47,7 @@ class _CameraScreenState extends State<CameraScreen> {
       if (!mounted) {
         return;
       }
-      setState(() {}); 
+      setState(() {});
     }).catchError((e) {
       print(e);
     });
@@ -65,6 +65,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
     if (cameraController != null && cameraController!.value.isInitialized) {
       return Scaffold(
+        backgroundColor: musikatBackgroundColor,
         body: Stack(
           children: [
             CameraPreview(cameraController!),
@@ -179,13 +180,15 @@ class _CameraScreenState extends State<CameraScreen> {
               },
               child: button(Icons.camera_alt_outlined, Alignment.bottomCenter),
             ),
-            const Align(
-              alignment: AlignmentDirectional.topCenter,
-              child: Text(
-                "FER Camera",
-                style: TextStyle(
-                  fontSize: 30,
-                ),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text("FER Camera",
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white.withOpacity(0.8),
+                    )),
               ),
             ),
           ],
@@ -208,7 +211,14 @@ class _CameraScreenState extends State<CameraScreen> {
         width: 50,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.topRight,
+            colors: [
+              Color(0xfffca311),
+              Color(0xff62DD69),
+            ], // Define your gradient colors here
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black26,
@@ -220,7 +230,7 @@ class _CameraScreenState extends State<CameraScreen> {
         child: Center(
           child: Icon(
             icon,
-            color: Colors.black54,
+            color: Colors.white,
           ),
         ),
       ),

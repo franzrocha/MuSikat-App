@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:get_it/get_it.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';

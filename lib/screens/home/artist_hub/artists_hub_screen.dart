@@ -4,7 +4,6 @@ import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/screens/home/artist_hub/edit_profile_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/library_screen.dart';
 import 'package:musikat_app/service_locators.dart';
