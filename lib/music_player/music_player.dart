@@ -38,7 +38,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   bool isPlaying = false;
   bool isLoadingAudio = false;
 
-  bool _isLiked = false;
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
@@ -46,18 +45,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     super.initState();
     _musicHandler.currentSongs = widget.songs;
     _musicHandler.currentIndex = widget.initialIndex ?? 0;
-    _musicHandler.setAudioSource(widget.songs[widget.initialIndex!], uid);
+    _musicHandler.setAudioSource(
+      widget.songs[widget.initialIndex ??
+          0], // provide a default value (e.g., 0) when initialIndex is null
+      uid,
+    );
+
     print(widget.initialIndex);
 
-    checkIfSongIsLiked();
-  }
-
-  void checkIfSongIsLiked() async {
-    bool isLiked = await likedCon.isSongLikedByUser(
-        widget.songs[_musicHandler.currentIndex].songId, uid);
-    setState(() {
-      _isLiked = isLiked;
-    });
+    _musicHandler.checkIfSongIsLiked(uid, widget.songs);
   }
 
   // @override
@@ -66,47 +62,47 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   //   super.dispose();
   // }
 
-  Future<void> playPrevious() async {
-    if (isLoadingAudio) {
-      return;
-    }
-    if (_musicHandler.currentIndex > 0) {
-      _musicHandler.currentIndex--;
-    } else {
-      _musicHandler.currentIndex = _musicHandler.currentSongs.length - 1;
-    }
+  // Future<void> playPrevious() async {
+  //   if (isLoadingAudio) {
+  //     return;
+  //   }
+  //   if (_musicHandler.currentIndex > 0) {
+  //     _musicHandler.currentIndex--;
+  //   } else {
+  //     _musicHandler.currentIndex = _musicHandler.currentSongs.length - 1;
+  //   }
 
-    try {
-      checkIfSongIsLiked();
-      await _musicHandler.setAudioSource(
-          _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
-    } on PlayerInterruptedException catch (_) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      await _musicHandler.setAudioSource(
-          _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
-    }
-  }
+  //   try {
+  //     checkIfSongIsLiked();
+  //     await _musicHandler.setAudioSource(
+  //         _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
+  //   } on PlayerInterruptedException catch (_) {
+  //     await Future.delayed(const Duration(milliseconds: 500));
+  //     await _musicHandler.setAudioSource(
+  //         _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
+  //   }
+  // }
 
-  Future<void> playNext() async {
-    if (isLoadingAudio) {
-      return;
-    }
-    if (_musicHandler.currentIndex < _musicHandler.currentSongs.length - 1) {
-      _musicHandler.currentIndex++;
-    } else {
-      _musicHandler.currentIndex = 0;
-    }
+  // Future<void> playNext() async {
+  //   if (isLoadingAudio) {
+  //     return;
+  //   }
+  //   if (_musicHandler.currentIndex < _musicHandler.currentSongs.length - 1) {
+  //     _musicHandler.currentIndex++;
+  //   } else {
+  //     _musicHandler.currentIndex = 0;
+  //   }
 
-    try {
-      checkIfSongIsLiked();
-      await _musicHandler.setAudioSource(
-          _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
-    } on PlayerInterruptedException catch (_) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      await _musicHandler.setAudioSource(
-          _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
-    }
-  }
+  //   try {
+  //     checkIfSongIsLiked();
+  //     await _musicHandler.setAudioSource(
+  //         _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
+  //   } on PlayerInterruptedException catch (_) {
+  //     await Future.delayed(const Duration(milliseconds: 500));
+  //     await _musicHandler.setAudioSource(
+  //         _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +212,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             const SizedBox(width: 25),
                             InkWell(
                               onTap: () async {
-                                await playPrevious();
+                                await _musicHandler.playPrevious(
+                                    uid, widget.songs);
                               },
                               child: const FaIcon(
                                 FontAwesomeIcons.backwardStep,
@@ -249,7 +246,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                                   return pauseButton();
                                 } else if (processingState ==
                                     ProcessingState.completed) {
-                                  playNext();
+                                  _musicHandler.playNext(uid, widget.songs);
                                   return const LoadingIndicator();
                                 } else {
                                   return pauseButton();
@@ -259,7 +256,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             const SizedBox(width: 25),
                             InkWell(
                               onTap: () {
-                                playNext();
+                                _musicHandler.playNext(uid, widget.songs);
                               },
                               child: const FaIcon(
                                 FontAwesomeIcons.forwardStep,
@@ -270,12 +267,12 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             const SizedBox(width: 30),
                             GestureDetector(
                               onTap: () async {
-                                setState(() {
-                                  _isLiked = !_isLiked;
-                                });
+                                _musicHandler
+                                    .setIsLiked(!_musicHandler.isLiked);
+
                                 String uid =
                                     FirebaseAuth.instance.currentUser!.uid;
-                                if (_isLiked) {
+                                if (_musicHandler.isLiked) {
                                   await likedCon.addLikedSong(
                                     uid,
                                     widget.songs[_musicHandler.currentIndex]
@@ -312,10 +309,12 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                                 }
                               },
                               child: FaIcon(
-                                _isLiked
+                                _musicHandler.isLiked
                                     ? FontAwesomeIcons.solidHeart
                                     : FontAwesomeIcons.heart,
-                                color: _isLiked ? Colors.red : Colors.white,
+                                color: _musicHandler.isLiked
+                                    ? Colors.red
+                                    : Colors.white,
                                 size: 25,
                               ),
                             ),

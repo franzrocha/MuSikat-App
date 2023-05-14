@@ -30,7 +30,7 @@ class _CameraScreenState extends State<CameraScreen> {
   late List<CameraDescription> cameras;
   CameraController? cameraController;
 
-  int direction = 0;
+  int direction = 1;
 
   @override
   void initState() {
@@ -160,15 +160,18 @@ class _CameraScreenState extends State<CameraScreen> {
 
                     // Call the API with the download URL
                     Uri apiUrl = Uri.parse(
-                        'https://da3b-143-44-164-134.ngrok-free.app/?image=$downloadUrl');
+                        'https://d6f5-143-44-164-134.ngrok-free.app/?image=$downloadUrl');
                     http.Response response = await http.get(apiUrl);
 
-                    if (response.statusCode == 200) {
+                    if (response.statusCode == 255) {
                       emotion = response.body;
+
                       // API call successful
                       // print('API response: ${response.body}');
                       Fluttertoast.showToast(
                           msg: 'It seems that you are ${response.body} Today!');
+                    } else if (response.body == 'blank') {
+                      Fluttertoast.showToast(msg: 'No Face Detected');
                     } else {
                       // API call failed
                       print(

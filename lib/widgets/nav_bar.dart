@@ -9,6 +9,8 @@ import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/mini_player.dart';
 
+import '../service_locators.dart';
+
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
   const NavBar({Key? key, required this.musicHandler}) : super(key: key);
@@ -21,7 +23,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
-
+  // final MusicHandler _musicHandler = locator<MusicHandler>();
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
@@ -78,7 +80,7 @@ class _NavBarState extends State<NavBar> {
       body: pages[pageIndex],
       bottomNavigationBar: SafeArea(
         child: Container(
-          height: 140,
+          height: 160,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(30), topLeft: Radius.circular(30)),
@@ -92,8 +94,8 @@ class _NavBarState extends State<NavBar> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (widget.musicHandler.currentSongs.isNotEmpty)
-                const MiniPlayer(),
+              //   if (widget.musicHandler.currentSongs.isNotEmpty)
+              const MiniPlayer(),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40.0),

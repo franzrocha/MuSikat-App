@@ -6,9 +6,12 @@ import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/service_locators.dart';
 
+import '../controllers/liked_songs_controller.dart';
+
 class MusicHandler with ChangeNotifier, RouteAware {
   final AudioPlayer player = AudioPlayer();
   final SongsController _songCon = SongsController();
+  final LikedSongsController likedCon = LikedSongsController();
   //final MusicHandler _musicHandler = locator<MusicHandler>();
 
   //list of songs declared
@@ -25,6 +28,8 @@ class MusicHandler with ChangeNotifier, RouteAware {
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+  bool isLoadingAudio = false;
+  bool isLiked = false;
 
   int currentIndex = 0;
   SongModel? currentSong;
@@ -68,6 +73,54 @@ class MusicHandler with ChangeNotifier, RouteAware {
     final seconds = twoDigits(duration.inSeconds.remainder(60));
 
     return [if (duration.inHours > 0) hours, minutes, seconds].join(":");
+  }
+
+  Future<void> playPrevious(String uid, List<SongModel> songs) async {
+    if (isLoadingAudio) {
+      return;
+    }
+    if (currentIndex > 0) {
+      currentIndex--;
+    } else {
+      currentIndex = currentSongs.length - 1;
+    }
+
+    try {
+      checkIfSongIsLiked(uid, songs);
+      await setAudioSource(currentSongs[currentIndex], uid);
+    } on PlayerInterruptedException catch (_) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      await setAudioSource(currentSongs[currentIndex], uid);
+    }
+  }
+
+  Future<void> playNext(String uid, List<SongModel> songs) async {
+    if (isLoadingAudio) {
+      return;
+    }
+    if (currentIndex < currentSongs.length - 1) {
+      currentIndex++;
+    } else {
+      currentIndex = 0;
+    }
+
+    try {
+      checkIfSongIsLiked(uid, songs);
+      await setAudioSource(currentSongs[currentIndex], uid);
+    } on PlayerInterruptedException catch (_) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      await setAudioSource(currentSongs[currentIndex], uid);
+    }
+  }
+
+  void checkIfSongIsLiked(String uid, List<SongModel> songs) async {
+    isLiked = await likedCon.isSongLikedByUser(songs[currentIndex].songId, uid);
+    notifyListeners();
+  }
+
+  void setIsLiked(bool isLiked) {
+    this.isLiked = isLiked;
+    notifyListeners();
   }
 
   // Getters
