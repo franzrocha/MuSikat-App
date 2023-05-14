@@ -23,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final SongsController _songCon = SongsController();
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -75,16 +76,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
                               onTap: () {
-                                widget.musicHandler.currentSongs =
-                                    widget.musicHandler.randomSongs;
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => MusicPlayerScreen(
-                                            songs: limitedSongs,
-                                            initialIndex:
-                                                limitedSongs.indexOf(song),
-                                          )),
-                                );
+                                widget.musicHandler.currentSongs = limitedSongs;
+                                widget.musicHandler.currentIndex =
+                                    limitedSongs.indexOf(song);
+                                widget.musicHandler.setAudioSource(
+                                    limitedSongs[
+                                        widget.musicHandler.currentIndex],
+                                    uid);
                               },
                               onLongPress: () {
                                 showModalBottomSheet(
@@ -194,15 +192,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
                               onTap: () {
-                                widget.musicHandler.currentSongs = songs;
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => MusicPlayerScreen(
-                                            songs: limitedSongs,
-                                            initialIndex:
-                                                limitedSongs.indexOf(song),
-                                          )),
-                                );
+                                widget.musicHandler.currentSongs = limitedSongs;
+                                widget.musicHandler.currentIndex =
+                                    limitedSongs.indexOf(song);
+                                widget.musicHandler.setAudioSource(song, uid);
                               },
                               onLongPress: () {
                                 showModalBottomSheet(
