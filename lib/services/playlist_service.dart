@@ -3,11 +3,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/utils/exports.dart';
-import 'package:musikat_app/widgets/toast_msg.dart';
 
 class PlaylistService {
   static Future<void> createPlaylist(
@@ -157,7 +155,7 @@ class PlaylistService {
     } catch (e) {
       ToastMessage.show(context, 'Error editing playlist: $e');
     } finally {
-      // Hide loading indicator
+     
       Navigator.pop(context);
     }
     Navigator.pop(context);

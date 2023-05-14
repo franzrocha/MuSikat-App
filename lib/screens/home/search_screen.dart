@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
@@ -17,36 +18,19 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textCon = TextEditingController();
   Future<List<SongModel>>? getSongs;
   Future<List<UserModel>>? getUsers;
+  final SongsController _songCon = SongsController();
 
   UserModel? user;
 
   @override
   Widget build(BuildContext context) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
     getSongs ??= SongModel.getSongs();
     getUsers ??= UserModel.getUsers();
 
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(
-            title: TextField(
-              autofocus: true,
-              controller: _textCon,
-              onSubmitted: (textCon) {},
-              onChanged: (text) {
-                setState(() {});
-              },
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Colors.white,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Search',
-                border: InputBorder.none,
-                hintStyle: GoogleFonts.inter(fontSize: 15, color: Colors.grey),
-              ),
-            ),
-            showLogo: false),
+        appBar: CustomAppBar(title: textField(uid), showLogo: false),
         backgroundColor: musikatBackgroundColor,
         body: SizedBox(
           child: FutureBuilder<List<Object>>(
@@ -150,167 +134,191 @@ class _SearchScreenState extends State<SearchScreen> {
                   });
 
                   return combinedResults.isEmpty
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/images/no_results.png",
-                                width: 130,
-                                height: 130,
-                              ),
-                              const SizedBox(height: 30),
-                              Text(
-                                'No results found',
-                                style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: combinedResults.length,
-                          itemBuilder: (context, index) {
-                            if (combinedResults[index] is UserModel) {
-                              UserModel user =
-                                  combinedResults[index] as UserModel;
-                              return user.uid !=
-                                      FirebaseAuth.instance.currentUser?.uid
-                                  ? ListTile(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          FadeRoute(
-                                            page: ArtistsProfileScreen(
-                                              selectedUserUID: user.uid,
-                                            ),
-                                            settings: const RouteSettings(),
-                                          ),
-                                        );
-                                      },
-                                      leading: AvatarImage(uid: user.uid),
-                                      title: Text(
-                                        user.username,
-                                        style: GoogleFonts.inter(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        'User',
-                                        style: GoogleFonts.inter(
-                                          color: Colors.white.withOpacity(0.5),
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox();
-                            } else if (combinedResults[index] is SongModel) {
-                              SongModel song =
-                                  combinedResults[index] as SongModel;
-                              return song.uid !=
-                                      FirebaseAuth.instance.currentUser?.uid
-                                  ? ListTile(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          FadeRoute(
-                                            page: MusicPlayerScreen(
-                                              songs: songSearchResult
-                                                  .where((s) =>
-                                                      s.songId == song.songId)
-                                                  .toList(),
-                                            ),
-                                            settings: const RouteSettings(),
-                                          ),
-                                        );
-                                      },
-                                      onLongPress: () {
-                                        showModalBottomSheet(
-                                            backgroundColor: musikatColor4,
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return SingleChildScrollView(
-                                                child: SongBottomField(
-                                                  song: song,
-                                                  hideEdit: true,
-                                                  hideDelete: true,
-                                                  hideRemoveToPlaylist: true,
-                                                ),
-                                              );
-                                            });
-                                      },
-                                      title: Text(
-                                        song.title,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.inter(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      leading: Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image:
-                                                NetworkImage(song.albumCover),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      subtitle: Row(
-                                        children: [
-                                          Text(
-                                            song.artist,
-                                            style: GoogleFonts.inter(
-                                              color:
-                                                  Colors.white.withOpacity(0.5),
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          Text(
-                                            ' • Song',
-                                            style: GoogleFonts.inter(
-                                              color:
-                                                  Colors.white.withOpacity(0.5),
-                                              fontSize: 14,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  : const SizedBox();
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
-                        );
+                      ? noResults()
+                      : showResults(combinedResults, songSearchResult);
                 } else {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/images/search.png",
-                          width: 250,
-                          height: 220,
-                        ),
-                        Text(
-                          'Search for your favourite music or your friends',
-                          style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  );
+                  return noSearchYet();
                 }
               }),
         ),
+      ),
+    );
+  }
+
+  Center noSearchYet() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            "assets/images/search.png",
+            width: 250,
+            height: 220,
+          ),
+          Text(
+            'Search for your favourite music or your friends',
+            style: GoogleFonts.inter(
+                color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ListView showResults(
+      List<Object> combinedResults, List<SongModel> songSearchResult) {
+    return ListView.builder(
+      itemCount: combinedResults.length,
+      itemBuilder: (context, index) {
+        if (combinedResults[index] is UserModel) {
+          UserModel user = combinedResults[index] as UserModel;
+          return user.uid != FirebaseAuth.instance.currentUser?.uid
+              ? ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      FadeRoute(
+                        page: ArtistsProfileScreen(
+                          selectedUserUID: user.uid,
+                        ),
+                        settings: const RouteSettings(),
+                      ),
+                    );
+                  },
+                  leading: AvatarImage(uid: user.uid),
+                  title: Text(
+                    user.username,
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'User',
+                    style: GoogleFonts.inter(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 14,
+                    ),
+                  ),
+                )
+              : const SizedBox();
+        } else if (combinedResults[index] is SongModel) {
+          SongModel song = combinedResults[index] as SongModel;
+          return song.uid != FirebaseAuth.instance.currentUser?.uid
+              ? ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      FadeRoute(
+                        page: MusicPlayerScreen(
+                          songs: songSearchResult
+                              .where((s) => s.songId == song.songId)
+                              .toList(),
+                        ),
+                        settings: const RouteSettings(),
+                      ),
+                    );
+                  },
+                  onLongPress: () {
+                    showModalBottomSheet(
+                        backgroundColor: musikatColor4,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SingleChildScrollView(
+                            child: SongBottomField(
+                              song: song,
+                              hideEdit: true,
+                              hideDelete: true,
+                              hideRemoveToPlaylist: true,
+                            ),
+                          );
+                        });
+                  },
+                  title: Text(
+                    song.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                  leading: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(song.albumCover),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  subtitle: Row(
+                    children: [
+                      Text(
+                        song.artist,
+                        style: GoogleFonts.inter(
+                          color: Colors.white.withOpacity(0.5),
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        ' • Song',
+                        style: GoogleFonts.inter(
+                          color: Colors.white.withOpacity(0.5),
+                          fontSize: 14,
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : const SizedBox();
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
+  }
+
+  Center noResults() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            "assets/images/no_results.png",
+            width: 130,
+            height: 130,
+          ),
+          const SizedBox(height: 30),
+          Text(
+            'No results found',
+            style: GoogleFonts.inter(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  TextField textField(String uid) {
+    return TextField(
+      autofocus: true,
+      controller: _textCon,
+      onSubmitted: (textCon) {},
+      onChanged: (text) {
+        setState(() {});
+      },
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+        color: Colors.white,
+      ),
+      decoration: InputDecoration(
+        hintText: 'Search',
+        border: InputBorder.none,
+        hintStyle: GoogleFonts.inter(fontSize: 15, color: Colors.grey),
       ),
     );
   }

@@ -3,18 +3,17 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/models/chat_message_model.dart';
-import 'package:musikat_app/models/chatroom_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class IndividualChatController with ChangeNotifier {
   late StreamSubscription _chatSub;
-  List<ChatMessage> chats = [];
   UserModel? user;
   final StreamController<String?> _controller = StreamController();
   Stream<String?> get stream => _controller.stream;
   String? chatroom;
   late String recipient;
+  List<ChatMessage> messages = [];
 
   IndividualChatController() {
     _chatSub = const Stream.empty().listen((_) {});
@@ -93,55 +92,63 @@ class IndividualChatController with ChangeNotifier {
 
   chatUpdateHandler(List<ChatMessage> update) {
     for (ChatMessage message in update) {
-      if (message.sentBy == FirebaseAuth.instance.currentUser!.uid &&
-          chatroom == generateRoomId(recipient) &&
+      if (chatroom == generateRoomId(recipient) &&
           message.hasNotSeenMessage(FirebaseAuth.instance.currentUser!.uid)) {
         message.individualUpdateSeen(
             FirebaseAuth.instance.currentUser!.uid, chatroom!);
-      }
+      } else {}
     }
 
-    chats = update;
+    messages = update;
     notifyListeners();
   }
 
-  sendFirstMessage(String message, String recipient) {
-    ChatRoomModel chatRoom = ChatRoomModel(
-      roomId: generateRoomId(recipient),
-      participantIds: [recipient, FirebaseAuth.instance.currentUser!.uid],
-    );
+  sendFirstMessage({
+    String message = '',
+    required String recipient,
+  }) {
+    var newMessage = ChatMessage(
+            sentBy: FirebaseAuth.instance.currentUser!.uid, message: message)
+        .json;
 
-    FirebaseFirestore.instance
-        .collection('chats')
-        .doc(chatRoom.roomId)
-        .set(chatRoom.json)
-        .then((value) {
-      FirebaseFirestore.instance
-          .collection('chats')
-          .doc(chatRoom.roomId)
-          .collection('messages')
-          .add(ChatMessage(
-            sentBy: FirebaseAuth.instance.currentUser!.uid,
-            message: message,
-          ).json)
-          .then((value) {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .update({
-          'chatrooms': FieldValue.arrayUnion([chatRoom.roomId])
-        }).then((value) {
-          FirebaseFirestore.instance.collection('users').doc(recipient).update({
-            'chatrooms': FieldValue.arrayUnion([chatRoom.roomId])
-          }).then((value) {
-            subscribe();
-          });
-        });
-      });
-    });
+    var thisUser = FirebaseAuth.instance.currentUser!.uid;
+    String chatroom = generateRoomId(recipient);
 
-    return chatRoom.roomId;
+    firstMessageText(chatroom, recipient, thisUser, newMessage);
   }
+
+  void firstMessageText(String chatroom, String recipient, String thisUser,
+      Map<String, dynamic> newMessage) {
+    FirebaseFirestore.instance.collection('chats').doc(chatroom).set({
+      'chatroom': chatroom,
+      'members': FieldValue.arrayUnion([recipient, thisUser])
+    }).then(
+      (snap) => {
+        FirebaseFirestore.instance
+            .collection('chats')
+            .doc(chatroom)
+            .collection('messages')
+            .add(newMessage)
+            .then((value) => {
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .update({
+                    'chatrooms': FieldValue.arrayUnion([chatroom])
+                  }).then((value) => {
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(recipient)
+                                .update({
+                              'chatrooms': FieldValue.arrayUnion([chatroom])
+                            }),
+                            subscribe(),
+                          }),
+                }),
+      },
+    );
+  }
+
 
   Future sendMessage({required String message}) async {
     return await FirebaseFirestore.instance
@@ -152,5 +159,34 @@ class IndividualChatController with ChangeNotifier {
                 sentBy: FirebaseAuth.instance.currentUser!.uid,
                 message: message)
             .json);
+  }
+
+  Future fetchChatrooms() {
+    return UserModel.fromUid(uid: FirebaseAuth.instance.currentUser!.uid)
+        .then((value) {
+      return value;
+    }).then((dynamic user) {
+      return FirebaseFirestore.instance
+          .collection("users")
+          .where("chatrooms", arrayContainsAny: user?.chatrooms ?? [])
+          .get()
+          .then((value) {
+        List<UserModel> users = [];
+
+        for (var data in value.docs) {
+          users.add(UserModel.fromDocumentSnap(data));
+        }
+        return users;
+      });
+    });
+  }
+
+  Stream<List<UserModel>> fetchChatroomsStream() async* {
+    while (true) {
+      await Future.delayed(
+          const Duration(seconds: 2)); // delay to simulate updates
+      List<UserModel> users = await fetchChatrooms();
+      yield users;
+    }
   }
 }

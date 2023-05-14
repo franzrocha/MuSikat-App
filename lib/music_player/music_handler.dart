@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/models/recently_played.dart';
 import 'package:musikat_app/models/song_model.dart';
-import 'package:musikat_app/service_locators.dart';
 
 import '../controllers/liked_songs_controller.dart';
 
@@ -26,6 +26,8 @@ class MusicHandler with ChangeNotifier, RouteAware {
   List<SongModel> songSearchResult = [];
   List<SongModel> likedSongs = [];
   List<SongModel> randomSongs = [];
+
+  RecentlyPlayedModel? recentlyPlayed;
 
   bool isPlaying = false;
   Duration duration = Duration.zero;
@@ -62,7 +64,12 @@ class MusicHandler with ChangeNotifier, RouteAware {
       }
       await player.play();
       notifyListeners();
+
+
+      String currentUser = FirebaseAuth.instance.currentUser!.uid;
       await _songCon.updateSongPlayCount(song.songId);
+      await RecentlyPlayedModel.addRecentlyPlayedSong(currentUser, song.songId);
+
     } catch (e) {
       if (e is PlatformException) {
         await Future.delayed(const Duration(seconds: 5));

@@ -67,9 +67,9 @@ class ChatMessage {
     }
   }
 
-  String get previousMessage {
-    return previousChatID!;
-  }
+  // String get previousMessage {
+  //   return previousChatID!;
+  // }
 
   bool hasNotSeenMessage(String uid) {
     return !seenBy.contains(uid);
@@ -104,18 +104,6 @@ class ChatMessage {
             .toList());
   }
 
-  // static Stream<List<ChatMessage>> individualCurrentChats(String chatroomId) {
-  //   final chatroomRef =
-  //       FirebaseFirestore.instance.collection('chats').doc(chatroomId);
-  //   return chatroomRef
-  //       .collection('messages')
-  //       .orderBy('ts', descending: false)
-  //       .snapshots()
-  //       .map((querySnapshot) => querySnapshot.docs
-  //           .map((doc) =>
-  //               ChatMessage.fromDocumentSnapWithRoomId(doc, chatroomId))
-  //           .toList());
-  // }
 
   static Stream<List<ChatMessage>> individualCurrentChats(String chatroom) =>
       FirebaseFirestore.instance
@@ -135,6 +123,15 @@ class ChatMessage {
     });
   }
 
+  Future individualUpdateMessage(String newMessage, String chatroom) {
+    return FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chatroom)
+        .collection('messages')
+        .doc(uid)
+        .update({'message': newMessage, 'isEdited': true});
+  }
+
   Future deleteMessage() async {
     final globalChatRef =
         FirebaseFirestore.instance.collection('chats').doc('globalChat');
@@ -142,5 +139,14 @@ class ChatMessage {
       'message': 'message deleted',
       'isDeleted': true,
     });
+  }
+
+  Future individualDeleteMessage(String chatroom) {
+    return FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chatroom)
+        .collection('messages')
+        .doc(uid) //edited
+        .update({'isDeleted': true});
   }
 }

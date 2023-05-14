@@ -1,6 +1,7 @@
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/screens/home/camera.dart';
 import 'package:musikat_app/screens/home/chat/chat_home.dart';
+import 'package:musikat_app/screens/home/recently_played_screen.dart';
 import 'package:musikat_app/screens/home/search_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/categories/categories_screen.dart';
@@ -8,8 +9,6 @@ import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/mini_player.dart';
-
-import '../service_locators.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
@@ -24,7 +23,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
   // final MusicHandler _musicHandler = locator<MusicHandler>();
-  @override
+@override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomeScreen(
@@ -67,6 +66,19 @@ class _NavBarState extends State<NavBar> {
                 },
                 icon: const Icon(
                   Icons.camera_alt,
+                  size: 20,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const RecentlyPlayedScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.history,
                   size: 20,
                 ),
               ),

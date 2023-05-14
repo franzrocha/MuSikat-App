@@ -51,18 +51,6 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
     }
   }
 
-  scrollBottom() async {
-    await Future.delayed(const Duration(milliseconds: 250));
-    print('scrolling to bottom');
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-          _scrollController.position.viewportDimension +
-              _scrollController.position.maxScrollExtent,
-          curve: Curves.easeIn,
-          duration: const Duration(milliseconds: 250));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +104,12 @@ class _GlobalChatScreenState extends State<GlobalChatScreen> {
                                   return ChatCard(
                                       scrollController: _scrollController,
                                       index: index,
-                                      chat: _chatCon.chats);
+                                      chat: _chatCon.chats,
+                                      isGroup: true,
+                                      chatroom: 'globalchat',
+                                      recipient: 'globalchat',
+                                      
+                                      );
                                 }),
                           ],
                         ),

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
@@ -198,4 +197,29 @@ class SongsController with ChangeNotifier {
     super.dispose();
     _uploadProgressStreamController.close();
   }
+
+
+  // Future<List<UserModel>?> getUsersWithSongs(String uid) async {
+  //   QuerySnapshot songsSnapshot =
+  //       await _db.collection('songs').where('uid', isEqualTo: uid).get();
+
+  //   List<SongModel> songs = songsSnapshot.docs
+  //       .map((doc) => SongModel.fromDocumentSnap(doc))
+  //       .toList();
+
+  //   List<String> userIds = songs.map((song) => song.uid).toSet().toList();
+
+  //   if (userIds.isEmpty) {
+  //     return null; // or handle the error in some other way
+  //   }
+
+  //   QuerySnapshot usersSnapshot = await _db
+  //       .collection('users')
+  //       .where(FieldPath.documentId, whereIn: userIds)
+  //       .get();
+
+  //   return usersSnapshot.docs
+  //       .map((doc) => UserModel.fromDocumentSnap(doc))
+  //       .toList();
+  // }
 }

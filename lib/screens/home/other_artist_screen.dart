@@ -184,14 +184,14 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
     );
   }
 
-  SizedBox playlists() {
+ SizedBox playlists() {
     return SizedBox(
       height: 250,
       child: StreamBuilder<List<PlaylistModel>>(
           stream: _playlistCon.getPlaylistStream(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
-              return Container();
+              return const SizedBox.shrink();
             }
 
             if (snapshot.hasError) {
@@ -199,94 +199,96 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingIndicator();
+              return const SizedBox.shrink();
             } else {
               final playlists = snapshot.data!
                   .where((playlist) => playlist.uid == widget.selectedUserUID)
                   .toList();
 
-              return playlists.isEmpty
-                  ? Container()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 30, bottom: 10, top: 20),
-                            child: Text('Playlists',
-                                style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: playlists.map((playlist) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 25, top: 10),
-                                child: GestureDetector(
-                                  onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PlaylistDetailScreen(
-                                              playlist: playlists[
-                                                  playlists.indexOf(playlist)],
-                                            )),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 120,
-                                        height: 120,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: const Color.fromARGB(
-                                                255, 124, 131, 127),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                                playlist.playlistImg),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
+              if (playlists.isEmpty) {
+                return const SizedBox.shrink();
+              } else {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 30, bottom: 10, top: 20),
+                        child: Text('Playlists',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: playlists.map((playlist) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(left: 25, top: 10),
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PlaylistDetailScreen(
+                                          playlist: playlists[
+                                              playlists.indexOf(playlist)],
+                                        )),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 124, 131, 127),
+                                        width: 1.0,
                                       ),
-                                      Text(
-                                        playlist.title.length > 19
-                                            ? '${playlist.title.substring(0, 19)}..'
-                                            : playlist.title,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white,
-                                          height: 2,
-                                          fontSize: 11,
-                                        ),
+                                      borderRadius:
+                                          BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                        image: CachedNetworkImageProvider(
+                                            playlist.playlistImg),
+                                        fit: BoxFit.cover,
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    );
+                                  Text(
+                                    playlist.title.length > 19
+                                        ? '${playlist.title.substring(0, 19)}..'
+                                        : playlist.title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      height: 2,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                );
+              }
             }
           }),
     );

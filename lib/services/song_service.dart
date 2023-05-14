@@ -15,7 +15,7 @@ class SongService {
 
   UploadTask? _uploadTask;
 
-  Future<UploadTask> uploadSong(
+  Future<String> uploadSong(
       String title,
       String artist,
       String filePath,
@@ -42,6 +42,8 @@ class SongService {
           FirebaseStorage.instance.ref('users/$username/audios/$fileName');
       final Reference coverRef = FirebaseStorage.instance
           .ref('users/$username/albumCovers/$coverFileName');
+
+          
 
       // Upload the audio and album cover files to Firebase Storage
       _uploadTask = audioRef.putFile(File(filePath));
@@ -78,10 +80,10 @@ class SongService {
       await docRef.set(metadata);
       await docRef.update({'song_id': docRef.id});
 
-      return _uploadTask!;
+      return docRef.id;
     } catch (e) {
       print(e.toString());
-      return _uploadTask!;
+      return  '';
     } finally {
       _uploadProgressStreamController.close();
     }
@@ -94,3 +96,5 @@ class SongService {
     }
   }
 }
+
+

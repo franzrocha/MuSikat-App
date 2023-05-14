@@ -25,6 +25,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       _producerCon = TextEditingController();
 
   final SongsController _songCon = SongsController();
+
   final List<String> _writers = [];
   final List<String> _producers = [];
   List<String>? selectedLanguage;
@@ -157,7 +158,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       final UserModel? user = await UserModel.getCurrentUser();
 
       // starts uploading the file
-      final UploadTask songId = await songService.uploadSong(
+      final String songId = await songService.uploadSong(
         title,
         user!.username,
         _selectedFile!.path,
@@ -171,7 +172,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       );
 
       // Get the song model with the uploaded file data
-      final SongModel song = await _songCon.getSongById(songId as String);
+      final SongModel song = await _songCon.getSongById(songId);
 
       // Close progress dialog
       Navigator.of(context).pop();
@@ -209,7 +210,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
           ),
         ),
         showLogo: false,
-       
       ),
       backgroundColor: musikatBackgroundColor,
       body: Center(
@@ -371,6 +371,36 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
         backgroundColor: musikatColor,
         onPressed: _uploadAudio,
         child: const Icon(Icons.upload),
+      ),
+    );
+  }
+
+  TextFormField titleForm() {
+    return TextFormField(
+      style: GoogleFonts.inter(
+        color: Colors.white,
+        fontSize: 13,
+      ),
+      controller: _titleCon,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      decoration: InputDecoration(
+        hintText: 'Enter the song title',
+        hintStyle: GoogleFonts.inter(
+          color: Colors.grey,
+          fontSize: 13,
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
+        ),
       ),
     );
   }
@@ -660,36 +690,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
               _writerCon.clear();
             }
           },
-        ),
-      ),
-    );
-  }
-
-  TextFormField titleForm() {
-    return TextFormField(
-      style: GoogleFonts.inter(
-        color: Colors.white,
-        fontSize: 13,
-      ),
-      controller: _titleCon,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return null;
-        } else {
-          return null;
-        }
-      },
-      decoration: InputDecoration(
-        hintText: 'Enter the song title',
-        hintStyle: GoogleFonts.inter(
-          color: Colors.grey,
-          fontSize: 13,
-        ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey,
-            width: 0.5,
-          ),
         ),
       ),
     );

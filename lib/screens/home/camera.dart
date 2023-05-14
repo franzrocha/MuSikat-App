@@ -6,13 +6,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:musikat_app/controllers/songs_controller.dart';
-import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/screens/home/emotion_screen.dart';
-
 import '../../models/song_model.dart';
-import '../../music_player/music_handler.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({
@@ -51,7 +47,7 @@ class _CameraScreenState extends State<CameraScreen> {
       if (!mounted) {
         return;
       }
-      setState(() {}); //To refresh widget
+      setState(() {}); 
     }).catchError((e) {
       print(e);
     });
@@ -169,7 +165,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       // API call successful
                       // print('API response: ${response.body}');
                       Fluttertoast.showToast(
-                          msg: 'It seems that you are ${response.body} Today!');
+                          msg: 'It seems that you are ${response.body} today!');
                     } else if (response.body == 'blank') {
                       Fluttertoast.showToast(msg: 'No Face Detected');
                     } else {

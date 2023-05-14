@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:musikat_app/controllers/liked_songs_controller.dart';
+import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/models/song_model.dart';
 
 class LikedSongsModel {
   final String likedSongsId, uid;
@@ -24,4 +27,53 @@ class LikedSongsModel {
         'uid': uid,
         'songId': songId,
       };
+
+ static Future<List<SongModel>> getRecommendedSongsByLike(
+  {bool byGenre = true}) async {
+  try {
+    final LikedSongsController likedCon = LikedSongsController();
+    
+    final List<SongModel> likedSongs = await likedCon.getLikedSongs();
+
+    if (likedSongs.isEmpty) {
+      // If there are no liked songs, return an empty list
+      return [];
+    }
+
+    // Extract the genres or artists of the liked songs
+    final List<String> categories = [];
+    for (final song in likedSongs) {
+      categories.add(byGenre ? song.genre : song.artist);
+    }
+
+    // Query for similar songs based on the extracted genres or artists
+    final SongsController songsController = SongsController();
+    Query query = FirebaseFirestore.instance.collection('songs');
+    if (categories.isNotEmpty) {
+      query = query.where(byGenre ? 'genre' : 'artist', whereIn: categories);
+      print('Print me $categories');
+    }
+
+    final QuerySnapshot querySnapshot = await query.get();
+    print(querySnapshot.docs.length);
+
+    // Convert the query results to a list of SongModel objects
+    final List<SongModel> recommendedSongs = [];
+    for (final doc in querySnapshot.docs) {
+      final song = await songsController.getSongById(doc.id);
+      recommendedSongs.add(song);
+    }
+
+    // Shuffle the recommended songs and take the first 5
+    recommendedSongs.shuffle();
+    final List<SongModel> limitedRecommendedSongs =
+        recommendedSongs.take(5).toList();
+
+    return limitedRecommendedSongs;
+  } catch (e) {
+    print(e.toString());
+    return [];
+  }
+}
+
 }

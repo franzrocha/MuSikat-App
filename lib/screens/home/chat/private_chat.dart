@@ -1,4 +1,3 @@
-
 import 'package:musikat_app/controllers/individual_chat_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -18,24 +17,31 @@ class PrivateChatScreen extends StatefulWidget {
 
 class _PrivateChatScreenState extends State<PrivateChatScreen> {
   final IndividualChatController _chatCon = IndividualChatController();
-
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
   final ScrollController _scrollController = ScrollController();
+
+  String get chatroom => widget.chatroom;
+  UserModel? user;
 
   @override
   void initState() {
     _chatCon.initChatRoom(_chatCon.generateRoomId(widget.selectedUserUID),
         widget.selectedUserUID);
+
+    _chatCon.addListener(scrollToBottom);
+    _messageFN.addListener(scrollToBottom);
     super.initState();
   }
 
   @override
   void dispose() {
-    _chatCon.removeListener(scrollToBottom);
     _messageFN.dispose();
     _messageController.dispose();
-    _chatCon.dispose();
+
+    if (_chatCon.messages.isNotEmpty) {
+      _chatCon.dispose();
+    }
     super.dispose();
   }
 
@@ -48,17 +54,17 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
     }
   }
 
-  scrollBottom() async {
-    await Future.delayed(const Duration(milliseconds: 250));
-    print('scrolling to bottom');
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-          _scrollController.position.viewportDimension +
-              _scrollController.position.maxScrollExtent,
-          curve: Curves.easeIn,
-          duration: const Duration(milliseconds: 250));
-    }
-  }
+  // scrollBottom() async {
+  //   await Future.delayed(const Duration(milliseconds: 250));
+  //   print('scrolling to bottom');
+  //   if (_scrollController.hasClients) {
+  //     _scrollController.animateTo(
+  //         _scrollController.position.viewportDimension +
+  //             _scrollController.position.maxScrollExtent,
+  //         curve: Curves.easeIn,
+  //         duration: const Duration(milliseconds: 250));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,23 +110,9 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
             body: StreamBuilder(
               stream: _chatCon.stream,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                //   if (!snapshot.hasData || snapshot.data == null) {
-                //     return const LoadingContainer();
-                //   } else if (snapshot.hasError) {
-                //     return Center(child: Text('Error: ${snapshot.error}'));
-                //   } else if (snapshot.connectionState ==
-                //       ConnectionState.waiting) {
-                //     return const Center(child: LoadingIndicator());
-                //   } else if (snapshot.data == "success") {
-                //     return messages();
-                //   } else if (snapshot.data == 'empty') {
-                //     return noMessageYet(context);
-                //   }
-                //   return const LoadingIndicator();
-                // }
                 if (snapshot.hasData) {
                   if (snapshot.data == "null") {
-                    return LoadingIndicator();
+                    return const LoadingIndicator();
                   } else if (snapshot.data == "success") {
                     return body(
                       context,
@@ -140,7 +132,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                     ConnectionState.waiting) {
                   return const Center(child: LoadingIndicator());
                 }
-                return LoadingIndicator();
+                return const LoadingIndicator();
               },
             ),
           );
@@ -151,13 +143,11 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: Container(
-        child: Column(
-          children: [
-            message(),
-            textFormField(context, send),
-          ],
-        ),
+      child: Column(
+        children: [
+          message(),
+          textFormField(context, send),
+        ],
       ),
     );
   }
@@ -178,12 +168,15 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: _chatCon.chats.length,
+                      itemCount: _chatCon.messages.length,
                       itemBuilder: (context, index) {
                         return ChatCard(
-                            scrollController: _scrollController,
-                            index: index,
-                            chat: _chatCon.chats);
+                          scrollController: _scrollController,
+                          index: index,
+                          chat: _chatCon.messages,
+                          chatroom: _chatCon.chatroom ?? '',
+                          recipient: widget.selectedUserUID,
+                        );
                       }),
                 ],
               ),
@@ -259,7 +252,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/images/musikat_logo.png", width: 300),
+          Image.asset("assets/images/musikat_logo.png", width: 100),
           const Text('Start your legendary conversation'),
           const SizedBox(
             height: 60,
@@ -282,12 +275,17 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
 
     if (_messageController.text.isNotEmpty) {
       var chatroom = _chatCon.sendFirstMessage(
-          _messageController.text.trim(), widget.selectedUserUID);
+        message: _messageController.text.trim(),
+        recipient: widget.selectedUserUID,
+      );
       _messageController.text = '';
-
-      setState(() {
-        _chatCon.initChatRoom(chatroom, widget.selectedUserUID);
-      });
+      try {
+        setState(() {
+          _chatCon.initChatRoom(chatroom, widget.selectedUserUID);
+        });
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }
