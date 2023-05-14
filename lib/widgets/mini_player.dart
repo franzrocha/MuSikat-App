@@ -7,16 +7,19 @@ import '../music_player/music_player.dart';
 import '../service_locators.dart';
 
 class MiniPlayer extends StatelessWidget {
-  const MiniPlayer({super.key});
+  final MusicHandler musicHandler;
+  const MiniPlayer({super.key, required this.musicHandler});
 
   //Lift MusicPlayer controller up, upto the common parent widget of both nav bar and music player (screen)
   //aron usa ra iyang controller, to which same ra ang ilang ma play nga music
 
   listenStateStream() {}
 
+  MusicHandler get _musicHandler => musicHandler;
+
   @override
   Widget build(BuildContext context) {
-    final MusicHandler _musicHandler = locator<MusicHandler>();
+    //final MusicHandler _musicHandler = locator<MusicHandler>();
 
     const double borderRadius = 10;
     return AnimatedBuilder(
@@ -41,15 +44,15 @@ class MiniPlayer extends StatelessWidget {
                 vertical: MediaQuery.of(context).size.height * 0.005,
               ),
               child: GestureDetector(
-                // onTap: () {
-                //   Navigator.of(context).push(
-                //     MaterialPageRoute(
-                //       builder: (context) => MusicPlayerScreen(
-                //         songs: _musicHandler.currentSongs,
-                //       ),
-                //     ),
-                //   );
-                // },
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MusicPlayerScreen(
+                          songs: _musicHandler.currentSongs,
+                          initialIndex: _musicHandler.currentIndex),
+                    ),
+                  );
+                },
                 child: Row(
                   children: [
                     // Thumbnail

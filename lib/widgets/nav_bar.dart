@@ -30,7 +30,7 @@ class _NavBarState extends State<NavBar> {
       HomeScreen(
         musicHandler: widget.musicHandler,
       ),
-      const ArtistsHubScreen(),
+      ArtistsHubScreen(musicHandler: widget.musicHandler),
       Container(),
       const ChatHomeScreen(),
       const ProfileScreen(),
@@ -95,7 +95,7 @@ class _NavBarState extends State<NavBar> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               //   if (widget.musicHandler.currentSongs.isNotEmpty)
-              const MiniPlayer(),
+              MiniPlayer(musicHandler: widget.musicHandler),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40.0),

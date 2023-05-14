@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
@@ -12,6 +13,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
   final AudioPlayer player = AudioPlayer();
   final SongsController _songCon = SongsController();
   final LikedSongsController likedCon = LikedSongsController();
+
   //final MusicHandler _musicHandler = locator<MusicHandler>();
 
   //list of songs declared
@@ -28,8 +30,13 @@ class MusicHandler with ChangeNotifier, RouteAware {
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+
   bool isLoadingAudio = false;
   bool isLiked = false;
+  bool isLoading = false;
+  bool isPlayingNext = false;
+
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   int currentIndex = 0;
   SongModel? currentSong;
@@ -75,7 +82,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
     return [if (duration.inHours > 0) hours, minutes, seconds].join(":");
   }
 
-  Future<void> playPrevious(String uid, List<SongModel> songs) async {
+  Future<void> playPrevious() async {
     if (isLoadingAudio) {
       return;
     }
@@ -86,7 +93,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
     }
 
     try {
-      checkIfSongIsLiked(uid, songs);
+      checkIfSongIsLiked();
       await setAudioSource(currentSongs[currentIndex], uid);
     } on PlayerInterruptedException catch (_) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -94,33 +101,64 @@ class MusicHandler with ChangeNotifier, RouteAware {
     }
   }
 
-  Future<void> playNext(String uid, List<SongModel> songs) async {
-    if (isLoadingAudio) {
-      return;
-    }
-    if (currentIndex < currentSongs.length - 1) {
-      currentIndex++;
-    } else {
-      currentIndex = 0;
-    }
-
+  Future<void> playNext() async {
     try {
-      checkIfSongIsLiked(uid, songs);
+      isPlayingNext = true;
+      if (isLoadingAudio) {
+        return;
+      }
+      if (currentIndex < currentSongs.length - 1) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+
+      checkIfSongIsLiked();
       await setAudioSource(currentSongs[currentIndex], uid);
     } on PlayerInterruptedException catch (_) {
       await Future.delayed(const Duration(milliseconds: 500));
       await setAudioSource(currentSongs[currentIndex], uid);
+    } finally {
+      isPlayingNext = false;
+      notifyListeners();
     }
   }
 
-  void checkIfSongIsLiked(String uid, List<SongModel> songs) async {
-    isLiked = await likedCon.isSongLikedByUser(songs[currentIndex].songId, uid);
+  void checkIfSongIsLiked() async {
+    isLiked = await likedCon.isSongLikedByUser(
+        currentSongs[currentIndex].songId, uid);
     notifyListeners();
   }
 
   void setIsLiked(bool isLiked) {
     this.isLiked = isLiked;
     notifyListeners();
+  }
+
+  void initSongStream() {
+    player.playerStateStream.listen((playerState) {
+      final processingState = playerState.processingState;
+      final playing = playerState.playing;
+
+      if (processingState == ProcessingState.loading ||
+          processingState == ProcessingState.buffering) {
+        isLoading = true;
+      } else if (playing != true) {
+        isLoading = false;
+        isPlaying = false;
+      } else if (processingState != ProcessingState.completed) {
+        isLoading = false;
+        isPlaying = true;
+      } else if (processingState == ProcessingState.completed) {
+        isLoading = true;
+        if (!isPlayingNext) {
+          playNext();
+        }
+      } else {
+        isPlaying = false;
+      }
+      notifyListeners();
+    });
   }
 
   // Getters

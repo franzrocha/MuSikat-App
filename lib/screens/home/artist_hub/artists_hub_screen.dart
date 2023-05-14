@@ -12,8 +12,12 @@ import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 
+import '../../../music_player/music_handler.dart';
+
 class ArtistsHubScreen extends StatefulWidget {
-  const ArtistsHubScreen({Key? key}) : super(key: key);
+  final MusicHandler musicHandler;
+  const ArtistsHubScreen({Key? key, required this.musicHandler})
+      : super(key: key);
 
   @override
   State<ArtistsHubScreen> createState() => _ArtistsHubScreenState();
@@ -22,6 +26,7 @@ class ArtistsHubScreen extends StatefulWidget {
 class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
   final AuthController _auth = locator<AuthController>();
   final SongsController _songCon = SongsController();
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   UserModel? user;
 
@@ -145,12 +150,12 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                               });
                                         },
                                         onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MusicPlayerScreen(
-                                                        songs: [latestSong],
-                                                      )));
+                                          widget.musicHandler.currentSongs = [
+                                            latestSong
+                                          ];
+                                          widget.musicHandler.currentIndex = 0;
+                                          widget.musicHandler
+                                              .setAudioSource(latestSong, uid);
                                         },
                                         child: Row(
                                           mainAxisAlignment:

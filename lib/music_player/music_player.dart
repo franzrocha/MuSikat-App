@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/models/song_model.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/music_player/player_controls.dart';
 import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -37,6 +36,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
   bool isPlaying = false;
   bool isLoadingAudio = false;
+  bool disableButton = false;
 
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -53,56 +53,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
     print(widget.initialIndex);
 
-    _musicHandler.checkIfSongIsLiked(uid, widget.songs);
+    _musicHandler.checkIfSongIsLiked();
+    _musicHandler.initSongStream();
   }
-
-  // @override
-  // void dispose() {
-  //   player.dispose();
-  //   super.dispose();
-  // }
-
-  // Future<void> playPrevious() async {
-  //   if (isLoadingAudio) {
-  //     return;
-  //   }
-  //   if (_musicHandler.currentIndex > 0) {
-  //     _musicHandler.currentIndex--;
-  //   } else {
-  //     _musicHandler.currentIndex = _musicHandler.currentSongs.length - 1;
-  //   }
-
-  //   try {
-  //     checkIfSongIsLiked();
-  //     await _musicHandler.setAudioSource(
-  //         _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
-  //   } on PlayerInterruptedException catch (_) {
-  //     await Future.delayed(const Duration(milliseconds: 500));
-  //     await _musicHandler.setAudioSource(
-  //         _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
-  //   }
-  // }
-
-  // Future<void> playNext() async {
-  //   if (isLoadingAudio) {
-  //     return;
-  //   }
-  //   if (_musicHandler.currentIndex < _musicHandler.currentSongs.length - 1) {
-  //     _musicHandler.currentIndex++;
-  //   } else {
-  //     _musicHandler.currentIndex = 0;
-  //   }
-
-  //   try {
-  //     checkIfSongIsLiked();
-  //     await _musicHandler.setAudioSource(
-  //         _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
-  //   } on PlayerInterruptedException catch (_) {
-  //     await Future.delayed(const Duration(milliseconds: 500));
-  //     await _musicHandler.setAudioSource(
-  //         _musicHandler.currentSongs[_musicHandler.currentIndex], uid);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -211,10 +164,19 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             ),
                             const SizedBox(width: 25),
                             InkWell(
-                              onTap: () async {
-                                await _musicHandler.playPrevious(
-                                    uid, widget.songs);
-                              },
+                              onTap: !disableButton
+                                  ? () async {
+                                      if (!disableButton) {
+                                        setState(() {
+                                          disableButton = true;
+                                        });
+                                      }
+                                      await _musicHandler.playPrevious();
+                                      setState(() {
+                                        disableButton = false;
+                                      });
+                                    }
+                                  : null,
                               child: const FaIcon(
                                 FontAwesomeIcons.backwardStep,
                                 size: 30,
@@ -222,42 +184,32 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                               ),
                             ),
                             const SizedBox(width: 25),
-                            StreamBuilder<PlayerState>(
-                              stream: _musicHandler.player.playerStateStream,
-                              builder: (context, snapshot) {
-                                final playerState = snapshot.data;
-                                final processingState =
-                                    playerState?.processingState;
-                                final playing = playerState?.playing;
-                                if (processingState ==
-                                        ProcessingState.loading ||
-                                    processingState ==
-                                        ProcessingState.buffering) {
-                                  return Container(
-                                    margin: const EdgeInsets.all(9.0),
-                                    width: 50,
-                                    height: 50,
-                                    child: const LoadingIndicator(),
-                                  );
-                                } else if (playing != true) {
-                                  return playButton();
-                                } else if (processingState !=
-                                    ProcessingState.completed) {
-                                  return pauseButton();
-                                } else if (processingState ==
-                                    ProcessingState.completed) {
-                                  _musicHandler.playNext(uid, widget.songs);
-                                  return const LoadingIndicator();
-                                } else {
-                                  return pauseButton();
-                                }
-                              },
-                            ),
+                            if (_musicHandler.isLoading) ...[
+                              Container(
+                                  margin: const EdgeInsets.all(9.0),
+                                  width: 50,
+                                  height: 50,
+                                  child: const LoadingIndicator()),
+                            ] else if (!_musicHandler.isPlaying) ...[
+                              playButton(),
+                            ] else ...[
+                              pauseButton(),
+                            ],
                             const SizedBox(width: 25),
                             InkWell(
-                              onTap: () {
-                                _musicHandler.playNext(uid, widget.songs);
-                              },
+                              onTap: !disableButton
+                                  ? () async {
+                                      if (!disableButton) {
+                                        setState(() {
+                                          disableButton = true;
+                                        });
+                                      }
+                                      await _musicHandler.playNext();
+                                      setState(() {
+                                        disableButton = false;
+                                      });
+                                    }
+                                  : null,
                               child: const FaIcon(
                                 FontAwesomeIcons.forwardStep,
                                 size: 30,
@@ -371,10 +323,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         borderRadius: BorderRadius.circular(50),
       ),
       child: IconButton(
-        icon: const Icon(Icons.play_arrow),
-        iconSize: 50,
-        onPressed: _musicHandler.player.play,
-      ),
+          icon: const Icon(Icons.play_arrow),
+          iconSize: 50,
+          onPressed: _musicHandler.player.play),
     );
   }
 
