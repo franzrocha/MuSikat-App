@@ -20,6 +20,7 @@ class _AuthScreenState extends State<AuthScreen> {
       _passCon = TextEditingController();
   final AuthController _authController = locator<AuthController>();
 
+  
   bool _passwordVisible = false;
 
   String prompts = '';

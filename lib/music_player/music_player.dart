@@ -352,6 +352,22 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
           size: 20,
         ),
       ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const SearchScreen(),
+            //   ),
+            // );
+          },
+          icon: const FaIcon(
+            FontAwesomeIcons.ellipsisVertical,
+            size: 20,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -43,8 +43,6 @@ class SongService {
       final Reference coverRef = FirebaseStorage.instance
           .ref('users/$username/albumCovers/$coverFileName');
 
-          
-
       // Upload the audio and album cover files to Firebase Storage
       _uploadTask = audioRef.putFile(File(filePath));
 
@@ -83,7 +81,7 @@ class SongService {
       return docRef.id;
     } catch (e) {
       print(e.toString());
-      return  '';
+      return '';
     } finally {
       _uploadProgressStreamController.close();
     }
@@ -142,7 +140,3 @@ class SongService {
     }
   }
 }
-
-
-
-

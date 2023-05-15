@@ -7,6 +7,7 @@ import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/screens/home/artist_hub/edit_metadata_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/owned_playlist.dart';
 
@@ -209,7 +210,13 @@ class _SongBottomFieldState extends State<SongBottomField> {
         "Edit",
         style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EditMetadataScreen(songs: widget.song)),
+        );
+      },
     );
   }
 

@@ -71,6 +71,13 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
     return FutureBuilder<UserModel>(
         future: UserModel.fromUid(uid: widget.selectedUserUID),
         builder: (BuildContext context, AsyncSnapshot<UserModel> selectedUser) {
+             if (selectedUser.hasError) {
+                return Center(child: Text('Error: ${selectedUser.error}'));
+              }
+
+              if (selectedUser  .connectionState == ConnectionState.waiting) {
+                return const LoadingIndicator();
+              } 
           if (!selectedUser.hasData) {
             return Center(
               child: Column(
@@ -253,7 +260,14 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset("assets/images/musikat_logo.png", width: 100),
-          const Text('Start your legendary conversation'),
+          const SizedBox(height: 20,),
+          Text('Start your legendary conversation', 
+          style: GoogleFonts.inter(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+          ),
+          ),
           const SizedBox(
             height: 60,
           )

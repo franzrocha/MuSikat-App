@@ -1,51 +1,53 @@
-// ignore_for_file: unused_local_variable, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
-import 'package:musikat_app/screens/home/artist_hub/description_selection_screen.dart';
-import 'package:musikat_app/screens/home/artist_hub/genre_selection_screen.dart';
-import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/models/song_model.dart';
-import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/screens/home/artist_hub/description_selection_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/language_selection_screen.dart';
+import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/utils/exports.dart';
 
-class AudioUploaderScreen extends StatefulWidget {
-  const AudioUploaderScreen({Key? key}) : super(key: key);
+import 'genre_selection_screen.dart';
+
+class EditMetadataScreen extends StatefulWidget {
+  const EditMetadataScreen({super.key, required this.songs});
+  final SongModel songs;
 
   @override
-  AudioUploaderScreenState createState() => AudioUploaderScreenState();
+  State<EditMetadataScreen> createState() => _EditMetadataScreenState();
 }
 
-class AudioUploaderScreenState extends State<AudioUploaderScreen> {
+class _EditMetadataScreenState extends State<EditMetadataScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleCon = TextEditingController(),
-      _writerCon = TextEditingController(),
-      _producerCon = TextEditingController();
-
   final SongsController _songCon = SongsController();
+  TextEditingController? _titleCon, _writerCon, _producerCon;
 
-  final List<String> _writers = [];
-  final List<String> _producers = [];
+  @override
+  void initState() {
+    super.initState();
+    _titleCon = TextEditingController(text: widget.songs.title);
+    _writers = List<String>.from(widget.songs.writers);
+    _writerCon = TextEditingController();
+    _producers = List<String>.from(widget.songs.producers);
+    _producerCon = TextEditingController();
+    selectedGenre = widget.songs.genre;
+    selectedLanguage = widget.songs.languages;
+    selectedDescription = widget.songs.description;
+  }
+
+  List<String> _writers = [];
+  List<String> _producers = [];
   List<String>? selectedLanguage;
   List<String>? selectedDescription;
   String? selectedGenre;
 
-  File? _selectedFile, _selectedAlbumCover;
+  File? _selectedAlbumCover;
 
-  void _pickAudioFile() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.audio);
-    if (result != null) {
-      setState(() {
-        _selectedFile = File(result.files.single.path!);
-      });
-    } else {
-      ToastMessage.show(context, 'No audio selected');
-    }
-  }
-
-  void _pickAlbumCover() async {
+  void _editAlbumCover() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null) {
       final cropResult = await ImageCropper().cropImage(
@@ -72,126 +74,64 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
     }
   }
 
-  void _removeAudioFile() {
-    setState(() {
-      _selectedFile = null;
-    });
-  }
-
-  void _addWriter(String writer) {
-    setState(() {
-      _writers.add(writer);
-    });
-    _writerCon.clear();
-  }
-
-  void _addProducer(String producer) {
-    setState(() {
-      _producers.add(producer);
-    });
-    _producerCon.clear();
-  }
-
-  void _uploadAudio() async {
-    if (_selectedFile == null || _selectedAlbumCover == null) {
-      if (_selectedFile == null && _selectedAlbumCover == null) {
-        ToastMessage.show(context, 'Please input the required fields');
-      } else if (_selectedFile == null) {
-        ToastMessage.show(context, 'Please select an audio file');
-      } else {
-        ToastMessage.show(context, 'Please select an album cover');
-      }
-      return;
-    }
-
-    final String fileName = _selectedFile!.path.split('/').last;
-    final String title = _titleCon.text.trim();
-    final List<String> trimmedWriters =
+  void _editData() async {
+    // Trim the input data
+    String title = _titleCon!.text.trim();
+    List<String> trimmedWriters =
         _writers.map((writer) => writer.trim()).toList();
-    final List<String> trimmedProducers =
+    List<String> trimmedProducers =
         _producers.map((producer) => producer.trim()).toList();
-
-    if (title.isEmpty) {
-      ToastMessage.show(context, 'Please enter the title of the song');
-      return;
-    }
-
-    if (trimmedWriters.isEmpty) {
-      ToastMessage.show(context, 'Please add songwriter(s) of the song');
-      return;
-    }
-
-    if (trimmedProducers.isEmpty) {
-      ToastMessage.show(context, 'Please add producer(s) of the song');
-      return;
-    }
-
-    if (selectedLanguage == null) {
-      ToastMessage.show(context, 'Please select the language of the song');
-      return;
-    }
-
-    if (selectedGenre == null) {
-      ToastMessage.show(context, 'Please select the genre of the song');
-      return;
-    }
-
-    if (selectedDescription == null) {
-      ToastMessage.show(context, 'Please select the description of the song');
-      return;
-    }
 
     final SongService songService = SongService();
 
-    // shows progress during upload
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return UploadDialog(songService: songService);
-      },
-    );
+    const LoadingIndicator();
 
     try {
-      final UserModel? user = await UserModel.getCurrentUser();
+      // Starts uploading the file
+      final String songId = await songService.updateSong(
+          widget.songs.songId,
+          title,
+          _selectedAlbumCover!.path,
+          trimmedWriters,
+          trimmedProducers,
+          selectedGenre!,
+          selectedLanguage!,
+          selectedDescription!);
 
-      // starts uploading the file
-      final String songId = await songService.uploadSong(
-        title,
-        user!.username,
-        _selectedFile!.path,
-        _selectedAlbumCover!.path,
-        trimmedWriters,
-        trimmedProducers,
-        selectedGenre!,
-        user.uid,
-        selectedLanguage ?? [],
-        selectedDescription ?? [],
-      );
+      // Get the updated song model with the new data
+      final SongModel updatedSong = await _songCon.getSongById(songId);
 
-      // Get the song model with the uploaded file data
-      final SongModel song = await _songCon.getSongById(songId);
-
-      // Close progress dialog
-      Navigator.of(context).pop();
-
-      // Navigate to the previous screen and pass the song data
-      Navigator.of(context).pop(song);
+      // Navigate to the previous screen and pass the updated song data
+      Navigator.of(context).pop(updatedSong);
 
       // Show toast message to indicate success
-      ToastMessage.show(context, 'Song uploaded successfully');
+      ToastMessage.show(context, 'Song updated successfully');
     } catch (e) {
-      print('Upload failed: ${e.toString()}');
-      ToastMessage.show(context, 'Upload failed: ${e.toString()}');
+      print('Update failed: ${e.toString()}');
+      ToastMessage.show(context, 'Update failed: ${e.toString()}');
       return;
     }
+  }
+
+  void _editWriter(String writer) {
+    setState(() {
+      _writers.add(writer);
+    });
+    _writerCon!.clear();
+  }
+
+  void _editProducer(String producer) {
+    setState(() {
+      _producers.add(producer);
+    });
+    _producerCon!.clear();
   }
 
   @override
   void dispose() {
-    _titleCon.dispose();
-    _writerCon.dispose();
-    _producerCon.dispose();
+    _titleCon!.dispose();
+    _writerCon!.dispose();
+    _producerCon!.dispose();
     super.dispose();
   }
 
@@ -200,7 +140,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text(
-          'Upload',
+          'Edit Metadata',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -224,10 +164,11 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Center(
                     child: InkWell(
-                      onTap: _pickAlbumCover,
+                      onTap: _editAlbumCover,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.grey,
@@ -237,7 +178,11 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                                   image: FileImage(_selectedAlbumCover!),
                                   fit: BoxFit.cover,
                                 )
-                              : null,
+                              : DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                      widget.songs.albumCover),
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                         width: 180,
                         height: 170,
@@ -251,55 +196,9 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Stack(
-                        children: [
-                          ElevatedButton.icon(
-                            onPressed: _pickAudioFile,
-                            icon: Icon(_selectedFile != null
-                                ? Icons.check_circle
-                                : Icons.music_note),
-                            label: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _selectedFile != null
-                                      ? '${_selectedFile!.path.split('/').last.substring(0, 20)}...'
-                                      : 'Select Audio',
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                if (_selectedFile != null)
-                                  const SizedBox(width: 20.0),
-                              ],
-                            ),
-                          ),
-                          if (_selectedFile != null)
-                            Positioned(
-                              top: 5,
-                              right: 0,
-                              child: InkWell(
-                                onTap: _removeAudioFile,
-                                borderRadius: BorderRadius.circular(20.0),
-                                splashColor: Colors.grey[300]!,
-                                hoverColor: Colors.grey[200]!,
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    Icons.close_rounded,
-                                    size: 22,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
+                  const SizedBox(
+                    height: 20,
                   ),
-                  const SizedBox(height: 20),
                   Text(
                     'Title',
                     style: GoogleFonts.inter(
@@ -334,7 +233,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                   producerChips(),
                   const SizedBox(height: 10),
                   Text(
-                    'Choose genre',
+                    'Edit genre',
                     style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 13,
@@ -367,38 +266,8 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: musikatColor,
-        onPressed: _uploadAudio,
+        onPressed: _editData,
         child: const Icon(Icons.upload),
-      ),
-    );
-  }
-
-  TextFormField titleForm() {
-    return TextFormField(
-      style: GoogleFonts.inter(
-        color: Colors.white,
-        fontSize: 13,
-      ),
-      controller: _titleCon,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return null;
-        } else {
-          return null;
-        }
-      },
-      decoration: InputDecoration(
-        hintText: 'Enter the song title',
-        hintStyle: GoogleFonts.inter(
-          color: Colors.grey,
-          fontSize: 13,
-        ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey,
-            width: 0.5,
-          ),
-        ),
       ),
     );
   }
@@ -437,35 +306,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
     );
   }
 
-  ListTile genreTile(BuildContext context) {
-    return ListTile(
-      onTap: () async {
-        final result = await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const GenreSelectionScreen(),
-          ),
-        );
-        if (result != null) {
-          setState(() {
-            selectedGenre = result;
-          });
-        }
-      },
-      title: Text(
-        selectedGenre != null ? selectedGenre! : 'Select a genre',
-        style: GoogleFonts.inter(
-          color: selectedGenre != null ? Colors.white : Colors.grey,
-          fontSize: 13,
-        ),
-      ),
-      trailing: const Icon(
-        Icons.arrow_forward_ios,
-        color: Colors.grey,
-        size: 15,
-      ),
-    );
-  }
-
   ListTile languageTile(BuildContext context) {
     return ListTile(
       onTap: () async {
@@ -486,6 +326,35 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
             : 'Select a language',
         style: GoogleFonts.inter(
           color: selectedLanguage != null ? Colors.white : Colors.grey,
+          fontSize: 13,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.arrow_forward_ios,
+        color: Colors.grey,
+        size: 15,
+      ),
+    );
+  }
+
+  ListTile genreTile(BuildContext context) {
+    return ListTile(
+      onTap: () async {
+        final result = await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const GenreSelectionScreen(),
+          ),
+        );
+        if (result != null) {
+          setState(() {
+            selectedGenre = result;
+          });
+        }
+      },
+      title: Text(
+        selectedGenre != null ? selectedGenre! : 'Select a genre',
+        style: GoogleFonts.inter(
+          color: selectedGenre != null ? Colors.white : Colors.grey,
           fontSize: 13,
         ),
       ),
@@ -529,21 +398,21 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
             color: Colors.grey,
           ),
           onPressed: () {
-            if (_producerCon.text.isEmpty) {
+            if (_producerCon!.text.isEmpty) {
               ToastMessage.show(
                   context, 'Please enter a producer for the song');
             } else if (_producers
                 .map((w) => w.toLowerCase())
-                .contains(_producerCon.text.toLowerCase())) {
+                .contains(_producerCon!.text.toLowerCase())) {
               ToastMessage.show(context, 'Producer already added');
             } else if (_producers.length < 10) {
               setState(() {
-                _addProducer(_producerCon.text);
-                _producerCon.clear();
+                _editProducer(_producerCon!.text);
+                _producerCon!.clear();
               });
             } else {
               ToastMessage.show(context, 'You can only add up to 10 producers');
-              _producerCon.clear();
+              _producerCon!.clear();
             }
           },
         ),
@@ -672,22 +541,52 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
             color: Colors.grey,
           ),
           onPressed: () {
-            if (_writerCon.text.isEmpty) {
+            if (_writerCon!.text.isEmpty) {
               ToastMessage.show(context, 'Please enter a writer for the song');
             } else if (_writers
                 .map((w) => w.toLowerCase())
-                .contains(_writerCon.text.toLowerCase())) {
+                .contains(_writerCon!.text.toLowerCase())) {
               ToastMessage.show(context, 'Writer already added');
             } else if (_writers.length < 10) {
               setState(() {
-                _addWriter(_writerCon.text);
-                _writerCon.clear();
+                _editWriter(_writerCon!.text);
+                _writerCon!.clear();
               });
             } else {
               ToastMessage.show(context, 'You can only add up to 10 writers');
-              _writerCon.clear();
+              _writerCon!.clear();
             }
           },
+        ),
+      ),
+    );
+  }
+
+  TextFormField titleForm() {
+    return TextFormField(
+      style: GoogleFonts.inter(
+        color: Colors.white,
+        fontSize: 13,
+      ),
+      controller: _titleCon,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return null;
+        } else {
+          return null;
+        }
+      },
+      decoration: InputDecoration(
+        hintText: 'Enter the song title',
+        hintStyle: GoogleFonts.inter(
+          color: Colors.grey,
+          fontSize: 13,
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 0.5,
+          ),
         ),
       ),
     );
