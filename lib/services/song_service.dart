@@ -95,6 +95,54 @@ class SongService {
       _uploadTask = null;
     }
   }
+  Future<String> updateSong(
+    String songId,
+    String title,
+    String? albumCover,
+    List<String> writers,
+    List<String> producers,
+    String genre,
+    List<String> languages,
+    List<String> description,
+  ) async {
+    try {
+      final DocumentReference docRef = _db.collection('songs').doc(songId);
+      final DocumentSnapshot songSnapshot = await docRef.get();
+      final String currentCoverUrl = songSnapshot.get('album_cover');
+
+      // Delete the current album cover file from Firebase Storage
+      final Reference currentCoverRef =
+          FirebaseStorage.instance.refFromURL(currentCoverUrl);
+
+
+      // Upload the new album cover file to Firebase Storage
+      final String fileName = albumCover!.split('/').last;
+      final Reference newCoverRef =
+          FirebaseStorage.instance.ref('albumCovers/$fileName');
+      final UploadTask coverUploadTask = newCoverRef.putFile(File(albumCover));
+      final TaskSnapshot coverTaskSnapshot = await coverUploadTask;
+      final String newCoverDownloadUrl = await newCoverRef.getDownloadURL();
+
+      // Update the song document in Firestore with the new album cover download URL
+      final Map<String, dynamic> updatedData = {
+        'title': title,
+        'album_cover': newCoverDownloadUrl,
+        'writers': writers,
+        'producers': producers,
+        'genre': genre,
+        'languages': languages,
+        'description': description,
+      };
+      await docRef.update(updatedData);
+
+      return songId;
+    } catch (e) {
+      print(e.toString());
+      return '';
+    }
+  }
 }
+
+
 
 
