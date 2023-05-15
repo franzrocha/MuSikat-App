@@ -51,31 +51,33 @@ class MusicHandler with ChangeNotifier, RouteAware {
       );
 
   Future<void> setAudioSource(SongModel song, String uid) async {
-    final source = AudioSource.uri(
-      Uri.parse(song.audio),
-      tag: _createMediaItem(song),
-    );
     try {
-      if (!isPlaying ||
+      final source = AudioSource.uri(
+        Uri.parse(song.audio),
+        tag: _createMediaItem(song),
+      );
+      print(
+          "Current Song: ${currentSong?.title ?? 'None'} New Song: ${song.title}");
+      if (currentSong == null ||
           (currentSong != null && currentSong?.songId != song.songId)) {
-        await player.setAudioSource(source);
         isPlaying = true;
         currentSong = song;
+        await player.setAudioSource(source);
+        notifyListeners();
+        await player.play();
       }
-      await player.play();
-      notifyListeners();
-
 
       String currentUser = FirebaseAuth.instance.currentUser!.uid;
       await _songCon.updateSongPlayCount(song.songId);
       await RecentlyPlayedModel.addRecentlyPlayedSong(currentUser, song.songId);
-
+      notifyListeners();
     } catch (e) {
+      //print("Error play sa first na kanta");
       if (e is PlatformException) {
         await Future.delayed(const Duration(seconds: 5));
         await setAudioSource(song, uid);
       } else {
-        rethrow;
+        // rethrow;
       }
     }
   }
@@ -166,6 +168,11 @@ class MusicHandler with ChangeNotifier, RouteAware {
       }
       notifyListeners();
     });
+  }
+
+  void setIsPlaying(bool isPlaying) {
+    this.isPlaying = isPlaying;
+    notifyListeners();
   }
 
   // Getters

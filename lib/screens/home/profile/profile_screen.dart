@@ -8,6 +8,8 @@ import 'package:musikat_app/screens/home/profile/about_us.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/utils/exports.dart';
 
+import '../../../music_player/music_handler.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -97,6 +99,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: Icons.logout,
                   title: 'Log-out',
                   ontap: () async {
+                    locator<MusicHandler>().setIsPlaying(false);
+                    locator<MusicHandler>().player.pause();
                     _auth.logout();
                   },
                 ),

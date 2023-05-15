@@ -199,15 +199,17 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             InkWell(
                               onTap: !disableButton
                                   ? () async {
-                                      if (!disableButton) {
+                                      if (mounted && !disableButton) {
                                         setState(() {
                                           disableButton = true;
                                         });
                                       }
                                       await _musicHandler.playNext();
-                                      setState(() {
-                                        disableButton = false;
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          disableButton = false;
+                                        });
+                                      }
                                     }
                                   : null,
                               child: const FaIcon(

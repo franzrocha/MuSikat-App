@@ -23,7 +23,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
   // final MusicHandler _musicHandler = locator<MusicHandler>();
-@override
+  @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomeScreen(
@@ -60,7 +60,9 @@ class _NavBarState extends State<NavBar> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const CameraScreen(),
+                      builder: (context) => const CameraScreen(
+                        songs: [],
+                      ),
                     ),
                   );
                 },

@@ -1,30 +1,40 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
+import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/screens/home/emotion_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
+import '../../controllers/songs_controller.dart';
+
 import '../../models/song_model.dart';
 
 class CameraScreen extends StatefulWidget {
+  final List<SongModel> songs;
+
   const CameraScreen({
     Key? key,
+    required this.songs,
   }) : super(key: key);
+
   @override
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen> {
   final FirebaseStorage storage = FirebaseStorage.instance;
-  late List<SongModel> songs;
+  late List<SongModel> songs = [];
 
   String emotion = '';
   late List<CameraDescription> cameras;
   CameraController? cameraController;
+  final SongsController _songCon = SongsController();
 
   int direction = 1;
 
@@ -62,6 +72,10 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     final SongsController _songsCon = SongsController();
+
+    int length;
+    Random random = Random();
+    int randomIndex = 0;
 
     if (cameraController != null && cameraController!.value.isInitialized) {
       return Scaffold(
@@ -122,25 +136,26 @@ class _CameraScreenState extends State<CameraScreen> {
                                 ),
                               ),
                             ),
-                            //  ElevatedButton(
-                            //     onPressed: () {
-                            //       Navigator.of(context).push(
-                            //         MaterialPageRoute(
-                            //           builder: (context) => MusicPlayerScreen(
-                            //             emotion: emotion,
-                            //             songs: emotion,
-                            //           ),
-                            //         ),
-                            //       );
-                            //     },
-                            //     child: const Text(
-                            //       'Play a Song',
-                            //       style: TextStyle(
-                            //         fontSize: 16,
-                            //         fontWeight: FontWeight.bold,
-                            //       ),
-                            //     ),
-                            //   ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => MusicPlayerScreen(
+                                      songs: songs,
+                                      emotion: emotion,
+                                      initialIndex: randomIndex,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Play A Song',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: 10),
                             ElevatedButton(
                               onPressed: () {
@@ -157,18 +172,19 @@ class _CameraScreenState extends State<CameraScreen> {
 
                     // Call the API with the download URL
                     Uri apiUrl = Uri.parse(
-                        'https://d6f5-143-44-164-134.ngrok-free.app/?image=$downloadUrl');
+                        'https://627e-2001-4454-399-2500-204e-163e-df1b-1a1a.ngrok-free.app/?image=$downloadUrl');
                     http.Response response = await http.get(apiUrl);
 
-                    if (response.statusCode == 255) {
+                    if (response.statusCode == 200) {
                       emotion = response.body;
+                      songs = await _songCon.getEmotionSongs(emotion);
+                      length = songs.length;
+                      randomIndex = random.nextInt(length);
 
                       // API call successful
                       // print('API response: ${response.body}');
                       Fluttertoast.showToast(
                           msg: 'It seems that you are ${response.body} today!');
-                    } else if (response.body == 'blank') {
-                      Fluttertoast.showToast(msg: 'No Face Detected');
                     } else {
                       // API call failed
                       print(

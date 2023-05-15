@@ -87,7 +87,6 @@ class MiniPlayer extends StatelessWidget {
                                 marqueeDirection: MarqueeDirection.rtl,
                                 speed: 25,
                               ),
-                             
                               Text(
                                 _musicHandler.currentSong?.artist ?? "",
                                 style: GoogleFonts.inter(
@@ -120,18 +119,15 @@ class MiniPlayer extends StatelessWidget {
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
+                                print("IsPlaying: ${_musicHandler.isPlaying}");
                                 if (_musicHandler.isPlaying) {
-                                  _musicHandler.player.pause().then((_) {
-                                    _musicHandler.isPlaying = false;
-                                    _musicHandler.notifyListeners();
-                                  });
+                                  await _musicHandler.player.pause();
+                                  _musicHandler.setIsPlaying(false);
                                 } else {
                                   if (_musicHandler.currentSong != null) {
-                                    _musicHandler.player.play().then((_) {
-                                      _musicHandler.isPlaying = true;
-                                      _musicHandler.notifyListeners();
-                                    });
+                                    _musicHandler.player.play();
+                                    _musicHandler.setIsPlaying(true);
                                   } else {
                                     // Play the first song or handle the case when no song is available
                                     if (_musicHandler.currentSongs.isNotEmpty) {
@@ -140,8 +136,7 @@ class MiniPlayer extends StatelessWidget {
                                               _musicHandler.currentSongs.first,
                                               "your_uid")
                                           .then((_) {
-                                        _musicHandler.isPlaying = true;
-                                        _musicHandler.notifyListeners();
+                                        _musicHandler.setIsPlaying(true);
                                       });
                                     } else {
                                       // Handle the case when there are no songs in the currentSongs list
