@@ -107,54 +107,25 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-        - family: SF-Compact
+        - family: Gotham
           fonts:
-            - asset: assets/fonts/SF-Compact.ttf
-            - asset: assets/fonts/SF-Compact-Text-Black.ttf
-              weight: 900
-            - asset: assets/fonts/SF-Compact-Text-BlackItalic.ttf
-              weight: 900
-              style: italic
-            - asset: assets/fonts/SF-Compact-Text-Bold.ttf
-              weight: 700
-            - asset: assets/fonts/SF-Compact-Text-BoldItalic.ttf
-              weight: 700
-              style: italic
-            - asset: assets/fonts/SF-Compact-Text-Heavy.ttf
-              weight: 800
-            - asset: assets/fonts/SF-Compact-Text-HeavyItalic.ttf
-              weight: 800
-              style: italic
-            - asset: assets/fonts/SF-Compact-Text-Light.ttf
-              weight: 300
-            - asset: assets/fonts/SF-Compact-Text-LightItalic.ttf
-              weight: 300
-              style: italic
-            - asset: assets/fonts/SF-Compact-Text-Medium.ttf
-              weight: 500
-            - asset: assets/fonts/SF-Compact-Text-MediumItalic.ttf
-              weight: 500
-              style: italic
-            - asset: assets/fonts/SF-Compact-Text-Regular.ttf
-              weight: 400
-            - asset: assets/fonts/SF-Compact-Text-RegularItalic.ttf
-              weight: 400
-              style: italic
-            - asset: assets/fonts/SF-Compact-Text-Semibold.ttf
-              weight: 600
-            - asset: assets/fonts/SF-Compact-Text-SemiboldItalic.ttf
-              weight: 600
-              style: italic
-            - asset: assets/fonts/SF-Compact-Text-Thin.ttf
-              weight: 100
-            - asset: assets/fonts/SF-Compact-Text-ThinItalic.ttf
-              weight: 100
-              style: italic
-            - asset: assets/fonts/SF-Compact-Text-Ultralight.ttf
-              weight: 200
-            - asset: assets/fonts/SF-Compact-Text-UltralightItalic.ttf
-              weight: 200
-              style: italic
+              - asset: assets/fonts/Gotham-Black.otf
+              - asset: assets/fonts/Gotham-Bold.otf
+              - asset: assets/fonts/GothamBold.ttf
+              - asset: assets/fonts/GothamBoldItalic.ttf
+              - asset: assets/fonts/GothamBook.ttf
+              - asset: assets/fonts/Gotham-BookItalic.otf
+              - asset: assets/fonts/GothamBookItalic.ttf  
+              - asset: assets/fonts/Gotham-Light.otf
+              - asset: assets/fonts/GothamLight.ttf
+              - asset: assets/fonts/GothamLightItalic.ttf
+              - asset: assets/fonts/GothamMedium.ttf
+              - asset: assets/fonts/GothamMediumItalic.ttf
+              - asset: assets/fonts/Gotham-Thin.otf
+              - asset: assets/fonts/Gotham-ThinItalic.otf
+              - asset: assets/fonts/Gotham-UltraItalic.otf
+              - asset: assets/fonts/Gotham-XLight.otf
+              - asset: assets/fonts/Gotham-XLightItalic.otf
 
 
   #       - asset: fonts/Schyler-Regular.ttf

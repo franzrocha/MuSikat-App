@@ -80,7 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             const Text(
               "MuSikat",
               style: TextStyle(
-                fontFamily: 'SF-Compact',
+                fontFamily: 'Gotham',
                 color: Colors.white,
                 fontSize: 40,
                 height: 1.5,
@@ -98,7 +98,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     "Your music, your way.",
                     duration: const Duration(milliseconds: 5000),
                     textStyle: const TextStyle(
-                      fontFamily: 'SF-Compact',
+                      fontFamily: 'Gotham',
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -109,7 +109,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     duration: const Duration(milliseconds: 5000),
                     textAlign: TextAlign.center,
                     textStyle: const TextStyle(
-                      fontFamily: 'SF-Compact',
+                      fontFamily: 'Gotham',
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -120,7 +120,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     duration: const Duration(milliseconds: 5000),
                     textAlign: TextAlign.center,
                     textStyle: const TextStyle(
-                      fontFamily: 'SF-Compact',
+                      fontFamily: 'Gotham',
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -159,7 +159,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: const Text(
                   "Log in",
                   style: TextStyle(
-                    fontFamily: 'SF-Compact',
+                    fontFamily: 'Gotham',
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -186,7 +186,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: const Text(
                   "Sign up",
                   style: TextStyle(
-                    fontFamily: 'SF-Compact',
+                    fontFamily: 'Gotham',
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
