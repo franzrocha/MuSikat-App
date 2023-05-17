@@ -21,3 +21,12 @@ const cancelColor = Color.fromARGB(255, 125, 123, 123);
 
 //musikat text color
 const musikatTextColor = Colors.white;
+
+
+//Logo 
+ const logoStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 30,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'SF-Compact',
+);

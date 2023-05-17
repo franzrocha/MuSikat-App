@@ -6,6 +6,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/recently_played.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/models/user_model.dart';
 
 import '../controllers/liked_songs_controller.dart';
 
@@ -18,7 +19,6 @@ class MusicHandler with ChangeNotifier, RouteAware {
 
   //list of songs declared
   List<SongModel> currentSongs = [];
-
   List<SongModel> genreSongs = [];
   List<SongModel> descriptionSongs = [];
   List<SongModel> latestSong = [];
@@ -37,8 +37,6 @@ class MusicHandler with ChangeNotifier, RouteAware {
   bool isLiked = false;
   bool isLoading = false;
   bool isPlayingNext = false;
-
-  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   int currentIndex = 0;
   SongModel? currentSong;
@@ -100,17 +98,18 @@ class MusicHandler with ChangeNotifier, RouteAware {
     } else {
       currentIndex = currentSongs.length - 1;
     }
-
+    String currentUser = FirebaseAuth.instance.currentUser!.uid;
     try {
       checkIfSongIsLiked();
-      await setAudioSource(currentSongs[currentIndex], uid);
+      await setAudioSource(currentSongs[currentIndex], currentUser);
     } on PlayerInterruptedException catch (_) {
       await Future.delayed(const Duration(milliseconds: 500));
-      await setAudioSource(currentSongs[currentIndex], uid);
+      await setAudioSource(currentSongs[currentIndex], currentUser);
     }
   }
 
   Future<void> playNext() async {
+    String currentUser = FirebaseAuth.instance.currentUser!.uid;
     try {
       isPlayingNext = true;
       if (isLoadingAudio) {
@@ -123,10 +122,10 @@ class MusicHandler with ChangeNotifier, RouteAware {
       }
 
       checkIfSongIsLiked();
-      await setAudioSource(currentSongs[currentIndex], uid);
+      await setAudioSource(currentSongs[currentIndex], currentUser);
     } on PlayerInterruptedException catch (_) {
       await Future.delayed(const Duration(milliseconds: 500));
-      await setAudioSource(currentSongs[currentIndex], uid);
+      await setAudioSource(currentSongs[currentIndex], currentUser);
     } finally {
       isPlayingNext = false;
       notifyListeners();
@@ -134,8 +133,9 @@ class MusicHandler with ChangeNotifier, RouteAware {
   }
 
   void checkIfSongIsLiked() async {
+    String currentUser = FirebaseAuth.instance.currentUser!.uid;
     isLiked = await likedCon.isSongLikedByUser(
-        currentSongs[currentIndex].songId, uid);
+        currentSongs[currentIndex].songId, currentUser);
     notifyListeners();
   }
 
@@ -185,32 +185,4 @@ class MusicHandler with ChangeNotifier, RouteAware {
   //   player.dispose();
   //   super.dispose();
   // }
-
-  @override
-  void didPush() {
-    player.play();
-    isPlaying = true;
-    notifyListeners();
-  }
-
-  @override
-  void didPopNext() {
-    player.play();
-    isPlaying = true;
-    notifyListeners();
-  }
-
-  @override
-  void didPop() {
-    player.pause();
-    isPlaying = false;
-    notifyListeners();
-  }
-
-  @override
-  void didPushNext() {
-    player.pause();
-    isPlaying = false;
-    notifyListeners();
-  }
 }

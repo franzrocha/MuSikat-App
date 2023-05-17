@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/services.dart';
 import 'package:musikat_app/screens/authentication/register_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -54,100 +55,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Image.asset(
-                              "assets/images/musikat_logo.png",
-                              width: 141,
-                              height: 140,
-                            ),
-                          ),
-                          Text(
-                            "MuSikat",
-                            style: GoogleFonts.montserrat(
-                              color: Colors.white,
-                              fontSize: 38,
-                              height: 1.5,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 15),
-                          Text(
-                            "LISTEN TO YOUR FAVOURITE \n OPM TRACKS HERE ",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.quicksand(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 318,
-                            height: 63,
-                            decoration: BoxDecoration(
-                              color: musikatColor,
-                              borderRadius: BorderRadius.circular(60),
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const AuthScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'Log in',
-                                style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Container(
-                            width: 318,
-                            height: 63,
-                            decoration: BoxDecoration(
-                              color: musikatColor2,
-                              borderRadius: BorderRadius.circular(60),
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RegisterScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'Sign up',
-                                style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    logo(),
+                    buttons(context),
                   ],
                 ),
               ],
@@ -156,5 +67,147 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ),
       );
     }
+  }
+
+  Expanded logo() {
+    return Expanded(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 30), // Padding(musikatLogo()
+            musikatLogo(),
+            const Text(
+              "MuSikat",
+              style: TextStyle(
+                fontFamily: 'SF-Compact',
+                color: Colors.white,
+                fontSize: 40,
+                height: 1.5,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            
+            Container(
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: AnimatedTextKit(
+                repeatForever: true,
+                animatedTexts: [
+                  FadeAnimatedText(
+                    "Your music, your way.",
+                    duration: const Duration(milliseconds: 5000),
+                    textStyle: const TextStyle(
+                      fontFamily: 'SF-Compact',
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  FadeAnimatedText(
+                    "The hub for OPM.",
+                    duration: const Duration(milliseconds: 5000),
+                    textAlign: TextAlign.center,
+                    textStyle: const TextStyle(
+                      fontFamily: 'SF-Compact',
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  FadeAnimatedText(
+                    "We are here for OPM.",
+                    duration: const Duration(milliseconds: 5000),
+                    textAlign: TextAlign.center,
+                    textStyle: const TextStyle(
+                      fontFamily: 'SF-Compact',
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Expanded buttons(BuildContext context) {
+    return Expanded(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 250,
+              height: 60,
+              decoration: BoxDecoration(
+                color: musikatColor,
+                borderRadius: BorderRadius.circular(60),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AuthScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Log in",
+                  style: TextStyle(
+                    fontFamily: 'SF-Compact',
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              width: 270,
+              height: 60,
+              decoration: BoxDecoration(
+                color: musikatColor2,
+                borderRadius: BorderRadius.circular(60),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Sign up",
+                  style: TextStyle(
+                    fontFamily: 'SF-Compact',
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding musikatLogo() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Image.asset(
+        "assets/images/musikat_logo.png",
+        width: 141,
+        height: 140,
+      ),
+    );
   }
 }

@@ -137,17 +137,17 @@ class _CameraScreenState extends State<CameraScreen> {
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => MusicPlayerScreen(
-                                      songs: songs,
-                                      emotion: emotion,
-                                      initialIndex: randomIndex,
-                                    ),
-                                  ),
-                                );
-                              },
+                              onPressed: () {},
+                              //   Navigator.of(context).push(
+                              //     MaterialPageRoute(
+                              //       builder: (context) => MusicPlayerScreen(
+                              //         songs: songs,
+                              //         emotion: emotion,
+                              //         initialIndex: randomIndex,
+                              //       ),
+                              //     ),
+                              //   );
+                              // },
                               child: const Text(
                                 'Play A Song',
                                 style: TextStyle(

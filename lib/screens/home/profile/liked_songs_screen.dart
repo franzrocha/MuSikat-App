@@ -72,15 +72,15 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                           itemBuilder: (context, index) {
                             SongModel songData = likedSongs[index];
                             return ListTile(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => MusicPlayerScreen(
-                                            songs: likedSongs,
-                                            initialIndex: index,
-                                          )),
-                                );
-                              },
+                              // onTap: () {
+                              //   Navigator.of(context).push(
+                              //     MaterialPageRoute(
+                              //         builder: (context) => MusicPlayerScreen(
+                              //               songs: likedSongs,
+                              //               initialIndex: index,
+                              //             )),
+                              //   );
+                              // },
                               title: Text(
                                 songData.title.length > 22
                                     ? '${songData.title.substring(0, 22)}..'

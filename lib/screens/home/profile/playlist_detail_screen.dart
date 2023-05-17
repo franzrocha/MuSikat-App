@@ -136,16 +136,16 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                                       ),
                                     ),
                                   ),
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => MusicPlayerScreen(
-                                          songs: songs,
-                                          initialIndex: index,
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                  // onTap: () {
+                                  //   Navigator.of(context).push(
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) => MusicPlayerScreen(
+                                  //         songs: songs,
+                                  //         initialIndex: index,
+                                  //       ),
+                                  //     ),
+                                  //   );
+                                  // },
                                 );
                               },
                             );

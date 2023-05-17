@@ -14,8 +14,8 @@ import 'package:musikat_app/utils/exports.dart';
 import '../../../music_player/music_handler.dart';
 
 class ArtistsHubScreen extends StatefulWidget {
-  final MusicHandler musicHandler;
-  const ArtistsHubScreen({Key? key, required this.musicHandler})
+  // final MusicHandler musicHandler;
+  const ArtistsHubScreen({Key? key, })
       : super(key: key);
 
   @override
@@ -148,14 +148,14 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                                 );
                                               });
                                         },
-                                        onTap: () {
-                                          widget.musicHandler.currentSongs = [
-                                            latestSong
-                                          ];
-                                          widget.musicHandler.currentIndex = 0;
-                                          widget.musicHandler
-                                              .setAudioSource(latestSong, uid);
-                                        },
+                                        // onTap: () {
+                                        //   widget.musicHandler.currentSongs = [
+                                        //     latestSong
+                                        //   ];
+                                        //   widget.musicHandler.currentIndex = 0;
+                                        //   widget.musicHandler
+                                        //       .setAudioSource(latestSong, uid);
+                                        // },
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,

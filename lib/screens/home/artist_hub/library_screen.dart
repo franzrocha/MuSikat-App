@@ -96,13 +96,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
                             final song = songs[index];
 
                             return ListTile(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => MusicPlayerScreen(
-                                          songs: songs,
-                                          initialIndex: index,
-                                        )),
-                              ),
+                              // onTap: () => Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //       builder: (context) => MusicPlayerScreen(
+                              //             songs: songs,
+                              //             initialIndex: index,
+                              //           )),
+                              // ),
                               onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,

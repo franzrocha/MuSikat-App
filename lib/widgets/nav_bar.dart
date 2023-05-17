@@ -12,9 +12,9 @@ import 'package:musikat_app/music_player/mini_player.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
-  const NavBar({Key? key, required this.musicHandler}) : super(key: key);
+  const NavBar({Key? key, }) : super(key: key);
 
-  final MusicHandler musicHandler;
+  // final MusicHandler musicHandler;
 
   @override
   State<NavBar> createState() => _NavBarState();
@@ -27,9 +27,12 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomeScreen(
-        musicHandler: widget.musicHandler,
+        // musicHandler: widget.musicHandler,
       ),
-      ArtistsHubScreen(musicHandler: widget.musicHandler),
+      ArtistsHubScreen(
+        // musicHandler: widget.musicHandler
+        
+        ),
       Container(),
       const ChatHomeScreen(),
       const ProfileScreen(),
@@ -109,7 +112,7 @@ class _NavBarState extends State<NavBar> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               //   if (widget.musicHandler.currentSongs.isNotEmpty)
-              MiniPlayer(musicHandler: widget.musicHandler),
+              // MiniPlayer(musicHandler: widget.musicHandler),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40.0),

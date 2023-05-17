@@ -60,6 +60,7 @@ dependencies:
   http: ^0.13.3
   path_provider: ^2.0.2
   rxdart: ^0.27.7
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -91,7 +92,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/images/
-     - assets/images/homescreen/
      - assets/audio/
   #   - images/a_dot_ham.jpeg
 
@@ -106,9 +106,57 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
+  fonts:
+        - family: SF-Compact
+          fonts:
+            - asset: assets/fonts/SF-Compact.ttf
+            - asset: assets/fonts/SF-Compact-Text-Black.ttf
+              weight: 900
+            - asset: assets/fonts/SF-Compact-Text-BlackItalic.ttf
+              weight: 900
+              style: italic
+            - asset: assets/fonts/SF-Compact-Text-Bold.ttf
+              weight: 700
+            - asset: assets/fonts/SF-Compact-Text-BoldItalic.ttf
+              weight: 700
+              style: italic
+            - asset: assets/fonts/SF-Compact-Text-Heavy.ttf
+              weight: 800
+            - asset: assets/fonts/SF-Compact-Text-HeavyItalic.ttf
+              weight: 800
+              style: italic
+            - asset: assets/fonts/SF-Compact-Text-Light.ttf
+              weight: 300
+            - asset: assets/fonts/SF-Compact-Text-LightItalic.ttf
+              weight: 300
+              style: italic
+            - asset: assets/fonts/SF-Compact-Text-Medium.ttf
+              weight: 500
+            - asset: assets/fonts/SF-Compact-Text-MediumItalic.ttf
+              weight: 500
+              style: italic
+            - asset: assets/fonts/SF-Compact-Text-Regular.ttf
+              weight: 400
+            - asset: assets/fonts/SF-Compact-Text-RegularItalic.ttf
+              weight: 400
+              style: italic
+            - asset: assets/fonts/SF-Compact-Text-Semibold.ttf
+              weight: 600
+            - asset: assets/fonts/SF-Compact-Text-SemiboldItalic.ttf
+              weight: 600
+              style: italic
+            - asset: assets/fonts/SF-Compact-Text-Thin.ttf
+              weight: 100
+            - asset: assets/fonts/SF-Compact-Text-ThinItalic.ttf
+              weight: 100
+              style: italic
+            - asset: assets/fonts/SF-Compact-Text-Ultralight.ttf
+              weight: 200
+            - asset: assets/fonts/SF-Compact-Text-UltralightItalic.ttf
+              weight: 200
+              style: italic
+
+
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
