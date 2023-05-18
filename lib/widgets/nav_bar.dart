@@ -95,114 +95,100 @@ class _NavBarState extends State<NavBar> {
               ],
             ),
             const SizedBox(
-              width: 8,
+              width: 5,
             ),
           ],
         ),
-        body: pages[pageIndex],
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            height: 160,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-              boxShadow: [
-                BoxShadow(
-                    color: musikatBackgroundColor,
-                    spreadRadius: 0,
-                    blurRadius: 10),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // if (widget.musicHandler.currentSongs.isNotEmpty)
-                MiniPlayer(musicHandler: widget.musicHandler),
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40.0),
-                    topRight: Radius.circular(40.0),
-                  ),
-                  child: BottomNavigationBar(
-                    type: BottomNavigationBarType.fixed,
-                    backgroundColor: const Color(0xffE28D00),
-                    selectedItemColor: Colors.white,
-                    unselectedItemColor: Colors.white54,
-                    currentIndex: pageIndex,
-                    elevation: 2,
-                    showUnselectedLabels: false,
-                    showSelectedLabels: true,
-                    selectedLabelStyle: GoogleFonts.inter(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
+        body: Stack(
+          children: [
+            pages[pageIndex],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MiniPlayer(musicHandler: widget.musicHandler),
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(40.0),
+                      topRight: Radius.circular(40.0),
                     ),
-                    onTap: (int index) {
-                      if (index != 2) {
-                        setState(() {
-                          pageIndex = index;
-                        });
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SearchScreen(),
+                    child: BottomNavigationBar(
+                      type: BottomNavigationBarType.fixed,
+                      backgroundColor: const Color(0xffE28D00),
+                      selectedItemColor: Colors.white,
+                      unselectedItemColor: Colors.white54,
+                      currentIndex: pageIndex,
+                      elevation: 2,
+                      showUnselectedLabels: false,
+                      showSelectedLabels: true,
+                      selectedLabelStyle: GoogleFonts.inter(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10,
+                      ),
+                      onTap: (int index) {
+                        if (index != 2) {
+                          setState(() {
+                            pageIndex = index;
+                          });
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SearchScreen(),
+                            ),
+                          );
+                        }
+                      },
+                      
+                      items: [
+                        const BottomNavigationBarItem(
+                          icon: FaIcon(
+                            FontAwesomeIcons.house,
+                            size: 20,
                           ),
-                        );
-                      }
-                    },
-                    items: [
-                      const BottomNavigationBarItem(
-                        icon: FaIcon(
-                          FontAwesomeIcons.house,
-                          size: 20,
+                          label: 'Home',
                         ),
-                        label: 'Home',
-                      ),
-                      const BottomNavigationBarItem(
-                        icon: FaIcon(FontAwesomeIcons.music),
-                        label: 'Artists Hub',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: musikatBackgroundColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: musikatBackgroundColor,
-                                spreadRadius: 0,
-                                blurRadius: 5,
+                        const BottomNavigationBarItem(
+                          icon: FaIcon(FontAwesomeIcons.music),
+                          label: 'Artists Hub',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: musikatBackgroundColor,
+                          
+                            ),
+                            child: const CircleAvatar(
+                              radius: 20,
+                              backgroundColor: musikatBackgroundColor,
+                              child: FaIcon(
+                                FontAwesomeIcons.magnifyingGlass,
+                                color: Colors.white,
+                                size: 18,
                               ),
-                            ],
-                          ),
-                          child: const CircleAvatar(
-                            radius: 25,
-                            backgroundColor: musikatBackgroundColor,
-                            child: FaIcon(
-                              FontAwesomeIcons.magnifyingGlass,
-                              color: Colors.white,
-                              size: 18,
                             ),
                           ),
+                          label: '',
                         ),
-                        label: '',
-                      ),
-                      const BottomNavigationBarItem(
-                        icon: Icon(Icons.chat_bubble),
-                        label: 'Chat',
-                      ),
-                      const BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.person,
-                          size: 30,
+                        const BottomNavigationBarItem(
+                          icon: Icon(Icons.chat_bubble),
+                          label: 'Chat',
                         ),
-                        label: 'Profile',
-                      ),
-                    ],
+                        const BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.person,
+                            size: 30,
+                          ),
+                          label: 'Profile',
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

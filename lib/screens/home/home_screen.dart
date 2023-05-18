@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
             artiststToLookOut(),
             basedOnListeningHistory(),
             basedOnLikedSongs(),
-            const SizedBox(height: 5),
+            const SizedBox(height: 130),
           ]),
         ),
       ),

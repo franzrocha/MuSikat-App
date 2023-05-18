@@ -24,7 +24,7 @@ class MiniPlayer extends StatelessWidget {
         animation: musicHandler,
         builder: (BuildContext context, Widget? child) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0,),
             child: Container(
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -33,11 +33,11 @@ class MiniPlayer extends StatelessWidget {
                     bottomLeft: Radius.circular(borderRadius),
                     bottomRight: Radius.circular(borderRadius),
                   ),
-                  color: Colors.transparent),
+                  color: Color.fromARGB(255, 24, 23, 23)),
               margin: EdgeInsets.only(
                   bottom: MediaQuery.of(context).size.height * 0.01),
               width: double.infinity,
-              height: 70,
+              height: 50,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.03,
@@ -57,8 +57,8 @@ class MiniPlayer extends StatelessWidget {
                     children: [
                       // Thumbnail
                       Container(
-                        height: 50,
-                        width: 50,
+                        height: 35,
+                        width: 35,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: CachedNetworkImageProvider(
@@ -77,14 +77,14 @@ class MiniPlayer extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 5),
                               MarqueeText(
                                 text: TextSpan(
                                     text: musicHandler.currentSong?.title ??
                                         "No song playing... "),
                                 style: GoogleFonts.inter(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     color: Colors.white),
                                 marqueeDirection: MarqueeDirection.rtl,
                                 speed: 25,
@@ -94,7 +94,7 @@ class MiniPlayer extends StatelessWidget {
                                 style: GoogleFonts.inter(
                                     color: Colors.white.withOpacity(0.5),
                                     height: 1.5,
-                                    fontSize: 12),
+                                    fontSize: 10),
                               ),
                             ],
                           ),
@@ -103,8 +103,8 @@ class MiniPlayer extends StatelessWidget {
 
                       // Button
                       SizedBox(
-                        width: 50,
-                        height: 50,
+                        width: 40,
+                        height: 40,
                         child: DecoratedBox(
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(

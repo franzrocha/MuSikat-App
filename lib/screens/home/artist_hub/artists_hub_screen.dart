@@ -283,6 +283,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 130),
                     ],
                   ),
                 );
