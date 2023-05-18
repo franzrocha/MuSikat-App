@@ -7,14 +7,15 @@ import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/categories/categories_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
+import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/music_player/mini_player.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
-  const NavBar({Key? key, }) : super(key: key);
+  const NavBar({Key? key, required this.musicHandler, }) : super(key: key);
 
-  // final MusicHandler musicHandler;
+  final MusicHandler musicHandler;
 
   @override
   State<NavBar> createState() => _NavBarState();
@@ -22,15 +23,15 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
-  // final MusicHandler _musicHandler = locator<MusicHandler>();
+  final MusicHandler _musicHandler = locator<MusicHandler>();
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomeScreen(
-        // musicHandler: widget.musicHandler,
+        musicHandler: widget.musicHandler,
       ),
       ArtistsHubScreen(
-        // musicHandler: widget.musicHandler
+        musicHandler: widget.musicHandler
         
         ),
       Container(),
@@ -111,8 +112,8 @@ class _NavBarState extends State<NavBar> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              //   if (widget.musicHandler.currentSongs.isNotEmpty)
-              // MiniPlayer(musicHandler: widget.musicHandler),
+                // if (widget.musicHandler.currentSongs.isNotEmpty)
+              MiniPlayer(musicHandler: widget.musicHandler),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40.0),

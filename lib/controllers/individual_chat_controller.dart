@@ -186,9 +186,8 @@ class IndividualChatController with ChangeNotifier {
       await Future.delayed(
           const Duration(seconds: 2)); // delay to simulate updates
       List<UserModel> users = await fetchChatrooms();
-      if(users != null) {
       yield users;
       }
     }
   }
-}
+

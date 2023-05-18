@@ -339,13 +339,13 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
-                              // onTap: () => Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //       builder: (context) => MusicPlayerScreen(
-                              //             songs: songs,
-                              //             initialIndex: songs.indexOf(song),
-                              //           )),
-                              // ),
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => MusicPlayerScreen(
+                                          songs: songs,
+                                          initialIndex: songs.indexOf(song),
+                                        )),
+                              ),
                               onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,
@@ -458,15 +458,15 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
                               child: ListTile(
-                                // onTap: () {
-                                //   Navigator.of(context).push(
-                                //     MaterialPageRoute(
-                                //         builder: (context) => MusicPlayerScreen(
-                                //               songs: songs,
-                                //               initialIndex: index,
-                                //             )),
-                                //   );
-                                // },
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => MusicPlayerScreen(
+                                              songs: songs,
+                                              initialIndex: index,
+                                            )),
+                                  );
+                                },
                                 leading: Container(
                                   width: 50,
                                   height: 50,
@@ -559,16 +559,16 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 30),
                       child: InkWell(
-                        // onTap: () {
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => MusicPlayerScreen(
-                        //         songs: [latestSong],
-                        //       ),
-                        //     ),
-                        //   );
-                        // },
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MusicPlayerScreen(
+                                songs: [latestSong],
+                              ),
+                            ),
+                          );
+                        },
                         child: Container(
                           height: 105,
                           width: 110,

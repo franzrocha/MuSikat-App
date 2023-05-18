@@ -15,10 +15,10 @@ import 'package:musikat_app/utils/exports.dart';
 import '../../music_player/music_handler.dart';
 
 class HomeScreen extends StatefulWidget {
-  // final MusicHandler musicHandler;
+  final MusicHandler musicHandler;
   static const String route = 'home-screen';
 
-  const HomeScreen({Key? key, }) : super(key: key);
+  const HomeScreen({Key? key, required this.musicHandler, }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -123,12 +123,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
-                              // onTap: () {
-                              //   widget.musicHandler.currentSongs = songs;
-                              //   widget.musicHandler.currentIndex =
-                              //       songs.indexOf(song);
-                              //   widget.musicHandler.setAudioSource(song, uid);
-                              // },
+                              onTap: () {
+                                widget.musicHandler.currentSongs = songs;
+                                widget.musicHandler.currentIndex =
+                                    songs.indexOf(song);
+                                widget.musicHandler.setAudioSource(song, uid);
+                              },
                               onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,
@@ -245,12 +245,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
-                              // onTap: () {
-                              //   widget.musicHandler.currentSongs = songs;
-                              //   widget.musicHandler.currentIndex =
-                              //       songs.indexOf(song);
-                              //   widget.musicHandler.setAudioSource(song, uid);
-                              // },
+                              onTap: () {
+                                widget.musicHandler.currentSongs = songs;
+                                widget.musicHandler.currentIndex =
+                                    songs.indexOf(song);
+                                widget.musicHandler.setAudioSource(song, uid);
+                              },
                               onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,
@@ -449,7 +449,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } else {
             final songs = snapshot.data!;
             final limitedSongs = songs.take(5).toList();
-            // widget.musicHandler.latestSong = songs;
+            widget.musicHandler.latestSong = songs;
 
             return songs.isEmpty
                 ? const SizedBox.shrink()
@@ -473,13 +473,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             return Padding(
                               padding: const EdgeInsets.only(left: 25, top: 10),
                               child: GestureDetector(
-                                // onTap: () {
-                                //   widget.musicHandler.currentSongs =
-                                //       limitedSongs;
-                                //   widget.musicHandler.currentIndex =
-                                //       limitedSongs.indexOf(song);
-                                //   widget.musicHandler.setAudioSource(song, uid);
-                                // },
+                                onTap: () {
+                                  widget.musicHandler.currentSongs =
+                                      limitedSongs;
+                                  widget.musicHandler.currentIndex =
+                                      limitedSongs.indexOf(song);
+                                  widget.musicHandler.setAudioSource(song, uid);
+                                },
                                 onLongPress: () {
                                   showModalBottomSheet(
                                       backgroundColor: musikatColor4,
@@ -570,7 +570,7 @@ class _HomeScreenState extends State<HomeScreen> {
             final songs = snapshot.data!;
             final randomSongs = songs..shuffle();
             final limitedSongs = randomSongs.take(5).toList();
-            // widget.musicHandler.randomSongs = limitedSongs;
+            widget.musicHandler.randomSongs = limitedSongs;
 
             return songs.isEmpty
                 ? const SizedBox.shrink()
@@ -595,16 +595,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding:
                                       const EdgeInsets.only(left: 25, top: 10),
                                   child: GestureDetector(
-                                    // onTap: () {
-                                    //   widget.musicHandler.currentSongs =
-                                    //       limitedSongs;
-                                    //   widget.musicHandler.currentIndex =
-                                    //       limitedSongs.indexOf(song);
-                                    //   widget.musicHandler.setAudioSource(
-                                    //       limitedSongs[
-                                    //           widget.musicHandler.currentIndex],
-                                    //       uid);
-                                    // },
+                                    onTap: () {
+                                      widget.musicHandler.currentSongs =
+                                          limitedSongs;
+                                      widget.musicHandler.currentIndex =
+                                          limitedSongs.indexOf(song);
+                                      widget.musicHandler.setAudioSource(
+                                          limitedSongs[
+                                              widget.musicHandler.currentIndex],
+                                          uid);
+                                    },
                                     onLongPress: () {
                                       showModalBottomSheet(
                                           backgroundColor: musikatColor4,

@@ -22,11 +22,18 @@ const cancelColor = Color.fromARGB(255, 125, 123, 123);
 //musikat text color
 const musikatTextColor = Colors.white;
 
-
-//Logo 
- const logoStyle = TextStyle(
+//Logo
+TextStyle logoStyle = const TextStyle(
+  fontFamily: 'Gotham',
   color: Colors.white,
-  fontSize: 30,
+  fontSize: 40,
+  height: 1.5,
   fontWeight: FontWeight.bold,
-  fontFamily: 'SF-Compact',
+);
+
+TextStyle sloganStyle = const TextStyle(
+  fontFamily: 'Gotham',
+  color: Colors.white,
+  fontSize: 18,
+  fontWeight: FontWeight.w700,
 );

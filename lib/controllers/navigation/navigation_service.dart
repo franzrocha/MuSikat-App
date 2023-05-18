@@ -10,7 +10,7 @@ part 'navigation_animations.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  // final MusicHandler musicHandler = locator.get<MusicHandler>();
+  final MusicHandler musicHandler = locator.get<MusicHandler>();
   List<String> routeStack = [WelcomeScreen.route];
   String get currentRoute {
     String result = '';
@@ -157,7 +157,7 @@ class NavigationService {
     if (FirebaseAuth.instance.currentUser != null) {
       return FadeRoute(
           page: NavBar(
-            // musicHandler: musicHandler,
+            musicHandler: musicHandler,
           ),
           settings: settings);
     } else {

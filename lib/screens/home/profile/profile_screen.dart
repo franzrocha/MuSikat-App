@@ -98,11 +98,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 TileList(
                   icon: Icons.logout,
                   title: 'Log-out',
-                  // ontap: () async {
-                  //   locator<MusicHandler>().setIsPlaying(false);
-                  //   locator<MusicHandler>().player.pause();
-                  //   _auth.logout();
-                  // },
+                  ontap: () async {
+                    locator<MusicHandler>().setIsPlaying(false);
+                    locator<MusicHandler>().player.stop();
+
+                    _auth.logout();
+                  },
                 ),
                 const SizedBox(
                   height: 20,

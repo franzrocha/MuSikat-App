@@ -76,18 +76,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 30), // Padding(musikatLogo()
-            musikatLogo(),
-            const Text(
-              "MuSikat",
-              style: TextStyle(
-                fontFamily: 'Gotham',
-                color: Colors.white,
-                fontSize: 40,
-                height: 1.5,
-                fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Image.asset(
+                "assets/images/musikat_logo.png",
+                width: 141,
+                height: 140,
               ),
             ),
-            
+            Text(
+              "MuSikat",
+              style: logoStyle,
+            ),
+
             Container(
               height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -97,34 +98,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   FadeAnimatedText(
                     "Your music, your way.",
                     duration: const Duration(milliseconds: 5000),
-                    textStyle: const TextStyle(
-                      fontFamily: 'Gotham',
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    textStyle: sloganStyle,
                   ),
                   FadeAnimatedText(
                     "The hub for OPM.",
                     duration: const Duration(milliseconds: 5000),
                     textAlign: TextAlign.center,
-                    textStyle: const TextStyle(
-                      fontFamily: 'Gotham',
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    textStyle: sloganStyle,
                   ),
                   FadeAnimatedText(
                     "We are here for OPM.",
                     duration: const Duration(milliseconds: 5000),
                     textAlign: TextAlign.center,
-                    textStyle: const TextStyle(
-                      fontFamily: 'Gotham',
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    textStyle: sloganStyle,
                   )
                 ],
               ),
@@ -196,17 +182,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Padding musikatLogo() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Image.asset(
-        "assets/images/musikat_logo.png",
-        width: 141,
-        height: 140,
       ),
     );
   }

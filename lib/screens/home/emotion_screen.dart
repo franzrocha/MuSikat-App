@@ -79,15 +79,15 @@ class _EmotionDisplayScreenState extends State<EmotionDisplayScreen> {
                                   style: GoogleFonts.inter(
                                       color: Colors.white.withOpacity(0.5),
                                       fontSize: 14)),
-                              // onTap: () {
-                              //   Navigator.of(context).push(
-                              //     MaterialPageRoute(
-                              //         builder: (context) => MusicPlayerScreen(
-                              //               songs: descriptionSongs,
-                              //               initialIndex: index,
-                              //             )),
-                              //   );
-                              // },
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            songs: descriptionSongs,
+                                            initialIndex: index,
+                                          )),
+                                );
+                              },
                               onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,

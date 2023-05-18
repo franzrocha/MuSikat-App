@@ -5,8 +5,7 @@ import 'controllers/navigation/navigation_service.dart';
 
 final locator = GetIt.instance;
 Future<void> setupLocators() async {
-  
+  locator.registerSingleton<MusicHandler>(MusicHandler());
   locator.registerSingleton<NavigationService>(NavigationService());
   locator.registerSingleton<AuthController>(AuthController());
-  locator.registerSingleton<MusicHandler>(MusicHandler());
 }

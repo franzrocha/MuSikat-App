@@ -205,18 +205,18 @@ class _SearchScreenState extends State<SearchScreen> {
           SongModel song = combinedResults[index] as SongModel;
           return song.uid != FirebaseAuth.instance.currentUser?.uid
               ? ListTile(
-                  // onTap: () {
-                  //   Navigator.of(context).push(
-                  //     FadeRoute(
-                  //       page: MusicPlayerScreen(
-                  //         songs: songSearchResult
-                  //             .where((s) => s.songId == song.songId)
-                  //             .toList(),
-                  //       ),
-                  //       settings: const RouteSettings(),
-                  //     ),
-                  //   );
-                  // },
+                  onTap: () {
+                    Navigator.of(context).push(
+                      FadeRoute(
+                        page: MusicPlayerScreen(
+                          songs: songSearchResult
+                              .where((s) => s.songId == song.songId)
+                              .toList(),
+                        ),
+                        settings: const RouteSettings(),
+                      ),
+                    );
+                  },
                   onLongPress: () {
                     showModalBottomSheet(
                         backgroundColor: musikatColor4,
