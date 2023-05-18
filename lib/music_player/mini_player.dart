@@ -1,4 +1,3 @@
-
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,7 +33,7 @@ class MiniPlayer extends StatelessWidget {
                     bottomLeft: Radius.circular(borderRadius),
                     bottomRight: Radius.circular(borderRadius),
                   ),
-                  color: Color.fromARGB(255, 29, 28, 28)),
+                  color: Colors.transparent),
               margin: EdgeInsets.only(
                   bottom: MediaQuery.of(context).size.height * 0.01),
               width: double.infinity,
@@ -62,9 +61,10 @@ class MiniPlayer extends StatelessWidget {
                         width: 50,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: CachedNetworkImageProvider(musicHandler
-                                    .currentSong?.albumCover ??
-                                'https://icon-library.com/images/vinyl-icon-png/vinyl-icon-png-11.jpg', ),
+                            image: CachedNetworkImageProvider(
+                              musicHandler.currentSong?.albumCover ??
+                                  'https://icon-library.com/images/vinyl-icon-png/vinyl-icon-png-11.jpg',
+                            ),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -80,9 +80,8 @@ class MiniPlayer extends StatelessWidget {
                               const SizedBox(height: 10),
                               MarqueeText(
                                 text: TextSpan(
-                                  text: musicHandler.currentSong?.title ??
-                                      "No song playing... "
-                                ),
+                                    text: musicHandler.currentSong?.title ??
+                                        "No song playing... "),
                                 style: GoogleFonts.inter(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,

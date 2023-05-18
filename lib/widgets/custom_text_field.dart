@@ -32,9 +32,10 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: TextFormField(
-        style: GoogleFonts.inter(
+        style: const TextStyle(
           color: Colors.black,
           fontSize: 15,
+          fontFamily: 'Inter'
         ),
         controller: controller,
         validator: validator,

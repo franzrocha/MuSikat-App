@@ -1,9 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,7 +12,6 @@ import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/screens/home/emotion_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
-import '../../controllers/songs_controller.dart';
 
 import '../../models/song_model.dart';
 
@@ -76,6 +76,8 @@ class _CameraScreenState extends State<CameraScreen> {
       isCapturing = true;
     });
 
+      cameraController?.pausePreview();
+
     cameraController?.takePicture().then((XFile? file) async {
       if (mounted && file != null) {
         print(file.path);
@@ -125,6 +127,8 @@ class _CameraScreenState extends State<CameraScreen> {
         setState(() {
           isCapturing = false;
         });
+
+        cameraController?.resumePreview();
       }
     });
   }
@@ -137,7 +141,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final SongsController _songsCon = SongsController();
+    // final SongsController _songsCon = SongsController();
 
     if (cameraController != null && cameraController!.value.isInitialized) {
       return Scaffold(
@@ -223,16 +227,12 @@ class _CameraScreenState extends State<CameraScreen> {
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        LoadingIndicator(),
-                        SizedBox(height: 10),
+                      children: [
+                        const LoadingIndicator(),
+                        const SizedBox(height: 10),
                         Text(
-                          'Musikat Generating Songs.',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          'Detecting emotion...',
+                          style: sloganStyle,
                         ),
                       ],
                     ),
@@ -311,73 +311,124 @@ class CameraResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.network(downloadUrl),
-          const SizedBox(height: 20),
-          Text(
-            'It seems that you are $response today',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+      appBar: CustomAppBar(
+        showLogo: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                width: 35,
+                height: 40,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: musikatColor,
+                ),
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    style: IconButton.styleFrom(
+                      elevation: 0,
+                      shape: const CircleBorder(),
+                    ),
+                    onPressed: () {
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => EmotionDisplayScreen(
-                        emotion: emotion,
-                      ),
-                    ),
-                  );
-                },
-                child: const Text(
-                  'Suggested Songs',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MusicPlayerScreen(
-                        songs: songs,
-                        emotion: emotion,
-                        initialIndex: randomIndex,
-                      ),
-                    ),
-                  );
-                },
-                child: const Text(
-                  'Play A Song',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 0),
-          ElevatedButton(
-            onPressed: () {
-              // User marked the picture as not okay
-              // Perform necessary actions
-              Navigator.pop(context);
-            },
-            child: const Icon(Icons.close),
-          ),
-          const SizedBox(height: 0),
         ],
       ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            SizedBox(height: 500, child: Image.network(downloadUrl)),
+            const SizedBox(height: 30),
+            Text(
+              'It seems that you are $response today ${getEmojiForResponse(response)}',
+              style: const TextStyle(
+                  color: Colors.white, fontSize: 16, fontFamily: 'Gotham'),
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: 150,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: musikatColor,
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MusicPlayerScreen(
+                            songs: songs,
+                            emotion: emotion,
+                            initialIndex: randomIndex,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Play a song",
+                      style: shortDefault,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  width: 150,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: musikatColor2,
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EmotionDisplayScreen(
+                            emotion: emotion,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Suggested songs",
+                      style: shortDefault,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 0),
+          ],
+        ),
+      ),
     );
+  }
+
+  String getEmojiForResponse(String response) {
+    switch (response) {
+      case 'happy':
+        return '😄';
+      case 'sad':
+        return '😢';
+      case 'normal':
+        return '😐';
+      default:
+        return '';
+    }
   }
 }

@@ -13,7 +13,10 @@ import 'package:musikat_app/music_player/mini_player.dart';
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
-  const NavBar({Key? key, required this.musicHandler, }) : super(key: key);
+  const NavBar({
+    Key? key,
+    required this.musicHandler,
+  }) : super(key: key);
 
   final MusicHandler musicHandler;
 
@@ -30,18 +33,14 @@ class _NavBarState extends State<NavBar> {
       HomeScreen(
         musicHandler: widget.musicHandler,
       ),
-      ArtistsHubScreen(
-        musicHandler: widget.musicHandler
-        
-        ),
+      ArtistsHubScreen(musicHandler: widget.musicHandler),
       Container(),
       const ChatHomeScreen(),
       const ProfileScreen(),
     ];
 
     return WillPopScope(
-         onWillPop: () async {
-        // Cancel the back button by returning false
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(
@@ -117,7 +116,7 @@ class _NavBarState extends State<NavBar> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                  // if (widget.musicHandler.currentSongs.isNotEmpty)
+                // if (widget.musicHandler.currentSongs.isNotEmpty)
                 MiniPlayer(musicHandler: widget.musicHandler),
                 ClipRRect(
                   borderRadius: const BorderRadius.only(

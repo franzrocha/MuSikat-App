@@ -59,6 +59,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   children: [
                     logo(),
                     buttons(context),
+                    const Text(
+                      'MuSikat © 2023. All rights reserved.',
+                      style: TextStyle(
+                        fontFamily: 'Gotham',
+                        fontWeight: FontWeight.w100,
+                        fontSize: 10,
+                        height: 3,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const   SizedBox(height: 10,),
                   ],
                 ),
               ],
@@ -169,6 +180,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ),
             ),
+         
           ],
         ),
       ),

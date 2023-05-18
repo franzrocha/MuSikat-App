@@ -53,3 +53,11 @@ TextStyle appBarStyle = const TextStyle(
   fontSize: 18,
   color: Colors.white,
 );
+
+TextStyle shortDefault = const TextStyle(
+  fontFamily: 'Gotham',
+  fontWeight: FontWeight.w500,
+  fontSize: 13,
+  color: Colors.white,
+);
+
