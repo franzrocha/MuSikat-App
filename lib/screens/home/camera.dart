@@ -1,9 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,6 +37,8 @@ class _CameraScreenState extends State<CameraScreen> {
   final SongsController _songCon = SongsController();
 
   int direction = 1;
+  bool isCapturing = false;
+  Offset? focusPoint;
 
   @override
   void initState() {
@@ -69,13 +71,73 @@ class _CameraScreenState extends State<CameraScreen> {
     super.dispose();
   }
 
+  Future<void> captureImage() async {
+    setState(() {
+      isCapturing = true;
+    });
+
+    cameraController?.takePicture().then((XFile? file) async {
+      if (mounted && file != null) {
+        print(file.path);
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        Reference ref = storage.ref().child('images/$fileName.jpg');
+        UploadTask uploadTask = ref.putFile(File(file.path));
+
+        TaskSnapshot taskSnapshot = await uploadTask;
+        String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+        print(downloadUrl);
+
+        // Call the API with the download URL
+        Uri apiUrl = Uri.parse(
+            'https://cba6-49-145-104-250.ngrok-free.app/?image=$downloadUrl');
+        http.Response response = await http.get(apiUrl);
+
+        if (response.statusCode == 200) {
+          emotion = response.body;
+          songs = await _songCon.getEmotionSongs(emotion);
+          int length = songs.length;
+          Random random = Random();
+          int randomIndex = random.nextInt(length);
+
+          // API call successful
+          // print('API response: ${response.body}');
+
+          // Fluttertoast.showToast(
+          //     msg: 'It seems that you are ${response.body} today!');
+
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CameraResultScreen(
+                downloadUrl: downloadUrl,
+                emotion: emotion,
+                songs: songs,
+                randomIndex: randomIndex,
+                response: response.body,
+              ),
+            ),
+          );
+        } else {
+          // API call failed
+          print('API call failed with status code: ${response.statusCode}');
+          Fluttertoast.showToast(msg: 'Failed to call API');
+        }
+
+        setState(() {
+          isCapturing = false;
+        });
+      }
+    });
+  }
+
+  void updateFocusPoint(Offset point) {
+    setState(() {
+      focusPoint = point;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final SongsController _songsCon = SongsController();
-
-    int length;
-    Random random = Random();
-    int randomIndex = 0;
 
     if (cameraController != null && cameraController!.value.isInitialized) {
       return Scaffold(
@@ -83,6 +145,36 @@ class _CameraScreenState extends State<CameraScreen> {
         body: Stack(
           children: [
             CameraPreview(cameraController!),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: isCapturing ? Colors.red : Colors.green,
+                    width: 2.0,
+                  ),
+                ),
+              ),
+            ),
+            if (focusPoint != null)
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 80.0,
+                  height: 80.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.yellow,
+                      width: 2.0,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.face,
+                    color: Colors.yellow,
+                    size: 48.0,
+                  ),
+                ),
+              ),
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -90,123 +182,63 @@ class _CameraScreenState extends State<CameraScreen> {
                   startCamera(direction);
                 });
               },
-              child:
-                  button(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
+              child: button(
+                  Icons.flip_camera_ios_outlined, Alignment.bottomLeft, () {
+                // Callback function logic goes here
+              }),
             ),
-            GestureDetector(
-              onTap: () async {
-                cameraController?.takePicture().then((XFile? file) async {
-                  if (mounted && file != null) {
-                    print(file.path);
-                    String fileName =
-                        DateTime.now().millisecondsSinceEpoch.toString();
-                    Reference ref = storage.ref().child('images/$fileName.jpg');
-                    UploadTask uploadTask = ref.putFile(File(file.path));
-
-                    TaskSnapshot taskSnapshot = await uploadTask;
-                    String downloadUrl =
-                        await taskSnapshot.ref.getDownloadURL();
-                    print(downloadUrl);
-
-                    // Display the captured image in a dialog or modal bottom sheet
-                    // ignore: use_build_context_synchronously
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Captured Image'),
-                        content: Column(
-                          children: [
-                            Image.network(downloadUrl),
-                            const SizedBox(height: 10),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => EmotionDisplayScreen(
-                                      emotion: emotion,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Create a Playlist',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () { 
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => MusicPlayerScreen(
-                                      songs: songs,
-                                      emotion: emotion,
-                                      initialIndex: randomIndex,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Play A Song',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            ElevatedButton(
-                              onPressed: () {
-                                // User marked the picture as not okay
-                                // Perform necessary actions
-                                Navigator.pop(context); // Close the dialog
-                              },
-                              child: const Icon(Icons.close),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-
-                    // Call the API with the download URL
-                    Uri apiUrl = Uri.parse(
-                        'https://627e-2001-4454-399-2500-204e-163e-df1b-1a1a.ngrok-free.app/?image=$downloadUrl');
-                    http.Response response = await http.get(apiUrl);
-
-                    if (response.statusCode == 200) {
-                      emotion = response.body;
-                      songs = await _songCon.getEmotionSongs(emotion);
-                      length = songs.length;
-                      randomIndex = random.nextInt(length);
-
-                      // API call successful
-                      // print('API response: ${response.body}');
-                      Fluttertoast.showToast(
-                          msg: 'It seems that you are ${response.body} today!');
-                    } else {
-                      // API call failed
-                      print(
-                          'API call failed with status code: ${response.statusCode}');
-                      Fluttertoast.showToast(msg: 'Failed to call API');
-                    }
-                  }
-                });
-              },
-              child: button(Icons.camera_alt_outlined, Alignment.bottomCenter),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    button(Icons.camera_alt_outlined, Alignment.bottomCenter,
+                        () async {
+                      if (!isCapturing) {
+                        await captureImage();
+                      }
+                    }),
+                  ],
+                ),
+              ],
             ),
             SafeArea(
               child: Align(
                 alignment: Alignment.topCenter,
-                child: Text("FER Camera",
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(0.8),
-                    )),
+                child: Text(
+                  "FER Camera",
+                  style: GoogleFonts.inter(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
               ),
             ),
+            if (isCapturing)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black54,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        LoadingIndicator(),
+                        SizedBox(height: 10),
+                        Text(
+                          'Musikat Generating Songs.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       );
@@ -215,7 +247,11 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  Widget button(IconData icon, Alignment alignment) {
+  Widget button(
+    IconData icon,
+    Alignment alignment,
+    VoidCallback onPressed,
+  ) {
     return Align(
       alignment: alignment,
       child: Container(
@@ -233,7 +269,7 @@ class _CameraScreenState extends State<CameraScreen> {
             colors: [
               Color(0xfffca311),
               Color(0xff62DD69),
-            ], // Define your gradient colors here
+            ],
           ),
           boxShadow: [
             BoxShadow(
@@ -243,12 +279,104 @@ class _CameraScreenState extends State<CameraScreen> {
             ),
           ],
         ),
-        child: Center(
-          child: Icon(
+        child: IconButton(
+          icon: Icon(
             icon,
             color: Colors.white,
           ),
+          onPressed: onPressed,
         ),
+      ),
+    );
+  }
+}
+
+class CameraResultScreen extends StatelessWidget {
+  final String downloadUrl;
+  final String emotion;
+  final List<SongModel> songs;
+  final int randomIndex;
+  final String response;
+
+  const CameraResultScreen({
+    Key? key,
+    required this.downloadUrl,
+    required this.emotion,
+    required this.songs,
+    required this.randomIndex,
+    required this.response,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: musikatBackgroundColor,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.network(downloadUrl),
+          const SizedBox(height: 20),
+          Text(
+            'It seems that you are $response today',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EmotionDisplayScreen(
+                        emotion: emotion,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Suggested Songs',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MusicPlayerScreen(
+                        songs: songs,
+                        emotion: emotion,
+                        initialIndex: randomIndex,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Play A Song',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 0),
+          ElevatedButton(
+            onPressed: () {
+              // User marked the picture as not okay
+              // Perform necessary actions
+              Navigator.pop(context);
+            },
+            child: const Icon(Icons.close),
+          ),
+          const SizedBox(height: 0),
+        ],
       ),
     );
   }
