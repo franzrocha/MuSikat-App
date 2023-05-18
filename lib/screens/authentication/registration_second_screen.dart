@@ -52,11 +52,7 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
               appBar: CustomAppBar(
                 title: Text(
                   'Register',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
+                  style: appBarStyle,
                 ),
                 showLogo: false,
               ),
@@ -70,18 +66,14 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
                         child: Image.asset(
                           "assets/images/register_bg2.png",
                           width: 250,
-                          height: 230,
+                          height: 210,
                         ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 25, top: 10),
                         alignment: Alignment.topLeft,
-                        child: Text("Upload your own song as an artist",
-                            textAlign: TextAlign.right,
-                            style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),
+                        child: Text("Be an artist. Be a fan. ",
+                            textAlign: TextAlign.right, style: sloganStyle),
                       ),
                       Container(
                         padding: const EdgeInsets.all(20),
@@ -118,11 +110,11 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
                             child: checkBox(),
                           ),
                           const SizedBox(width: 15.0),
-                          Text(
+                          const Text(
                             'By signing up you accept the MuSikat \n Term of Service and Piracy Policy.',
-                            style: GoogleFonts.inter(
+                            style:TextStyle(
                               color: Colors.white,
-                              fontSize: 14,
+                              fontSize: 12,
                             ),
                           ),
                         ],
@@ -147,7 +139,6 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
           color: musikatColor, borderRadius: BorderRadius.circular(60)),
       child: TextButton(
         onPressed: () {
-          
           if (isFieldEmpty()) {
             ToastMessage.show(context, 'Please fill in all fields');
           } else if (!checkMe) {
@@ -165,9 +156,7 @@ class _RegistrationSecondScreenState extends State<RegistrationSecondScreen> {
         },
         child: Text(
           'Register',
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-        ),
+          style: buttonStyle),
       ),
     );
   }

@@ -31,9 +31,25 @@ TextStyle logoStyle = const TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+//slogan
 TextStyle sloganStyle = const TextStyle(
   fontFamily: 'Gotham',
   color: Colors.white,
   fontSize: 18,
   fontWeight: FontWeight.w700,
+);
+
+//button
+TextStyle buttonStyle = const TextStyle(
+  fontFamily: 'Gotham',
+  color: Colors.white,
+  fontSize: 18,
+  fontWeight: FontWeight.w600,
+);
+
+TextStyle appBarStyle = const TextStyle(
+  fontFamily: 'Gotham',
+  fontWeight: FontWeight.w500,
+  fontSize: 18,
+  color: Colors.white,
 );

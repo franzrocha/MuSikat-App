@@ -75,7 +75,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 30), // Padding(musikatLogo()
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Image.asset(
@@ -88,7 +88,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               "MuSikat",
               style: logoStyle,
             ),
-
             Container(
               height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -128,7 +127,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 250,
+              width: 220,
               height: 60,
               decoration: BoxDecoration(
                 color: musikatColor,
@@ -142,20 +141,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   "Log in",
-                  style: TextStyle(
-                    fontFamily: 'Gotham',
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: buttonStyle,
                 ),
               ),
             ),
             const SizedBox(height: 20),
             Container(
-              width: 270,
+              width: 250,
               height: 60,
               decoration: BoxDecoration(
                 color: musikatColor2,
@@ -169,14 +163,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   "Sign up",
-                  style: TextStyle(
-                    fontFamily: 'Gotham',
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: buttonStyle,
                 ),
               ),
             ),

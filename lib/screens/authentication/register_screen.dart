@@ -45,11 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               appBar: CustomAppBar(
                 title: Text(
                   'Register',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
+                  style: appBarStyle
                 ),
                 showLogo: false,
               ),
@@ -74,10 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           alignment: Alignment.topLeft,
                           child: Text("Create an account for free",
                               textAlign: TextAlign.right,
-                              style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)),
+                              style: sloganStyle),
                         ),
                         Container(
                           padding: const EdgeInsets.all(20),
@@ -149,17 +142,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Text(
               'Next',
-              style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500),
+              style: buttonStyle,
             ),
             const SizedBox(
               width: 10,
             ),
             const FaIcon(
               FontAwesomeIcons.angleRight,
-              size: 20,
+              size: 18,
               color: Colors.white,
             ),
           ],

@@ -1,6 +1,7 @@
 
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/service_locators.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -61,9 +62,9 @@ class MiniPlayer extends StatelessWidget {
                         width: 50,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(musicHandler
+                            image: CachedNetworkImageProvider(musicHandler
                                     .currentSong?.albumCover ??
-                                "https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png"),
+                                'https://icon-library.com/images/vinyl-icon-png/vinyl-icon-png-11.jpg', ),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -80,7 +81,7 @@ class MiniPlayer extends StatelessWidget {
                               MarqueeText(
                                 text: TextSpan(
                                   text: musicHandler.currentSong?.title ??
-                                      "No Songs Played",
+                                      "No song playing... "
                                 ),
                                 style: GoogleFonts.inter(
                                     fontWeight: FontWeight.bold,

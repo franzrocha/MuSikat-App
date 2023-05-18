@@ -20,7 +20,6 @@ class _AuthScreenState extends State<AuthScreen> {
       _passCon = TextEditingController();
   final AuthController _authController = locator<AuthController>();
 
-  
   bool _passwordVisible = false;
 
   String prompts = '';
@@ -67,11 +66,7 @@ class _AuthScreenState extends State<AuthScreen> {
               appBar: CustomAppBar(
                   title: Text(
                     'Login',
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
+                    style: appBarStyle,
                   ),
                   showLogo: false),
               backgroundColor: musikatBackgroundColor,
@@ -85,18 +80,14 @@ class _AuthScreenState extends State<AuthScreen> {
                         Padding(
                           padding: const EdgeInsets.only(top: 25),
                           child: Image.asset("assets/images/login_bg.png",
-                              width: 210, height: 190),
+                              width: 210, height: 210),
                         ),
                         Container(
                           padding: const EdgeInsets.only(
-                              left: 30, top: 5, bottom: 5),
+                              left: 30, top: 5),
                           alignment: Alignment.topLeft,
                           child: Text("We are here for OPM.",
-                              textAlign: TextAlign.right,
-                              style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)),
+                              textAlign: TextAlign.right, style: sloganStyle),
                         ),
                         Container(
                           padding: const EdgeInsets.all(20),
@@ -121,7 +112,6 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                         loginButton(),
-                    
                       ],
                     ),
                   ),
@@ -195,10 +185,10 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               );
             },
-            child: Text(
+            child: const Text(
               'Forgot Password?',
-              style: GoogleFonts.inter(
-                fontSize: 15,
+              style: TextStyle(
+                fontSize: 12  ,
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
                 decoration: TextDecoration.underline,
@@ -236,8 +226,7 @@ class _AuthScreenState extends State<AuthScreen> {
         },
         child: Text(
           'Log In',
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+          style: buttonStyle,
         ),
       ),
     );

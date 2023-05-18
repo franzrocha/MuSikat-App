@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/models/recently_played.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class RecentlyPlayedScreen extends StatefulWidget {
@@ -76,6 +77,15 @@ class _RecentlyPlayedScreenState extends State<RecentlyPlayedScreen> {
                         itemBuilder: (context, index) {
                           SongModel songData = recentlyPlayed[index];
                           return ListTile(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => MusicPlayerScreen(
+                                      songs: recentlyPlayed,
+                                      initialIndex: index),
+                                ),
+                              );
+                            },
                             title: Text(
                               songData.title,
                               style: GoogleFonts.inter(

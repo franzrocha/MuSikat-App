@@ -30,11 +30,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appBar: CustomAppBar(
         title: Text(
           'Forgot Password',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
+          style: appBarStyle,
         ),
         showLogo: false,
       ),
@@ -63,25 +59,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Forgot your password?',
-                              style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)),
+                          child:
+                              Text('Forgot your password?', style: sloganStyle),
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Text(
                             'Enter your e-mail address you have used to register with us and we will send you a reset link.',
                             textAlign: TextAlign.justify,
-                            style: GoogleFonts.inter(
+                            style: TextStyle(
                               color: Colors.white,
-                              fontSize: 14,
+                              fontSize: 10,
                             )),
                       ),
                       const SizedBox(height: 20),
@@ -126,18 +119,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           color: const Color(0xfffca311),
           borderRadius: BorderRadius.circular(60)),
       child: TextButton(
-        onPressed: () {
-          resetPass();
-        },
-        child: Text(
-          'Submit',
-          style: GoogleFonts.inter(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
+          onPressed: () {
+            resetPass();
+          },
+          child: Text('Submit', style: buttonStyle)),
     );
   }
 
