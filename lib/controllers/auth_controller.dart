@@ -68,7 +68,6 @@ class AuthController with ChangeNotifier {
         throw Exception('Login failed');
       }
 
-      // Retrieve the user's account type from Firebase
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(result.user!.uid)

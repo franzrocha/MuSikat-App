@@ -569,16 +569,12 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                 runSpacing: 8.0,
                 children: _producers.map((producer) {
                   return Chip(
-                    backgroundColor: musikatBackgroundColor.withOpacity(0.5),
+                    backgroundColor: musikatColor,
+                    deleteIconColor: Colors.white,
                     label: Text(producer),
                     labelStyle: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 12,
-                      // fontWeight: FontWeight.bold,
-                    ),
-                    deleteIcon: const Icon(
-                      Icons.clear,
-                      color: Colors.black87,
                     ),
                     onDeleted: () {
                       setState(() {
@@ -614,16 +610,14 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                 runSpacing: 8.0,
                 children: _writers.map((writer) {
                   return Chip(
-                    backgroundColor: musikatBackgroundColor.withOpacity(0.5),
+                    backgroundColor: musikatColor,
+                    deleteIconColor: Colors.white,
                     label: Text(writer),
                     labelStyle: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 12,
                     ),
-                    deleteIcon: const Icon(
-                      Icons.clear,
-                      color: Colors.black87,
-                    ),
+                 
                     onDeleted: () {
                       setState(() {
                         _writers.remove(writer);

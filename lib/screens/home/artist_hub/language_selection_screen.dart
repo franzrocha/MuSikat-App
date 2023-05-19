@@ -1,3 +1,4 @@
+import 'package:musikat_app/controllers/categories_controller.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
@@ -10,58 +11,70 @@ class LanguageSelectionScreen extends StatefulWidget {
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   final Map<String, bool> _checkedLanguages = {};
+  final CategoriesController _categoriesCon = CategoriesController();
+  final TextEditingController _searchController = TextEditingController();
+  String searchText = '';
 
   @override
   void initState() {
     super.initState();
-    for (String language in languages) {
-      _checkedLanguages[language] = false;
-    }
+    _fetchLanguages();
+  }
+
+  Future<void> _fetchLanguages() async {
+    List<String> languages = await _categoriesCon.getLanguages();
+    setState(() {
+      for (String language in languages) {
+        _checkedLanguages[language] = false;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: musikatBackgroundColor,
       appBar: CustomAppBar(
-        title: Text(
-          'Select a language',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
+        title: Text('Select a language', style: appBarStyle),
         showLogo: false,
-      ),
-      body: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-        itemCount: languages.length,
-        itemBuilder: (BuildContext context, int index) {
-          String language = languages[index];
-          return ListTile(
-            onTap: () {
+        actions: [
+          IconButton(
+            onPressed: () {
               setState(() {
-                _checkedLanguages[language] = !_checkedLanguages[language]!;
+                bool hasSelectedLanguages = false;
+                _checkedLanguages.forEach((language, isSelected) {
+                  if (isSelected) {
+                    hasSelectedLanguages = true;
+                    _checkedLanguages[language] = false;
+                  }
+                });
+
+                if (hasSelectedLanguages) {
+                  ToastMessage.show(context, 'All languages removed');
+                } else {
+                  ToastMessage.show(context, 'No languages selected to remove');
+                }
               });
             },
-            selected: _checkedLanguages[language]!,
-            selectedTileColor: Colors.grey,
-            title: Text(
-              language,
-              style: GoogleFonts.inter(fontSize: 14, color: Colors.white),
+            icon: const FaIcon(
+              FontAwesomeIcons.trash,
+              size: 20,
             ),
-            trailing: _checkedLanguages[language]!
-                ? const Icon(Icons.check, color: musikatColor2)
-                : null,
-          );
-        },
+          ),
+        ],
+      ),
+      backgroundColor: musikatBackgroundColor,
+      body: Column(
+        children: [
+          searchBar(),
+          languageChips(),
+          languageList(),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: musikatColor,
         onPressed: () {
           List<String> selectedLanguages = [];
-          for (String language in languages) {
+          for (String language in _checkedLanguages.keys) {
             if (_checkedLanguages[language]!) {
               selectedLanguages.add(language);
             }
@@ -76,6 +89,99 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           }
         },
         child: const Icon(Icons.arrow_forward_ios),
+      ),
+    );
+  }
+
+  Expanded languageList() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _checkedLanguages.length,
+        itemBuilder: (BuildContext context, int index) {
+          String language = _checkedLanguages.keys.toList()[index];
+          if (searchText.isNotEmpty &&
+              !language.toLowerCase().contains(searchText)) {
+            return const SizedBox.shrink();
+          }
+          return Container(
+            color: _checkedLanguages[language]! ? Colors.grey : null,
+            child: ListTile(
+              onTap: () {
+                setState(() {
+                  _checkedLanguages[language] = !_checkedLanguages[language]!;
+                });
+              },
+              selected: _checkedLanguages[language]!,
+              title: Text(
+                language,
+                style: GoogleFonts.inter(fontSize: 14, color: Colors.white),
+              ),
+              trailing: _checkedLanguages[language]!
+                  ? const Icon(Icons.check, color: musikatColor2)
+                  : null,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Padding languageChips() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        child: Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children: _checkedLanguages.keys
+              .where((language) => _checkedLanguages[language]!)
+              .map((language) => Chip(
+                    deleteIconColor: Colors.white,
+                    backgroundColor: musikatColor,
+                    label: Text(
+                      language,
+                      style:
+                          GoogleFonts.inter(color: Colors.white, fontSize: 13),
+                    ),
+                    onDeleted: () {
+                      setState(() {
+                        _checkedLanguages[language] = false;
+                      });
+                    },
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+  }
+
+  Padding searchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: TextField(
+        style: GoogleFonts.inter(color: Colors.black, fontSize: 13),
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search',
+          hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 13),
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: Colors.grey),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: Colors.grey),
+          ),
+        ),
+        onChanged: (value) {
+          setState(() {
+            searchText = value.toLowerCase();
+          });
+        },
       ),
     );
   }
