@@ -20,7 +20,7 @@ class EmotionDisplayScreen extends StatefulWidget {
 class _EmotionDisplayScreenState extends State<EmotionDisplayScreen> {
   @override
   Widget build(BuildContext context) {
-    final SongsController _songsCon = SongsController();
+    final SongsController songCon = SongsController();
     final String description = widget.emotion; // Access widget.emotion here
 
     return Scaffold(
@@ -32,7 +32,7 @@ class _EmotionDisplayScreenState extends State<EmotionDisplayScreen> {
           ),
           SliverFillRemaining(
             child: FutureBuilder<List<SongModel>>(
-              future: _songsCon.getEmotionSongs(description),
+              future: songCon.getEmotionSongs(description),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: LoadingIndicator());

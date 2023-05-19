@@ -10,7 +10,8 @@ class UserModel {
       profileImage,
       age,
       gender,
-      headerImage;
+      headerImage,
+      accountType;
   Timestamp created, updated;
   List<String> chatrooms;
 
@@ -26,7 +27,8 @@ class UserModel {
     this.headerImage,
     this.created,
     this.updated,
-    this.chatrooms,
+    this.chatrooms, 
+    this.accountType,
   );
 
   static UserModel fromDocumentSnap(DocumentSnapshot snap) {
@@ -49,6 +51,7 @@ class UserModel {
       json['chatrooms'] != null
           ? List<String>.from(json['chatrooms'])
           : <String>[],
+      json['accountType'] ?? '',
     );
   }
 
@@ -62,6 +65,7 @@ class UserModel {
         'gender': gender,
         'profileImage': profileImage,
         'headerImage': headerImage,
+        'accountType': accountType,
         'created': created,
         'updated': updated,
       };

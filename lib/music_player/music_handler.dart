@@ -6,7 +6,6 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/recently_played.dart';
 import 'package:musikat_app/models/song_model.dart';
-import 'package:musikat_app/models/user_model.dart';
 
 import '../controllers/liked_songs_controller.dart';
 

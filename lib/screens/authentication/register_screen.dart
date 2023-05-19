@@ -246,13 +246,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: DropdownButtonFormField(
         value: dropdownValue,
         icon: const Icon(Icons.arrow_drop_down),
-        decoration: InputDecoration(
-          labelStyle: const TextStyle(color: Colors.black),
+        decoration: const InputDecoration(
+          labelStyle: TextStyle(color: Colors.black),
           labelText: "Gender",
           border: InputBorder.none,
           prefixIcon: Row(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children:  [
               FaIcon(
                 FontAwesomeIcons.marsAndVenus,
                 color: Colors.grey,
@@ -262,7 +262,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ],
           ),
-          prefixIconConstraints: const BoxConstraints(
+          prefixIconConstraints:  BoxConstraints(
             minWidth: 2,
           ),
         ),

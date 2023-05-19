@@ -9,7 +9,6 @@ import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/recently_played.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import '../../music_player/music_handler.dart';

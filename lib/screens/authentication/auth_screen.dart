@@ -213,7 +213,7 @@ class _AuthScreenState extends State<AuthScreen> {
           } else if (_formKey.currentState?.validate() ?? false) {
             try {
               await _authController.login(
-                  _emailCon.text.trim(), _passCon.text.trim());
+                  _emailCon.text.trim(), _passCon.text.trim(), 'user');
             } on FirebaseAuthException catch (e) {
               ToastMessage.show(context, e.message ?? '');
             } catch (e) {

@@ -23,9 +23,9 @@ class AboutUsScreen extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children:  [
                   Text(
                     'Meet the Team.',
                     style: TextStyle(

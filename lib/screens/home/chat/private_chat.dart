@@ -79,13 +79,13 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                 return const LoadingIndicator();
               } 
           if (!selectedUser.hasData) {
-            return Center(
+            return const  Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  const SizedBox(
+                   SizedBox(
                     height: 50.0,
                     width: 50.0,
                     child: LoadingIndicator(),

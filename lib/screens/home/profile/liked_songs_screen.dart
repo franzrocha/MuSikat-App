@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
-import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class LikedSongsScreen extends StatefulWidget {

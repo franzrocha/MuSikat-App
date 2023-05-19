@@ -26,7 +26,7 @@ class AuthController with ChangeNotifier {
     super.dispose();
   }
 
-  handleAuthUserChanges(User? event) {
+  handleAuthUserChanges(User? event) async {
     if (event == null) {
       print('No logged in user');
       nav.popUntilFirst();
@@ -36,21 +36,51 @@ class AuthController with ChangeNotifier {
     if (event != null) {
       print('Logged in user');
       print(event.email);
+
+      // Retrieve the user's account type from Firebase
+      String accountType = await getUserAccountType();
+
+      if (accountType.toLowerCase() == 'admin') {
+        // User has admin account type, prevent navigation to the app
+        await logout();
+        nav.popUntilFirst();
+        nav.pushReplacementNamed(WelcomeScreen.route);
+        return;
+      }
+
       nav.pushReplacementNamed(NavBar.route);
     }
+
     error = null;
     working = false;
     currentUser = event;
     notifyListeners();
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(String email, String password, String accountType) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
 
       if (result.user == null) {
         throw Exception('Login failed');
+      }
+
+      // Retrieve the user's account type from Firebase
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(result.user!.uid)
+          .get();
+
+      Map<String, dynamic> userData =
+          userSnapshot.data() as Map<String, dynamic>;
+      String accountTypeFirebase = userData['accountType'] as String;
+
+      // Perform account type check
+      if (accountTypeFirebase.toLowerCase() != 'user') {
+        throw Exception('Invalid account type');
       }
 
       working = false;
@@ -107,18 +137,20 @@ class AuthController with ChangeNotifier {
           email: email, password: password);
       if (createdUser.user != null) {
         UserModel userModel = UserModel(
-            createdUser.user!.uid,
-            username,
-            lastName,
-            firstName,
-            email,
-            age,
-            gender,
-            '',
-            '',
-            Timestamp.now(),
-            Timestamp.now(),
-            []);
+          createdUser.user!.uid,
+          username,
+          lastName,
+          firstName,
+          email,
+          age,
+          gender,
+          '',
+          '',
+          Timestamp.now(),
+          Timestamp.now(),
+          [],
+          'User',
+        );
         return FirebaseFirestore.instance
             .collection('users')
             .doc(userModel.uid)
@@ -142,5 +174,24 @@ class AuthController with ChangeNotifier {
       print(error.message);
       return Future.error(error.message.toString());
     }
+  }
+
+  Future<String> getUserAccountType() async {
+    User? currentUser = _auth.currentUser;
+
+    if (currentUser != null) {
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+      if (userData != null && userData.containsKey('accountType')) {
+        return userData['accountType'] as String;
+      }
+    }
+
+    throw Exception('User account type not found');
   }
 }
