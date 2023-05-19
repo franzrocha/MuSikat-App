@@ -24,7 +24,9 @@ class MiniPlayer extends StatelessWidget {
         animation: musicHandler,
         builder: (BuildContext context, Widget? child) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0,),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+            ),
             child: Container(
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(

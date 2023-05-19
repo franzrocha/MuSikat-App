@@ -76,7 +76,7 @@ class _CameraScreenState extends State<CameraScreen> {
       isCapturing = true;
     });
 
-      cameraController?.pausePreview();
+    cameraController?.pausePreview();
 
     cameraController?.takePicture().then((XFile? file) async {
       if (mounted && file != null) {
@@ -91,7 +91,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
         // Call the API with the download URL
         Uri apiUrl = Uri.parse(
-            'https://cba6-49-145-104-250.ngrok-free.app/?image=$downloadUrl');
+            'https://fcba-49-145-104-250.ngrok-free.app/?image=$downloadUrl');
         http.Response response = await http.get(apiUrl);
 
         if (response.statusCode == 200) {

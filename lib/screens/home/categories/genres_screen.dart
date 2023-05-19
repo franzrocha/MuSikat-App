@@ -163,7 +163,6 @@ class GenreSongsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              
                               title: Text(
                                 song.title,
                                 maxLines: 1,
@@ -184,7 +183,7 @@ class GenreSongsScreen extends StatelessWidget {
                                           )),
                                 );
                               },
-                               onLongPress: () {
+                              onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,
                                     context: context,

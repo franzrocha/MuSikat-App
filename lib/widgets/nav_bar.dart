@@ -1,3 +1,4 @@
+import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/screens/home/camera.dart';
 import 'package:musikat_app/screens/home/chat/chat_home.dart';
@@ -107,7 +108,31 @@ class _NavBarState extends State<NavBar> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MiniPlayer(musicHandler: widget.musicHandler),
+                  GestureDetector(
+                    key: const Key('miniplayer'),
+                    onHorizontalDragEnd: (details) {
+                      if (details.velocity.pixelsPerSecond.dx > 0) {
+                        // Handle swipe left (stop music player)
+                        widget.musicHandler.player.stop();
+                      }
+                    },
+                    child: StreamBuilder<PlayerState>(
+                      stream: widget.musicHandler.player.playerStateStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.data?.processingState !=
+                            ProcessingState.idle) {
+                          return Column(
+                            children: [
+                              MiniPlayer(musicHandler: widget.musicHandler),
+                              // Add pause and play controls in the navbar here
+                            ],
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    ),
+                  ),
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(40.0),
@@ -139,7 +164,6 @@ class _NavBarState extends State<NavBar> {
                           );
                         }
                       },
-                      
                       items: [
                         const BottomNavigationBarItem(
                           icon: FaIcon(
@@ -157,7 +181,6 @@ class _NavBarState extends State<NavBar> {
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: musikatBackgroundColor,
-                          
                             ),
                             child: const CircleAvatar(
                               radius: 20,
