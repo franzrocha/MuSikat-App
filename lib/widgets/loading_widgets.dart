@@ -69,7 +69,7 @@ class LoadingCircularContainer extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  color: Colors.grey[300],
+                  // color: Colors.grey[300],
                 ),
               ),
             ),

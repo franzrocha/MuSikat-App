@@ -69,58 +69,63 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
     return StreamBuilder<List<UserModel>>(
         stream: _chatController.fetchChatroomsStream(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (!snapshot.hasData) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 100),
-              child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const LoadingIndicator(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Fetching chats... ',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              )),
+          if (snapshot.data == null) {
+            return const Center(
+              child: LoadingIndicator(),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: LoadingIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.data == null || snapshot.data!.length == 0) {
+            return const Center(
+              child: Text(
+                'No messages yet',
+                style: TextStyle(color: Colors.white),
+              ),
             );
           } else {
-            return Column(
-              children: [
-                for (UserModel user in snapshot.data)
-                  if (user.uid != FirebaseAuth.instance.currentUser!.uid)
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      child: ListTile(
-                        onTap: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PrivateChatScreen(selectedUserUID: user.uid),
-                            ),
-                          )
-                        },
-                        leading: AvatarImage(
-                          uid: user.uid,
-                          radius: 18,
-                        ),
-                        title: Text(
-                          user.username,
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
+            // Rest of your code for displaying the chat list
+
+            return snapshot.data!.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No messages yet',
+                      style: TextStyle(color: Colors.white),
                     ),
-              ],
-            );
+                  )
+                : Column(
+                    children: [
+                      for (UserModel user in snapshot.data)
+                        if (user.uid != FirebaseAuth.instance.currentUser!.uid)
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 5),
+                            child: ListTile(
+                              onTap: () => {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => PrivateChatScreen(
+                                        selectedUserUID: user.uid),
+                                  ),
+                                )
+                              },
+                              leading: AvatarImage(
+                                uid: user.uid,
+                                radius: 18,
+                              ),
+                              title: Text(
+                                user.username,
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                    ],
+                  );
           }
         });
   }
