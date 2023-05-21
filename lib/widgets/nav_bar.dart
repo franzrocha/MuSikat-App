@@ -111,7 +111,6 @@ class _NavBarState extends State<NavBar> {
                     key: const Key('miniplayer'),
                     onHorizontalDragEnd: (details) {
                       if (details.velocity.pixelsPerSecond.dx > 0) {
-                        // Handle swipe left (stop music player)
                         widget.musicHandler.player.stop();
                       }
                     },
@@ -123,7 +122,6 @@ class _NavBarState extends State<NavBar> {
                           return Column(
                             children: [
                               MiniPlayer(musicHandler: widget.musicHandler),
-                              // Add pause and play controls in the navbar here
                             ],
                           );
                         } else {

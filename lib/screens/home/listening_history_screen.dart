@@ -32,7 +32,7 @@ class _ListeningHistoryScreenState extends State<ListeningHistoryScreen> {
           IconButton(
             onPressed: () async {
               try {
-               await _listenCon.deleteListeningHistory(currentUser);
+                await _listenCon.deleteListeningHistory(currentUser);
                 ToastMessage.show(
                     context, 'Listening history deleted successfully.');
               } catch (error) {

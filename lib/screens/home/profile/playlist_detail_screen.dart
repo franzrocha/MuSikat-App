@@ -5,6 +5,7 @@ import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,9 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                 image: widget.playlist.playlistImg,
                 title: widget.playlist.title,
                 caption: widget.playlist.description,
+                actions: [
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.add))
+                ],
                 children: [
                   const SizedBox(height: 20),
                   FutureBuilder<UserModel>(
@@ -104,7 +108,6 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                                               playlist: widget.playlist,
                                               hideEdit: true,
                                               hideDelete: true,
-                                         
                                             ),
                                           );
                                         });
@@ -135,16 +138,16 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                                       ),
                                     ),
                                   ),
-                                  // onTap: () {
-                                  //   Navigator.of(context).push(
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) => MusicPlayerScreen(
-                                  //         songs: songs,
-                                  //         initialIndex: index,
-                                  //       ),
-                                  //     ),
-                                  //   );
-                                  // },
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => MusicPlayerScreen(
+                                          songs: songs,
+                                          initialIndex: index,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             );

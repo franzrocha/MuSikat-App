@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   StreamBuilder<List<SongModel>> basedOnListeningHistory() {
     return StreamBuilder<List<SongModel>>(
-      stream: _listenCon.getRecommendedSongsStream(),
+      stream: _listenCon.getRecommendedSongs().asStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           return const LoadingContainer();

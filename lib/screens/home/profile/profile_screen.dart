@@ -101,7 +101,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ontap: () async {
                     locator<MusicHandler>().setIsPlaying(false);
                     locator<MusicHandler>().player.stop();
-
                     _auth.logout();
                   },
                 ),

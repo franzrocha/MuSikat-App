@@ -161,21 +161,14 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: TextField(
-        style: GoogleFonts.inter(color: Colors.black, fontSize: 13),
+        
+        style: GoogleFonts.inter(color: Colors.white, fontSize: 13),
         controller: _searchController,
         decoration: InputDecoration(
           hintText: 'Search',
+          fillColor: musikatBackgroundColor,
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 13),
           filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(color: Colors.grey),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(color: Colors.grey),
-          ),
         ),
         onChanged: (value) {
           setState(() {

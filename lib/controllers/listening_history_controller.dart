@@ -8,6 +8,30 @@ import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class ListeningHistoryController with ChangeNotifier {
+  Future<List<SongModel>> getListeningHistory() async {
+    List<SongModel> listenedSongs = [];
+    final SongsController songCon = SongsController();
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      final collectionRef =
+          FirebaseFirestore.instance.collection('listeningHistory');
+      final querySnapshot =
+          await collectionRef.where('uid', isEqualTo: uid).get();
+      for (var i = querySnapshot.docs.length - 1; i >= 0; i--) {
+        final doc = querySnapshot.docs[i];
+        final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
+        for (final songId in songIdList) {
+          final song = await songCon.getSongById(songId);
+          listenedSongs.add(song);
+        }
+      }
+      return listenedSongs;
+    } catch (e) {
+      print(e.toString());
+      return listenedSongs;
+    }
+  }
+
   Stream<List<SongModel>> getListeningHistoryStream() {
     final SongsController songCon = SongsController();
     String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -18,7 +42,7 @@ class ListeningHistoryController with ChangeNotifier {
         .where('uid', isEqualTo: uid)
         .snapshots()
         .asyncMap((querySnapshot) async {
-      List<SongModel> likedSongs = [];
+      List<SongModel> listenedSongs = [];
 
       for (var i = querySnapshot.docs.length - 1; i >= 0; i--) {
         final doc = querySnapshot.docs[i];
@@ -26,73 +50,13 @@ class ListeningHistoryController with ChangeNotifier {
 
         for (final songId in songIdList) {
           final song = await songCon.getSongById(songId);
-          likedSongs.add(song);
+          listenedSongs.add(song);
         }
       }
 
-      return likedSongs;
+      return listenedSongs;
     });
   }
-
-  Stream<List<SongModel>> getRecommendedSongsStream() {
-    final StreamController<List<SongModel>> controller =
-        StreamController<List<SongModel>>();
-
-    void fetchRecommendedSongs(List<SongModel> recentlyPlayed) async {
-      try {
-        if (recentlyPlayed.isEmpty) {
-          controller.add([]);
-          return;
-        }
-
-        final List<String> categories = [];
-        for (final song in recentlyPlayed) {
-          categories.add(song.genre);
-        }
-
-        final List<List<String>> categoryChunks = [];
-        for (int i = 0; i < categories.length; i += 10) {
-          final chunk = categories.sublist(
-              i, i + 10 < categories.length ? i + 10 : categories.length);
-          categoryChunks.add(chunk);
-        }
-
-        final SongsController songsController = SongsController();
-        final List<Query> queries = categoryChunks.map((chunk) {
-          Query query = FirebaseFirestore.instance.collection('songs');
-          query = query.where('genre', whereIn: chunk);
-          return query;
-        }).toList();
-
-        final List<QuerySnapshot> querySnapshots =
-            await Future.wait(queries.map((query) => query.get()));
-        final List<QueryDocumentSnapshot> allDocs =
-            querySnapshots.expand((snapshot) => snapshot.docs).toList();
-
-        final List<SongModel> recommendedSongs = [];
-        for (final doc in allDocs) {
-          final song = await songsController.getSongById(doc.id);
-          recommendedSongs.add(song);
-        }
-
-        recommendedSongs.shuffle();
-        final List<SongModel> limitedRecommendedSongs =
-            recommendedSongs.take(5).toList();
-
-        controller.add(limitedRecommendedSongs);
-      } catch (e) {
-        print(e.toString());
-        controller.add([]);
-      }
-    }
-
-    getListeningHistoryStream().listen((recentlyPlayed) {
-      fetchRecommendedSongs(recentlyPlayed);
-    });
-
-    return controller.stream;
-  }
-
 
   Future<void> deleteListeningHistory(String userId) async {
     final collectionRef =
@@ -105,22 +69,13 @@ class ListeningHistoryController with ChangeNotifier {
       final recentSnap = await docRef.get();
       final recentModel = ListeningHistoryModel.fromDocumentSnap(recentSnap);
 
-
       recentModel.songId.clear();
-
-
-      // Clear the songId list
-      recentModel.songId.clear();
-
-      // Update the document with the modified song list
 
       await docRef.update(recentModel.json);
     }
   }
 
-
-  Future<void> addListeningHistorySong(
-      String userId, String songId) async {
+  Future<void> addListeningHistorySong(String userId, String songId) async {
     final collectionRef =
         FirebaseFirestore.instance.collection('listeningHistory');
 
@@ -149,6 +104,47 @@ class ListeningHistoryController with ChangeNotifier {
     }
   }
 
+  Future<List<SongModel>> getRecommendedSongs() async {
+    try {
+      // Retrieve the list of recently played songs for the current user
+      final List<SongModel> recentlyPlayed = await getListeningHistory();
 
+      if (recentlyPlayed.isEmpty) {
+        // If there are no recently played songs, return an empty list
+        return [];
+      }
 
+      // Extract the genres or artists of the recently played songs
+      final List<String> categories = [];
+      for (final song in recentlyPlayed) {
+        categories.add(song.genre);
+      }
+
+      // Query for similar songs based on the extracted genres or artists
+      final SongsController songsController = SongsController();
+      Query query = FirebaseFirestore.instance.collection('songs');
+      query = query.where('genre', whereIn: categories);
+      print(categories);
+
+      final QuerySnapshot querySnapshot = await query.get();
+      print(querySnapshot.docs.length);
+
+      // Convert the query results to a list of SongModel objects
+      final List<SongModel> recommendedSongs = [];
+      for (final doc in querySnapshot.docs) {
+        final song = await songsController.getSongById(doc.id);
+        recommendedSongs.add(song);
+      }
+
+      // Shuffle the recommended songs and take the first 5
+      recommendedSongs.shuffle();
+      final List<SongModel> limitedRecommendedSongs =
+          recommendedSongs.take(5).toList();
+
+      return limitedRecommendedSongs;
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
 }

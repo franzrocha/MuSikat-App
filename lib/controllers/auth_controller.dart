@@ -37,11 +37,10 @@ class AuthController with ChangeNotifier {
       print('Logged in user');
       print(event.email);
 
-      // Retrieve the user's account type from Firebase
+    
       String accountType = await getUserAccountType();
 
       if (accountType.toLowerCase() == 'admin') {
-        // User has admin account type, prevent navigation to the app
         await logout();
         nav.popUntilFirst();
         nav.pushReplacementNamed(WelcomeScreen.route);

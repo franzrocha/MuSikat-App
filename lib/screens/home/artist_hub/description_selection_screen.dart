@@ -1,3 +1,4 @@
+import 'package:musikat_app/controllers/categories_controller.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class DescriptionSelectionScreen extends StatefulWidget {
@@ -11,118 +12,171 @@ class DescriptionSelectionScreen extends StatefulWidget {
 class _DescriptionSelectionScreenState
     extends State<DescriptionSelectionScreen> {
   final Map<String, bool> _checkedDescriptions = {};
+  final CategoriesController _categoriesCon = CategoriesController();
   final TextEditingController _searchController = TextEditingController();
-  String _searchText = '';
+  String searchText = '';
 
   @override
   void initState() {
     super.initState();
-    for (String description in descriptions) {
-      _checkedDescriptions[description] = false;
-    }
+    _fetchDescriptions();
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  Future<void> _fetchDescriptions() async {
+    List<String> descriptions = await _categoriesCon.getDescriptions();
+    setState(() {
+      for (String description in descriptions) {
+        _checkedDescriptions[description] = false;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: musikatBackgroundColor,
       appBar: CustomAppBar(
-        title: Text(
-          'Select a description',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
+        title: Text('Select a description', style: appBarStyle),
         showLogo: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                bool hasSelectedDescriptions = false;
+                _checkedDescriptions.forEach((description, isSelected) {
+                  if (isSelected) {
+                    hasSelectedDescriptions = true;
+                    _checkedDescriptions[description] = false;
+                  }
+                });
+
+                if (hasSelectedDescriptions) {
+                  ToastMessage.show(context, 'All descriptions removed');
+                } else {
+                  ToastMessage.show(
+                      context, 'No descriptions selected to remove');
+                }
+              });
+            },
+            icon: const FaIcon(
+              FontAwesomeIcons.trash,
+              size: 20,
+            ),
+          ),
+        ],
       ),
+      backgroundColor: musikatBackgroundColor,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: TextField(
-              style: GoogleFonts.inter(color: Colors.black, fontSize: 13),
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search',
-                hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 13),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.grey),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.grey),
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _searchText = value.toLowerCase();
-                });
-              },
-            ),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: descriptions.length,
-              itemBuilder: (BuildContext context, int index) {
-                String description = descriptions[index];
-                if (_searchText.isNotEmpty &&
-                    !description.toLowerCase().contains(_searchText)) {
-                  return const SizedBox.shrink();
-                }
-                return ListTile(
-                  onTap: () {
-                    setState(() {
-                      _checkedDescriptions[description] =
-                          !_checkedDescriptions[description]!;
-                    });
-                  },
-                  selected: _checkedDescriptions[description]!,
-                  selectedTileColor: Colors.grey,
-                  title: Text(
-                    description,
-                    style: GoogleFonts.inter(fontSize: 14, color: Colors.white),
-                  ),
-                  trailing: _checkedDescriptions[description]!
-                      ? const Icon(Icons.check, color: musikatColor2)
-                      : null,
-                );
-              },
-            ),
-          ),
+          searchBar(),
+          descriptionChips(),
+          descriptionList(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: musikatColor,
         onPressed: () {
           List<String> selectedDescriptions = [];
-          for (String description in descriptions) {
+          for (String description in _checkedDescriptions.keys) {
             if (_checkedDescriptions[description]!) {
               selectedDescriptions.add(description);
             }
           }
           if (selectedDescriptions.isEmpty) {
-            ToastMessage.show(
-                context, 'Please select at least one description');
+            ToastMessage.show(context, 'Please select a description');
           } else if (selectedDescriptions.length > 10) {
-            ToastMessage.show(context, 'Please select at most 10 descriptions');
+            ToastMessage.show(
+                context, 'Please select a maximum of 10 descriptions');
           } else {
             Navigator.pop(context, selectedDescriptions);
           }
         },
         child: const Icon(Icons.arrow_forward_ios),
+      ),
+    );
+  }
+
+  Expanded descriptionList() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _checkedDescriptions.length,
+        itemBuilder: (BuildContext context, int index) {
+          String description = _checkedDescriptions.keys.toList()[index];
+          if (searchText.isNotEmpty &&
+              !description.toLowerCase().contains(searchText)) {
+            return const SizedBox.shrink();
+          }
+          return Container(
+            color: _checkedDescriptions[description]! ? Colors.grey : null,
+            child: ListTile(
+              onTap: () {
+                setState(() {
+                  _checkedDescriptions[description] =
+                      !_checkedDescriptions[description]!;
+                });
+              },
+              selected: _checkedDescriptions[description]!,
+              title: Text(
+                description,
+                style: GoogleFonts.inter(fontSize: 14, color: Colors.white),
+              ),
+              trailing: _checkedDescriptions[description]!
+                  ? const Icon(Icons.check, color: musikatColor2)
+                  : null,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Padding descriptionChips() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        child: Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children: _checkedDescriptions.keys
+              .where((description) => _checkedDescriptions[description]!)
+              .map((description) => Chip(
+                    deleteIconColor: Colors.white,
+                    backgroundColor: musikatColor,
+                    label: Text(
+                      description,
+                      style:
+                          GoogleFonts.inter(color: Colors.white, fontSize: 13),
+                    ),
+                    onDeleted: () {
+                      setState(() {
+                        _checkedDescriptions[description] = false;
+                      });
+                    },
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+  }
+
+  Padding searchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: TextField(
+        style: GoogleFonts.inter(color: Colors.white, fontSize: 13),
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search',
+          fillColor: musikatBackgroundColor,
+          hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 13),
+          filled: true,
+        ),
+        onChanged: (value) {
+          setState(() {
+            searchText = value.toLowerCase();
+          });
+        },
       ),
     );
   }
