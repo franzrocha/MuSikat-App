@@ -46,8 +46,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     _musicHandler.currentSongs = widget.songs;
     _musicHandler.currentIndex = widget.initialIndex ?? 0;
     _musicHandler.setAudioSource(
-      widget.songs[widget.initialIndex ??
-          0], // provide a default value (e.g., 0) when initialIndex is null
+      widget.songs[widget.initialIndex ?? 0],
       uid,
     );
 
@@ -60,7 +59,30 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appbar(context),
+        appBar: CustomAppBar(
+          showLogo: false,
+          title: Text(
+            'Now Playing',
+            style: appBarStyle,
+          ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const SearchScreen(),
+                //   ),
+                // );
+              },
+              icon: const FaIcon(
+                FontAwesomeIcons.ellipsisVertical,
+                size: 20,
+              ),
+            ),
+          ],
+        ),
         backgroundColor: musikatBackgroundColor,
         body: AnimatedBuilder(
           animation: _musicHandler,
@@ -328,46 +350,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
           icon: const Icon(Icons.play_arrow),
           iconSize: 50,
           onPressed: _musicHandler.player.play),
-    );
-  }
-
-  AppBar appbar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 75,
-      centerTitle: true,
-      title: Text("Now Playing",
-          style: GoogleFonts.inter(
-              color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)),
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        onPressed: () {
-          Future.delayed(const Duration(milliseconds: 100), () {
-            Navigator.pop(context);
-          });
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.angleLeft,
-          size: 20,
-        ),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => const SearchScreen(),
-            //   ),
-            // );
-          },
-          icon: const FaIcon(
-            FontAwesomeIcons.ellipsisVertical,
-            size: 20,
-          ),
-        ),
-      ],
     );
   }
 }

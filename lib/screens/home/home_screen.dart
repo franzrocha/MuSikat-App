@@ -1,12 +1,13 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/models/liked_songs_model.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
+<<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
 import 'package:musikat_app/models/recently_played.dart';
+=======
+>>>>>>> modified ui in home screen
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final SongsController _songCon = SongsController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
+<<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
   Stream<List<SongModel>>? _songsStream;
   StreamSubscription? _timerSubscription;
 
@@ -57,6 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+=======
+>>>>>>> modified ui in home screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: const EdgeInsets.only(left: 30, bottom: 10),
+                          padding: const EdgeInsets.only(left: 25, bottom: 10),
                           child: buildCustomContainer(
                               'Based on your liked songs...')),
                     ),
@@ -151,11 +155,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: 120,
                                     height: 120,
                                     decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: const Color.fromARGB(
-                                            255, 124, 131, 127),
-                                        width: 1.0,
-                                      ),
+                                     boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(
+                                                  0.1), 
+                                              spreadRadius: 2,
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
                                       borderRadius: BorderRadius.circular(5),
                                       image: DecorationImage(
                                         image: CachedNetworkImageProvider(
@@ -170,22 +178,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         : song.title,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                      height: 2,
-                                      fontSize: 11,
-                                    ),
+                                    style: titleStyle
                                   ),
                                   Text(
                                     song.artist,
                                     textAlign: TextAlign.left,
-                                    style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white.withOpacity(0.5),
-                                      fontSize: 10,
-                                      height: 1.2,
-                                    ),
+                                    style: artistStyle,
                                   ),
                                 ],
                               ),
@@ -231,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: const EdgeInsets.only(left: 30, bottom: 10),
+                          padding: const EdgeInsets.only(left: 25, bottom: 10),
                           child: buildCustomContainer(
                               'Based on your listening activity...')),
                     ),
@@ -273,11 +271,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: 120,
                                     height: 120,
                                     decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: const Color.fromARGB(
-                                            255, 124, 131, 127),
-                                        width: 1.0,
-                                      ),
+                                      boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(
+                                                  0.1), 
+                                              spreadRadius: 2,
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
                                       borderRadius: BorderRadius.circular(5),
                                       image: DecorationImage(
                                         image: CachedNetworkImageProvider(
@@ -292,22 +294,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         : song.title,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                      height: 2,
-                                      fontSize: 11,
-                                    ),
+                                    style: titleStyle,
                                   ),
                                   Text(
                                     song.artist,
                                     textAlign: TextAlign.left,
-                                    style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white.withOpacity(0.5),
-                                      fontSize: 10,
-                                      height: 1.2,
-                                    ),
+                                    style: artistStyle
                                   ),
                                 ],
                               ),
@@ -355,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: const EdgeInsets.only(left: 30, bottom: 10),
+                          padding: const EdgeInsets.only(left: 25, bottom: 10),
                           child: buildCustomContainer(
                               'Artists to look out for...')),
                     ),
@@ -365,6 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
+<<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
                           children: users
                               .take(5)
                               .map((user) => Padding(
@@ -418,6 +411,57 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ]),
                                       ],
+=======
+                          children: users.map((user) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 25, top: 10),
+                              child: Column(
+                                children: [
+                                  Column(children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ArtistsProfileScreen(
+                                                      selectedUserUID: user.uid,
+                                                    )));
+                                      },
+                                      child: Container(
+                                        width: 120,
+                                        height: 120,
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(
+                                                  0.1), 
+                                              spreadRadius: 2,
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          image: user.profileImage.isNotEmpty
+                                              ? DecorationImage(
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          user.profileImage),
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : null,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Text(
+                                        user.username,
+                                        style: titleStyle,
+                                      ),
+>>>>>>> modified ui in home screen
                                     ),
                                   ))
                               .toList(),
@@ -502,11 +546,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                       width: 120,
                                       height: 120,
                                       decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: const Color.fromARGB(
-                                              255, 124, 131, 127),
-                                          width: 1.0,
-                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.1),
+                                            spreadRadius: 2,
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
                                         borderRadius: BorderRadius.circular(5),
                                         image: DecorationImage(
                                           image: CachedNetworkImageProvider(
@@ -516,28 +564,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     Text(
-                                      song.title.length > 19
-                                          ? '${song.title.substring(0, 19)}..'
-                                          : song.title,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white,
-                                        height: 2,
-                                        fontSize: 11,
-                                      ),
-                                    ),
-                                    Text(
-                                      song.artist,
-                                      textAlign: TextAlign.left,
-                                      style: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white.withOpacity(0.5),
-                                        fontSize: 10,
-                                        height: 1.2,
-                                      ),
-                                    ),
+                                        song.title.length > 19
+                                            ? '${song.title.substring(0, 19)}..'
+                                            : song.title,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: titleStyle),
+                                    Text(song.artist,
+                                        textAlign: TextAlign.left,
+                                        style: artistStyle),
                                   ],
                                 ),
                               ),
@@ -629,11 +664,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 120,
                                           height: 120,
                                           decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 124, 131, 127),
-                                              width: 1.0,
-                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                    0.1), // Adjust the opacity as needed
+                                                spreadRadius: 2,
+                                                blurRadius: 4,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             image: DecorationImage(
@@ -644,28 +683,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         Text(
+<<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
                                           song.title.length > 19
                                               ? '${song.title.substring(0, 19)}..'
+=======
+                                          song.title.length > 17
+                                              ? '${song.title.substring(0, 17)}..'
+>>>>>>> modified ui in home screen
                                               : song.title,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
-                                          style: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                            height: 2,
-                                            fontSize: 11,
-                                          ),
+                                          style: titleStyle,
                                         ),
                                         Text(
                                           song.artist,
                                           textAlign: TextAlign.left,
-                                          style: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                Colors.white.withOpacity(0.5),
-                                            fontSize: 10,
-                                            height: 1.2,
-                                          ),
+                                          style: artistStyle,
                                         ),
                                       ],
                                     ),

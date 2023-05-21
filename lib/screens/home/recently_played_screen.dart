@@ -2,7 +2,11 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+<<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8:lib/screens/home/recently_played_screen.dart
 import 'package:musikat_app/models/recently_played.dart';
+=======
+import 'package:musikat_app/controllers/listening_history_controller.dart';
+>>>>>>> modified ui in home screen:lib/screens/home/listening_history_screen.dart
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/utils/exports.dart';

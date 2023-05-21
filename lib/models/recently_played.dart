@@ -1,7 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:musikat_app/controllers/songs_controller.dart';
-import 'package:musikat_app/models/song_model.dart';
 
 class RecentlyPlayedModel {
   final String playedId, uid;
@@ -27,6 +24,7 @@ class RecentlyPlayedModel {
         'uid': uid,
         'songId': songId,
       };
+<<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8:lib/models/recently_played.dart
 
   static Future<void> addRecentlyPlayedSong(
       String userId, String songId) async {
@@ -124,6 +122,8 @@ class RecentlyPlayedModel {
 
 
   
+=======
+>>>>>>> modified ui in home screen:lib/models/listening_history_model.dart
 }
 
 

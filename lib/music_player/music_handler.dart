@@ -1,8 +1,10 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:musikat_app/controllers/listening_history_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/recently_played.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -13,6 +15,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
   final AudioPlayer player = AudioPlayer();
   final SongsController _songCon = SongsController();
   final LikedSongsController likedCon = LikedSongsController();
+  final ListeningHistoryController _listenCon = ListeningHistoryController();
 
   //final MusicHandler _musicHandler = locator<MusicHandler>();
 
@@ -66,7 +69,11 @@ class MusicHandler with ChangeNotifier, RouteAware {
 
       String currentUser = FirebaseAuth.instance.currentUser!.uid;
       await _songCon.updateSongPlayCount(song.songId);
+<<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
       await RecentlyPlayedModel.addRecentlyPlayedSong(currentUser, song.songId);
+=======
+      await _listenCon.addListeningHistorySong(currentUser, song.songId);
+>>>>>>> modified ui in home screen
       notifyListeners();
     } catch (e) {
       //print("Error play sa first na kanta");
@@ -184,4 +191,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
   //   player.dispose();
   //   super.dispose();
   // }
+
+
+
 }

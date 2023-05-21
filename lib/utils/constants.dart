@@ -61,3 +61,18 @@ TextStyle shortDefault = const TextStyle(
   color: Colors.white,
 );
 
+TextStyle titleStyle = const TextStyle(
+  fontFamily: 'Gotham',
+  fontWeight: FontWeight.bold,
+  color: Colors.white,
+  height: 2,
+  fontSize: 10,
+);
+
+TextStyle artistStyle = TextStyle(
+  fontFamily: 'Gotham',
+  fontWeight: FontWeight.w400,
+  color: Colors.white.withOpacity(0.5),
+  fontSize: 10,
+  height: 1.2,
+);
