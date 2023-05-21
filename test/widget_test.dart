@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:musikat_app/app.dart';
 
 import 'package:musikat_app/main.dart';
 

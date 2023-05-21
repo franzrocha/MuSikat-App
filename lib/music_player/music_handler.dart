@@ -69,15 +69,10 @@ class MusicHandler with ChangeNotifier, RouteAware {
 
       String currentUser = FirebaseAuth.instance.currentUser!.uid;
       await _songCon.updateSongPlayCount(song.songId);
-<<<<<<< HEAD
-<<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
-      await RecentlyPlayedModel.addRecentlyPlayedSong(currentUser, song.songId);
-=======
+
       await _listenCon.addListeningHistorySong(currentUser, song.songId);
->>>>>>> modified ui in home screen
-=======
-      await ListeningHistoryModel.addListeningHistorySong(currentUser, song.songId);
->>>>>>> main
+
+
       notifyListeners();
     } catch (e) {
       //print("Error play sa first na kanta");
