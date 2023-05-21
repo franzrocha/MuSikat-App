@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
@@ -100,6 +102,36 @@ class LikedSongsController with ChangeNotifier {
       return likedSongs;
     }
   }
+
+  Stream<List<SongModel>> getLikedSongsStream() {
+  final StreamController<List<SongModel>> controller =
+      StreamController<List<SongModel>>();
+
+  try {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
+
+    collectionRef.where('uid', isEqualTo: uid).snapshots().listen((snapshot) async {
+      List<SongModel> likedSongs = [];
+
+      for (final doc in snapshot.docs) {
+        final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
+        for (final songId in songIdList) {
+          final song = await _songCon.getSongById(songId);
+          likedSongs.add(song);
+        }
+      }
+
+      controller.add(likedSongs);
+    });
+  } catch (e) {
+    print(e.toString());
+    controller.addError(e);
+  }
+
+  return controller.stream;
+}
+
 
   
 }

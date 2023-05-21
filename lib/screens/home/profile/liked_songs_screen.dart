@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
+import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class LikedSongsScreen extends StatefulWidget {
@@ -28,8 +29,8 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
             caption: 'All your liked songs in one place.',
           ),
           SliverFillRemaining(
-            child: FutureBuilder<List<SongModel>>(
-              future: _likedCon.getLikedSongs(),
+            child: StreamBuilder<List<SongModel>>(
+              stream: _likedCon.getLikedSongsStream(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const Center(
@@ -71,15 +72,15 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                           itemBuilder: (context, index) {
                             SongModel songData = likedSongs[index];
                             return ListTile(
-                              // onTap: () {
-                              //   Navigator.of(context).push(
-                              //     MaterialPageRoute(
-                              //         builder: (context) => MusicPlayerScreen(
-                              //               songs: likedSongs,
-                              //               initialIndex: index,
-                              //             )),
-                              //   );
-                              // },
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => MusicPlayerScreen(
+                                            songs: likedSongs,
+                                            initialIndex: index,
+                                          )),
+                                );
+                              },
                               title: Text(
                                 songData.title.length > 22
                                     ? '${songData.title.substring(0, 22)}..'

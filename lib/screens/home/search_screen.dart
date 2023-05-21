@@ -18,7 +18,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textCon = TextEditingController();
   Future<List<SongModel>>? getSongs;
   Future<List<UserModel>>? getUsers;
-  final SongsController _songCon = SongsController();
+  // final SongsController _songCon = SongsController();
 
   UserModel? user;
 

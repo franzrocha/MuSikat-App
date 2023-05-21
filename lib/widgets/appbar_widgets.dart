@@ -13,7 +13,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.title,
       required this.showLogo,
       this.actions,
-      this.centerTitle, this.bottom});
+      this.centerTitle,
+      this.bottom});
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +124,7 @@ class CustomSliverBar extends StatelessWidget {
                     child: Text(
                       title,
                       style: const TextStyle(
+                        fontFamily: 'Gotham',
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -132,11 +134,13 @@ class CustomSliverBar extends StatelessWidget {
                   Text(
                     caption ?? "",
                     style: const TextStyle(
+                      fontFamily: 'Gotham',
                       fontSize: 12,
+                      height: 1.5,
                       color: Colors.white,
                     ),
                   ),
-                    const SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Row(
                     children: children ?? [],
                   ),

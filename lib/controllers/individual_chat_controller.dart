@@ -149,7 +149,6 @@ class IndividualChatController with ChangeNotifier {
     );
   }
 
-
   Future sendMessage({required String message}) async {
     return await FirebaseFirestore.instance
         .collection('chats')
@@ -161,24 +160,30 @@ class IndividualChatController with ChangeNotifier {
             .json);
   }
 
-  Future fetchChatrooms() {
-    return UserModel.fromUid(uid: FirebaseAuth.instance.currentUser!.uid)
-        .then((value) {
-      return value;
-    }).then((dynamic user) {
-      return FirebaseFirestore.instance
-          .collection("users")
-          .where("chatrooms", arrayContainsAny: user?.chatrooms ?? [])
-          .get()
-          .then((value) {
-        List<UserModel> users = [];
+  Future<List<UserModel>> fetchChatrooms() async {
+    UserModel user =
+        await UserModel.fromUid(uid: FirebaseAuth.instance.currentUser!.uid);
 
-        for (var data in value.docs) {
-          users.add(UserModel.fromDocumentSnap(data));
-        }
-        return users;
-      });
-    });
+    List<String> chatrooms =
+        user.chatrooms; // If user.chatrooms is null, use an empty list
+
+    if (chatrooms.isEmpty) {
+      // Handle the case when chatrooms is empty or null
+      // For example, you can return an empty list or throw an exception
+      return [];
+    }
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .where("chatrooms", arrayContainsAny: chatrooms)
+        .get();
+
+    List<UserModel> users = [];
+    for (var documentSnapshot in querySnapshot.docs) {
+      users.add(UserModel.fromDocumentSnap(documentSnapshot));
+    }
+
+    return users;
   }
 
   Stream<List<UserModel>> fetchChatroomsStream() async* {
@@ -186,8 +191,10 @@ class IndividualChatController with ChangeNotifier {
       await Future.delayed(
           const Duration(seconds: 2)); // delay to simulate updates
       List<UserModel> users = await fetchChatrooms();
-      yield users;
+
+      if (users.isNotEmpty) {
+        yield users;
       }
     }
   }
-
+}

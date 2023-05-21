@@ -2,12 +2,17 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musikat_app/controllers/listening_history_controller.dart';
 import 'package:musikat_app/models/liked_songs_model.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
+<<<<<<< HEAD
 <<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
 import 'package:musikat_app/models/recently_played.dart';
 =======
 >>>>>>> modified ui in home screen
+=======
+import 'package:musikat_app/models/listening_history_model.dart';
+>>>>>>> main
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
@@ -18,7 +23,10 @@ class HomeScreen extends StatefulWidget {
   final MusicHandler musicHandler;
   static const String route = 'home-screen';
 
-  const HomeScreen({Key? key, required this.musicHandler, }) : super(key: key);
+  const HomeScreen({
+    Key? key,
+    required this.musicHandler,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -26,38 +34,44 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final SongsController _songCon = SongsController();
+  final ListeningHistoryController _listenCon = ListeningHistoryController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
+<<<<<<< HEAD
 <<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
   Stream<List<SongModel>>? _songsStream;
   StreamSubscription? _timerSubscription;
+=======
+  // Stream<List<SongModel>>? _songsStream;
+  // StreamSubscription? _timerSubscription;
+>>>>>>> main
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    _songsStream = _createSongsStream();
-    _timerSubscription = Stream.periodic(const Duration(minutes: 5))
-        .switchMap((_) => _createSongsStream())
-        .listen((songs) {
-      setState(() {});
-    });
-  }
+  //   _songsStream = _createSongsStream();
+  //   _timerSubscription = Stream.periodic(const Duration(minutes: 5))
+  //       .switchMap((_) => _createSongsStream())
+  //       .listen((songs) {
+  //     setState(() {});
+  //   });
+  // }
 
-  Stream<List<SongModel>> _createSongsStream() {
-    final now = DateTime.now();
-    if (now.minute < 1) {
-      return RecentlyPlayedModel.getRecommendedSongs(byGenre: false).asStream();
-    } else {
-      return RecentlyPlayedModel.getRecommendedSongs().asStream();
-    }
-  }
+  // Stream<List<SongModel>> _createSongsStream() {
+  //   final now = DateTime.now();
+  //   if (now.minute < 1) {
+  //     return RecentlyPlayedModel.getRecommendedSongs(byGenre: false).asStream();
+  //   } else {
+  //     return
+  //   }
+  // }
 
-  @override
-  void dispose() {
-    _timerSubscription!.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _timerSubscription!.cancel();
+  //   super.dispose();
+  // }
 
 =======
 >>>>>>> modified ui in home screen
@@ -201,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   StreamBuilder<List<SongModel>> basedOnListeningHistory() {
     return StreamBuilder<List<SongModel>>(
-      stream: _songsStream,
+      stream: _listenCon.getRecommendedSongsStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           return const LoadingContainer();
@@ -215,10 +229,10 @@ class _HomeScreenState extends State<HomeScreen> {
         } else {
           List<SongModel> songs = snapshot.data!;
 
-          // songs = songs
-          //     .where((song) =>
-          //         song.songId != FirebaseAuth.instance.currentUser!.uid)
-          //     .toList();
+          songs = songs
+              .where((song) =>
+                  song.songId != FirebaseAuth.instance.currentUser!.uid)
+              .toList();
 
           return songs.isEmpty
               ? const SizedBox.shrink()
@@ -338,6 +352,8 @@ class _HomeScreenState extends State<HomeScreen> {
               .toList();
           users.shuffle(random);
 
+          users = users.take(5).toList();
+
           return users.isEmpty
               ? const SizedBox.shrink()
               : Column(
@@ -357,6 +373,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
+<<<<<<< HEAD
 <<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
                           children: users
                               .take(5)
@@ -412,6 +429,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ]),
                                       ],
 =======
+=======
+>>>>>>> main
                           children: users.map((user) {
                             return Padding(
                               padding: const EdgeInsets.only(left: 25, top: 10),
@@ -432,6 +451,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: 120,
                                         height: 120,
                                         decoration: BoxDecoration(
+<<<<<<< HEAD
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.black.withOpacity(
@@ -441,6 +461,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                               offset: const Offset(0, 2),
                                             ),
                                           ],
+=======
+                                          color: const Color.fromARGB(
+                                              255, 77, 69, 69),
+>>>>>>> main
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           image: user.profileImage.isNotEmpty
@@ -453,6 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               : null,
                                         ),
                                       ),
+<<<<<<< HEAD
                                     ),
                                     const SizedBox(height: 5),
                                     Align(
@@ -462,9 +487,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                         style: titleStyle,
                                       ),
 >>>>>>> modified ui in home screen
+=======
+>>>>>>> main
                                     ),
-                                  ))
-                              .toList(),
+                                    const SizedBox(height: 5),
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Text(
+                                        user.username,
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                          height: 2,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),
@@ -503,7 +546,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 30, bottom: 10),
+                          padding: const EdgeInsets.only(left: 25, bottom: 10),
                           child: buildCustomContainer('What\'s New?'),
                         ),
                       ),
@@ -604,6 +647,7 @@ class _HomeScreenState extends State<HomeScreen> {
             final songs = snapshot.data!;
             final randomSongs = songs..shuffle();
             final limitedSongs = randomSongs.take(5).toList();
+
             widget.musicHandler.randomSongs = limitedSongs;
 
             return songs.isEmpty
@@ -616,7 +660,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                               padding:
-                                  const EdgeInsets.only(left: 30, bottom: 10),
+                                  const EdgeInsets.only(left: 25, bottom: 10),
                               child: buildCustomContainer('Home for OPM')),
                         ),
                         SingleChildScrollView(
@@ -683,6 +727,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         Text(
+<<<<<<< HEAD
 <<<<<<< 962eefe0396b452f52b6ae3f13c042287f85eee8
                                           song.title.length > 19
                                               ? '${song.title.substring(0, 19)}..'
@@ -690,6 +735,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           song.title.length > 17
                                               ? '${song.title.substring(0, 17)}..'
 >>>>>>> modified ui in home screen
+=======
+                                          song.title.length > 18
+                                              ? '${song.title.substring(0, 18)}..'
+>>>>>>> main
                                               : song.title,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
@@ -714,12 +763,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Container buildCustomContainer(String text) {
     return Container(
       padding: const EdgeInsets.only(top: 25),
-      alignment: Alignment.topLeft,
       child: Text(
         text,
         textAlign: TextAlign.right,
-        style: GoogleFonts.inter(
-            color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        style: sloganStyle,
       ),
     );
   }
