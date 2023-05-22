@@ -17,7 +17,7 @@ class CategoriesController with ChangeNotifier {
         }
       }
     }
-
+    languages.sort();
     return languages;
   }
 
@@ -37,6 +37,8 @@ class CategoriesController with ChangeNotifier {
       }
     }
 
+    genres.sort();
+
     return genres;
   }
 
@@ -55,6 +57,8 @@ class CategoriesController with ChangeNotifier {
         }
       }
     }
+
+    descriptions.sort();
 
     return descriptions;
   }

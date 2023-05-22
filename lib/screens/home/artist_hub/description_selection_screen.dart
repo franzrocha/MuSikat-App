@@ -15,6 +15,7 @@ class _DescriptionSelectionScreenState
   final CategoriesController _categoriesCon = CategoriesController();
   final TextEditingController _searchController = TextEditingController();
   String searchText = '';
+  bool showNoResults = false;
 
   @override
   void initState() {
@@ -69,6 +70,7 @@ class _DescriptionSelectionScreenState
         children: [
           searchBar(),
           descriptionChips(),
+          if (showNoResults) Text('No results found', style: shortDefault),
           descriptionList(),
         ],
       ),
@@ -106,7 +108,9 @@ class _DescriptionSelectionScreenState
             return const SizedBox.shrink();
           }
           return Container(
-            color: _checkedDescriptions[description]! ? Colors.grey : null,
+            color: _checkedDescriptions[description]!
+                ? const Color.fromARGB(255, 10, 10, 10)
+                : null,
             child: ListTile(
               onTap: () {
                 setState(() {
@@ -175,6 +179,9 @@ class _DescriptionSelectionScreenState
         onChanged: (value) {
           setState(() {
             searchText = value.toLowerCase();
+               showNoResults = _checkedDescriptions.keys
+                .every((description) => !description.toLowerCase().contains(searchText));
+
           });
         },
       ),

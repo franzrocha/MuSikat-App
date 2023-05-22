@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
@@ -33,7 +34,11 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                 title: widget.playlist.title,
                 caption: widget.playlist.description,
                 actions: [
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.add))
+                  if (widget.playlist.uid ==
+                      FirebaseAuth.instance.currentUser?.uid) ...{
+                    IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.playlist_add))
+                  }
                 ],
                 children: [
                   const SizedBox(height: 20),

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:musikat_app/controllers/categories_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -15,6 +16,28 @@ class MoodsScreen extends StatefulWidget {
 }
 
 class _MoodsScreenState extends State<MoodsScreen> {
+  final CategoriesController _categoriesCon = CategoriesController();
+  Map<String, LinearGradient> moodGradients = {};
+  TextEditingController searchController = TextEditingController();
+  List<String> moods = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  void fetchData() async {
+    try {
+      List<String> fetchedMoods = await _categoriesCon.getDescriptions();
+      setState(() {
+        moods = fetchedMoods;
+      });
+    } catch (error) {
+      print('Error fetching descriptions: $error');
+    }
+  }
+
   LinearGradient generateRandomGradient() {
     final random = Random();
     final color1 = Color.fromARGB(
@@ -36,71 +59,113 @@ class _MoodsScreenState extends State<MoodsScreen> {
     );
   }
 
-  void _showDescriptionSongs(String description) {
-    final gradient = generateRandomGradient();
+  LinearGradient? getMoodGradient(String mood) {
+    if (!moodGradients.containsKey(mood)) {
+      moodGradients[mood] = generateRandomGradient();
+    }
+    return moodGradients[mood];
+  }
+
+  void _showMoodSongs(String mood) {
+    final gradient = getMoodGradient(mood);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DescriptionSongsScreen(
-            description: description, gradient: gradient),
+          description: mood,
+          gradient: gradient!,
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final filteredMoods = moods
+        .where((mood) =>
+            mood.toLowerCase().contains(searchController.text.toLowerCase()))
+        .toList();
+
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
-      body: CustomScrollView(
-        slivers: [
-          CustomSliverBar(
-            image: moodPic,
-            title: 'Moods',
-            caption: 'Let your mood guide your next listening choice.',
-          ),
-          SliverGrid.count(
-            crossAxisCount: 2,
-            children: descriptions.map((descriptions) {
-              return GestureDetector(
-                  onTap: () => _showDescriptionSongs(descriptions),
-                  child: SizedBox(
-                    height: 200,
+      body: moods.isEmpty
+          ? const Center(child: LoadingIndicator())
+          : Scrollbar(
+            child: CustomScrollView(
+                slivers: [
+                  CustomSliverBar(
+                    image: moodPic,
+                    title: 'Moods',
+                    caption: 'Let your mood guide your next listening choice.',
+                  ),
+                  SliverToBoxAdapter(
                     child: Container(
-                      margin: const EdgeInsets.all(16.0),
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        gradient: generateRandomGradient(),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(20.0)),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black,
-                            spreadRadius: 0.5,
-                            offset: Offset(2.0, 2.0),
-                            blurRadius: 5.0,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 16),
+                      width: 400,
+                      child: TextField(
+                        style:
+                            GoogleFonts.inter(color: Colors.white, fontSize: 13),
+                        controller: searchController,
+                        onChanged: (_) => setState(() {}),
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          fillColor: Colors.transparent,
+                          hintStyle: GoogleFonts.inter(
+                            color: Colors.grey,
+                            fontSize: 13,
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            descriptions,
-                            style: GoogleFonts.inter(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                          filled: true,
+                        ),
                       ),
                     ),
-                  ));
-            }).toList(),
+                  ),
+                  SliverGrid.count(
+                    crossAxisCount: 2,
+                    children: filteredMoods.map((moods) {
+                      final gradient = getMoodGradient(moods);
+          
+                      return GestureDetector(
+                          onTap: () => _showMoodSongs(moods),
+                          child: SizedBox(
+                            height: 200,
+                            child: Container(
+                              margin: const EdgeInsets.all(16.0),
+                              padding: const EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
+                                gradient: gradient,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20.0)),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    spreadRadius: 0.5,
+                                    offset: Offset(2.0, 2.0),
+                                    blurRadius: 5.0,
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    moods,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ));
+                    }).toList(),
+                  ),
+                ],
+              ),
           ),
-        ],
-      ),
     );
   }
 }

@@ -14,6 +14,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   final CategoriesController _categoriesCon = CategoriesController();
   final TextEditingController _searchController = TextEditingController();
   String searchText = '';
+   bool showNoResults = false;
 
   @override
   void initState() {
@@ -67,6 +68,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         children: [
           searchBar(),
           languageChips(),
+          if (showNoResults) Text('No results found', style: shortDefault),
+
           languageList(),
         ],
       ),
@@ -104,7 +107,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             return const SizedBox.shrink();
           }
           return Container(
-            color: _checkedLanguages[language]! ? Colors.grey : null,
+            color: _checkedLanguages[language]! ? const Color.fromARGB(255, 10, 10, 10) : null,
             child: ListTile(
               onTap: () {
                 setState(() {
@@ -173,6 +176,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         onChanged: (value) {
           setState(() {
             searchText = value.toLowerCase();
+             showNoResults = _checkedLanguages.keys
+                .every((language) => !language.toLowerCase().contains(searchText));
           });
         },
       ),

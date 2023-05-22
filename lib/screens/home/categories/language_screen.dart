@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:musikat_app/controllers/categories_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
@@ -13,6 +14,28 @@ class LanguagesScreen extends StatefulWidget {
 }
 
 class _LanguagesScreenState extends State<LanguagesScreen> {
+  final CategoriesController _categoriesCon = CategoriesController();
+  Map<String, LinearGradient> languageGradients = {};
+  TextEditingController searchController = TextEditingController();
+  List<String> languages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  void fetchData() async {
+    try {
+      List<String> fetchedLanguages = await _categoriesCon.getLanguages();
+      setState(() {
+        languages = fetchedLanguages;
+      });
+    } catch (error) {
+      print('Error fetching languages: $error');
+    }
+  }
+
   LinearGradient generateRandomGradient() {
     final random = Random();
     final color1 = Color.fromARGB(
@@ -34,72 +57,115 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
     );
   }
 
-  void _showLanguageSongs(String languages) {
-    final gradient = generateRandomGradient();
+  LinearGradient? getLanguageGradient(String language) {
+    if (!languageGradients.containsKey(language)) {
+      languageGradients[language] = generateRandomGradient();
+    }
+    return languageGradients[language];
+  }
+
+  void _showLanguageSongs(String language) {
+    final gradient = getLanguageGradient(language);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            LanguageSongsScreen(languages: languages, gradient: gradient),
+        builder: (context) => LanguageSongsScreen(
+          languages: language,
+          gradient: gradient!,
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final filteredLanguages = languages
+        .where((language) => language
+            .toLowerCase()
+            .contains(searchController.text.toLowerCase()))
+        .toList();
+
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
-      body: CustomScrollView(
-        slivers: [
-          CustomSliverBar(
-            image: languagePic,
-            title: 'Languages',
-            caption:
-                'Expand your music horizons with ethno-languages from the Philippines.',
-          ),
-          SliverGrid.count(
-            crossAxisCount: 2,
-            children: languages.map((languages) {
-              return GestureDetector(
-                  onTap: () => _showLanguageSongs(languages),
-                  child: SizedBox(
-                    height: 200,
+      body: languages.isEmpty
+          ? const Center(child: LoadingIndicator())
+          : Scrollbar(
+            child: CustomScrollView(
+                slivers: [
+                  CustomSliverBar(
+                    image: languagePic,
+                    title: 'Languages',
+                    caption:
+                        'Expand your music horizons with ethno-languages from the Philippines.',
+                  ),
+                  SliverToBoxAdapter(
                     child: Container(
-                      margin: const EdgeInsets.all(16.0),
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        gradient: generateRandomGradient(),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(20.0)),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black,
-                            spreadRadius: 0.5,
-                            offset: Offset(2.0, 2.0),
-                            blurRadius: 5.0,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 16),
+                      width: 400,
+                      child: TextField(
+                        style:
+                            GoogleFonts.inter(color: Colors.white, fontSize: 13),
+                        controller: searchController,
+                        onChanged: (_) => setState(() {}),
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          fillColor: Colors.transparent,
+                          hintStyle: GoogleFonts.inter(
+                            color: Colors.grey,
+                            fontSize: 13,
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            languages,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                          filled: true,
+                        ),
                       ),
                     ),
-                  ));
-            }).toList(),
+                  ),
+                  SliverGrid.count(
+                    crossAxisCount: 2,
+                    children: filteredLanguages.map((language) {
+                      final gradient = getLanguageGradient(language);
+          
+                      return GestureDetector(
+                          onTap: () => _showLanguageSongs(language),
+                          child: SizedBox(
+                            height: 200,
+                            child: Container(
+                              margin: const EdgeInsets.all(16.0),
+                              padding: const EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
+                                gradient: gradient,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20.0)),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    spreadRadius: 0.5,
+                                    offset: Offset(2.0, 2.0),
+                                    blurRadius: 5.0,
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    language,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ));
+                    }).toList(),
+                  ),
+                ],
+              ),
           ),
-        ],
-      ),
     );
   }
 }
@@ -180,7 +246,7 @@ class LanguageSongsScreen extends StatelessWidget {
                                           )),
                                 );
                               },
-                                onLongPress: () {
+                              onLongPress: () {
                                 showModalBottomSheet(
                                     backgroundColor: musikatColor4,
                                     context: context,

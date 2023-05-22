@@ -1,7 +1,5 @@
-import 'package:musikat_app/utils/exports.dart';
-
 import 'package:musikat_app/controllers/categories_controller.dart';
-
+import 'package:musikat_app/utils/exports.dart';
 
 class GenreSelectionScreen extends StatefulWidget {
   const GenreSelectionScreen({Key? key}) : super(key: key);
@@ -11,10 +9,11 @@ class GenreSelectionScreen extends StatefulWidget {
 }
 
 class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
-  String? selectedGenre;
+  final Map<String, bool> _checkedGenres = {};
   final CategoriesController _categoriesCon = CategoriesController();
   final TextEditingController _searchController = TextEditingController();
   String searchText = '';
+  bool showNoResults = false;
 
   @override
   void initState() {
@@ -25,8 +24,8 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
   Future<void> _fetchGenres() async {
     List<String> genres = await _categoriesCon.getGenres();
     setState(() {
-      if (genres.isNotEmpty) {
-        selectedGenre = genres.first;
+      for (String genre in genres) {
+        _checkedGenres[genre] = false;
       }
     });
   }
@@ -42,13 +41,18 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
       body: Column(
         children: [
           searchBar(),
+          if (showNoResults) Text('No results found', style: shortDefault),
           genreList(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: musikatColor,
         onPressed: () {
-          if (selectedGenre == null) {
+          String selectedGenre = _checkedGenres.keys.firstWhere(
+            (genre) => _checkedGenres[genre]!,
+            orElse: () => '',
+          );
+          if (selectedGenre.isEmpty) {
             ToastMessage.show(context, 'Please select a genre');
           } else {
             Navigator.pop(context, selectedGenre);
@@ -62,26 +66,30 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
   Expanded genreList() {
     return Expanded(
       child: ListView.builder(
-        itemCount: genres.length,
+        itemCount: _checkedGenres.length,
         itemBuilder: (BuildContext context, int index) {
-          String genre = genres[index];
-          if (searchText.isNotEmpty && !genre.toLowerCase().contains(searchText)) {
+          String genre = _checkedGenres.keys.toList()[index];
+          if (searchText.isNotEmpty &&
+              !genre.toLowerCase().contains(searchText)) {
             return const SizedBox.shrink();
           }
           return Container(
-            color: genre == selectedGenre ? Colors.grey : null,
+            color: _checkedGenres[genre]! ? const Color.fromARGB(255, 10, 10, 10) : null,
             child: ListTile(
               onTap: () {
                 setState(() {
-                  selectedGenre = genre;
+                  _checkedGenres.forEach((key, value) {
+                    _checkedGenres[key] = false;
+                  });
+                  _checkedGenres[genre] = true;
                 });
               },
-              selected: genre == selectedGenre,
+              selected: _checkedGenres[genre]!,
               title: Text(
                 genre,
                 style: GoogleFonts.inter(fontSize: 14, color: Colors.white),
               ),
-              trailing: genre == selectedGenre
+              trailing: _checkedGenres[genre]!
                   ? const Icon(Icons.check, color: musikatColor2)
                   : null,
             ),
@@ -95,7 +103,6 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: TextField(
-        
         style: GoogleFonts.inter(color: Colors.white, fontSize: 13),
         controller: _searchController,
         decoration: InputDecoration(
@@ -107,6 +114,8 @@ class _GenreSelectionScreenState extends State<GenreSelectionScreen> {
         onChanged: (value) {
           setState(() {
             searchText = value.toLowerCase();
+            showNoResults = _checkedGenres.keys
+                .every((genre) => !genre.toLowerCase().contains(searchText));
           });
         },
       ),
