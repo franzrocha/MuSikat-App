@@ -61,6 +61,12 @@ TextStyle shortDefault = const TextStyle(
   color: Colors.white,
 );
 
+TextStyle songTitle = const TextStyle(
+  color: Colors.white,
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
+);
+
 TextStyle titleStyle = const TextStyle(
   fontFamily: 'Gotham',
   fontWeight: FontWeight.bold,

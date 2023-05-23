@@ -183,10 +183,22 @@ class SongsController with ChangeNotifier {
   }
 
   Future<void> updateSongPlayCount(String songId) async {
-    await FirebaseFirestore.instance
-        .collection('songs')
-        .doc(songId)
-        .update({'playCount': FieldValue.increment(1)});
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot songSnapshot =
+        await FirebaseFirestore.instance.collection('songs').doc(songId).get();
+
+    if (songSnapshot.exists) {
+      Map<String, dynamic>? songData =
+          songSnapshot.data() as Map<String, dynamic>?;
+      String owner = songData!['uid'];
+
+      if (owner != userId) {
+        await FirebaseFirestore.instance
+            .collection('songs')
+            .doc(songId)
+            .update({'playCount': FieldValue.increment(1)});
+      }
+    }
   }
 
   Stream<double> get uploadProgressStream =>
@@ -197,7 +209,6 @@ class SongsController with ChangeNotifier {
     super.dispose();
     _uploadProgressStreamController.close();
   }
-
 
   // Future<List<UserModel>?> getUsersWithSongs(String uid) async {
   //   QuerySnapshot songsSnapshot =
