@@ -17,11 +17,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       appBar: CustomAppBar(
         title: Text(
           'Categories',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
+          style: appBarStyle,
         ),
         showLogo: false,
       ),

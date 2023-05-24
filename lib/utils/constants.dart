@@ -61,10 +61,23 @@ TextStyle shortDefault = const TextStyle(
   color: Colors.white,
 );
 
+TextStyle shortDefaultGrey = TextStyle(
+  fontFamily: 'Gotham',
+  fontWeight: FontWeight.w500,
+  fontSize: 13,
+  color: Colors.white.withOpacity(0.5),
+);
+
+TextStyle mediumDefault = const TextStyle(
+  fontFamily: 'Gotham',
+  fontWeight: FontWeight.w500,
+  fontSize: 16,
+  color: Colors.white,
+);
+
 TextStyle songTitle = const TextStyle(
   color: Colors.white,
-  fontSize: 15,
-  fontWeight: FontWeight.w500,
+  fontSize: 14,
 );
 
 TextStyle titleStyle = const TextStyle(
@@ -81,4 +94,11 @@ TextStyle artistStyle = TextStyle(
   color: Colors.white.withOpacity(0.5),
   fontSize: 10,
   height: 1.2,
+);
+
+TextStyle shortThinStyle = const TextStyle(
+  fontFamily: 'Gotham',
+  fontWeight: FontWeight.w400,
+  color: Colors.white,
+  fontSize: 13,
 );

@@ -70,15 +70,11 @@ class SongModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is SongModel &&
-        other.songId == songId &&
-        other.title == title; // add other fields that make a song unique
+    return other is SongModel && other.songId == songId && other.title == title;
   }
 
   @override
-  int get hashCode =>
-      songId.hashCode ^
-      title.hashCode; // add hashCodes of other fields that make a song unique
+  int get hashCode => songId.hashCode ^ title.hashCode;
 
   static Future<List<SongModel>> getSongs() async {
     List<SongModel> songs = [];

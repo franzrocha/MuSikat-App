@@ -38,11 +38,7 @@ class CardTile extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text(
                   text,
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: shortThinStyle,
                 ),
               ],
             ),

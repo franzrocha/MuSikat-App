@@ -26,6 +26,7 @@ class AvatarImage extends StatelessWidget {
                 child: CircleAvatar(
                   radius: radius,
                   backgroundImage: CachedNetworkImageProvider(snap.data!.profileImage),
+                  
                 ),
               );
             }

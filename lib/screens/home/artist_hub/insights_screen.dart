@@ -98,6 +98,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
                       ),
                       title: Text(
                         song.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: songTitle,
                       ),
 
@@ -152,25 +154,13 @@ class _InsightsScreenState extends State<InsightsScreen> {
   Column overviewTab() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          'Overview',
-          textAlign: TextAlign.start,
-          style: GoogleFonts.inter(
-            color: Colors.white,
-            fontSize: 20,
-            height: 2,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          'Top Tracks',
-          textAlign: TextAlign.start,
-          style: GoogleFonts.inter(
-            color: Colors.white,
-            fontSize: 15,
-            height: 1.5,
-            fontWeight: FontWeight.bold,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [ 
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: Text(
+            'Top Tracks',
+            style: sloganStyle,
           ),
         ),
         const SizedBox(height: 15),
@@ -184,6 +174,13 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     .where((song) =>
                         song.uid == FirebaseAuth.instance.currentUser?.uid)
                     .toList();
+
+                if (songs.isEmpty) {
+                  return Center(
+                    child: Text('No songs found in your library.', style: shortThinStyle,),
+                  );
+                }
+
                 return ListView.separated(
                   itemCount: songs.length > 5 ? 5 : songs.length,
                   separatorBuilder: (BuildContext context, int index) =>
@@ -210,11 +207,10 @@ class _InsightsScreenState extends State<InsightsScreen> {
                         ),
                       ),
                       title: Text(
-                        song.title,
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
+                        '${index + 1}.  ${song.title}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: songTitle,
                       ),
                     );
                   },
@@ -231,6 +227,30 @@ class _InsightsScreenState extends State<InsightsScreen> {
             },
           ),
         ),
+        Expanded(
+            child: FutureBuilder<int>(
+          future:
+              _songCon.getOverallPlays(FirebaseAuth.instance.currentUser!.uid),
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return ListTile(
+                title: Row(
+                  children: [
+                    Text('Overall Streams:', style: sloganStyle),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text('${snapshot.data}', style: sloganStyle),
+                  ],
+                ),
+              );
+            }
+          },
+        ))
       ],
     );
   }

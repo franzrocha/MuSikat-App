@@ -200,11 +200,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
       appBar: CustomAppBar(
         title: Text(
           'Upload',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.white,
-          ),
+          style: appBarStyle,
         ),
         showLogo: false,
       ),
@@ -269,6 +265,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                                       ? '${_selectedFile!.path.split('/').last.substring(0, 20)}...'
                                       : 'Select Audio',
                                   overflow: TextOverflow.ellipsis,
+                                  style: shortThinStyle,
                                 ),
                                 if (_selectedFile != null)
                                   const SizedBox(width: 20.0),
@@ -299,64 +296,28 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    'Title',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  ),
+                  Text('Title', style: shortThinStyle),
                   titleForm(),
                   const SizedBox(height: 20),
-                  Text(
-                    'Songwriter(s)',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  ),
+                  Text('Songwriter(s)', style: shortThinStyle),
                   const SizedBox(height: 10),
                   writerForm(),
                   const SizedBox(height: 10),
                   writerChips(),
                   const SizedBox(height: 10),
-                  Text(
-                    'Producer(s)',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  ),
+                  Text('Producer(s)', style: shortThinStyle),
                   const SizedBox(height: 10),
                   producerForm(),
                   const SizedBox(height: 10),
                   producerChips(),
                   const SizedBox(height: 10),
-                  Text(
-                    'Choose genre',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  ),
+                  Text('Choose genre', style: shortThinStyle),
                   genreTile(context),
                   const SizedBox(height: 10),
-                  Text(
-                    'Choose language',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  ),
+                  Text('Choose language', style: shortThinStyle),
                   languageTile(context),
                   const SizedBox(height: 10),
-                  Text(
-                    'Describe the track',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
-                  ),
+                  Text('Describe the track', style: shortThinStyle),
                   descriptionTile(context),
                 ],
               ),
@@ -617,7 +578,6 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                       color: Colors.white,
                       fontSize: 12,
                     ),
-                 
                     onDeleted: () {
                       setState(() {
                         _writers.remove(writer);

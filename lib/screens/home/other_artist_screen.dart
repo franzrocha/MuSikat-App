@@ -626,14 +626,10 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
       alignment: Alignment.bottomLeft,
       child: Padding(
         padding: const EdgeInsets.only(top: 20, left: 30, bottom: 10),
-        child: Stack(
-          children: [
-            SizedBox(
-              width: 100,
-              height: 120,
-              child: AvatarImage(uid: selectedUserUID),
-            ),
-          ],
+        child: SizedBox(
+          width: 120,
+          height: 120,
+          child: AvatarImage(uid: selectedUserUID,),
         ),
       ),
     );

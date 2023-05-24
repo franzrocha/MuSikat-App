@@ -40,6 +40,7 @@ class HeaderImage extends StatelessWidget {
       height: 150,
       decoration: BoxDecoration(
         color: musikatBackgroundColor.withOpacity(0.5),
+          
       ),
     );
   }

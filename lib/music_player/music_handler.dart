@@ -58,6 +58,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
       );
       print(
           "Current Song: ${currentSong?.title ?? 'None'} New Song: ${song.title}");
+
       if (currentSong == null ||
           (currentSong != null && currentSong?.songId != song.songId)) {
         isPlaying = true;
@@ -65,17 +66,17 @@ class MusicHandler with ChangeNotifier, RouteAware {
         await player.setAudioSource(source);
         notifyListeners();
         await player.play();
+      } else {
+        await player.seek(Duration.zero);
+        await player.play();
       }
 
       String currentUser = FirebaseAuth.instance.currentUser!.uid;
       await _songCon.updateSongPlayCount(song.songId);
-
       await _listenCon.addListeningHistorySong(currentUser, song.songId);
-
 
       notifyListeners();
     } catch (e) {
-      //print("Error play sa first na kanta");
       if (e is PlatformException) {
         await Future.delayed(const Duration(seconds: 5));
         await setAudioSource(song, uid);
@@ -190,7 +191,4 @@ class MusicHandler with ChangeNotifier, RouteAware {
   //   player.dispose();
   //   super.dispose();
   // }
-
-
-
 }

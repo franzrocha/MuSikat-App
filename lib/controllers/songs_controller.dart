@@ -210,6 +210,23 @@ class SongsController with ChangeNotifier {
     _uploadProgressStreamController.close();
   }
 
+  Future<int> getOverallPlays(String currentUserUid) async {
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('songs')
+        .where('uid', isEqualTo: currentUserUid)
+        .get();
+
+    int totalPlayCount = 0;
+
+    for (final doc in querySnapshot.docs) {
+      final SongModel song = SongModel.fromDocumentSnap(doc);
+      totalPlayCount += song.playCount;
+    }
+
+    return totalPlayCount;
+  }
+}
+
   // Future<List<UserModel>?> getUsersWithSongs(String uid) async {
   //   QuerySnapshot songsSnapshot =
   //       await _db.collection('songs').where('uid', isEqualTo: uid).get();
@@ -233,4 +250,4 @@ class SongsController with ChangeNotifier {
   //       .map((doc) => UserModel.fromDocumentSnap(doc))
   //       .toList();
   // }
-}
+

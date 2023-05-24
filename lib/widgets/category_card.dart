@@ -28,11 +28,12 @@ class CategoryCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(text,
-                  style: GoogleFonts.inter(
+                  style: appBarStyle.copyWith(
                     color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  )),
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold
+                  ),
+              ),
             ),
           ),
         ),

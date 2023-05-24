@@ -178,12 +178,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Stack(
             children: [
               SizedBox(
-                width: 100,
+                width: 120,
                 height: 120,
                 child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
               ),
               Positioned(
-                left: 35,
+                left: 45,
                 top: 45,
                 child: Icon(
                   Icons.camera_alt,
