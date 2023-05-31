@@ -67,7 +67,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
         notifyListeners();
         await player.play();
       } else {
-        await player.seek(Duration.zero);
+        //await player.seek(Duration.zero);
         await player.play();
       }
 

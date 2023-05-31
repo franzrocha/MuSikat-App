@@ -3,6 +3,7 @@ import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/screens/home/camera.dart';
 import 'package:musikat_app/screens/home/chat/chat_home.dart';
 import 'package:musikat_app/screens/home/listening_history_screen.dart';
+import 'package:musikat_app/screens/home/notification_screen.dart';
 import 'package:musikat_app/screens/home/search_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/categories/categories_screen.dart';
@@ -51,6 +52,19 @@ class _NavBarState extends State<NavBar> {
           actions: [
             Row(
               children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.notifications,
+                    size: 20,
+                  ),
+                ),
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).push(

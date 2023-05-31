@@ -1,6 +1,10 @@
 // ignore_for_file: must_be_immutable
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:musikat_app/controllers/following_controller.dart';
+import 'package:musikat_app/controllers/getx_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
@@ -21,11 +25,21 @@ class ArtistsProfileScreen extends StatefulWidget {
 }
 
 class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
+  @override
+  void dispose() {
+    Get.delete<ArtistDetailsController>();
+    super.dispose();
+  }
+
   final SongsController _songCon = SongsController();
+  final FollowController _followCon = FollowController();
+  final currentUser = FirebaseAuth.instance.currentUser!.uid;
+
   final PlaylistController _playlistCon = PlaylistController();
   String get selectedUserUID => widget.selectedUserUID;
   UserModel? user;
   int followers = 0;
+  //int followingCount = 0;
   bool isFollowing = false;
 
   @override
@@ -42,6 +56,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ArtistDetailsController());
     return Scaffold(
       appBar: CustomAppBar(
         showLogo: false,
@@ -89,7 +104,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                     ),
                     Column(
                       children: [
-                        usernameText(snapshot),
+                        usernameText(snapshot, isFollowing),
                         fullnameText(snapshot),
                         followings(),
                         const SizedBox(height: 5),
@@ -117,27 +132,58 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
     return Row(
       children: [
         const SizedBox(width: 30.0),
-        SizedBox(
-          width: 130.0,
-          child: FollowButton(
-            isFollowing: isFollowing,
-            onFollowChanged: (bool isFollowing) {
-              setState(() {
-                if (isFollowing) {
-                  followers++;
-                } else {
-                  followers--;
-                }
-                this.isFollowing = isFollowing;
-              });
-            },
-          ),
+        StreamBuilder<List<String>>(
+          stream: _followCon.getUserFollowing(currentUser).asStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container();
+            } else if (snapshot.hasData) {
+              final followingList = snapshot.data;
+              final selectedUserFollows =
+                  followingList?.contains(selectedUserUID) ?? false;
+
+              return SizedBox(
+                width: 130.0,
+                child: FollowButton(
+                  isFollowing: selectedUserFollows,
+                  onFollowChanged: (bool isFollowing) async {
+                    setState(() {
+                      if (isFollowing) {
+                        _followCon.followUser(selectedUserUID);
+                        // Increment the following count
+                        followers++;
+                      } else {
+                        _followCon.unfollowUser(selectedUserUID);
+                        // Decrement the following count
+                        followers--;
+                      }
+                      // Update the isFollowing state variable
+                      this.isFollowing = isFollowing;
+                    });
+                  },
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return Container();
+            }
+          },
         ),
         const SizedBox(width: 15.0),
         SizedBox(
           width: 130.0,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Perform the desired action on other users' profiles
+              // For example, you can navigate to their profile page:
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => OtherUserProfilePage(selectedUserUID),
+              //   ),
+              // );
+            },
             child: const Text('Support'),
           ),
         ),
@@ -150,41 +196,71 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
       child: Row(
         children: [
-          const Text(
-            'Followers: ',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 13.0,
-            ),
-          ),
-          Text(
-            followers.toString(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13.0,
-            ),
+          StreamBuilder<List<String>>(
+            stream: _followCon.getUserFollowers(selectedUserUID).asStream(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              } else if (snapshot.hasData) {
+                final followersCount = snapshot.data!.length;
+                return Text(
+                  'Followers: $followersCount',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13.0,
+                  ),
+                );
+              } else {
+                return const Text(
+                  'Followers: 0',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13.0,
+                  ),
+                );
+              }
+            },
           ),
           const SizedBox(width: 30.0),
-          const Text(
-            'Following: ',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 13.0,
-            ),
-          ),
-          const Text(
-            '0',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 13.0,
-            ),
+          StreamBuilder<List<String>>(
+            stream: _followCon.getUserFollowing(selectedUserUID).asStream(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              } else if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                final followingList = snapshot.data;
+
+                final controller = Get.find<ArtistDetailsController>();
+
+                controller.setSelectedArtistFollowsCurrentUser(
+                    currentUser, followingList!);
+
+                final followingCount = snapshot.data!.length;
+                return Text(
+                  'Following: $followingCount',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13.0,
+                  ),
+                );
+              } else {
+                return const Text(
+                  'Following: 0',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13.0,
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),
     );
   }
 
- SizedBox playlists() {
+  SizedBox playlists() {
     return SizedBox(
       height: 250,
       child: StreamBuilder<List<PlaylistModel>>(
@@ -232,21 +308,18 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: playlists.map((playlist) {
                           return Padding(
-                            padding:
-                                const EdgeInsets.only(left: 25, top: 10),
+                            padding: const EdgeInsets.only(left: 25, top: 10),
                             child: GestureDetector(
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        PlaylistDetailScreen(
+                                    builder: (context) => PlaylistDetailScreen(
                                           playlist: playlists[
                                               playlists.indexOf(playlist)],
                                         )),
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     width: 120,
@@ -257,8 +330,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                                             255, 124, 131, 127),
                                         width: 1.0,
                                       ),
-                                      borderRadius:
-                                          BorderRadius.circular(5),
+                                      borderRadius: BorderRadius.circular(5),
                                       image: DecorationImage(
                                         image: CachedNetworkImageProvider(
                                             playlist.playlistImg),
@@ -626,25 +698,44 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
       alignment: Alignment.bottomLeft,
       child: Padding(
         padding: const EdgeInsets.only(top: 20, left: 30, bottom: 10),
-        child: SizedBox(
-          width: 120,
-          height: 120,
-          child: AvatarImage(uid: selectedUserUID,),
+        child: Stack(
+          children: [
+            SizedBox(
+              width: 100,
+              height: 120,
+              child: AvatarImage(uid: selectedUserUID),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Align usernameText(snapshot) {
+  Align usernameText(snapshot, bool isFollowing) {
+    final controller = Get.find<ArtistDetailsController>();
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 31),
-        child: Text(snapshot.data!.username,
-            style: GoogleFonts.inter(
+        child: Row(
+          children: [
+            Text(
+              snapshot.data!.username,
+              style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 16,
-                fontWeight: FontWeight.bold)),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Obx(() => controller.artistIsFollowingUser
+                ? const Text(' Follows You',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ))
+                : const SizedBox())
+          ],
+        ),
       ),
     );
   }
@@ -665,10 +756,13 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
 }
 
 class FollowButton extends StatefulWidget {
-  const FollowButton(
-      {super.key, required this.isFollowing, required this.onFollowChanged});
+  const FollowButton({
+    Key? key,
+    required this.isFollowing,
+    required this.onFollowChanged,
+  }) : super(key: key);
 
-  final bool? isFollowing;
+  final bool isFollowing;
   final Function(bool isFollowing) onFollowChanged;
 
   @override
@@ -676,29 +770,20 @@ class FollowButton extends StatefulWidget {
 }
 
 class _FollowButtonState extends State<FollowButton> {
-  bool? _isFollowing;
-
-  @override
-  void initState() {
-    super.initState();
-    _isFollowing = widget.isFollowing;
-  }
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        setState(() {
-          _isFollowing = !_isFollowing!;
-          widget.onFollowChanged(_isFollowing!);
-        });
+        final isFollowing = !widget.isFollowing;
+        widget.onFollowChanged(isFollowing);
       },
       style: ElevatedButton.styleFrom(
-          backgroundColor: _isFollowing == true
-              ? const Color(0xff62DD69)
-              : const Color(0xfffca311)),
+        backgroundColor: widget.isFollowing
+            ? const Color(0xff62DD69)
+            : const Color(0xfffca311),
+      ),
       child: Text(
-        _isFollowing == true ? 'Unfollow' : 'Follow',
+        widget.isFollowing ? 'Unfollow' : 'Follow',
         style: const TextStyle(
           color: Colors.white,
           fontSize: 16.0,
