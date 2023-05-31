@@ -727,6 +727,8 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 31),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
           children: [
             Text(
               snapshot.data!.username,
@@ -736,13 +738,38 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Obx(() => controller.artistIsFollowingUser
-                ? const Text(' Follows You',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ))
-                : const SizedBox())
+
+            const SizedBox(
+                width: 10), // Add a space between username and "Follows You"
+            Obx(
+              () => controller.artistIsFollowingUser
+                  ? Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[800], // background color
+                        borderRadius: BorderRadius.circular(5), // border radius
+                        border: Border.all(
+                          color: Colors.grey[
+                              800]!, // border color (same as background color)
+                          width: 1.0, // border width
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: 90, // Set a fixed width for the container
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0), // Add padding to the text
+                          child: Text(
+                            'Follows you',
+                            style: GoogleFonts.inter(
+                              color: Colors.grey[300], // text color
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+            )
           ],
         ),
       ),
