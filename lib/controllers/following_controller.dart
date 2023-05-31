@@ -60,7 +60,7 @@ class FollowController with ChangeNotifier {
     return followersList.cast<String>();
   }
 
-  // Method to get a user's followings list
+// Method to get a user's followings list
   Future<List<String>> getUserFollowing(String selectedUserUID) async {
     final userSnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -69,23 +69,9 @@ class FollowController with ChangeNotifier {
 
     final followingList =
         (userSnapshot.data()?['followings'] as List<dynamic>?) ?? [];
+
     return followingList.cast<String>();
   }
 
-  Future<bool> isUserFollowingCurrentUser(String userIdToCheck) async {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    final currentUserId = currentUser?.uid;
-
-    // Get the current user's followings list
-    final followingListSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUserId)
-        .get();
-
-    final followingList =
-        (followingListSnapshot.data()?['followings'] as List<dynamic>?) ?? [];
-
-    // Check if the given user is in the current user's followings list
-    return followingList.contains(userIdToCheck);
-  }
+// Method to get a user's followers and followings using UserModel
 }

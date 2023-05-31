@@ -37,7 +37,6 @@ class AuthController with ChangeNotifier {
       print('Logged in user');
       print(event.email);
 
-    
       String accountType = await getUserAccountType();
 
       if (accountType.toLowerCase() == 'admin') {
@@ -148,6 +147,8 @@ class AuthController with ChangeNotifier {
           Timestamp.now(),
           [],
           'User',
+          [],
+          [],
         );
         return FirebaseFirestore.instance
             .collection('users')

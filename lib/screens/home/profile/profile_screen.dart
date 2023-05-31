@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/profile/account_info.dart';
+import 'package:musikat_app/screens/home/profile/following_screen.dart';
 import 'package:musikat_app/screens/home/profile/liked_songs_screen.dart';
 import 'package:musikat_app/screens/home/profile/playlist_screen.dart';
 import 'package:musikat_app/screens/home/profile/about_us.dart';
@@ -83,7 +84,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 TileList(
                   icon: Icons.people,
                   title: 'Following/Follower',
-                  ontap: () {},
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const FollowingListScreen()),
+                    );
+                  },
                 ),
                 TileList(
                   icon: Icons.info,
@@ -104,8 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _auth.logout();
                   },
                 ),
-           
-                    const SizedBox(height: 130),
+                const SizedBox(height: 130),
               ],
             ),
           ),

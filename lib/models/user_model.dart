@@ -14,22 +14,25 @@ class UserModel {
       accountType;
   Timestamp created, updated;
   List<String> chatrooms;
+  final List<String> followers;
+  final List<String> followings;
 
   UserModel(
-    this.uid,
-    this.username,
-    this.lastName,
-    this.firstName,
-    this.email,
-    this.age,
-    this.gender,
-    this.profileImage,
-    this.headerImage,
-    this.created,
-    this.updated,
-    this.chatrooms, 
-    this.accountType,
-  );
+      this.uid,
+      this.username,
+      this.lastName,
+      this.firstName,
+      this.email,
+      this.age,
+      this.gender,
+      this.profileImage,
+      this.headerImage,
+      this.created,
+      this.updated,
+      this.chatrooms,
+      this.accountType,
+      this.followers,
+      this.followings);
 
   static UserModel fromDocumentSnap(DocumentSnapshot snap) {
     Map<String, dynamic> json = {};
@@ -52,6 +55,12 @@ class UserModel {
           ? List<String>.from(json['chatrooms'])
           : <String>[],
       json['accountType'] ?? '',
+      json['followers'] != null
+          ? List<String>.from(json['followers'])
+          : <String>[],
+      json['followings'] != null
+          ? List<String>.from(json['followings'])
+          : <String>[],
     );
   }
 
@@ -68,6 +77,8 @@ class UserModel {
         'accountType': accountType,
         'created': created,
         'updated': updated,
+        'followers': followers,
+        'followings': followings
       };
 
   static Future<UserModel> fromUid({required String uid}) async {

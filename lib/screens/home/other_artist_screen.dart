@@ -144,23 +144,41 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
 
               return SizedBox(
                 width: 130.0,
-                child: FollowButton(
-                  isFollowing: selectedUserFollows,
-                  onFollowChanged: (bool isFollowing) async {
+                child: ElevatedButton(
+                  onPressed: () async {
                     setState(() {
-                      if (isFollowing) {
+                      if (!selectedUserFollows) {
                         _followCon.followUser(selectedUserUID);
-                        // Increment the following count
+                        // Increment the followers count
                         followers++;
                       } else {
                         _followCon.unfollowUser(selectedUserUID);
-                        // Decrement the following count
+                        // Decrement the followers count
                         followers--;
                       }
                       // Update the isFollowing state variable
-                      this.isFollowing = isFollowing;
+                      isFollowing = !selectedUserFollows;
                     });
                   },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.resolveWith<Color>((states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        // Color when the button is pressed
+                        return const Color.fromARGB(255, 0, 0, 0);
+                      } else if (isFollowing) {
+                        // Color when the button is in "Unfollow" state
+                        return Colors.grey;
+                      } else if (selectedUserFollows) {
+                        // Color when the button is in "Follow" state but previously followed
+                        return Colors.grey;
+                      } else {
+                        // Color when the button is in "Follow" state and not previously followed
+                        return const Color(0xfffca311);
+                      }
+                    }),
+                  ),
+                  child: Text(selectedUserFollows ? 'Unfollow' : 'Follow'),
                 ),
               );
             } else if (snapshot.hasError) {
@@ -174,16 +192,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
         SizedBox(
           width: 130.0,
           child: ElevatedButton(
-            onPressed: () {
-              // Perform the desired action on other users' profiles
-              // For example, you can navigate to their profile page:
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => OtherUserProfilePage(selectedUserUID),
-              //   ),
-              // );
-            },
+            onPressed: () {},
             child: const Text('Support'),
           ),
         ),
@@ -749,45 +758,6 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
           '${snapshot.data!.firstName} ${snapshot.data!.lastName}',
           style: GoogleFonts.inter(
               color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
-
-class FollowButton extends StatefulWidget {
-  const FollowButton({
-    Key? key,
-    required this.isFollowing,
-    required this.onFollowChanged,
-  }) : super(key: key);
-
-  final bool isFollowing;
-  final Function(bool isFollowing) onFollowChanged;
-
-  @override
-  State<StatefulWidget> createState() => _FollowButtonState();
-}
-
-class _FollowButtonState extends State<FollowButton> {
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        final isFollowing = !widget.isFollowing;
-        widget.onFollowChanged(isFollowing);
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: widget.isFollowing
-            ? const Color(0xff62DD69)
-            : const Color(0xfffca311),
-      ),
-      child: Text(
-        widget.isFollowing ? 'Unfollow' : 'Follow',
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );
