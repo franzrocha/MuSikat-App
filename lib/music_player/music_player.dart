@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
@@ -89,21 +91,50 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
           builder: (BuildContext context, Widget? child) {
             return SafeArea(
                 child: Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Column(
+                    child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Stack(alignment: Alignment.center, children: [
+                  // Background Image
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.width * 0.8,
+                    decoration: BoxDecoration(
+                      color: musikatBackgroundColor,
+                      border: Border.all(
+                        color: const Color.fromARGB(255, 124, 131, 127),
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                      image: DecorationImage(
+                        image: NetworkImage(widget
+                            .songs[_musicHandler.currentIndex].albumCover),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // Blur Effect
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: musikatBackgroundColor.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        child: Container(),
+                      ),
+                    ),
+                  ),
+                  // Content
+                  Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width * 0.8,
                           height: MediaQuery.of(context).size.width * 0.8,
                           decoration: BoxDecoration(
-                            color: musikatBackgroundColor,
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 124, 131, 127),
-                              width: 1.0,
-                            ),
+                            color: Colors.transparent,
                             borderRadius: BorderRadius.circular(5),
                             image: DecorationImage(
                               image: NetworkImage(widget
@@ -113,6 +144,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 23, right: 23, top: 25),
@@ -297,9 +329,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           ],
                         ),
                       ]),
-                ),
+                ]),
               ),
-            ));
+            )));
           },
         ));
   }
