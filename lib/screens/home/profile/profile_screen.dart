@@ -83,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 TileList(
                   icon: Icons.people,
-                  title: 'Following/Follower',
+                  title: 'Followers/Following',
                   ontap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

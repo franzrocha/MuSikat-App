@@ -27,7 +27,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
-  // final MusicHandler _musicHandler = locator<MusicHandler>();
+ 
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [

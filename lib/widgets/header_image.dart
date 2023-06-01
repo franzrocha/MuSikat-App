@@ -34,13 +34,13 @@ class HeaderImage extends StatelessWidget {
           }
         });
   }
-  
+
   Widget tempHeader(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 150,
-      decoration: BoxDecoration(
-        color: musikatBackgroundColor.withOpacity(0.5),
-          
+      width: double.infinity,
+      child: Container(
+        decoration: BoxDecoration(color: musikatColor4.withOpacity(0.5)),
       ),
     );
   }

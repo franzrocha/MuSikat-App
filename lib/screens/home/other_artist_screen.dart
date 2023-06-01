@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
-import 'package:musikat_app/controllers/getx_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
@@ -27,36 +26,24 @@ class ArtistsProfileScreen extends StatefulWidget {
 class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
   @override
   void dispose() {
-    Get.delete<ArtistDetailsController>();
+    Get.delete<FollowController>();
     super.dispose();
   }
 
   final SongsController _songCon = SongsController();
-  final FollowController _followCon = FollowController();
+  final FollowController _followCon = Get.put(FollowController());
+
   final currentUser = FirebaseAuth.instance.currentUser!.uid;
 
   final PlaylistController _playlistCon = PlaylistController();
   String get selectedUserUID => widget.selectedUserUID;
   UserModel? user;
   int followers = 0;
-  //int followingCount = 0;
   bool isFollowing = false;
 
   @override
-  void initState() {
-    UserModel.fromUid(uid: selectedUserUID).then((value) {
-      if (mounted) {
-        setState(() {
-          user = value;
-        });
-      }
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    Get.put(ArtistDetailsController());
+    // Get.put(FollowController());
     return Scaffold(
       appBar: CustomAppBar(
         showLogo: false,
@@ -74,6 +61,10 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
             },
             icon: const Icon(Icons.chat),
           ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.monetization_on),
+          ),
         ],
       ),
       backgroundColor: musikatBackgroundColor,
@@ -82,14 +73,14 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
             stream: UserModel.fromUidStream(uid: selectedUserUID),
             builder: (context, AsyncSnapshot<UserModel?> snapshot) {
               if (!snapshot.hasData || snapshot.data == null) {
-                return const Center(child: LoadingIndicator());
+                return Container();
               }
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: LoadingIndicator());
+                return Container();
               } else {
                 return SingleChildScrollView(
                   child: Column(children: [
@@ -102,20 +93,14 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                         ],
                       ),
                     ),
-                    Column(
-                      children: [
-                        usernameText(snapshot, isFollowing),
-                        fullnameText(snapshot),
-                        followings(),
-                        const SizedBox(height: 5),
-                        artistsButton(),
-                        const SizedBox(height: 10),
-                        Divider(
-                            height: 20,
-                            indent: 1.0,
-                            color: listileColor.withOpacity(0.4)),
-                      ],
-                    ),
+                    usernameText(snapshot, isFollowing),
+                    fullnameText(snapshot),
+                    followings(),
+                    artistsButton(),
+                    Divider(
+                        height: 20,
+                        indent: 1.0,
+                        color: listileColor.withOpacity(0.4)),
                     latestSong(),
                     topTracks(),
                     librarySongs(),
@@ -146,34 +131,28 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                 width: 130.0,
                 child: ElevatedButton(
                   onPressed: () async {
-                    setState(() {
-                      if (!selectedUserFollows) {
-                        _followCon.followUser(selectedUserUID);
-                        // Increment the followers count
-                        followers++;
-                      } else {
-                        _followCon.unfollowUser(selectedUserUID);
-                        // Decrement the followers count
-                        followers--;
-                      }
-                      // Update the isFollowing state variable
-                      isFollowing = !selectedUserFollows;
-                    });
+                    if (!selectedUserFollows) {
+                      _followCon.followUser(selectedUserUID);
+
+                      followers++;
+                    } else {
+                      _followCon.unfollowUser(selectedUserUID);
+
+                      followers--;
+                    }
+
+                    isFollowing = !selectedUserFollows;
                   },
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.resolveWith<Color>((states) {
                       if (states.contains(MaterialState.pressed)) {
-                        // Color when the button is pressed
                         return const Color.fromARGB(255, 0, 0, 0);
                       } else if (isFollowing) {
-                        // Color when the button is in "Unfollow" state
                         return Colors.grey;
                       } else if (selectedUserFollows) {
-                        // Color when the button is in "Follow" state but previously followed
                         return Colors.grey;
                       } else {
-                        // Color when the button is in "Follow" state and not previously followed
                         return const Color(0xfffca311);
                       }
                     }),
@@ -184,87 +163,85 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
-              return Container();
+              return const SizedBox(
+                width: 130.0,
+                child: ElevatedButton(child: null, onPressed: null),
+              );
             }
           },
-        ),
-        const SizedBox(width: 15.0),
-        SizedBox(
-          width: 130.0,
-          child: ElevatedButton(
-            onPressed: () {},
-            child: const Text('Support'),
-          ),
         ),
       ],
     );
   }
 
-  Padding followings() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-      child: Row(
-        children: [
-          StreamBuilder<List<String>>(
-            stream: _followCon.getUserFollowers(selectedUserUID).asStream(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container();
-              } else if (snapshot.hasData) {
-                final followersCount = snapshot.data!.length;
-                return Text(
-                  'Followers: $followersCount',
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13.0,
-                  ),
-                );
-              } else {
-                return const Text(
-                  'Followers: 0',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13.0,
-                  ),
-                );
-              }
-            },
-          ),
-          const SizedBox(width: 30.0),
-          StreamBuilder<List<String>>(
-            stream: _followCon.getUserFollowing(selectedUserUID).asStream(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container();
-              } else if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
-                final followingList = snapshot.data;
+  SizedBox followings() {
+    return SizedBox(
+      height: 35,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+        child: Row(
+          children: [
+            StreamBuilder<List<String>>(
+              stream: _followCon.getUserFollowers(selectedUserUID).asStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                } else if (snapshot.hasData) {
+                  final followersCount = snapshot.data!.length;
+                  return Text(
+                    'Followers: $followersCount',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  );
+                } else {
+                  return const Text(
+                    'Followers: 0',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  );
+                }
+              },
+            ),
+            const SizedBox(width: 30.0),
+            StreamBuilder<List<String>>(
+              stream: _followCon.getUserFollowing(selectedUserUID).asStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                } else if (snapshot.hasData &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  final followingList = snapshot.data;
 
-                final controller = Get.find<ArtistDetailsController>();
+                  final controller = Get.find<FollowController>();
 
-                controller.setSelectedArtistFollowsCurrentUser(
-                    currentUser, followingList!);
+                  controller.setSelectedArtistFollowsCurrentUser(
+                      currentUser, followingList!);
 
-                final followingCount = snapshot.data!.length;
-                return Text(
-                  'Following: $followingCount',
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13.0,
-                  ),
-                );
-              } else {
-                return const Text(
-                  'Following: 0',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13.0,
-                  ),
-                );
-              }
-            },
-          ),
-        ],
+                  final followingCount = snapshot.data!.length;
+                  return Text(
+                    'Following: $followingCount',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  );
+                } else {
+                  return const Text(
+                    'Following: 0',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -721,7 +698,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
   }
 
   Align usernameText(snapshot, bool isFollowing) {
-    final controller = Get.find<ArtistDetailsController>();
+    final controller = Get.find<FollowController>();
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
@@ -738,30 +715,26 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
-            const SizedBox(
-                width: 10), // Add a space between username and "Follows You"
+            const SizedBox(width: 10),
             Obx(
               () => controller.artistIsFollowingUser
                   ? Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[800], // background color
-                        borderRadius: BorderRadius.circular(5), // border radius
+                        color: Colors.grey[800],
+                        borderRadius: BorderRadius.circular(5),
                         border: Border.all(
-                          color: Colors.grey[
-                              800]!, // border color (same as background color)
-                          width: 1.0, // border width
+                          color: Colors.grey[800]!,
+                          width: 1.0,
                         ),
                       ),
                       child: SizedBox(
-                        width: 90, // Set a fixed width for the container
+                        width: 83,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0), // Add padding to the text
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
                             'Follows you',
                             style: GoogleFonts.inter(
-                              color: Colors.grey[300], // text color
+                              color: Colors.grey[300],
                               fontSize: 12,
                             ),
                           ),

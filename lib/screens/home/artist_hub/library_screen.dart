@@ -59,9 +59,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                               ),
                               Text(
                                 "No songs found in your library",
-                                style: GoogleFonts.inter(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
+                                style: shortThinStyle,
                               ),
                               const SizedBox(height: 40),
                               Container(
@@ -80,10 +78,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                   },
                                   child: Text(
                                     'Upload a file',
-                                    style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
+                                    style: buttonStyle,
                                   ),
                                 ),
                               ),
@@ -116,17 +111,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                       );
                                     });
                               },
-                              title: Text(
-                                song.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.inter(
-                                    color: Colors.white, fontSize: 16),
-                              ),
-                              subtitle: Text(song.artist,
-                                  style: GoogleFonts.inter(
-                                      color: Colors.white.withOpacity(0.5),
-                                      fontSize: 14)),
+                              title: Text(song.title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: songTitle),
+                              subtitle: Text(song.artist, style: songArtist),
                               leading: Container(
                                 width: 50,
                                 height: 50,

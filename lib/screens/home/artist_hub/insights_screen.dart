@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -83,9 +84,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     final SongModel song = songs[index];
                     return ListTile(
-                      // onTap: () {
-                      //   // Handle song tap
-                      // },
                       leading: Container(
                         width: 50,
                         height: 50,
@@ -102,33 +100,37 @@ class _InsightsScreenState extends State<InsightsScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: songTitle,
                       ),
-
-                      trailing: Row(
+                      subtitle: Row(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const FaIcon(
                             FontAwesomeIcons.play,
                             color: musikatColor2,
                             size: 15,
                           ),
-                          const SizedBox(width: 5),
-                          Text(
-                            song.playCount.toString(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 12),
+                          const SizedBox(width: 10),
+                          SizedBox(
+                            width: 50,
+                            child: Text(
+                              _formatNumber(song.playCount),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
+                            ),
                           ),
-                          const SizedBox(width: 20),
                           const FaIcon(
                             FontAwesomeIcons.solidHeart,
                             color: Colors.red,
                             size: 15,
                           ),
-                          const SizedBox(width: 5),
-                          Text(
-                            song.likeCount.toString(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 12),
+                          const SizedBox(width: 10),
+                          SizedBox(
+                            width: 50,
+                            child: Text(
+                              _formatNumber(song.likeCount),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
+                            ),
                           ),
                         ],
                       ),
@@ -155,7 +157,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [ 
+      mainAxisSize: MainAxisSize.min,
+      children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Text(
@@ -177,7 +180,10 @@ class _InsightsScreenState extends State<InsightsScreen> {
 
                 if (songs.isEmpty) {
                   return Center(
-                    child: Text('No songs found in your library.', style: shortThinStyle,),
+                    child: Text(
+                      'No songs found in your library.',
+                      style: shortThinStyle,
+                    ),
                   );
                 }
 
@@ -237,6 +243,9 @@ class _InsightsScreenState extends State<InsightsScreen> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
+              final NumberFormat numberFormat = NumberFormat('#,###');
+              final formattedStreams = numberFormat.format(snapshot.data);
+
               return ListTile(
                 title: Row(
                   children: [
@@ -244,7 +253,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text('${snapshot.data}', style: sloganStyle),
+                    Text(formattedStreams, style: sloganStyle),
                   ],
                 ),
               );
@@ -284,5 +293,14 @@ class _InsightsScreenState extends State<InsightsScreen> {
       ),
       backgroundColor: musikatBackgroundColor,
     );
+  }
+
+  String _formatNumber(int number) {
+    if (number >= 1000) {
+      final String formattedNumber = NumberFormat.compact().format(number);
+      return formattedNumber;
+    } else {
+      return number.toString();
+    }
   }
 }

@@ -123,15 +123,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: 120,
                                     height: 120,
                                     decoration: BoxDecoration(
-                                     boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(
-                                                  0.1), 
-                                              spreadRadius: 2,
-                                              blurRadius: 4,
-                                              offset: const Offset(0, 2),
-                                            ),
-                                          ],
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
                                       borderRadius: BorderRadius.circular(5),
                                       image: DecorationImage(
                                         image: CachedNetworkImageProvider(
@@ -141,13 +140,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Text(
-                                    song.title.length > 19
-                                        ? '${song.title.substring(0, 19)}..'
-                                        : song.title,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: titleStyle
-                                  ),
+                                      song.title.length > 19
+                                          ? '${song.title.substring(0, 19)}..'
+                                          : song.title,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: titleStyle),
                                   Text(
                                     song.artist,
                                     textAlign: TextAlign.left,
@@ -240,14 +238,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 120,
                                     decoration: BoxDecoration(
                                       boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(
-                                                  0.1), 
-                                              spreadRadius: 2,
-                                              blurRadius: 4,
-                                              offset: const Offset(0, 2),
-                                            ),
-                                          ],
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
                                       borderRadius: BorderRadius.circular(5),
                                       image: DecorationImage(
                                         image: CachedNetworkImageProvider(
@@ -264,11 +261,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     maxLines: 1,
                                     style: titleStyle,
                                   ),
-                                  Text(
-                                    song.artist,
-                                    textAlign: TextAlign.left,
-                                    style: artistStyle
-                                  ),
+                                  Text(song.artist,
+                                      textAlign: TextAlign.left,
+                                      style: artistStyle),
                                 ],
                               ),
                             ),
@@ -283,9 +278,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  StreamBuilder<List<UserModel>> artiststToLookOut() {
-    return StreamBuilder<List<UserModel>>(
-      stream: UserModel.getUsers().asStream(),
+  StreamBuilder<List<UserModel>?> artiststToLookOut() {
+    return StreamBuilder<List<UserModel>?>(
+      stream: _songCon.getUsersWithSongs().asStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           return const LoadingCircularContainer();
@@ -298,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return const LoadingCircularContainer();
         } else {
           List<UserModel> users = snapshot.data!;
-          Random random = Random(DateTime.now().day);
+          Random random = Random(DateTime.now().millisecondsSinceEpoch);
 
           users = users
               .where(
@@ -349,8 +344,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(
-                                                  0.1), 
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
                                               spreadRadius: 2,
                                               blurRadius: 4,
                                               offset: const Offset(0, 2),
@@ -518,8 +513,10 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingContainer();
           } else {
+            Random random = Random(DateTime.now().minute);
+
             final songs = snapshot.data!;
-            final randomSongs = songs..shuffle();
+            final randomSongs = songs..shuffle(random);
             final limitedSongs = randomSongs.take(5).toList();
 
             widget.musicHandler.randomSongs = limitedSongs;

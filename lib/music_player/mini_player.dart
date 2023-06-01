@@ -13,7 +13,7 @@ class MiniPlayer extends StatelessWidget {
 
   listenStateStream() {}
 
-  MusicHandler get _musicHandler => musicHandler;
+  // MusicHandler get musicHandler => musicHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -115,10 +115,10 @@ class MiniPlayer extends StatelessWidget {
                               colors: [
                                 Color(0xfffca311),
                                 Color(0xff62DD69),
-                              ], // Define your gradient colors here
+                              ], 
                             ),
                             borderRadius: BorderRadius.all(Radius.circular(
-                                110)), // Adjust the radius as needed
+                                110)),
                           ),
                           child: Material(
                             color: Colors.transparent,
@@ -133,7 +133,6 @@ class MiniPlayer extends StatelessWidget {
                                     musicHandler.player.play();
                                     musicHandler.setIsPlaying(true);
                                   } else {
-                                    // Play the first song or handle the case when no song is available
                                     if (musicHandler.currentSongs.isNotEmpty) {
                                       musicHandler
                                           .setAudioSource(
@@ -143,7 +142,7 @@ class MiniPlayer extends StatelessWidget {
                                         musicHandler.setIsPlaying(true);
                                       });
                                     } else {
-                                      // Handle the case when there are no songs in the currentSongs list
+                                      print("No songs available");
                                     }
                                   }
                                 }

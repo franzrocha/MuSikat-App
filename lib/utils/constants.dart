@@ -80,6 +80,11 @@ TextStyle songTitle = const TextStyle(
   fontSize: 14,
 );
 
+TextStyle songArtist = TextStyle(
+  color: Colors.white.withOpacity(0.5),
+  fontSize: 14,
+);
+
 TextStyle titleStyle = const TextStyle(
   fontFamily: 'Gotham',
   fontWeight: FontWeight.bold,

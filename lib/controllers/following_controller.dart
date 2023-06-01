@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:musikat_app/utils/exports.dart';
 
-class FollowController with ChangeNotifier {
-  // Method to follow a user
+class FollowController extends GetxController {
+  final selectedArtistFollowsCurrentUser = false.obs;
   void followUser(String userIdToFollow) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     final currentUserId = currentUser?.uid;
 
-    // Update the current user's followings list
     await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUserId)
@@ -16,7 +16,6 @@ class FollowController with ChangeNotifier {
       'followings': FieldValue.arrayUnion([userIdToFollow])
     });
 
-    // Update the target user's followers list
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userIdToFollow)
@@ -25,12 +24,10 @@ class FollowController with ChangeNotifier {
     });
   }
 
-  // Method to unfollow a user
   void unfollowUser(String userIdToUnfollow) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     final currentUserId = currentUser?.uid;
 
-    // Update the current user's followings list
     await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUserId)
@@ -38,7 +35,6 @@ class FollowController with ChangeNotifier {
       'followings': FieldValue.arrayRemove([userIdToUnfollow])
     });
 
-    // Update the target user's followers list
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userIdToUnfollow)
@@ -47,7 +43,6 @@ class FollowController with ChangeNotifier {
     });
   }
 
-  // Method to get a user's followers
   Future<List<String>> getUserFollowers(String selectedUserUID) async {
     final userSnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -60,7 +55,6 @@ class FollowController with ChangeNotifier {
     return followersList.cast<String>();
   }
 
-// Method to get a user's followings list
   Future<List<String>> getUserFollowing(String selectedUserUID) async {
     final userSnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -73,5 +67,13 @@ class FollowController with ChangeNotifier {
     return followingList.cast<String>();
   }
 
-// Method to get a user's followers and followings using UserModel
+  void setSelectedArtistFollowsCurrentUser(
+      String currentUser, List<String> selectedUserFollowings) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      selectedArtistFollowsCurrentUser.value =
+          selectedUserFollowings.contains(currentUser);
+    });
+  }
+
+  bool get artistIsFollowingUser => selectedArtistFollowsCurrentUser.value;
 }

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:musikat_app/controllers/following_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -24,6 +25,7 @@ class ArtistsHubScreen extends StatefulWidget {
 
 class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
   final SongsController _songCon = SongsController();
+  final FollowController _followCon = FollowController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
   UserModel? user;
@@ -64,6 +66,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                       usernameText(snapshot),
                       fullnameText(snapshot),
                       const SizedBox(height: 10),
+                      followings(),
                       Divider(
                           height: 20,
                           indent: 1.0,
@@ -234,7 +237,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                 latestSong.title.length > 25
                                     ? '${latestSong.title.substring(0, 25)}...'
                                     : latestSong.title,
-                                style: shortDefault,
+                                style: songTitle,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -322,9 +325,74 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
         child: Stack(
           children: [
             SizedBox(
-              width: 120,
+              width: 100,
               height: 120,
               child: AvatarImage(uid: FirebaseAuth.instance.currentUser!.uid),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SizedBox followings() {
+    return SizedBox(
+      height: 35,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+        child: Row(
+          children: [
+            StreamBuilder<List<String>>(
+              stream: _followCon.getUserFollowers(uid).asStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                } else if (snapshot.hasData) {
+                  final followersCount = snapshot.data!.length;
+                  return Text(
+                    'Followers: $followersCount',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  );
+                } else {
+                  return const Text(
+                    'Followers: 0',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  );
+                }
+              },
+            ),
+            const SizedBox(width: 30.0),
+            StreamBuilder<List<String>>(
+              stream: _followCon.getUserFollowing(uid).asStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                } else if (snapshot.hasData &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  final followingCount = snapshot.data!.length;
+                  return Text(
+                    'Following: $followingCount',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  );
+                } else {
+                  return const Text(
+                    'Following: 0',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

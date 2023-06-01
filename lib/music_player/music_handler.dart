@@ -67,7 +67,6 @@ class MusicHandler with ChangeNotifier, RouteAware {
         notifyListeners();
         await player.play();
       } else {
-        //await player.seek(Duration.zero);
         await player.play();
       }
 
@@ -81,7 +80,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
         await Future.delayed(const Duration(seconds: 5));
         await setAudioSource(song, uid);
       } else {
-        // rethrow;
+         await player.play();
       }
     }
   }

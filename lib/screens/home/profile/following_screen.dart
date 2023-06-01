@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -67,8 +68,6 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Text('Followers:', style: shortDefault),
-                  const SizedBox(height: 5),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: followersCount,
@@ -80,7 +79,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                             AsyncSnapshot<UserModel> snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return Container(); // Placeholder until user data is fetched
+                            return Container();
                           } else if (snapshot.hasError) {
                             return Text('Error: ${snapshot.error}');
                           } else {
@@ -96,15 +95,11 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                                             )));
                               },
                               child: ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(user.profileImage),
-                                ),
+                               leading: AvatarImage(uid: follower),
                                 title: Text(
                                   user.username,
                                   style: const TextStyle(
-                                    color: Colors
-                                        .white, // Set the text color to white
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -151,8 +146,6 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Text('Following:', style: shortDefault),
-                  const SizedBox(height: 5),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: followingCount,
@@ -164,7 +157,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                             AsyncSnapshot<UserModel> snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return Container(); // Placeholder until user data is fetched
+                            return Container();
                           } else if (snapshot.hasError) {
                             return Text('Error: ${snapshot.error}');
                           } else {
@@ -180,15 +173,11 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                                             )));
                               },
                               child: ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(user.profileImage),
-                                ),
+                               leading: AvatarImage(uid: followings),
                                 title: Text(
                                   user.username,
                                   style: const TextStyle(
-                                    color: Colors
-                                        .white, // Set the text color to white
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),

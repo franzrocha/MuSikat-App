@@ -90,7 +90,7 @@ class _GenresScreenState extends State<GenresScreen> {
       body: genres.isEmpty
           ? const Center(child: LoadingIndicator())
           : Scrollbar(
-            child: CustomScrollView(
+              child: CustomScrollView(
                 slivers: [
                   CustomSliverBar(
                     image: genrePic,
@@ -103,13 +103,12 @@ class _GenresScreenState extends State<GenresScreen> {
                           horizontal: 16.0, vertical: 16),
                       width: 400,
                       child: TextField(
-                        style:
-                            GoogleFonts.inter(color: Colors.white, fontSize: 13),
+                        style: GoogleFonts.inter(
+                            color: Colors.white, fontSize: 13),
                         controller: searchController,
                         onChanged: (_) => setState(() {}),
                         decoration: InputDecoration(
                           hintText: 'Search',
-                          fillColor: Colors.transparent,
                           hintStyle: GoogleFonts.inter(
                             color: Colors.grey,
                             fontSize: 13,
@@ -123,7 +122,7 @@ class _GenresScreenState extends State<GenresScreen> {
                     crossAxisCount: 2,
                     children: filteredGenres.map((genre) {
                       final gradient = getGenreGradient(genre);
-          
+
                       return GestureDetector(
                         onTap: () => _showGenreSongs(genre),
                         child: SizedBox(
@@ -165,7 +164,7 @@ class _GenresScreenState extends State<GenresScreen> {
                   ),
                 ],
               ),
-          ),
+            ),
     );
   }
 }
