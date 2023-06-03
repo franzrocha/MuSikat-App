@@ -43,7 +43,6 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(FollowController());
     return Scaffold(
       appBar: CustomAppBar(
         showLogo: false,
@@ -728,7 +727,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                         ),
                       ),
                       child: SizedBox(
-                        width: 83,
+                        width: 85,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(

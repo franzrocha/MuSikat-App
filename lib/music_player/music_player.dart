@@ -95,7 +95,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Stack(alignment: Alignment.center, children: [
-                  // Background Image
                   Container(
                     width: MediaQuery.of(context).size.width * 0.8,
                     height: MediaQuery.of(context).size.width * 0.8,
@@ -113,7 +112,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       ),
                     ),
                   ),
-                  // Blur Effect
+
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(

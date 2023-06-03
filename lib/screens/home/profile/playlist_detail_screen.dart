@@ -7,6 +7,7 @@ import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
+import 'package:musikat_app/screens/home/profile/add_to_playlist.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,15 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                   if (widget.playlist.uid ==
                       FirebaseAuth.instance.currentUser?.uid) ...{
                     IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.playlist_add))
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => AddToPlaylistScreen(
+                                playlist: widget.playlist,
+                              ),
+                            ),
+                          );
+                        }, icon: const Icon(Icons.playlist_add))
                   }
                 ],
                 children: [
