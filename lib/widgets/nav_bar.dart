@@ -27,7 +27,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
- 
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
@@ -93,25 +93,12 @@ class _NavBarState extends State<NavBar> {
                     size: 20,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ListeningHistoryScreen(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.history,
-                    size: 20,
-                  ),
-                ),
               ],
             ),
             const SizedBox(
               width: 5,
             ),
-          ],
+          ],  
         ),
         body: Stack(
           children: [

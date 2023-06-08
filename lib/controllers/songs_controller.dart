@@ -160,19 +160,21 @@ class SongsController with ChangeNotifier {
     return snapshot.docs.length;
   }
 
-  Future<List<SongModel>> getRankedSongs() async {
-    final QuerySnapshot snapshot = await _db
-        .collection('songs')
-        .orderBy('playCount', descending: true)
-        .get();
+Future<List<SongModel>> getRankedSongs() async {
+  final QuerySnapshot snapshot = await _db.collection('songs').get();
 
-    final List<SongModel> songs = snapshot.docs
-        .map((DocumentSnapshot documentSnapshot) =>
-            SongModel.fromDocumentSnap(documentSnapshot))
-        .toList();
+  final List<SongModel> songs = snapshot.docs
+      .map((DocumentSnapshot documentSnapshot) =>
+          SongModel.fromDocumentSnap(documentSnapshot))
+      .toList();
 
-    return songs;
-  }
+  songs.sort((a, b) =>
+      (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount));
+
+
+  return songs;
+}
+
 
   Future<int> getLikeSongCount() async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -237,7 +239,7 @@ class SongsController with ChangeNotifier {
     List<String> userIds = songs.map((song) => song.uid).toSet().toList();
 
     if (userIds.isEmpty) {
-      return null; // or handle the error in some other way
+      return null;
     }
 
     QuerySnapshot usersSnapshot = await _db

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
@@ -212,18 +213,25 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 30),
                             child: Container(
-                              height: 95,
-                              width: 95,
+                              height: 100,
+                              width: 100,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: NetworkImage(latestSong.albumCover),
+                                  image: CachedNetworkImageProvider(
+                                      latestSong.albumCover),
                                   fit: BoxFit.cover,
                                 ),
                                 color: Colors.grey.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Colors.grey.withOpacity(0.5),
-                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(
+                                        0.1),
+                                    spreadRadius: 2,
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.circular(5),
                               ),
                             ),
                           ),

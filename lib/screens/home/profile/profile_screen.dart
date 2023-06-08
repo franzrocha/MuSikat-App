@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
+import 'package:musikat_app/controllers/listening_history_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/screens/home/listening_history_screen.dart';
 import 'package:musikat_app/screens/home/profile/account_info.dart';
 import 'package:musikat_app/screens/home/profile/following_screen.dart';
 import 'package:musikat_app/screens/home/profile/liked_songs_screen.dart';
@@ -71,6 +73,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
+                  TileList(
+                  icon: Icons.history,
+                  title: 'Listening History',
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const ListeningHistoryScreen()),
+                    );
+                  },
+                ),
+                  TileList(
+                  icon: Icons.people,
+                  title: 'Followers/Following',
+                  ontap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const FollowingListScreen()),
+                    );
+                  },
+                ),
                 TileList(
                   icon: Icons.account_box,
                   title: 'Account Info',
@@ -81,16 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
-                TileList(
-                  icon: Icons.people,
-                  title: 'Followers/Following',
-                  ontap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => const FollowingListScreen()),
-                    );
-                  },
-                ),
+              
                 TileList(
                   icon: Icons.info,
                   title: 'About us',

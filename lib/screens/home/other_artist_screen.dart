@@ -215,9 +215,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                     snapshot.connectionState == ConnectionState.done) {
                   final followingList = snapshot.data;
 
-                  final controller = Get.find<FollowController>();
-
-                  controller.setSelectedArtistFollowsCurrentUser(
+                  _followCon.setSelectedArtistFollowsCurrentUser(
                       currentUser, followingList!);
 
                   final followingCount = snapshot.data!.length;
@@ -697,7 +695,6 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
   }
 
   Align usernameText(snapshot, bool isFollowing) {
-    final controller = Get.find<FollowController>();
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
@@ -716,7 +713,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
             ),
             const SizedBox(width: 10),
             Obx(
-              () => controller.artistIsFollowingUser
+              () => _followCon.artistIsFollowingUser
                   ? Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[800],

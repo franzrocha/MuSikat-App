@@ -165,11 +165,9 @@ class IndividualChatController with ChangeNotifier {
         await UserModel.fromUid(uid: FirebaseAuth.instance.currentUser!.uid);
 
     List<String> chatrooms =
-        user.chatrooms; // If user.chatrooms is null, use an empty list
-
+        user.chatrooms; 
     if (chatrooms.isEmpty) {
-      // Handle the case when chatrooms is empty or null
-      // For example, you can return an empty list or throw an exception
+ 
       return [];
     }
 
@@ -189,7 +187,7 @@ class IndividualChatController with ChangeNotifier {
   Stream<List<UserModel>> fetchChatroomsStream() async* {
     while (true) {
       await Future.delayed(
-          const Duration(seconds: 2)); // delay to simulate updates
+          const Duration(seconds: 2));
       List<UserModel> users = await fetchChatrooms();
 
       if (users.isNotEmpty) {

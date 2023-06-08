@@ -5,6 +5,7 @@ import 'package:musikat_app/utils/exports.dart';
 
 class FollowController extends GetxController {
   final selectedArtistFollowsCurrentUser = false.obs;
+
   void followUser(String userIdToFollow) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     final currentUserId = currentUser?.uid;

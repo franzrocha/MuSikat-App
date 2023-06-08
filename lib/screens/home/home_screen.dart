@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -403,9 +405,12 @@ class _HomeScreenState extends State<HomeScreen> {
             return const LoadingContainer();
           } else {
             final songs = snapshot.data!;
-            final limitedSongs = songs.take(5).toList();
-            widget.musicHandler.latestSong = songs;
+            final filteredSongs =
+                songs.where((song) => song.createdAt != null).toList();
+            final limitedSongs = filteredSongs.take(5).toList();
+            widget.musicHandler.latestSong = filteredSongs;
 
+            limitedSongs.shuffle(Random(DateTime.now().minute));
             return songs.isEmpty
                 ? const SizedBox.shrink()
                 : Column(
@@ -598,13 +603,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         Text(
-                                          song.title.length > 17
-                                              ? '${song.title.substring(0, 17)}..'
-                                              : song.title,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: titleStyle,
-                                        ),
+                                            song.title.length > 19
+                                                ? '${song.title.substring(0, 19)}..'
+                                                : song.title,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: titleStyle),
                                         Text(
                                           song.artist,
                                           textAlign: TextAlign.left,

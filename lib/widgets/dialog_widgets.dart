@@ -51,20 +51,20 @@ class UploadDialog extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                TextButton(
-                  onPressed: () {
-                    songService.cancelUpload();
-                    Navigator.of(context).pop();
-                  },
-                  style: ButtonStyle(
-                    overlayColor:
-                        MaterialStateProperty.all(Colors.grey.shade300),
-                  ),
-                  child: Text(
-                    'Cancel',
-                    style: GoogleFonts.inter(color: Colors.white),
-                  ),
-                ),
+                // TextButton(
+                //   onPressed: () {
+                //     songService.cancelUpload();
+                //     Navigator.of(context).pop();
+                //   },
+                //   style: ButtonStyle(
+                //     overlayColor:
+                //         MaterialStateProperty.all(Colors.grey.shade300),
+                //   ),
+                //   child: Text(
+                //     'Cancel',
+                //     style: GoogleFonts.inter(color: Colors.white),
+                //   ),
+                // ),
               ],
             );
           }
