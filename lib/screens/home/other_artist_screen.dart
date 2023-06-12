@@ -724,7 +724,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                         ),
                       ),
                       child: SizedBox(
-                        width: 85,
+                        width: 90,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(

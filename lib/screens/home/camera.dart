@@ -91,7 +91,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
         // Call the API with the download URL
         Uri apiUrl = Uri.parse(
-            'https://fcba-49-145-104-250.ngrok-free.app/?image=$downloadUrl');
+            'https://3944-2001-4454-39a-f600-311e-e230-f4b5-72fa.ngrok-free.app/?image=$downloadUrl');
         http.Response response = await http.get(apiUrl);
 
         if (response.statusCode == 200) {
@@ -427,6 +427,8 @@ class CameraResultScreen extends StatelessWidget {
         return '😢';
       case 'normal':
         return '😐';
+      case 'angry':
+        return '😡';
       default:
         return '';
     }

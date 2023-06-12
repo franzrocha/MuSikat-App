@@ -91,11 +91,13 @@ class SongsController with ChangeNotifier {
       emotion.addAll(happy);
     } else if (description == 'sad') {
       emotion.addAll(sad);
+    } else if (description == 'angry') {
+      emotion.addAll(angry);
     } else {
       emotion.addAll(normal);
     }
 
-    const chunkSize = 10;
+    const chunkSize = 5;
     final chunkedEmotions = <List<String>>[];
 
     for (var i = 0; i < emotion.length; i += chunkSize) {
@@ -160,21 +162,19 @@ class SongsController with ChangeNotifier {
     return snapshot.docs.length;
   }
 
-Future<List<SongModel>> getRankedSongs() async {
-  final QuerySnapshot snapshot = await _db.collection('songs').get();
+  Future<List<SongModel>> getRankedSongs() async {
+    final QuerySnapshot snapshot = await _db.collection('songs').get();
 
-  final List<SongModel> songs = snapshot.docs
-      .map((DocumentSnapshot documentSnapshot) =>
-          SongModel.fromDocumentSnap(documentSnapshot))
-      .toList();
+    final List<SongModel> songs = snapshot.docs
+        .map((DocumentSnapshot documentSnapshot) =>
+            SongModel.fromDocumentSnap(documentSnapshot))
+        .toList();
 
-  songs.sort((a, b) =>
-      (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount));
+    songs.sort((a, b) =>
+        (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount));
 
-
-  return songs;
-}
-
+    return songs;
+  }
 
   Future<int> getLikeSongCount() async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;

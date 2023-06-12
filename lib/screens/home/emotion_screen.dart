@@ -5,6 +5,8 @@ import 'package:musikat_app/utils/exports.dart';
 
 import '../../../music_player/music_player.dart';
 
+import 'dart:math';
+
 class EmotionDisplayScreen extends StatefulWidget {
   final String emotion;
 
@@ -40,7 +42,17 @@ class _EmotionDisplayScreenState extends State<EmotionDisplayScreen> {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else {
                   final descriptionSongs = snapshot.data!;
-                  return descriptionSongs.isEmpty
+
+                  // Limit the length of the list to 5
+                  final limitedSongs = descriptionSongs.length > 5
+                      ? descriptionSongs.sublist(0, 5)
+                      : descriptionSongs;
+
+                  // Randomize the songs
+                  final random = Random();
+                  limitedSongs.shuffle(random);
+
+                  return limitedSongs.isEmpty
                       ? Center(
                           child: Text(
                             "No songs found related \nto $description yet.",
@@ -53,9 +65,9 @@ class _EmotionDisplayScreenState extends State<EmotionDisplayScreen> {
                           ),
                         )
                       : ListView.builder(
-                          itemCount: descriptionSongs.length,
+                          itemCount: limitedSongs.length,
                           itemBuilder: (context, index) {
-                            final song = descriptionSongs[index];
+                            final song = limitedSongs[index];
                             return ListTile(
                               leading: Container(
                                 width: 50,

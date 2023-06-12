@@ -50,7 +50,6 @@ final List<String> sad = [
 final List<String> normal = [
   'normal',
   'confusing',
-  'angry',
   'introspective',
   'mysterious',
   'funky',
@@ -64,19 +63,25 @@ final List<String> normal = [
   'serene',
   'hypnotic',
   'reflective',
-  'intense',
   'bold',
   'yearning',
   'explosive',
   'cinematic',
   'captivating',
-  'enigmatic',
   'vibrant',
   'heavy',
-  'gritty',
   'experimental',
   'soulful',
-  'passionate',
   'sexy',
   'tender'
+];
+
+final List<String> angry = [
+  'enigmatic',
+  'intense',
+  'explosive',
+  'passionate',
+  'gritty',
+  'seething',
+  'angry',
 ];
