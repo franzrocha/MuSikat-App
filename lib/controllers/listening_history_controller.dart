@@ -106,37 +106,41 @@ class ListeningHistoryController with ChangeNotifier {
 
   Future<List<SongModel>> getRecommendedSongs() async {
     try {
-      // Retrieve the list of recently played songs for the current user
       final List<SongModel> recentlyPlayed = await getListeningHistory();
 
       if (recentlyPlayed.isEmpty) {
-        // If there are no recently played songs, return an empty list
         return [];
       }
 
-      // Extract the genres or artists of the recently played songs
       final List<String> categories = [];
       for (final song in recentlyPlayed) {
         categories.add(song.genre);
       }
 
-      // Query for similar songs based on the extracted genres or artists
       final SongsController songsController = SongsController();
-      Query query = FirebaseFirestore.instance.collection('songs');
-      query = query.where('genre', whereIn: categories);
-      print(categories);
-
-      final QuerySnapshot querySnapshot = await query.get();
-      print(querySnapshot.docs.length);
-
-      // Convert the query results to a list of SongModel objects
       final List<SongModel> recommendedSongs = [];
-      for (final doc in querySnapshot.docs) {
-        final song = await songsController.getSongById(doc.id);
-        recommendedSongs.add(song);
+
+      const int chunkSize = 10;
+      final int numChunks = (categories.length / chunkSize).ceil();
+
+      for (int i = 0; i < numChunks; i++) {
+        final List<String> chunk = categories.sublist(
+            i * chunkSize,
+            (i + 1) * chunkSize > categories.length
+                ? categories.length
+                : (i + 1) * chunkSize);
+
+        Query query = FirebaseFirestore.instance.collection('songs');
+        query = query.where('genre', whereIn: chunk);
+
+        final QuerySnapshot querySnapshot = await query.get();
+
+        for (final doc in querySnapshot.docs) {
+          final song = await songsController.getSongById(doc.id);
+          recommendedSongs.add(song);
+        }
       }
 
-      // Shuffle the recommended songs and take the first 5
       recommendedSongs.shuffle();
       final List<SongModel> limitedRecommendedSongs =
           recommendedSongs.take(5).toList();

@@ -146,7 +146,7 @@ class ChatMessage {
         .collection("chats")
         .doc(chatroom)
         .collection('messages')
-        .doc(uid) //edited
+        .doc(uid) 
         .update({'isDeleted': true});
   }
 }

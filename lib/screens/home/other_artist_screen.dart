@@ -112,66 +112,73 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
     );
   }
 
-  Row artistsButton() {
-    return Row(
-      children: [
-        const SizedBox(width: 30.0),
-        StreamBuilder<List<String>>(
-          stream: _followCon.getUserFollowing(currentUser).asStream(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container();
-            } else if (snapshot.hasData) {
-              final followingList = snapshot.data;
-              final selectedUserFollows =
-                  followingList?.contains(selectedUserUID) ?? false;
+ Row artistsButton() {
+  return Row(
+    children: [
+      const SizedBox(width: 30.0),
+      FutureBuilder<List<String>>(
+        future: _followCon.getUserFollowing(currentUser),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox(
+              width: 130.0,
+              child: ElevatedButton(
+                onPressed: null,
+                child: null,
+              ),
+            );
+          } else if (snapshot.hasData) {
+            final followingList = snapshot.data;
+            final selectedUserFollows =
+                followingList?.contains(selectedUserUID) ?? false;
 
-              return SizedBox(
-                width: 130.0,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (!selectedUserFollows) {
-                      _followCon.followUser(selectedUserUID);
+            return SizedBox(
+              width: 130.0,
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (!selectedUserFollows) {
+                    _followCon.followUser(selectedUserUID);
+                    followers++;
+                  } else {
+                    _followCon.unfollowUser(selectedUserUID);
+                    followers--;
+                  }
 
-                      followers++;
-                    } else {
-                      _followCon.unfollowUser(selectedUserUID);
-
-                      followers--;
-                    }
-
+                  setState(() {
                     isFollowing = !selectedUserFollows;
-                  },
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.resolveWith<Color>((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return const Color.fromARGB(255, 0, 0, 0);
-                      } else if (isFollowing) {
-                        return Colors.grey;
-                      } else if (selectedUserFollows) {
-                        return Colors.grey;
-                      } else {
-                        return const Color(0xfffca311);
-                      }
-                    }),
-                  ),
-                  child: Text(selectedUserFollows ? 'Unfollow' : 'Follow'),
+                  });
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.resolveWith<Color>((states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return const Color.fromARGB(255, 0, 0, 0);
+                    } else if (isFollowing) {
+                      return Colors.grey;
+                    } else if (selectedUserFollows) {
+                      return Colors.grey;
+                    } else {
+                      return const Color(0xfffca311);
+                    }
+                  }),
                 ),
-              );
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              return const SizedBox(
-                width: 130.0,
-                child: ElevatedButton(child: null, onPressed: null),
-              );
-            }
-          },
-        ),
-      ],
-    );
-  }
+                child: Text(selectedUserFollows ? 'Unfollow' : 'Follow'),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            return const SizedBox(
+              width: 130.0,
+              child: ElevatedButton(child: null, onPressed: null),
+            );
+          }
+        },
+      ),
+    ],
+  );
+}
+
 
   SizedBox followings() {
     return SizedBox(

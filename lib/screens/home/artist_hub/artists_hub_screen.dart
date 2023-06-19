@@ -289,7 +289,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
           style: shortDefaultGrey,
         ),
       ),
-    );
+    );    
   }
 
   Positioned editButton(snapshot) {

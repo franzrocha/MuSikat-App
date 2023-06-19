@@ -90,4 +90,32 @@ class PlaylistController with ChangeNotifier {
 
     await playlistRef.update(playlist.json);
   }
+
+
+ Future<int> getOwnedSongCount(String userId, String songId) async {
+  try {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('playlists')
+        .where('uid', isEqualTo: userId)
+        .get();
+
+    int count = 0;
+
+    for (DocumentSnapshot doc in snapshot.docs) {
+      PlaylistModel playlist = PlaylistModel.fromDocumentSnap(doc);
+
+      if (playlist.songs.contains(songId)) {
+        count++;
+      }
+    }
+
+    return count;
+  } catch (e) {
+    print('Error retrieving owned song count: $e');
+    return 0;
+  }
+}
+
+
+
 }

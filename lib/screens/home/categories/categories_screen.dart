@@ -27,7 +27,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           child: Center(
             child: Column(
               children: [
-                GestureDetector(
+                CategoryCard(
+                  image: genrePic,
+                  text: 'genres',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -36,12 +38,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       ),
                     );
                   },
-                  child: CategoryCard(
-                    image: genrePic,
-                    text: 'genres',
-                  ),
                 ),
-                GestureDetector(
+                CategoryCard(
+                  image: languagePic,
+                  text: 'languages',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -50,12 +50,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       ),
                     );
                   },
-                  child: CategoryCard(
-                    image: languagePic,
-                    text: 'languages',
-                  ),
                 ),
-                GestureDetector(
+                CategoryCard(
+                  image: moodPic,
+                  text: 'moods',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -64,10 +62,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       ),
                     );
                   },
-                  child: CategoryCard(
-                    image: moodPic,
-                    text: 'moods',
-                  ),
                 ),
               ],
             ),

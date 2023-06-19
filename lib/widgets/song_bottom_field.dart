@@ -214,7 +214,8 @@ class _SongBottomFieldState extends State<SongBottomField> {
         Navigator.pop(context);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => EditMetadataScreen(songs: widget.song)),
+          MaterialPageRoute(
+              builder: (context) => EditMetadataScreen(songs: widget.song)),
         );
       },
     );

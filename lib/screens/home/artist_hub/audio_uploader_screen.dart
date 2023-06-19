@@ -615,8 +615,8 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
         ),
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-              color: Colors.grey, // add the desired color
-              width: 0.5 // add the desired width
+              color: Colors.grey,
+              width: 0.5 
               ),
         ),
         suffixIcon: IconButton(

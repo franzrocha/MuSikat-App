@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
 import 'package:musikat_app/models/user_model.dart';

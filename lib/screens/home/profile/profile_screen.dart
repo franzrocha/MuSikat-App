@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/auth_controller.dart';
-import 'package:musikat_app/controllers/listening_history_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/listening_history_screen.dart';
 import 'package:musikat_app/screens/home/profile/account_info.dart';

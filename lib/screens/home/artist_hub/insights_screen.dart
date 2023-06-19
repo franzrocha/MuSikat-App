@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/screens/home/artist_hub/song_charts.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -19,6 +19,7 @@ class InsightsScreen extends StatefulWidget {
 
 class _InsightsScreenState extends State<InsightsScreen> {
   final SongsController _songCon = SongsController();
+  final PlaylistController _playCon = PlaylistController();
   UserModel? user;
 
   @override
@@ -110,6 +111,15 @@ class _InsightsScreenState extends State<InsightsScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     final SongModel song = songs[index];
                     return ListTile(
+                      // onTap: () {
+                      //   Navigator.of(context).push(
+                      //     MaterialPageRoute(
+                      //       builder: (context) => PlaylistCount(
+                      //         selectedSong: song.songId,
+                      //       ),
+                      //     ),
+                      //   );
+                      // },
                       leading: Container(
                         width: 50,
                         height: 50,
@@ -158,6 +168,31 @@ class _InsightsScreenState extends State<InsightsScreen> {
                                   color: Colors.white, fontSize: 12),
                             ),
                           ),
+                          const Icon(
+                            Icons.playlist_play,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 10),
+                          SizedBox(
+                              width: 50,
+                              child: FutureBuilder(
+                                  future: _playCon.getOwnedSongCount(
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                      song.songId),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<int> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Container();
+                                    } else {
+                                      return Text(
+                                        snapshot.data.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      );
+                                    }
+                                  }))
                         ],
                       ),
                     );
@@ -267,7 +302,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     return Text(
                       'Error: ${snapshot.error}',
                       style: const TextStyle(
-                        color: Colors.white, // Set text color to white
+                        color: Colors.white,
                       ),
                     );
                   } else {

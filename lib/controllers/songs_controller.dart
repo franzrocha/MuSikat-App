@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -48,22 +47,7 @@ class SongsController with ChangeNotifier {
 
       if (songSnapshot.exists) {
         print('Deleting song $songId');
-        // delete the song document from the songs collection
         await songRef.delete();
-
-        // delete the song file from Firebase Storage
-        final Map<String, dynamic> songData =
-            songSnapshot.data() as Map<String, dynamic>;
-        final String audioUrl = songData['audio'];
-        final String albumCoverUrl = songData['album_cover'];
-
-        final Reference audioRef =
-            FirebaseStorage.instance.refFromURL(audioUrl);
-        final Reference albumCoverRef =
-            FirebaseStorage.instance.refFromURL(albumCoverUrl);
-
-        await audioRef.delete();
-        await albumCoverRef.delete();
       }
       notifyListeners();
     } catch (e) {
