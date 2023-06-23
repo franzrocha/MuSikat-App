@@ -10,7 +10,6 @@ import 'package:musikat_app/screens/home/artist_hub/library_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
-
 import '../../../music_player/music_handler.dart';
 
 class ArtistsHubScreen extends StatefulWidget {

@@ -61,7 +61,6 @@ class SongDisplay extends StatelessWidget {
                             hideRemoveToPlaylist: true,
                           ),
                         );
-                      
                       },
                     );
                   },
@@ -157,16 +156,15 @@ class ArtistDisplay extends StatelessWidget {
                       Column(
                         children: [
                           InkWell(
-                            onTap: () 
-                               {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ArtistsProfileScreen(
-                                                      selectedUserUID: user.uid,
-                                                    )));
-                               },
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ArtistsProfileScreen(
+                                            selectedUserUID: user.uid,
+                                          )));
+                            },
                             child: Container(
                               width: 120,
                               height: 120,

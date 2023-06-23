@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
@@ -9,7 +8,6 @@ import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
-
 import '../../controllers/user_search_history_logs.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -44,14 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
         RecentHistoryUserSearchLogs()
             .deleteHistoryLogs(listRecentSearch[index].uid);
         listRecentSearch.removeAt(index);
-        Fluttertoast.showToast(
-            msg: "Deleted record successfully",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            textColor: Colors.white,
-            fontSize: 16.0);
-
+       ToastMessage.show(context, 'Deleted successfully.');
         if (lengthValue == 1) {
           isDeleted = true;
         } else {
@@ -217,13 +208,18 @@ class _SearchScreenState extends State<SearchScreen> {
           List<RecentLogsModel> listRecentSearch = snapshot.data!;
           return SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Recent List',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Text(
+                    'Recent Searches',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
                 ),
                 ListView.builder(
                   shrinkWrap: true,
@@ -263,13 +259,11 @@ class _SearchScreenState extends State<SearchScreen> {
                         onTap: () {
                           getStateHandler(listRecentSearch, index, counter);
                         },
-                        child: Text(
-                          'X',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 15,
+                        child: const Icon(
+                          FontAwesomeIcons.xmark,
+                          color: Colors.white,
                           ),
-                        ),
+                        
                       ),
                     );
                   },
@@ -357,7 +351,6 @@ class _SearchScreenState extends State<SearchScreen> {
                           songs: songSearchResult
                               .where((s) => s.songId == song.songId)
                               .toList(),
-                          recommendedSongs: [],
                         ),
                         settings: const RouteSettings(),
                       ),

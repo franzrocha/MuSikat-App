@@ -66,6 +66,8 @@ class PlaylistService {
         description: playlistDescription,
         playlistImg: playlistImg,
         songs: [],
+        isOfficial: false,
+        genre: 'none',
       );
 
       // Convert the PlaylistModel to a JSON object

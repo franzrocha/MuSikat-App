@@ -35,6 +35,32 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
           return Scaffold(
             resizeToAvoidBottomInset: true,
             backgroundColor: musikatBackgroundColor,
+            appBar: CustomAppBar(
+                showLogo: false,
+                title: Text(
+                  'Messages',
+                  style: appBarStyle,
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          FadeRoute(
+                            page: const GlobalChatScreen(),
+                            settings: const RouteSettings(),
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Colors.transparent,
+                        child: Image.asset("assets/images/musikat_global.png"),
+                      ),
+                    ),
+                  ),
+                ]),
             body: RefreshIndicator(
               onRefresh: () async {
                 setState(() {});
@@ -42,20 +68,6 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Messages',
-                            style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          )),
-                    ),
-                    globalChat(context),
                     chatList(),
                   ],
                 ),
@@ -87,7 +99,6 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
               ),
             );
           } else {
-            // Rest of your code for displaying the chat list
 
             return snapshot.data!.isEmpty
                 ? const Center(
@@ -128,36 +139,5 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                   );
           }
         });
-  }
-
-  Padding globalChat(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3.0),
-      child: ListTile(
-        onTap: () => {
-          Navigator.of(context).push(
-            FadeRoute(
-              page: const GlobalChatScreen(),
-              settings: const RouteSettings(),
-            ),
-          )
-        },
-        leading: FittedBox(
-          child: CircleAvatar(
-            radius: 18,
-            backgroundColor: Colors.transparent,
-            child: Image.asset("assets/images/musikat_global.png"),
-          ),
-        ),
-        title: Text(
-          "Global Chat",
-          style: GoogleFonts.inter(
-            color: Colors.white,
-            // fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
-        ),
-      ),
-    );
   }
 }

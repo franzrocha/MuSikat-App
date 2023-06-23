@@ -97,7 +97,7 @@ class _EmotionDisplayScreenState extends State<EmotionDisplayScreen> {
                                       builder: (context) => MusicPlayerScreen(
                                             songs: descriptionSongs,
                                             initialIndex: index,
-                                            recommendedSongs: [],
+                                          
                                           )),
                                 );
                               },

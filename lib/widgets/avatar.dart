@@ -39,7 +39,7 @@ class AvatarImage extends StatelessWidget {
       child: CircleAvatar(
         radius: radius,
         backgroundColor: Colors.white24,
-        child: const Icon(Icons.person, color: Colors.white),
+        child: const Icon(Icons.person, color: Colors.white, size: 18,),
       ),
       
     );

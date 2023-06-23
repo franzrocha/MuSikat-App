@@ -43,7 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
             newReleases(),
             popularTracks(),
             artiststToLookOut(),
-            categories(),
             basedOnLikedSongs(),
             basedOnListeningHistory(),
             const SizedBox(height: 120),

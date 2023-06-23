@@ -52,7 +52,7 @@ class MiniPlayer extends StatelessWidget {
                         builder: (context) => MusicPlayerScreen(
                           songs: musicHandler.currentSongs,
                           initialIndex: musicHandler.currentIndex,
-                          recommendedSongs: [],
+                          
                         ),
                       ),
                     );

@@ -100,7 +100,7 @@ class _ListeningHistoryScreenState extends State<ListeningHistoryScreen> {
                                   builder: (context) => MusicPlayerScreen(
                                     songs: recentlyPlayed,
                                     initialIndex: index,
-                                    recommendedSongs: [],
+                                   
                                   ),
                                 ),
                               );

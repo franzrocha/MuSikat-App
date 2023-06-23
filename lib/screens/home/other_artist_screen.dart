@@ -406,7 +406,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                                     builder: (context) => MusicPlayerScreen(
                                           songs: songs,
                                           initialIndex: songs.indexOf(song),
-                                          recommendedSongs: [],
+                                         
                                         )),
                               ),
                               onLongPress: () {
@@ -527,7 +527,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                                         builder: (context) => MusicPlayerScreen(
                                               songs: songs,
                                               initialIndex: index,
-                                              recommendedSongs: [],
+                                            
                                             )),
                                   );
                                 },
@@ -629,7 +629,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                             MaterialPageRoute(
                               builder: (context) => MusicPlayerScreen(
                                 songs: [latestSong],
-                                recommendedSongs: [],
+                               
                               ),
                             ),
                           );

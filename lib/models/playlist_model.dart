@@ -6,6 +6,8 @@ class PlaylistModel {
   List<String> songs;
   String? description;
   final String playlistImg;
+  bool isOfficial;
+  String genre;
 
   PlaylistModel({
     required this.playlistId,
@@ -15,6 +17,8 @@ class PlaylistModel {
     required this.uid,
     this.description,
     required this.playlistImg,
+    required this.isOfficial,
+    required this.genre,
   });
 
   static PlaylistModel fromDocumentSnap(DocumentSnapshot snap) {
@@ -28,6 +32,8 @@ class PlaylistModel {
       createdAt: json['createdAt']?.toDate() ?? DateTime.now(),
       songs: (json['songs'] as List<dynamic>?)?.cast<String>() ?? [],
       uid: json['uid'] ?? '',
+      isOfficial: json['isOfficial'] ?? false,
+      genre: json['genre'] ?? '',
     );
   }
 
@@ -39,7 +45,11 @@ class PlaylistModel {
         'createdAt': createdAt,
         'songs': songs,
         'uid': uid,
+        'isOfficial': isOfficial,
+        'genre': genre,
       };
+}
+
 
 //   static Future<List<PlaylistModel>> getPlaylists() async {
 //     List<PlaylistModel> playlists = [];
@@ -60,4 +70,4 @@ class PlaylistModel {
 //     String lowerCaseTitle = title.toLowerCase();
 //     return lowerCaseTitle.contains(lowerCaseQuery);
 //   }
-}
+
