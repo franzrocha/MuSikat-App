@@ -19,22 +19,15 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-//this code is to complicated to understand cuz you ned to know different between stateless and statefull widget and how to lifting up the state fron children to the parent
-//Cuz without it you may get a problem for updating the value in the user interface
-
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textCon = TextEditingController();
   Future<List<SongModel>>? getSongs;
   Future<List<UserModel>>? getUsers;
-  //this is the model set in  recent model section
   Future<List<RecentLogsModel>>? listRecentSearch;
   Future<int>? recentLogLength;
 
-  // final SongsController _songCon = SongsController();
-
   UserModel? user;
 
-  //state set
   bool isDeleted = false;
   int counter = 0;
 
@@ -46,12 +39,10 @@ class _SearchScreenState extends State<SearchScreen> {
     listRecentSearch ??= RecentHistoryUserSearchLogs().getHistoryLogs();
     recentLogLength ??= RecentHistoryUserSearchLogs().getLengthRecord();
 
-    //delete recent specific user
     void getStateHandler(listRecentSearch, index, lengthValue) {
       setState(() {
         RecentHistoryUserSearchLogs()
             .deleteHistoryLogs(listRecentSearch[index].uid);
-        // Remove the corresponding value from the array
         listRecentSearch.removeAt(index);
         Fluttertoast.showToast(
             msg: "Deleted record successfully",
@@ -69,7 +60,6 @@ class _SearchScreenState extends State<SearchScreen> {
       });
     }
 
-    //this code used when you tap the list tile for the recent logs search
     void getStateTextInput(String value) {
       setState(() {
         _textCon.text = value;
@@ -98,7 +88,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 List<UserModel> userSearchResult = [];
                 List<SongModel> songSearchResult = [];
 
-                //converted the number ro string to prevent null values error
                 String lengthRecordLog = snapshot.data![2].toString();
 
                 if (_textCon.text.isNotEmpty) {
@@ -192,9 +181,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     return showResults(combinedResults, songSearchResult);
                   }
                 } else {
-                  //this code start the recent log search history logic that I told on upper part of this code
-                  //the counter state default to the length record in the firebase store that we coded in user search history controller
-
                   if (counter == 0) {
                     counter = int.parse(lengthRecordLog);
                   }
@@ -214,12 +200,6 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
-
-  //this code for ui of tile list in recent log search history
-  //to understand this code you need to understand how markup this language works like how column and rows
-  //We use Future builder cus We define our state as asynchronous method that why Future builder used instead list builder
-  //ListView handled scrollable effect that why we use listview instead card or column
-  //this code is generated  list of our item that define in the getHistoryLogs in user search history logs controller
 
   FutureBuilder<List<RecentLogsModel>> recentHistory(
       Future<List<RecentLogsModel>> listRecentSearch,
@@ -252,14 +232,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       onTap: () {
-                        //callback for getting new search input
                         getStateTextInput(listRecentSearch[index].recentList);
                       },
-                      // leading: CircleAvatar(
-                      //   backgroundColor: Colors.blue,
-                      //   maxRadius: 30,
-                      //   child: NetworkImage(listRecentSearch[index].uploadedPhoto),
-                      // ),
                       leading: Container(
                         width: 50,
                         height: 50,
@@ -287,7 +261,6 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                       trailing: GestureDetector(
                         onTap: () {
-                          //callback for deleting record
                           getStateHandler(listRecentSearch, index, counter);
                         },
                         child: Text(
