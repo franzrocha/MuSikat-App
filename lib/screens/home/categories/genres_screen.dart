@@ -243,6 +243,7 @@ class GenreSongsScreen extends StatelessWidget {
                                       builder: (context) => MusicPlayerScreen(
                                             songs: genreSongs,
                                             initialIndex: index,
+                                            recommendedSongs: [],
                                           )),
                                 );
                               },

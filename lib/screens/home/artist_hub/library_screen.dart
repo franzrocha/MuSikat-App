@@ -96,6 +96,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                     builder: (context) => MusicPlayerScreen(
                                           songs: songs,
                                           initialIndex: index,
+                                          recommendedSongs: [],
                                         )),
                               ),
                               onLongPress: () {

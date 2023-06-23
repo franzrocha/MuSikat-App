@@ -23,6 +23,7 @@ class MusicPlayerScreen extends StatefulWidget {
     this.emotion,
     this.initialIndex,
     required this.songs,
+    required List<SongModel> recommendedSongs,
   }) : super(key: key);
 
   @override

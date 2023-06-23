@@ -98,8 +98,10 @@ class _ListeningHistoryScreenState extends State<ListeningHistoryScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => MusicPlayerScreen(
-                                      songs: recentlyPlayed,
-                                      initialIndex: index),
+                                    songs: recentlyPlayed,
+                                    initialIndex: index,
+                                    recommendedSongs: [],
+                                  ),
                                 ),
                               );
                             },

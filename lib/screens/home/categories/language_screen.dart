@@ -90,7 +90,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
       body: languages.isEmpty
           ? const Center(child: LoadingIndicator())
           : Scrollbar(
-            child: CustomScrollView(
+              child: CustomScrollView(
                 slivers: [
                   CustomSliverBar(
                     image: languagePic,
@@ -104,8 +104,8 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
                           horizontal: 16.0, vertical: 16),
                       width: 400,
                       child: TextField(
-                        style:
-                            GoogleFonts.inter(color: Colors.white, fontSize: 13),
+                        style: GoogleFonts.inter(
+                            color: Colors.white, fontSize: 13),
                         controller: searchController,
                         onChanged: (_) => setState(() {}),
                         decoration: InputDecoration(
@@ -124,7 +124,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
                     crossAxisCount: 2,
                     children: filteredLanguages.map((language) {
                       final gradient = getLanguageGradient(language);
-          
+
                       return GestureDetector(
                           onTap: () => _showLanguageSongs(language),
                           child: SizedBox(
@@ -134,8 +134,8 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
                               padding: const EdgeInsets.all(16.0),
                               decoration: BoxDecoration(
                                 gradient: gradient,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20.0)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20.0)),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black,
@@ -165,7 +165,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
                   ),
                 ],
               ),
-          ),
+            ),
     );
   }
 }
@@ -243,6 +243,7 @@ class LanguageSongsScreen extends StatelessWidget {
                                       builder: (context) => MusicPlayerScreen(
                                             songs: languageSongs,
                                             initialIndex: index,
+                                            recommendedSongs: [],
                                           )),
                                 );
                               },

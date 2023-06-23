@@ -158,6 +158,7 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                                         builder: (context) => MusicPlayerScreen(
                                           songs: songs,
                                           initialIndex: index,
+                                          recommendedSongs: [],
                                         ),
                                       ),
                                     );

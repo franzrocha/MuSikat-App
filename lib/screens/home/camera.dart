@@ -376,6 +376,7 @@ class CameraResultScreen extends StatelessWidget {
                             songs: songs,
                             emotion: emotion,
                             initialIndex: randomIndex,
+                            recommendedSongs: [],
                           ),
                         ),
                       );

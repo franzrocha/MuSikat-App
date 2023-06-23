@@ -78,6 +78,7 @@ class _LikedSongsScreenState extends State<LikedSongsScreen> {
                                       builder: (context) => MusicPlayerScreen(
                                             songs: likedSongs,
                                             initialIndex: index,
+                                            recommendedSongs: [],
                                           )),
                                 );
                               },

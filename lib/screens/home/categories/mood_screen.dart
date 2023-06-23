@@ -91,7 +91,7 @@ class _MoodsScreenState extends State<MoodsScreen> {
       body: moods.isEmpty
           ? const Center(child: LoadingIndicator())
           : Scrollbar(
-            child: CustomScrollView(
+              child: CustomScrollView(
                 slivers: [
                   CustomSliverBar(
                     image: moodPic,
@@ -104,8 +104,8 @@ class _MoodsScreenState extends State<MoodsScreen> {
                           horizontal: 16.0, vertical: 16),
                       width: 400,
                       child: TextField(
-                        style:
-                            GoogleFonts.inter(color: Colors.white, fontSize: 13),
+                        style: GoogleFonts.inter(
+                            color: Colors.white, fontSize: 13),
                         controller: searchController,
                         onChanged: (_) => setState(() {}),
                         decoration: InputDecoration(
@@ -124,7 +124,7 @@ class _MoodsScreenState extends State<MoodsScreen> {
                     crossAxisCount: 2,
                     children: filteredMoods.map((moods) {
                       final gradient = getMoodGradient(moods);
-          
+
                       return GestureDetector(
                           onTap: () => _showMoodSongs(moods),
                           child: SizedBox(
@@ -134,8 +134,8 @@ class _MoodsScreenState extends State<MoodsScreen> {
                               padding: const EdgeInsets.all(16.0),
                               decoration: BoxDecoration(
                                 gradient: gradient,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20.0)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20.0)),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black,
@@ -165,7 +165,7 @@ class _MoodsScreenState extends State<MoodsScreen> {
                   ),
                 ],
               ),
-          ),
+            ),
     );
   }
 }
@@ -243,6 +243,7 @@ class DescriptionSongsScreen extends StatelessWidget {
                                       builder: (context) => MusicPlayerScreen(
                                             songs: descriptionSongs,
                                             initialIndex: index,
+                                            recommendedSongs: [],
                                           )),
                                 );
                               },

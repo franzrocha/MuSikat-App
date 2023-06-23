@@ -50,8 +50,10 @@ class MiniPlayer extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => MusicPlayerScreen(
-                            songs: musicHandler.currentSongs,
-                            initialIndex: musicHandler.currentIndex),
+                          songs: musicHandler.currentSongs,
+                          initialIndex: musicHandler.currentIndex,
+                          recommendedSongs: [],
+                        ),
                       ),
                     );
                   },
