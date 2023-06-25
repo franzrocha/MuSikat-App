@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
@@ -203,6 +204,100 @@ class ArtistDisplay extends StatelessWidget {
                 );
               }).toList(),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PlaylistDisplay extends StatelessWidget {
+  final String slogan;
+  final List<PlaylistModel> playlists;
+  final Function(PlaylistModel) onTap;
+
+  const PlaylistDisplay({
+    super.key,
+    required this.playlists,
+    required this.onTap,
+    required this.slogan,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 25, bottom: 10),
+            child: Container(
+              padding: const EdgeInsets.only(top: 25),
+              child: Text(
+                slogan,
+                textAlign: TextAlign.right,
+                style: sloganStyle,
+              ),
+            ),
+          ),
+        ),
+        SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: playlists.map((playlist) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 25, top: 10),
+                child: GestureDetector(
+                  onTap: () => onTap(playlist),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(5),
+                          image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                                playlist.playlistImg),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        playlist.title.length > 19
+                            ? '${playlist.title.substring(0, 19)}..'
+                            : playlist.title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: titleStyle,
+                      ),
+                      Text(
+                        (playlist.description != null &&
+                                playlist.description!.length > 19)
+                            ? '${playlist.description?.substring(0, 19)}..'
+                            : playlist.description ?? '',
+                        textAlign: TextAlign.left,
+                        style: artistStyle,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ),
       ],

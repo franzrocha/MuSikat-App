@@ -96,7 +96,7 @@ class PlaylistController with ChangeNotifier {
   try {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('playlists')
-        .where('uid', isEqualTo: userId)
+        // .where('uid', isEqualTo: userId)
         .get();
 
     int count = 0;

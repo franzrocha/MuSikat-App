@@ -42,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
         RecentHistoryUserSearchLogs()
             .deleteHistoryLogs(listRecentSearch[index].uid);
         listRecentSearch.removeAt(index);
-       ToastMessage.show(context, 'Deleted successfully.');
+        ToastMessage.show(context, 'Deleted successfully.');
         if (lengthValue == 1) {
           isDeleted = true;
         } else {
@@ -231,16 +231,30 @@ class _SearchScreenState extends State<SearchScreen> {
                         getStateTextInput(listRecentSearch[index].recentList);
                       },
                       leading: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                listRecentSearch[index].uploadedPhoto),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                          width: 50,
+                          height: 50,
+                          decoration: listRecentSearch[index].type == 'User'
+                              ? BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  image: DecorationImage(
+                                    image: listRecentSearch[index]
+                                            .uploadedPhoto
+                                            .isNotEmpty
+                                        ? NetworkImage(listRecentSearch[index]
+                                            .uploadedPhoto)
+                                        : NetworkImage(
+                                            userIcon,
+                                          ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        listRecentSearch[index].uploadedPhoto),
+                                    fit: BoxFit.cover,
+                                  ),
+                                )),
                       title: Text(
                         listRecentSearch[index].recentList,
                         style: GoogleFonts.inter(
@@ -262,8 +276,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: const Icon(
                           FontAwesomeIcons.xmark,
                           color: Colors.white,
-                          ),
-                        
+                        ),
                       ),
                     );
                   },
@@ -327,7 +340,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                   subtitle: Text(
-                    'User',
+                    user.accountType,
                     style: GoogleFonts.inter(
                       color: Colors.white.withOpacity(0.5),
                       fontSize: 14,

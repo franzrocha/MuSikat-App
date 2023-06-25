@@ -1,12 +1,16 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:async';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/listening_history_controller.dart';
+import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/models/liked_songs_model.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
+import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
 import '../../music_player/music_handler.dart';
@@ -26,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final SongsController _songCon = SongsController();
+  final PlaylistController _playCon = PlaylistController();
   final ListeningHistoryController _listenCon = ListeningHistoryController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -40,8 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(children: [
             const SizedBox(height: 5),
             homeForOPM(),
+            editorsPlaylists(),
             newReleases(),
-            popularTracks(),
+            popularTracks(),  
             artiststToLookOut(),
             basedOnLikedSongs(),
             basedOnListeningHistory(),
@@ -52,44 +58,41 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Column categories() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 25, bottom: 10),
-            child: Container(
-              padding: const EdgeInsets.only(top: 25),
-              child: Text(
-                'Categories to explore',
-                textAlign: TextAlign.right,
-                style: sloganStyle,
-              ),
-            ),
-          ),
-        ),
-        SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 18, top: 10),
-                child: Row(
-                  children: [
-                    CategoryCard(image: genrePic, text: 'Genres'),
-                    CategoryCard(image: languagePic, text: 'Languages'),
-                    CategoryCard(image: moodPic, text: 'Moods'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+  StreamBuilder<List<PlaylistModel>> editorsPlaylists() {
+    return StreamBuilder<List<PlaylistModel>>(
+      stream: _playCon.getPlaylistStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const LoadingContainer();
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingContainer();
+        } else {
+          List<PlaylistModel> playlists = snapshot.data!;
+
+          playlists = playlists
+              .where((playlist) =>
+                  playlist.isOfficial != null && playlist.isOfficial == true)
+              .toList();
+
+          return playlists.isEmpty
+              ? const SizedBox.shrink()
+              : PlaylistDisplay(
+                  playlists: playlists,
+                  onTap: (playlist) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              PlaylistDetailScreen(playlist: playlist)),
+                    );
+                  },
+                  slogan: 'Editor\'s Playlists');
+        }
+      },
     );
   }
 

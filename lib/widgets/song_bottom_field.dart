@@ -35,6 +35,7 @@ class _SongBottomFieldState extends State<SongBottomField> {
   final LikedSongsController _likedCon = LikedSongsController();
   final PlaylistController _playlistCon = PlaylistController();
   bool _isLiked = false;
+  PlaylistModel? playlist;
 
   @override
   void initState() {
@@ -63,10 +64,14 @@ class _SongBottomFieldState extends State<SongBottomField> {
               likeSong(context),
               addToPlaylist(context),
               viewSongInfo(),
+               if (playlist?.uid ==
+                      FirebaseAuth.instance.currentUser?.uid) ...{
               Visibility(
                 visible: widget.hideRemoveToPlaylist == true ? false : true,
                 child: removeSongFromPlaylist(context),
               ),
+
+                      },
               if (FirebaseAuth.instance.currentUser != null &&
                   widget.song.uid ==
                       FirebaseAuth.instance.currentUser!.uid) ...[

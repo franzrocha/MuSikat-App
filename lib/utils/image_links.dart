@@ -10,3 +10,5 @@ String moodPic =
     'https://images.unsplash.com/photo-1617440168943-92f66e14cd6c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80';
 String likedSongsPic =
     "https://images.unsplash.com/photo-1569513586164-80529357ad6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
+String userIcon =
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE3ZyLNcsVNl5Yky4zWuHhBTldw3LjZXal7Q&usqp=CAU';
