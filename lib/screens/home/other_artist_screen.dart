@@ -420,6 +420,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                                           hideEdit: true,
                                           hideDelete: true,
                                           hideRemoveToPlaylist: true,
+                                          hideLike: false,
                                         ),
                                       );
                                     });

@@ -6,7 +6,7 @@ import 'package:musikat_app/utils/exports.dart';
 
 class RecentHistoryUserSearchLogs with ChangeNotifier {
   CollectionReference recentLogs =
-      FirebaseFirestore.instance.collection('userSearchHistoryLogs');
+      FirebaseFirestore.instance.collection('searchHistory');
 
   DateTime currentDate = DateTime.now();
 

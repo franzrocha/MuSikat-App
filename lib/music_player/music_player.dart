@@ -1,14 +1,16 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/liked_songs_controller.dart';
+import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/music_player/player_controls.dart';
 import 'package:musikat_app/services/song_service.dart';
 import 'package:musikat_app/utils/exports.dart';
+
 
 import '../service_locators.dart';
 
@@ -71,12 +73,20 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const SearchScreen(),
-                //   ),
-                // );
+                showModalBottomSheet(
+                    backgroundColor: musikatColor4,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SingleChildScrollView(
+                        child: SongBottomField(
+                          song: widget.songs[_musicHandler.currentIndex],
+                          hideRemoveToPlaylist: true,
+                          hideDelete: true,
+                          hideEdit: true,
+                          hideLike: true,
+                        ),
+                      );
+                    });
               },
               icon: const FaIcon(
                 FontAwesomeIcons.ellipsisVertical,

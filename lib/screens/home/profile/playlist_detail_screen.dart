@@ -46,7 +46,8 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                               ),
                             ),
                           );
-                        }, icon: const Icon(Icons.playlist_add))
+                        },
+                        icon: const Icon(Icons.playlist_add))
                   }
                 ],
                 children: [
@@ -122,6 +123,7 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                                               playlist: widget.playlist,
                                               hideEdit: true,
                                               hideDelete: true,
+                                              hideLike: false,
                                             ),
                                           );
                                         });
@@ -158,7 +160,6 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
                                         builder: (context) => MusicPlayerScreen(
                                           songs: songs,
                                           initialIndex: index,
-                                         
                                         ),
                                       ),
                                     );

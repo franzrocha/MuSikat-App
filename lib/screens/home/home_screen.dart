@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison
 
-import 'dart:async';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/listening_history_controller.dart';
@@ -39,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: const RangeMaintainingScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: SafeArea(
           child: Column(children: [
@@ -47,8 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
             homeForOPM(),
             editorsPlaylists(),
             newReleases(),
-            popularTracks(),  
+            popularTracks(),
             artiststToLookOut(),
+            recentListening(),
             basedOnLikedSongs(),
             basedOnListeningHistory(),
             const SizedBox(height: 120),
@@ -79,18 +79,61 @@ class _HomeScreenState extends State<HomeScreen> {
                   playlist.isOfficial != null && playlist.isOfficial == true)
               .toList();
 
-          return playlists.isEmpty
+          playlists.take(5);
+
+          if (playlists.isEmpty) {
+            return const SizedBox.shrink();
+          } else {
+            playlists.shuffle();
+
+            return PlaylistDisplay(
+              playlists: playlists,
+              onTap: (playlist) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PlaylistDetailScreen(playlist: playlist),
+                  ),
+                );
+              },
+              slogan: 'Editor\'s Playlists',
+            );
+          }
+        }
+      },
+    );
+  }
+
+  FutureBuilder<List<SongModel>> recentListening() {
+    return FutureBuilder<List<SongModel>>(
+      future: _listenCon.getListeningHistory(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const LoadingContainer();
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingContainer();
+        } else {
+          List<SongModel> songs = snapshot.data!;
+
+          songs = songs.take(5).toList();
+
+          return songs.isEmpty
               ? const SizedBox.shrink()
-              : PlaylistDisplay(
-                  playlists: playlists,
-                  onTap: (playlist) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              PlaylistDetailScreen(playlist: playlist)),
-                    );
+              : SongDisplay(
+                  songs: songs,
+                  onTap: (song) {
+                    widget.musicHandler.currentSongs = songs;
+                    widget.musicHandler.currentIndex = songs.indexOf(song);
+                    widget.musicHandler.setAudioSource(
+                        songs[widget.musicHandler.currentIndex], uid);
                   },
-                  slogan: 'Editor\'s Playlists');
+                  slogan: 'Recently played songs',
+                );
         }
       },
     );
@@ -165,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     widget.musicHandler.setAudioSource(
                         songs[widget.musicHandler.currentIndex], uid);
                   },
-                  slogan: 'Recommended for you',
+                  slogan: 'Recommended based on genre',
                 );
         }
       },

@@ -16,12 +16,10 @@ class LikedSongsController with ChangeNotifier {
   Future<void> addLikedSong(String userId, String songId) async {
     final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
 
-    // Get the document for this user's liked songs
     final querySnapshot =
         await collectionRef.where('uid', isEqualTo: userId).get();
 
     if (querySnapshot.docs.isEmpty) {
-      // There is no document for this user's liked songs yet, so create a new one
       final docRef = collectionRef.doc();
       final likedSongsModel = LikedSongsModel(
         likedSongsId: docRef.id,
@@ -30,7 +28,6 @@ class LikedSongsController with ChangeNotifier {
       );
       await docRef.set(likedSongsModel.json);
     } else {
-      // Update the existing document to add the newly liked song to the songId array
       final docRef = querySnapshot.docs.first.reference;
       await docRef.update({
         'songId': FieldValue.arrayUnion([songId]),
@@ -42,18 +39,18 @@ class LikedSongsController with ChangeNotifier {
   Future<void> removeLikedSong(String userId, String songId) async {
     final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
 
-    // Get the document for this user's liked songs
+  
     final querySnapshot =
         await collectionRef.where('uid', isEqualTo: userId).get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      // Update the existing document to remove the unliked song from the songId array
+    
       final docRef = querySnapshot.docs.first.reference;
       await docRef.update({
         'songId': FieldValue.arrayRemove([songId]),
       });
 
-      // Check if there are no more songIds left in the document, and delete it if so
+   
       final updatedSnapshot = await docRef.get();
       final updatedLikedSongsModel =
           LikedSongsModel.fromDocumentSnap(updatedSnapshot);
@@ -66,12 +63,12 @@ class LikedSongsController with ChangeNotifier {
 
   Future<bool> isSongLikedByUser(String songId, String userId) async {
     final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
-    // Get the document for this user's liked songs
+ 
     final querySnapshot =
         await collectionRef.where('uid', isEqualTo: userId).get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      // Check if the songId is present in the document's songId array
+      
       final docData = querySnapshot.docs.first.data();
       if (docData.containsKey('songId') && docData['songId'].contains(songId)) {
         return true;

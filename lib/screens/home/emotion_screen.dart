@@ -112,6 +112,7 @@ class _EmotionDisplayScreenState extends State<EmotionDisplayScreen> {
                                           hideRemoveToPlaylist: true,
                                           hideDelete: true,
                                           hideEdit: true,
+                                           hideLike: false,
                                         ),
                                       );
                                     });

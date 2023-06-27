@@ -19,7 +19,7 @@ class InsightsScreen extends StatefulWidget {
 
 class _InsightsScreenState extends State<InsightsScreen> {
   final SongsController _songCon = SongsController();
-  final PlaylistController _playCon = PlaylistController();
+
   UserModel? user;
 
   @override
@@ -111,15 +111,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     final SongModel song = songs[index];
                     return ListTile(
-                      // onTap: () {
-                      //   Navigator.of(context).push(
-                      //     MaterialPageRoute(
-                      //       builder: (context) => PlaylistCount(
-                      //         selectedSong: song.songId,
-                      //       ),
-                      //     ),
-                      //   );
-                      // },
                       leading: Container(
                         width: 50,
                         height: 50,
@@ -177,7 +168,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                           SizedBox(
                               width: 50,
                               child: FutureBuilder(
-                                  future: _playCon.getOwnedSongCount(
+                                  future: _songCon.getOwnedSongCount(
                                       FirebaseAuth.instance.currentUser!.uid,
                                       song.songId),
                                   builder: (BuildContext context,
@@ -291,78 +282,76 @@ class _InsightsScreenState extends State<InsightsScreen> {
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Expanded(
-              child: FutureBuilder<List<SongModel>>(
-                future: _songCon.getRankedSongs(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<SongModel>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container();
-                  } else if (snapshot.hasError) {
-                    return Text(
-                      'Error: ${snapshot.error}',
-                      style: const TextStyle(
-                        color: Colors.white,
+            child: FutureBuilder<List<SongModel>>(
+              future: _songCon.getRankedSongs(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<SongModel>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                } else if (snapshot.hasError) {
+                  return Text(
+                    'Error: ${snapshot.error}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  );
+                } else {
+                  final List<SongModel> songs = snapshot.data!
+                      .where((song) =>
+                          song.uid == FirebaseAuth.instance.currentUser?.uid)
+                      .toList();
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 56, 54, 54),
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: SfCartesianChart(
+                      primaryXAxis: CategoryAxis(
+                        labelStyle: const TextStyle(
+                          fontSize: 9,
+                          color: Colors.white,
+                        ),
+                        maximumLabelWidth: 70,
                       ),
-                    );
-                  } else {
-                    final List<SongModel> songs = snapshot.data!
-                        .where((song) =>
-                            song.uid == FirebaseAuth.instance.currentUser?.uid)
-                        .toList();
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 56, 54, 54),
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: SfCartesianChart(
-                        primaryXAxis: CategoryAxis(
-                          labelStyle: const TextStyle(
-                            fontSize: 9,
-                            color: Colors.white,
-                          ),
-                          maximumLabelWidth: 70,
-                        ),
-                        primaryYAxis: NumericAxis(
-                          labelStyle: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        series: <ChartSeries>[
-                          ColumnSeries<SongModel, String>(
-                            dataSource: songs,
-                            xValueMapper: (SongModel song, _) => song.title,
-                            yValueMapper: (SongModel song, _) =>
-                                song.playCount + song.likeCount,
-                            color: musikatColor3,
-                          ),
-                        ],
-                        title: ChartTitle(
-                          text: 'Top Tracks Stats',
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        legend: Legend(isVisible: false),
-                        tooltipBehavior: TooltipBehavior(
-                          enable: true,
-                          header: '',
-                          format: 'point.x: point.y',
+                      primaryYAxis: NumericAxis(
+                        labelStyle: const TextStyle(
+                          color: Colors.white,
                         ),
                       ),
-                    );
-                  }
-                },
-              ),
+                      series: <ChartSeries>[
+                        ColumnSeries<SongModel, String>(
+                          dataSource: songs,
+                          xValueMapper: (SongModel song, _) => song.title,
+                          yValueMapper: (SongModel song, _) =>
+                              song.playCount + song.likeCount,
+                          color: musikatColor3,
+                        ),
+                      ],
+                      title: ChartTitle(
+                        text: 'Top Tracks Stats',
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      legend: Legend(isVisible: false),
+                      tooltipBehavior: TooltipBehavior(
+                        enable: true,
+                        header: '',
+                        format: 'point.x: point.y',
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
           const SizedBox(height: 20),

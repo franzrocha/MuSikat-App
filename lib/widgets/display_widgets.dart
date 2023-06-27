@@ -60,6 +60,7 @@ class SongDisplay extends StatelessWidget {
                             hideEdit: true,
                             hideDelete: true,
                             hideRemoveToPlaylist: true,
+                            hideLike: false,
                           ),
                         );
                       },

@@ -72,6 +72,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
 
       String currentUser = FirebaseAuth.instance.currentUser!.uid;
       await _songCon.updateSongPlayCount(song.songId);
+
       await _listenCon.addListeningHistorySong(currentUser, song.songId);
 
       notifyListeners();
@@ -80,7 +81,7 @@ class MusicHandler with ChangeNotifier, RouteAware {
         await Future.delayed(const Duration(seconds: 5));
         await setAudioSource(song, uid);
       } else {
-         await player.play();
+        await player.play();
       }
     }
   }

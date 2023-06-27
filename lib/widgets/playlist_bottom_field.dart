@@ -81,7 +81,7 @@ class _PlaylistBottomFieldState extends State<PlaylistBottomField> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TextButton(
-                          onPressed: () async { 
+                          onPressed: () async {
                             try {
                               await _playlistCon
                                   .deletePlaylist(widget.playlist.playlistId);

@@ -17,14 +17,17 @@ class SongBottomField extends StatefulWidget {
   bool? hideRemoveToPlaylist;
   bool? hideEdit;
   bool? hideDelete;
+  bool? hideLike;
 
-  SongBottomField(
-      {super.key,
-      required this.song,
-      this.playlist,
-      this.hideRemoveToPlaylist,
-      this.hideDelete,
-      this.hideEdit});
+  SongBottomField({
+    super.key,
+    required this.song,
+    this.playlist,
+    this.hideRemoveToPlaylist,
+    this.hideDelete,
+    this.hideEdit,
+    required this.hideLike,
+  });
 
   @override
   State<SongBottomField> createState() => _SongBottomFieldState();
@@ -35,7 +38,6 @@ class _SongBottomFieldState extends State<SongBottomField> {
   final LikedSongsController _likedCon = LikedSongsController();
   final PlaylistController _playlistCon = PlaylistController();
   bool _isLiked = false;
-  PlaylistModel? playlist;
 
   @override
   void initState() {
@@ -61,17 +63,18 @@ class _SongBottomFieldState extends State<SongBottomField> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              likeSong(context),
               addToPlaylist(context),
               viewSongInfo(),
-               if (playlist?.uid ==
-                      FirebaseAuth.instance.currentUser?.uid) ...{
               Visibility(
-                visible: widget.hideRemoveToPlaylist == true ? false : true,
-                child: removeSongFromPlaylist(context),
+                visible: widget.hideLike == true ? false : true,
+                child: likeSong(context),
               ),
-
-                      },
+              if (widget.playlist!.uid == FirebaseAuth.instance.currentUser?.uid) ...{
+                Visibility(
+                  visible: widget.hideRemoveToPlaylist == true ? false : true,
+                  child: removeSongFromPlaylist(context),
+                ),
+              },
               if (FirebaseAuth.instance.currentUser != null &&
                   widget.song.uid ==
                       FirebaseAuth.instance.currentUser!.uid) ...[
@@ -245,65 +248,7 @@ class _SongBottomFieldState extends State<SongBottomField> {
                 borderRadius: BorderRadius.circular(20),
               ),
               backgroundColor: musikatColor4,
-              child: SingleChildScrollView(
-                  child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                        image: NetworkImage(widget.song.albumCover),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    widget.song.title,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    widget.song.artist,
-                    style: GoogleFonts.inter(
-                        fontSize: 12,
-                        color: Colors.white.withOpacity(0.5),
-                        fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 15),
-                  _buildInfoRow('Released at:',
-                      DateFormat("MMMM d, y").format(widget.song.createdAt)),
-                  _buildInfoRow('Genre:', widget.song.genre),
-                  _buildInfoRow('Languages:', widget.song.languages.join(", ")),
-                  _buildInfoRow('Writers:', widget.song.writers.join(", ")),
-                  _buildInfoRow('Producers:', widget.song.producers.join(", ")),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Wrap(
-                      spacing: 5,
-                      children: widget.song.description
-                          .map((e) => Chip(
-                                label: Text(
-                                  e,
-                                  style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                backgroundColor: musikatColor3,
-                              ))
-                          .toList(),
-                    ),
-                  ),
-                ],
-              ))),
+              child: ViewSongInfo(song: widget.song)),
         );
       },
     );
@@ -377,6 +322,80 @@ class _SongBottomFieldState extends State<SongBottomField> {
         }
       },
     );
+  }
+}
+
+class ViewSongInfo extends StatefulWidget {
+  const ViewSongInfo({
+    super.key,
+    required this.song,
+  });
+
+  final SongModel song;
+
+  @override
+  State<ViewSongInfo> createState() => _ViewSongInfoState();
+}
+
+class _ViewSongInfoState extends State<ViewSongInfo> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+        child: Column(
+      children: [
+        const SizedBox(height: 20),
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            image: DecorationImage(
+              image: NetworkImage(widget.song.albumCover),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          widget.song.title,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.inter(
+              fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
+        ),
+        Text(
+          widget.song.artist,
+          style: GoogleFonts.inter(
+              fontSize: 12,
+              color: Colors.white.withOpacity(0.5),
+              fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(height: 15),
+        _buildInfoRow('Released at:',
+            DateFormat("MMMM d, y").format(widget.song.createdAt)),
+        _buildInfoRow('Genre:', widget.song.genre),
+        _buildInfoRow('Languages:', widget.song.languages.join(", ")),
+        _buildInfoRow('Writers:', widget.song.writers.join(", ")),
+        _buildInfoRow('Producers:', widget.song.producers.join(", ")),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Wrap(
+            spacing: 5,
+            children: widget.song.description
+                .map((e) => Chip(
+                      label: Text(
+                        e,
+                        style: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      backgroundColor: musikatColor3,
+                    ))
+                .toList(),
+          ),
+        ),
+      ],
+    ));
   }
 }
 

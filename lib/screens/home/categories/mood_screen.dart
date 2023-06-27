@@ -258,6 +258,7 @@ class DescriptionSongsScreen extends StatelessWidget {
                                           hideRemoveToPlaylist: true,
                                           hideDelete: true,
                                           hideEdit: true,
+                                           hideLike: false,
                                         ),
                                       );
                                     });

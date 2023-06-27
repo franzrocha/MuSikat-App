@@ -107,6 +107,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                         child: SongBottomField(
                                           song: song,
                                           hideRemoveToPlaylist: true,
+                                           hideLike: false,
                                         ),
                                       );
                                     });

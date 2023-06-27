@@ -380,6 +380,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               hideEdit: true,
                               hideDelete: true,
                               hideRemoveToPlaylist: true,
+                              hideLike: false,
                             ),
                           );
                         });

@@ -197,6 +197,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                 child: SongBottomField(
                                   song: latestSong,
                                   hideRemoveToPlaylist: true,
+                                   hideLike: false,
                                 ),
                               );
                             });
