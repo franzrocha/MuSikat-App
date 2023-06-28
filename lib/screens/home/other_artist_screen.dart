@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
+import 'package:musikat_app/controllers/user_notification_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -34,6 +35,8 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
   final FollowController _followCon = Get.put(FollowController());
 
   final currentUser = FirebaseAuth.instance.currentUser!.uid;
+
+  final userNotification = UserNotificationController();
 
   final PlaylistController _playlistCon = PlaylistController();
   String get selectedUserUID => widget.selectedUserUID;
@@ -112,73 +115,68 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
     );
   }
 
- Row artistsButton() {
-  return Row(
-    children: [
-      const SizedBox(width: 30.0),
-      FutureBuilder<List<String>>(
-        future: _followCon.getUserFollowing(currentUser),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox(
-              width: 130.0,
-              child: ElevatedButton(
-                onPressed: null,
-                child: null,
-              ),
-            );
-          } else if (snapshot.hasData) {
-            final followingList = snapshot.data;
-            final selectedUserFollows =
-                followingList?.contains(selectedUserUID) ?? false;
+  Row artistsButton() {
+    return Row(
+      children: [
+        const SizedBox(width: 30.0),
+        StreamBuilder<List<String>>(
+          stream: _followCon.getUserFollowing(currentUser).asStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container();
+            } else if (snapshot.hasData) {
+              final followingList = snapshot.data;
+              final selectedUserFollows =
+                  followingList?.contains(selectedUserUID) ?? false;
 
-            return SizedBox(
-              width: 130.0,
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (!selectedUserFollows) {
-                    _followCon.followUser(selectedUserUID);
-                    followers++;
-                  } else {
-                    _followCon.unfollowUser(selectedUserUID);
-                    followers--;
-                  }
+              return SizedBox(
+                width: 130.0,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (!selectedUserFollows) {
+                      _followCon.followUser(selectedUserUID);
 
-                  setState(() {
-                    isFollowing = !selectedUserFollows;
-                  });
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.resolveWith<Color>((states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return const Color.fromARGB(255, 0, 0, 0);
-                    } else if (isFollowing) {
-                      return Colors.grey;
-                    } else if (selectedUserFollows) {
-                      return Colors.grey;
+                      userNotification.addUserNotification(selectedUserUID, 1);
+
+                      followers++;
                     } else {
-                      return const Color(0xfffca311);
+                      _followCon.unfollowUser(selectedUserUID);
+                      userNotification.addUserNotification(selectedUserUID, 0);
+                      followers--;
                     }
-                  }),
-                ),
-                child: Text(selectedUserFollows ? 'Unfollow' : 'Follow'),
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return const SizedBox(
-              width: 130.0,
-              child: ElevatedButton(child: null, onPressed: null),
-            );
-          }
-        },
-      ),
-    ],
-  );
-}
 
+                    isFollowing = !selectedUserFollows;
+                  },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.resolveWith<Color>((states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        return const Color.fromARGB(255, 0, 0, 0);
+                      } else if (isFollowing) {
+                        return Colors.grey;
+                      } else if (selectedUserFollows) {
+                        return Colors.grey;
+                      } else {
+                        return const Color(0xfffca311);
+                      }
+                    }),
+                  ),
+                  child: Text(selectedUserFollows ? 'Unfollow' : 'Follow'),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return const SizedBox(
+                width: 130.0,
+                child: ElevatedButton(child: null, onPressed: null),
+              );
+            }
+          },
+        ),
+      ],
+    );
+  }
 
   SizedBox followings() {
     return SizedBox(
@@ -406,7 +404,6 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                                     builder: (context) => MusicPlayerScreen(
                                           songs: songs,
                                           initialIndex: songs.indexOf(song),
-                                         
                                         )),
                               ),
                               onLongPress: () {
@@ -528,7 +525,6 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                                         builder: (context) => MusicPlayerScreen(
                                               songs: songs,
                                               initialIndex: index,
-                                            
                                             )),
                                   );
                                 },
@@ -630,7 +626,6 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                             MaterialPageRoute(
                               builder: (context) => MusicPlayerScreen(
                                 songs: [latestSong],
-                               
                               ),
                             ),
                           );

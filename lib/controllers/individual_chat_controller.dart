@@ -164,10 +164,8 @@ class IndividualChatController with ChangeNotifier {
     UserModel user =
         await UserModel.fromUid(uid: FirebaseAuth.instance.currentUser!.uid);
 
-    List<String> chatrooms =
-        user.chatrooms; 
+    List<String> chatrooms = user.chatrooms;
     if (chatrooms.isEmpty) {
- 
       return [];
     }
 
@@ -186,8 +184,7 @@ class IndividualChatController with ChangeNotifier {
 
   Stream<List<UserModel>> fetchChatroomsStream() async* {
     while (true) {
-      await Future.delayed(
-          const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       List<UserModel> users = await fetchChatrooms();
 
       if (users.isNotEmpty) {

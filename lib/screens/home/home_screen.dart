@@ -49,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
             popularTracks(),
             artiststToLookOut(),
             recentListening(),
-            recommendedPlaylistsGenre(),
             basedOnLikedSongs(),
             basedOnListeningHistory(),
             basedOnListeningHistoryLanguage(),

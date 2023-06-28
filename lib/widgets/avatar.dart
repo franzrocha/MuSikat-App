@@ -1,6 +1,5 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 

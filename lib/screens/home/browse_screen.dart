@@ -28,8 +28,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
           children: [
             const Searchbar(),
             categories(context),
-            for (int i = 0; i < genres.length; i++)
-              getPlaylist(genres[i]),
+            for (int i = 0; i < genres.length; i++) getPlaylist(genres[i]),
             const SizedBox(height: 120),
           ],
         ),
