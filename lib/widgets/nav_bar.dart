@@ -3,11 +3,10 @@ import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/controllers/firebase_service.dart';
 import 'package:musikat_app/controllers/user_notification_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
+import 'package:musikat_app/screens/home/browse_screen.dart';
 import 'package:musikat_app/screens/home/camera.dart';
 import 'package:musikat_app/screens/home/chat/chat_home.dart';
 import 'package:musikat_app/screens/home/dialog/notification.dart';
-import 'package:musikat_app/screens/home/dialog/show_modal_top.dart';
-import 'package:musikat_app/screens/home/search_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
@@ -30,8 +29,6 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
-  final int _cartBadgeAmount = 3;
-  late bool _showCartBadge;
   Color color = Colors.red;
 
   static final firebaseService = FirebaseService();
@@ -44,9 +41,9 @@ class _NavBarState extends State<NavBar> {
       HomeScreen(
         musicHandler: widget.musicHandler,
       ),
-      ArtistsHubScreen(musicHandler: widget.musicHandler),
+      const BrowseScreen(),
       Container(),
-      const ChatHomeScreen(),
+      ArtistsHubScreen(musicHandler: widget.musicHandler),
       const ProfileScreen(),
     ];
 
@@ -95,29 +92,29 @@ class _NavBarState extends State<NavBar> {
                         );
                       }
                     } else if (snapshot.hasError) {
-                      // Handle error case
                       return Text('Error: ${snapshot.error}');
                     }
 
                     return const Icon(
                       Icons.notifications,
-                      size: 20,
-                      color: Colors.teal,
+                      size: 25,
+                      color: Colors.white,
                     );
                   },
+                ),
+                const SizedBox(
+                  width: 10,
                 ),
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const CameraScreen(
-                          songs: [],
-                        ),
+                        builder: (context) => const ChatHomeScreen(),
                       ),
                     );
                   },
                   icon: const Icon(
-                    Icons.camera_alt,
+                    FontAwesomeIcons.rocketchat,
                     size: 20,
                   ),
                 ),
@@ -178,16 +175,18 @@ class _NavBarState extends State<NavBar> {
                         fontSize: 10,
                       ),
                       onTap: (int index) {
-                        if (index != 2) {
+                        if (index == 2) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const CameraScreen(
+                                songs: [],
+                              ),
+                            ),
+                          );
+                        } else {
                           setState(() {
                             pageIndex = index;
                           });
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const SearchScreen(),
-                            ),
-                          );
                         }
                       },
                       items: [
@@ -199,8 +198,8 @@ class _NavBarState extends State<NavBar> {
                           label: 'Home',
                         ),
                         const BottomNavigationBarItem(
-                          icon: FaIcon(FontAwesomeIcons.music),
-                          label: 'Artists Hub',
+                          icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                          label: 'Browse',
                         ),
                         BottomNavigationBarItem(
                           icon: Container(
@@ -212,7 +211,7 @@ class _NavBarState extends State<NavBar> {
                               radius: 20,
                               backgroundColor: musikatBackgroundColor,
                               child: FaIcon(
-                                FontAwesomeIcons.magnifyingGlass,
+                                FontAwesomeIcons.camera,
                                 color: Colors.white,
                                 size: 18,
                               ),
@@ -221,8 +220,8 @@ class _NavBarState extends State<NavBar> {
                           label: '',
                         ),
                         const BottomNavigationBarItem(
-                          icon: Icon(Icons.chat_bubble),
-                          label: 'Chat',
+                          icon: Icon(FontAwesomeIcons.music),
+                          label: 'Artist\'s Hub',
                         ),
                         const BottomNavigationBarItem(
                           icon: Icon(

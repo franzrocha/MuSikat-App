@@ -42,13 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
         RecentHistoryUserSearchLogs()
             .deleteHistoryLogs(listRecentSearch[index].uid);
         listRecentSearch.removeAt(index);
-        Fluttertoast.showToast(
-            msg: "Deleted record successfully",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        ToastMessage.show(context, 'Deleted successfully.');
 
         if (lengthValue == 1) {
           isDeleted = true;
@@ -215,52 +209,54 @@ class _SearchScreenState extends State<SearchScreen> {
           List<RecentLogsModel> listRecentSearch = snapshot.data!;
           return SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Recent List',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Text(
+                    'Recent Searches',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
                 ),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: listRecentSearch.length,
                   itemBuilder: (context, index) {
-                    var getFirstLetter = listRecentSearch[index]
-                            .recentList
-                            .isNotEmpty
-                        ? listRecentSearch[index].recentList[0].toUpperCase()
-                        : '';
-
                     return ListTile(
                       onTap: () {
-                        //callback for getting new search input
                         getStateTextInput(listRecentSearch[index].recentList);
                       },
-                      leading: listRecentSearch[index].uploadedPhoto == ''
-                          ? CircleAvatar(
-                              backgroundColor: Colors.blue,
-                              maxRadius: 30,
-                              child: Text(
-                                getFirstLetter,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
+                      leading: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: listRecentSearch[index].type == 'User'
+                            ? BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                image: DecorationImage(
+                                  image: listRecentSearch[index]
+                                          .uploadedPhoto
+                                          .isNotEmpty
+                                      ? NetworkImage(
+                                          listRecentSearch[index].uploadedPhoto)
+                                      : NetworkImage(
+                                          userIcon,
+                                        ),
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
                                       listRecentSearch[index].uploadedPhoto),
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
+                      ),
                       title: Text(
                         listRecentSearch[index].recentList,
                         style: GoogleFonts.inter(
@@ -280,12 +276,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           //callback for deleting record
                           getStateHandler(listRecentSearch, index, counter);
                         },
-                        child: Text(
-                          'X',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 15,
-                          ),
+                        child: const Icon(
+                          FontAwesomeIcons.xmark,
+                          color: Colors.white,
                         ),
                       ),
                     );
@@ -350,7 +343,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                   subtitle: Text(
-                    'User',
+                    user.accountType,
                     style: GoogleFonts.inter(
                       color: Colors.white.withOpacity(0.5),
                       fontSize: 14,

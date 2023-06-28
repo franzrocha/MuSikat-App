@@ -1,11 +1,10 @@
-import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/firebase_service.dart';
 import 'package:musikat_app/controllers/user_notification_controller.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
 import '../../../utils/exports.dart';
-import 'package:flutter/material.dart';
 
 class NotificationDialog extends StatefulWidget {
   const NotificationDialog({super.key});
@@ -55,7 +54,7 @@ class _State extends State<NotificationDialog> {
                 final DateFormat formatter = DateFormat(
                     'MMM-dd-yyyy:hh:ss'); // Define your desired date format
                 final String formattedDate =
-                    formatter.format(date); // Format the date as a string
+                    formatter.format(date); 
 
                 return StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -191,4 +190,40 @@ class _State extends State<NotificationDialog> {
       ),
     );
   }
+}
+
+
+Future<T?> showTopModalDialog<T>(BuildContext context, Widget child,
+    {bool barrierDismissible = true}) {
+  return showGeneralDialog<T?>(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    transitionDuration: const Duration(milliseconds: 250),
+    barrierLabel: MaterialLocalizations.of(context).dialogLabel,
+    barrierColor: Colors.black.withOpacity(0.5),
+    pageBuilder: (context, _, __) => child,
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      return SlideTransition(
+        position: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)
+            .drive(
+                Tween<Offset>(begin: const Offset(0, -1.0), end: Offset.zero)),
+        child: Container(
+          margin: const EdgeInsets.only(top: 80.0),
+          child: Column(
+            children: [
+              Positioned(
+                top: 80.0,
+                child: Material(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [child],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
