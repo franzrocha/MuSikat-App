@@ -16,9 +16,9 @@ class BrowseScreen extends StatefulWidget {
 }
 
 class _BrowseScreenState extends State<BrowseScreen> {
-
   final PlaylistController _playCon = PlaylistController();
-  
+  List<String> genres = ['Pop', 'Hiphop/Rap'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +28,17 @@ class _BrowseScreenState extends State<BrowseScreen> {
           children: [
             const Searchbar(),
             categories(context),
-        StreamBuilder<List<PlaylistModel>>(
+            for (int i = 0; i < genres.length; i++)
+              getPlaylist(genres[i]),
+            const SizedBox(height: 120),
+          ],
+        ),
+      ),
+    );
+  }
+
+  StreamBuilder<List<PlaylistModel>> getPlaylist(String genre) {
+    return StreamBuilder<List<PlaylistModel>>(
       stream: _playCon.getPlaylistStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
@@ -45,7 +55,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
           playlists = playlists
               .where((playlist) =>
-                  playlist.isOfficial == true && playlist.genre == 'Pop')
+                  playlist.isOfficial == true && playlist.genre == genre)
               .toList();
 
           return playlists.isEmpty
@@ -59,15 +69,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
                               PlaylistDetailScreen(playlist: playlist)),
                     );
                   },
-                  slogan: 'Pop');
+                  caption: genre);
         }
       },
-    
-        ),
-
-          ],
-        ),
-      ),
     );
   }
 

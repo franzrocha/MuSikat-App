@@ -147,19 +147,23 @@ class SongsController with ChangeNotifier {
     return snapshot.docs.length;
   }
 
-  Future<List<SongModel>> getRankedSongs() async {
-    final QuerySnapshot snapshot = await _db.collection('songs').get();
+Future<List<SongModel>> getRankedSongs(String userId) async {
+  final QuerySnapshot snapshot = await _db.collection('songs').get();
 
-    final List<SongModel> songs = snapshot.docs
-        .map((DocumentSnapshot documentSnapshot) =>
-            SongModel.fromDocumentSnap(documentSnapshot))
-        .toList();
+  final List<SongModel> songs = snapshot.docs
+      .map((DocumentSnapshot documentSnapshot) =>
+          SongModel.fromDocumentSnap(documentSnapshot))
+      .toList();
 
-    songs.sort((a, b) =>
-        (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount));
+  songs.sort((a, b) =>
+      (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount));
 
-    return songs;
-  }
+  final List<SongModel> userSongs = songs
+      .where((song) => song.uid == userId)
+      .toList();
+
+  return userSongs;
+}
 
   Future<int> getLikeSongCount() async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -189,8 +193,6 @@ class SongsController with ChangeNotifier {
     }
   }
 
-  
-
   Stream<double> get uploadProgressStream =>
       _uploadProgressStreamController.stream;
 
@@ -214,6 +216,23 @@ class SongsController with ChangeNotifier {
     }
 
     return totalPlayCount;
+  }
+
+  
+  Future<int> getOverallLikes(String currentUserUid) async {
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('songs')
+        .where('uid', isEqualTo: currentUserUid)
+        .get();
+
+    int totalLikeCount = 0;
+
+    for (final doc in querySnapshot.docs) {
+      final SongModel song = SongModel.fromDocumentSnap(doc);
+      totalLikeCount += song.likeCount;
+    }
+
+    return totalLikeCount;
   }
 
   Future<List<UserModel>?> getUsersWithSongs() async {
@@ -263,11 +282,5 @@ class SongsController with ChangeNotifier {
     }
   }
 
-
-
   //calculate the popularity score
-
-
-
-
 }

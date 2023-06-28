@@ -487,7 +487,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
     return SizedBox(
       height: 210,
       child: FutureBuilder<List<SongModel>>(
-        future: _songCon.getRankedSongs(),
+        future: _songCon.getRankedSongs(widget.selectedUserUID),
         builder:
             (BuildContext context, AsyncSnapshot<List<SongModel>> snapshot) {
           if (snapshot.hasData) {

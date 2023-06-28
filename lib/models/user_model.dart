@@ -134,4 +134,18 @@ class UserModel {
     if (firstName != null) data['firstName'] = firstName;
     await FirebaseFirestore.instance.collection('users').doc(uid).update(data);
   }
+
+
+  static Future<int> getFollowersLength(String uid) async {
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(uid);
+    final userSnapshot = await userDoc.get();
+    if (userSnapshot.exists) {
+      final userData = userSnapshot.data() as Map<String, dynamic>;
+      final followers = userData['followers'] as List<dynamic>?;
+      if (followers != null) {
+        return followers.length;
+      }
+    }
+    return 0; 
+  }
 }

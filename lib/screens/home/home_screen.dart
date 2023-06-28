@@ -49,12 +49,91 @@ class _HomeScreenState extends State<HomeScreen> {
             popularTracks(),
             artiststToLookOut(),
             recentListening(),
+            recommendedPlaylistsGenre(),
             basedOnLikedSongs(),
             basedOnListeningHistory(),
+            basedOnListeningHistoryLanguage(),
             const SizedBox(height: 120),
           ]),
         ),
       ),
+    );
+  }
+
+  StreamBuilder<List<SongModel>> basedOnListeningHistoryLanguage() {
+    return StreamBuilder<List<SongModel>>(
+      stream: _listenCon.getRecommendedSongsBasedOnLanguage().asStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const LoadingContainer();
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingContainer();
+        } else {
+          List<SongModel> songs = snapshot.data!;
+
+          songs = songs
+              .where((song) =>
+                  song.songId != FirebaseAuth.instance.currentUser!.uid)
+              .toList();
+
+          return songs.isEmpty
+              ? const SizedBox.shrink()
+              : SongDisplay(
+                  songs: songs,
+                  onTap: (song) {
+                    widget.musicHandler.currentSongs = songs;
+                    widget.musicHandler.currentIndex = songs.indexOf(song);
+                    widget.musicHandler.setAudioSource(
+                        songs[widget.musicHandler.currentIndex], uid);
+                  },
+                  caption: 'Recommended based on language',
+                );
+        }
+      },
+    );
+  }
+
+  StreamBuilder<List<PlaylistModel>> recommendedPlaylistsGenre() {
+    return StreamBuilder<List<PlaylistModel>>(
+      stream: _listenCon.getRecommendedPlaylistBasedOnGenre().asStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const LoadingContainer();
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingContainer();
+        } else {
+          List<PlaylistModel> playlists = snapshot.data!;
+
+          if (playlists.isEmpty) {
+            return const SizedBox.shrink();
+          } else {
+            playlists.shuffle();
+
+            return PlaylistDisplay(
+              playlists: playlists,
+              onTap: (playlist) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PlaylistDetailScreen(playlist: playlist),
+                  ),
+                );
+              },
+              caption: 'Playlists recommendation',
+            );
+          }
+        }
+      },
     );
   }
 
@@ -96,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-              slogan: 'Editor\'s Playlists',
+              caption: 'Editor\'s Playlists',
             );
           }
         }
@@ -132,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     widget.musicHandler.setAudioSource(
                         songs[widget.musicHandler.currentIndex], uid);
                   },
-                  slogan: 'Recently played songs',
+                  caption: 'Recently played songs',
                 );
         }
       },
@@ -170,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     widget.musicHandler.setAudioSource(
                         songs[widget.musicHandler.currentIndex], uid);
                   },
-                  slogan: 'Based on your liked songs',
+                  caption: 'Based on your liked songs',
                 );
         }
       },
@@ -179,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   StreamBuilder<List<SongModel>> basedOnListeningHistory() {
     return StreamBuilder<List<SongModel>>(
-      stream: _listenCon.getRecommendedSongs().asStream(),
+      stream: _listenCon.getRecommendedSongsBasedOnGenre().asStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           return const LoadingContainer();
@@ -208,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     widget.musicHandler.setAudioSource(
                         songs[widget.musicHandler.currentIndex], uid);
                   },
-                  slogan: 'Recommended based on genre',
+                  caption: 'Recommended based on genre',
                 );
         }
       },
@@ -242,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return users.isEmpty
               ? const SizedBox.shrink()
-              : ArtistDisplay(users: users, slogan: 'Artists to look out for');
+              : ArtistDisplay(users: users, caption: 'Artists to look out for');
         }
       },
     );
@@ -281,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       widget.musicHandler.setAudioSource(
                           limitedSongs[widget.musicHandler.currentIndex], uid);
                     },
-                    slogan: 'What\'s new?',
+                    caption: 'What\'s new?',
                   );
           }
         });
@@ -321,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       widget.musicHandler.setAudioSource(
                           limitedSongs[widget.musicHandler.currentIndex], uid);
                     },
-                    slogan: 'Home for OPM',
+                    caption: 'Home for OPM',
                   );
           }
         });
@@ -359,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     widget.musicHandler.setAudioSource(
                         topSongs[widget.musicHandler.currentIndex], uid);
                   },
-                  slogan: 'Popular Tracks',
+                  caption: 'Popular Tracks',
                 );
         }
       },

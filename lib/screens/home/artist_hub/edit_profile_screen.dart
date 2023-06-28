@@ -1,5 +1,3 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/services/image_service.dart';
@@ -76,11 +74,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Column(children: [
-                    usernameForm(),
-                    lastNameForm(),
-                    firstNameForm()
-                  ]),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Username', style: shortThinStyle),
+                        usernameForm(),
+                        const SizedBox(height: 15),
+                        Text('Last name', style: shortThinStyle),
+                        lastNameForm(),
+                        const SizedBox(height: 15),
+                        Text('First name', style: shortThinStyle),
+                        firstNameForm()
+                      ]),
                 ),
               ),
             ],

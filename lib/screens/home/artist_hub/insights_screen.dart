@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -67,31 +66,62 @@ class _InsightsScreenState extends State<InsightsScreen> {
             }
           },
         ),
-        FutureBuilder<int>(
-          future:
-              _songCon.getOverallPlays(FirebaseAuth.instance.currentUser!.uid),
-          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              final NumberFormat numberFormat = NumberFormat('#,###');
-              final formattedStreams = numberFormat.format(snapshot.data);
+        Padding(
+          padding: const EdgeInsets.only(left: 15, bottom: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              FutureBuilder<int>(
+                future: _songCon
+                    .getOverallPlays(FirebaseAuth.instance.currentUser!.uid),
+                builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final NumberFormat numberFormat = NumberFormat('#,###');
+                    final formattedStreams = numberFormat.format(snapshot.data);
 
-              return ListTile(
-                title: Row(
-                  children: [
-                    Text('Overall Streams:', style: shortDefault),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(formattedStreams, style: shortDefault),
-                  ],
-                ),
-              );
-            }
-          },
+                    return Row(
+                      children: [
+                        Text('Overall Streams:', style: shortDefault),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(formattedStreams, style: shortDefault),
+                      ],
+                    );
+                  }
+                },
+              ),
+              const SizedBox(width: 40),
+              FutureBuilder<int>(
+                future: _songCon
+                    .getOverallLikes(FirebaseAuth.instance.currentUser!.uid),
+                builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final NumberFormat numberFormat = NumberFormat('#,###');
+                    final formattedStreams = numberFormat.format(snapshot.data);
+
+                    return Row(
+                      children: [
+                        Text('Overall Likes:', style: shortDefault),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(formattedStreams, style: shortDefault),
+                      ],
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
         Expanded(
           child: StreamBuilder<List<SongModel>>(
@@ -222,15 +252,12 @@ class _InsightsScreenState extends State<InsightsScreen> {
           SizedBox(
             height: 320,
             child: FutureBuilder(
-              future: _songCon.getRankedSongs(),
+              future: _songCon
+                  .getRankedSongs(FirebaseAuth.instance.currentUser!.uid),
               builder: (BuildContext context,
                   AsyncSnapshot<List<SongModel>> snapshot) {
                 if (snapshot.hasData) {
-                  final List<SongModel> songs = snapshot.data!
-                      .where((song) =>
-                          song.uid == FirebaseAuth.instance.currentUser?.uid)
-                      .toList();
-
+                  final List<SongModel> songs = snapshot.data!;
                   if (songs.isEmpty) {
                     return Center(
                       child: Text(
@@ -283,7 +310,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: FutureBuilder<List<SongModel>>(
-              future: _songCon.getRankedSongs(),
+              future: _songCon
+                  .getRankedSongs(FirebaseAuth.instance.currentUser!.uid),
               builder: (BuildContext context,
                   AsyncSnapshot<List<SongModel>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -296,10 +324,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     ),
                   );
                 } else {
-                  final List<SongModel> songs = snapshot.data!
-                      .where((song) =>
-                          song.uid == FirebaseAuth.instance.currentUser?.uid)
-                      .toList();
+                  final List<SongModel> songs = snapshot.data!;
                   return Container(
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 56, 54, 54),

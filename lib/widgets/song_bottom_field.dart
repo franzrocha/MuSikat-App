@@ -69,7 +69,7 @@ class _SongBottomFieldState extends State<SongBottomField> {
                 visible: widget.hideLike == true ? false : true,
                 child: likeSong(context),
               ),
-              if (widget.playlist!.uid == FirebaseAuth.instance.currentUser?.uid) ...{
+              if (widget.playlist?.uid == FirebaseAuth.instance.currentUser?.uid) ...{
                 Visibility(
                   visible: widget.hideRemoveToPlaylist == true ? false : true,
                   child: removeSongFromPlaylist(context),

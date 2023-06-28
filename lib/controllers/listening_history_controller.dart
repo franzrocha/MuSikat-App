@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/listening_history_model.dart';
+import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
@@ -31,8 +33,6 @@ class ListeningHistoryController with ChangeNotifier {
       return listenedSongs;
     }
   }
-
-
 
   Stream<List<SongModel>> getListeningHistoryStream() {
     final SongsController songCon = SongsController();
@@ -106,7 +106,7 @@ class ListeningHistoryController with ChangeNotifier {
     }
   }
 
-  Future<List<SongModel>> getRecommendedSongs() async {
+  Future<List<SongModel>> getRecommendedSongsBasedOnGenre() async {
     try {
       final List<SongModel> recentlyPlayed = await getListeningHistory();
 
@@ -154,7 +154,100 @@ class ListeningHistoryController with ChangeNotifier {
     }
   }
 
+  Future<List<SongModel>> getRecommendedSongsBasedOnLanguage() async {
+    try {
+      final List<SongModel> recentlyPlayed = await getListeningHistory();
+
+      if (recentlyPlayed.isEmpty) {
+        return [];
+      }
+
+      final List<String> categories = [];
+      for (final song in recentlyPlayed) {
+        categories.addAll(song.languages);
+      }
+
+      final SongsController songsController = SongsController();
+      final List<SongModel> recommendedSongs = [];
+
+      const int chunkSize = 10;
+      final int numChunks = (categories.length / chunkSize).ceil();
+
+      for (int i = 0; i < numChunks; i++) {
+        final List<String> chunk = categories.sublist(
+            i * chunkSize,
+            (i + 1) * chunkSize > categories.length
+                ? categories.length
+                : (i + 1) * chunkSize);
+
+        Query query = FirebaseFirestore.instance.collection('songs');
+        query = query.where('languages', arrayContainsAny: chunk);
+
+        final QuerySnapshot querySnapshot = await query.get();
+
+        for (final doc in querySnapshot.docs) {
+          final song = await songsController.getSongById(doc.id);
+          recommendedSongs.add(song);
+        }
+      }
+
+      recommendedSongs.shuffle();
+      final List<SongModel> limitedRecommendedSongs =
+          recommendedSongs.take(5).toList();
+
+      return limitedRecommendedSongs;
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
 
 
-  
+   Future<List<PlaylistModel>> getRecommendedPlaylistBasedOnGenre() async {
+    try {
+      final List<SongModel> recentlyPlayed = await getListeningHistory();
+
+      if (recentlyPlayed.isEmpty) {
+        return [];
+      }
+
+      final List<String> categories = [];
+      for (final song in recentlyPlayed) {
+        categories.add(song.genre);
+      }
+
+      final PlaylistController playlistController = PlaylistController();
+      final List<PlaylistModel> recommendedPlaylists = [];
+
+      const int chunkSize = 10;
+      final int numChunks = (categories.length / chunkSize).ceil();
+
+      for (int i = 0; i < numChunks; i++) {
+        final List<String> chunk = categories.sublist(
+            i * chunkSize,
+            (i + 1) * chunkSize > categories.length
+                ? categories.length
+                : (i + 1) * chunkSize);
+
+        Query query = FirebaseFirestore.instance.collection('playlists');
+        query = query.where('genre', whereIn: chunk);
+
+        final QuerySnapshot querySnapshot = await query.get();
+
+        for (final doc in querySnapshot.docs) {
+          final playlist = await playlistController.getPlaylistById(doc.id);
+          recommendedPlaylists.add(playlist);
+        }
+      }
+
+      recommendedPlaylists.shuffle();
+      final List<PlaylistModel> limitedRecommendedSongs =
+          recommendedPlaylists.take(5).toList();
+
+      return limitedRecommendedSongs;
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
 }

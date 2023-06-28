@@ -81,7 +81,7 @@ class LikedSongsController with ChangeNotifier {
   Future<List<SongModel>> getLikedSongs() async {
     List<SongModel> likedSongs = [];
     try {
-      String uid = FirebaseAuth.instance.currentUser!.uid;
+      String uid = FirebaseAuth.instance.currentUser!.uid;  
       final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
       final querySnapshot =
           await collectionRef.where('uid', isEqualTo: uid).get();

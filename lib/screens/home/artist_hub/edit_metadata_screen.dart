@@ -75,7 +75,6 @@ class _EditMetadataScreenState extends State<EditMetadataScreen> {
   }
 
   void _editData() async {
-    // Trim the input data
     String title = _titleCon!.text.trim();
     List<String> trimmedWriters =
         _writers.map((writer) => writer.trim()).toList();
@@ -87,24 +86,22 @@ class _EditMetadataScreenState extends State<EditMetadataScreen> {
     const LoadingIndicator();
 
     try {
-      // Starts uploading the file
       final String songId = await songService.updateSong(
           widget.songs.songId,
           title,
-          _selectedAlbumCover!.path,
+          _selectedAlbumCover != null
+              ? _selectedAlbumCover!.path
+              : null, 
           trimmedWriters,
           trimmedProducers,
           selectedGenre!,
           selectedLanguage!,
           selectedDescription!);
 
-      // Get the updated song model with the new data
       final SongModel updatedSong = await _songCon.getSongById(songId);
 
-      // Navigate to the previous screen and pass the updated song data
       Navigator.of(context).pop(updatedSong);
 
-      // Show toast message to indicate success
       ToastMessage.show(context, 'Song updated successfully');
     } catch (e) {
       print('Update failed: ${e.toString()}');

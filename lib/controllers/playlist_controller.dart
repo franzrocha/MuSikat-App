@@ -117,5 +117,10 @@ class PlaylistController with ChangeNotifier {
 }
 
 
+  Future<PlaylistModel> getPlaylistById(String playlistId) async {
+    final DocumentSnapshot snap =
+        await FirebaseFirestore.instance.collection('playlists').doc(playlistId).get();
+    return PlaylistModel.fromDocumentSnap(snap);
+  }
 
 }

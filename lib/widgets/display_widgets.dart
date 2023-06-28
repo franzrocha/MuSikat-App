@@ -1,14 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/other_artist_screen.dart';
-import 'package:musikat_app/utils/constants.dart';
-import 'package:musikat_app/widgets/song_bottom_field.dart';
+import 'package:musikat_app/utils/exports.dart';
 
 class SongDisplay extends StatelessWidget {
-  final String slogan;
+  final String caption;
   final List<SongModel> songs;
   final Function(SongModel) onTap;
 
@@ -16,7 +14,7 @@ class SongDisplay extends StatelessWidget {
     super.key,
     required this.songs,
     required this.onTap,
-    required this.slogan,
+    required this.caption,
   });
 
   @override
@@ -32,7 +30,7 @@ class SongDisplay extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(top: 25),
               child: Text(
-                slogan,
+                caption,
                 textAlign: TextAlign.right,
                 style: sloganStyle,
               ),
@@ -116,12 +114,12 @@ class SongDisplay extends StatelessWidget {
 
 class ArtistDisplay extends StatelessWidget {
   final List<UserModel> users;
-  final String slogan;
+  final String caption;
 
   const ArtistDisplay({
     super.key,
     required this.users,
-    required this.slogan,
+    required this.caption,
   });
 
   @override
@@ -137,7 +135,7 @@ class ArtistDisplay extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(top: 25),
               child: Text(
-                slogan,
+                caption,
                 textAlign: TextAlign.right,
                 style: sloganStyle,
               ),
@@ -150,6 +148,7 @@ class ArtistDisplay extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+
               children: users.map((user) {
                 return Padding(
                   padding: const EdgeInsets.only(left: 25, top: 10),
@@ -186,7 +185,11 @@ class ArtistDisplay extends StatelessWidget {
                                             user.profileImage),
                                         fit: BoxFit.cover,
                                       )
-                                    : null,
+                                    : DecorationImage(
+                                        image: CachedNetworkImageProvider(
+                                            userIcon),
+                                        fit: BoxFit.cover,
+                                      )
                               ),
                             ),
                           ),
@@ -196,6 +199,13 @@ class ArtistDisplay extends StatelessWidget {
                             child: Text(
                               user.username,
                               style: titleStyle,
+                            ),
+                          ),
+                            Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              '${user.followers.length} followers',
+                              style: artistStyle,
                             ),
                           ),
                         ],
@@ -213,7 +223,7 @@ class ArtistDisplay extends StatelessWidget {
 }
 
 class PlaylistDisplay extends StatelessWidget {
-  final String slogan;
+  final String caption;
   final List<PlaylistModel> playlists;
   final Function(PlaylistModel) onTap;
 
@@ -221,7 +231,7 @@ class PlaylistDisplay extends StatelessWidget {
     super.key,
     required this.playlists,
     required this.onTap,
-    required this.slogan,
+    required this.caption,
   });
 
   @override
@@ -237,7 +247,7 @@ class PlaylistDisplay extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(top: 25),
               child: Text(
-                slogan,
+                caption,
                 textAlign: TextAlign.right,
                 style: sloganStyle,
               ),

@@ -48,7 +48,7 @@ class LikedSongsModel {
       Query query = FirebaseFirestore.instance.collection('songs');
       if (categories.isNotEmpty) {
         query = query.where(byGenre ? 'genre' : 'artist', whereIn: categories);
-        print('Print me $categories');
+        // print('Print me $categories');
       }
 
       final QuerySnapshot querySnapshot = await query.get();
