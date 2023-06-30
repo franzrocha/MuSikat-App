@@ -27,4 +27,3 @@ export 'package:musikat_app/utils/list_values.dart';
 export 'package:marquee_text/marquee_direction.dart';
 export 'package:marquee_text/marquee_text.dart';
 export 'package:musikat_app/utils/image_links.dart';
-

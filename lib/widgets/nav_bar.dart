@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:musikat_app/controllers/firebase_service.dart';
+import 'package:musikat_app/services/firebase_service.dart';
 import 'package:musikat_app/controllers/user_notification_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/screens/home/browse_screen.dart';
@@ -59,6 +59,7 @@ class _NavBarState extends State<NavBar> {
           actions: [
             Row(
               children: [
+                //navbar notification
                 StreamBuilder<QuerySnapshot>(
                   stream: userNotificationController
                       .streamUserNotification(currentUserId!),
@@ -67,12 +68,17 @@ class _NavBarState extends State<NavBar> {
                       QuerySnapshot? querySnapshot = snapshot.data;
                       int length = querySnapshot!.docs.length;
 
-                      print('length $length');
                       if (snapshot.hasData && length > 0) {
                         return badges.Badge(
-                          onTap: () async {
-                            await showTopModalDialog<String?>(
-                                context, const NotificationDialog());
+                          onTap: () {
+                            print('get the value');
+                            // await showTopModalDialog<String?>(context, const NotificationDialog());
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const NotificationScreen(),
+                              ),
+                            );
                           },
                           position: badges.BadgePosition.topEnd(top: 0, end: 3),
                           badgeStyle: const badges.BadgeStyle(
@@ -84,21 +90,37 @@ class _NavBarState extends State<NavBar> {
                           ),
                           child: IconButton(
                             icon: const Icon(Icons.notifications, size: 20),
-                            onPressed: () async {
-                              await showTopModalDialog<String?>(
-                                  context, const NotificationDialog());
+                            onPressed: () {
+                              print('get the value');
+                              // await showTopModalDialog<String?>(context, const NotificationDialog());
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationScreen(),
+                                ),
+                              );
                             },
                           ),
                         );
                       }
                     } else if (snapshot.hasError) {
+                      // Handle error case
                       return Text('Error: ${snapshot.error}');
                     }
 
-                    return const Icon(
-                      Icons.notifications,
-                      size: 25,
-                      color: Colors.white,
+                    return IconButton(
+                      icon: const Icon(
+                        Icons.notifications,
+                        size: 20,
+                        color: Colors.teal,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationScreen(),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

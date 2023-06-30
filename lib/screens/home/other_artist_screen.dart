@@ -141,7 +141,8 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                       followers++;
                     } else {
                       _followCon.unfollowUser(selectedUserUID);
-                      userNotification.addUserNotification(selectedUserUID, 0);
+                      userNotification.deleteNotification(selectedUserUID);
+
                       followers--;
                     }
 

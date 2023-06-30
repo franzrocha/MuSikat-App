@@ -22,4 +22,16 @@ class FirebaseService with ChangeNotifier {
 
     return uid;
   }
+
+  void deleteAllCollection(db, field, userId) {
+    FirebaseFirestore.instance
+        .collection(db)
+        .where(field, isEqualTo: userId)
+        .snapshots()
+        .forEach((querySnapshot) {
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        docSnapshot.reference.delete();
+      }
+    });
+  }
 }
