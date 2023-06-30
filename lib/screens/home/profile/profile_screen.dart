@@ -21,7 +21,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final AuthController _auth = locator<AuthController>();
-
+  MusicHandler musicHandler = locator<MusicHandler>();
   UserModel? user;
 
   @override
@@ -41,11 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
-      body: 
-      
-      
-      
-      SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Center(
@@ -76,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
-                  TileList(
+                TileList(
                   icon: Icons.history,
                   title: 'Listening History',
                   ontap: () {
@@ -86,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
-                  TileList(
+                TileList(
                   icon: Icons.people,
                   title: 'Followers/Following',
                   ontap: () {
@@ -106,7 +102,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
-              
                 TileList(
                   icon: Icons.info,
                   title: 'About us',
@@ -123,6 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ontap: () async {
                     locator<MusicHandler>().setIsPlaying(false);
                     locator<MusicHandler>().player.stop();
+                     await Future.delayed(const Duration(seconds: 1)); 
                     _auth.logout();
                   },
                 ),

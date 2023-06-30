@@ -135,7 +135,6 @@ class UserModel {
     await FirebaseFirestore.instance.collection('users').doc(uid).update(data);
   }
 
-
   static Future<int> getFollowersLength(String uid) async {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(uid);
     final userSnapshot = await userDoc.get();
@@ -146,6 +145,20 @@ class UserModel {
         return followers.length;
       }
     }
-    return 0; 
+    return 0;
+  }
+
+  static Future<List<UserModel>> getNonFollowers(String currentUserUid) async {
+    List<UserModel> nonFollowers = [];
+
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('users').get();
+
+    nonFollowers = querySnapshot.docs
+        .map((documentSnapshot) => UserModel.fromDocumentSnap(documentSnapshot))
+        .where((user) => !user.followers.contains(currentUserUid))
+        .toList();
+
+    return nonFollowers;
   }
 }

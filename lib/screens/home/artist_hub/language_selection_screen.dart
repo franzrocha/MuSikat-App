@@ -14,7 +14,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   final CategoriesController _categoriesCon = CategoriesController();
   final TextEditingController _searchController = TextEditingController();
   String searchText = '';
-   bool showNoResults = false;
+  bool showNoResults = false;
 
   @override
   void initState() {
@@ -69,7 +69,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           searchBar(),
           languageChips(),
           if (showNoResults) Text('No results found', style: shortDefault),
-
           languageList(),
         ],
       ),
@@ -107,7 +106,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             return const SizedBox.shrink();
           }
           return Container(
-            color: _checkedLanguages[language]! ? const Color.fromARGB(255, 10, 10, 10) : null,
+            color: _checkedLanguages[language]!
+                ? const Color.fromARGB(255, 10, 10, 10)
+                : null,
             child: ListTile(
               onTap: () {
                 setState(() {
@@ -117,7 +118,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               selected: _checkedLanguages[language]!,
               title: Text(
                 language,
-                style: GoogleFonts.inter(fontSize: 14, color: Colors.white),
+                style: const TextStyle(fontSize: 14, color: Colors.white),
               ),
               trailing: _checkedLanguages[language]!
                   ? const Icon(Icons.check, color: musikatColor2)
@@ -164,20 +165,19 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: TextField(
-        
         style: GoogleFonts.inter(color: Colors.white, fontSize: 13),
         controller: _searchController,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'Search',
           fillColor: musikatBackgroundColor,
-          hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 13),
+          hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
           filled: true,
         ),
         onChanged: (value) {
           setState(() {
             searchText = value.toLowerCase();
-             showNoResults = _checkedLanguages.keys
-                .every((language) => !language.toLowerCase().contains(searchText));
+            showNoResults = _checkedLanguages.keys.every(
+                (language) => !language.toLowerCase().contains(searchText));
           });
         },
       ),

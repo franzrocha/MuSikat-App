@@ -17,7 +17,21 @@ class BrowseScreen extends StatefulWidget {
 
 class _BrowseScreenState extends State<BrowseScreen> {
   final PlaylistController _playCon = PlaylistController();
-  List<String> genres = ['Pop', 'Hiphop/Rap'];
+  List<String> genres = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUniqueGenres();
+  }
+
+  Future<void> fetchUniqueGenres() async {
+    List<String> uniqueGenres = await _playCon.getUniqueGenres();
+
+    setState(() {
+      genres = uniqueGenres;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

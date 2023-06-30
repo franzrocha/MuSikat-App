@@ -202,8 +202,56 @@ class ListeningHistoryController with ChangeNotifier {
     }
   }
 
+   Future<List<SongModel>> getRecommendedSongsBasedOnMoods() async {
+    try {
+      final List<SongModel> recentlyPlayed = await getListeningHistory();
 
-   Future<List<PlaylistModel>> getRecommendedPlaylistBasedOnGenre() async {
+      if (recentlyPlayed.isEmpty) {
+        return [];
+      }
+
+      final List<String> categories = [];
+      for (final song in recentlyPlayed) {
+        categories.addAll(song.description);
+      }
+
+      final SongsController songsController = SongsController();
+      final List<SongModel> recommendedSongs = [];
+
+      const int chunkSize = 10;
+      final int numChunks = (categories.length / chunkSize).ceil();
+
+      for (int i = 0; i < numChunks; i++) {
+        final List<String> chunk = categories.sublist(
+            i * chunkSize,
+            (i + 1) * chunkSize > categories.length
+                ? categories.length
+                : (i + 1) * chunkSize);
+
+        Query query = FirebaseFirestore.instance.collection('songs');
+        query = query.where('description', arrayContainsAny: chunk);
+
+        final QuerySnapshot querySnapshot = await query.get();
+
+        for (final doc in querySnapshot.docs) {
+          final song = await songsController.getSongById(doc.id);
+          recommendedSongs.add(song);
+        }
+      }
+
+      recommendedSongs.shuffle();
+      final List<SongModel> limitedRecommendedSongs =
+          recommendedSongs.take(5).toList();
+
+      return limitedRecommendedSongs;
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
+
+
+  Future<List<PlaylistModel>> getRecommendedPlaylistBasedOnGenre() async {
     try {
       final List<SongModel> recentlyPlayed = await getListeningHistory();
 
@@ -250,4 +298,5 @@ class ListeningHistoryController with ChangeNotifier {
       return [];
     }
   }
+
 }

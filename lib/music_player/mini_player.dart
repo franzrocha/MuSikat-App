@@ -52,14 +52,12 @@ class MiniPlayer extends StatelessWidget {
                         builder: (context) => MusicPlayerScreen(
                           songs: musicHandler.currentSongs,
                           initialIndex: musicHandler.currentIndex,
-                          
                         ),
                       ),
                     );
                   },
                   child: Row(
                     children: [
-                      // Thumbnail
                       Container(
                         height: 35,
                         width: 35,
@@ -155,7 +153,7 @@ class MiniPlayer extends StatelessWidget {
                                       ? Icons.pause
                                       : Icons.play_arrow,
                                   color: Colors
-                                      .white, // Set the color of the icon here
+                                      .white, 
                                 ),
                               ),
                             ),

@@ -161,7 +161,9 @@ class NavigationService {
           ),
           settings: settings);
     } else {
-      return FadeRoute(page: const WelcomeScreen(), settings: settings);
+      return FadeRoute(page: const WelcomeScreen(
+        
+      ), settings: settings);
     }
   }
 }

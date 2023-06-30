@@ -1,18 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:just_audio/just_audio.dart';
+<<<<<<< Updated upstream
 import 'package:musikat_app/services/firebase_service.dart';
 import 'package:musikat_app/controllers/user_notification_controller.dart';
+=======
+>>>>>>> Stashed changes
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/screens/home/browse_screen.dart';
 import 'package:musikat_app/screens/home/camera.dart';
 import 'package:musikat_app/screens/home/chat/chat_home.dart';
-import 'package:musikat_app/screens/home/dialog/notification.dart';
 import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/music_player/mini_player.dart';
-import 'package:badges/badges.dart' as badges;
 
 class NavBar extends StatefulWidget {
   static const String route = 'navbar';
@@ -30,17 +30,16 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
   Color color = Colors.red;
+  
 
-  static final firebaseService = FirebaseService();
-  static final userNotificationController = UserNotificationController();
-  static final currentUserId = firebaseService.getCurrentUserId();
+  // static final firebaseService = FirebaseService();
+  // static final userNotificationController = UserNotificationController();
+  // static final currentUserId = firebaseService.getCurrentUserId();
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      HomeScreen(
-        musicHandler: widget.musicHandler,
-      ),
+      HomeScreen(musicHandler: widget.musicHandler),
       const BrowseScreen(),
       Container(),
       ArtistsHubScreen(musicHandler: widget.musicHandler),
@@ -59,6 +58,7 @@ class _NavBarState extends State<NavBar> {
           actions: [
             Row(
               children: [
+<<<<<<< Updated upstream
                 //navbar notification
                 StreamBuilder<QuerySnapshot>(
                   stream: userNotificationController
@@ -124,6 +124,51 @@ class _NavBarState extends State<NavBar> {
                     );
                   },
                 ),
+=======
+                // StreamBuilder<QuerySnapshot>(
+                //   stream: userNotificationController
+                //       .streamUserNotification(currentUserId!),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       QuerySnapshot? querySnapshot = snapshot.data;
+                //       int length = querySnapshot!.docs.length;
+
+                //       print('length $length');
+                //       if (snapshot.hasData && length > 0) {
+                //         return badges.Badge(
+                //           onTap: () async {
+                //             await showTopModalDialog<String?>(
+                //                 context, const NotificationDialog());
+                //           },
+                //           position: badges.BadgePosition.topEnd(top: 0, end: 3),
+                //           badgeStyle: const badges.BadgeStyle(
+                //             badgeColor: Colors.red,
+                //           ),
+                //           badgeContent: Text(
+                //             length.toString(),
+                //             style: const TextStyle(color: Colors.white),
+                //           ),
+                //           child: IconButton(
+                //             icon: const Icon(Icons.notifications, size: 20),
+                //             onPressed: () async {
+                //               await showTopModalDialog<String?>(
+                //                   context, const NotificationDialog());
+                //             },
+                //           ),
+                //         );
+                //       }
+                //     } else if (snapshot.hasError) {
+                //       return Text('Error: ${snapshot.error}');
+                //     }
+
+                //     return const Icon(
+                //       Icons.notifications,
+                //       size: 25,
+                //       color: Colors.white,
+                //     );
+                //   },
+                // ),
+>>>>>>> Stashed changes
                 const SizedBox(
                   width: 10,
                 ),

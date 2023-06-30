@@ -6,7 +6,7 @@ import 'auth_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String route = 'welcome-screen';
-  const WelcomeScreen({Key? key}) : super(key: key);
+  const WelcomeScreen( {Key? key}) : super(key: key);
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
@@ -14,6 +14,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   ImageProvider? backgroundImage;
+  
 
   @override
   void initState() {

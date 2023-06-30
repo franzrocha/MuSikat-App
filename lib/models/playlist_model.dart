@@ -48,6 +48,9 @@ class PlaylistModel {
         'isOfficial': isOfficial,
         'genre': genre,
       };
+
+      
+
 }
 
 

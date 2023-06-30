@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
-import 'package:musikat_app/controllers/user_notification_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -36,7 +35,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
 
   final currentUser = FirebaseAuth.instance.currentUser!.uid;
 
-  final userNotification = UserNotificationController();
+  // final userNotification = UserNotificationController();
 
   final PlaylistController _playlistCon = PlaylistController();
   String get selectedUserUID => widget.selectedUserUID;
@@ -123,7 +122,10 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
           stream: _followCon.getUserFollowing(currentUser).asStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container();
+             return const SizedBox(
+                width: 130.0,
+                child: ElevatedButton(child: null, onPressed: null),
+              );
             } else if (snapshot.hasData) {
               final followingList = snapshot.data;
               final selectedUserFollows =
@@ -136,13 +138,18 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                     if (!selectedUserFollows) {
                       _followCon.followUser(selectedUserUID);
 
-                      userNotification.addUserNotification(selectedUserUID, 1);
+                      // userNotification.addUserNotification(selectedUserUID, 1);
 
                       followers++;
                     } else {
                       _followCon.unfollowUser(selectedUserUID);
+<<<<<<< Updated upstream
                       userNotification.deleteNotification(selectedUserUID);
 
+=======
+
+                      // userNotification.addUserNotification(selectedUserUID, 0);
+>>>>>>> Stashed changes
                       followers--;
                     }
 

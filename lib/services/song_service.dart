@@ -109,7 +109,7 @@ Future<String> updateSong(
     final DocumentSnapshot songSnapshot = await docRef.get();
     final String currentCoverUrl = songSnapshot.get('album_cover');
 
-    String newCoverDownloadUrl = currentCoverUrl; // Set the default value to the current cover URL
+    String newCoverDownloadUrl = currentCoverUrl; 
 
     if (albumCover != null) {
       final Reference currentCoverRef = FirebaseStorage.instance.refFromURL(currentCoverUrl);

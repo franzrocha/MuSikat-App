@@ -94,13 +94,29 @@ class _ListeningHistoryScreenState extends State<ListeningHistoryScreen> {
                         itemBuilder: (context, index) {
                           SongModel songData = recentlyPlayed[index];
                           return ListTile(
+                            onLongPress: () {
+                              showModalBottomSheet(
+                                backgroundColor: musikatColor4,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return SingleChildScrollView(
+                                    child: SongBottomField(
+                                      song: recentlyPlayed[index],
+                                      hideEdit: true,
+                                      hideDelete: true,
+                                      hideRemoveToPlaylist: true,
+                                      hideLike: false,
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => MusicPlayerScreen(
                                     songs: recentlyPlayed,
                                     initialIndex: index,
-                                   
                                   ),
                                 ),
                               );

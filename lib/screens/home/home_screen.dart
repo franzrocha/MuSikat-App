@@ -13,6 +13,7 @@ import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
 import '../../music_player/music_handler.dart';
+import 'package:flutter/rendering.dart';
 
 class HomeScreen extends StatefulWidget {
   final MusicHandler musicHandler;
@@ -32,6 +33,41 @@ class _HomeScreenState extends State<HomeScreen> {
   final PlaylistController _playCon = PlaylistController();
   final ListeningHistoryController _listenCon = ListeningHistoryController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
+   GlobalKey _globalKey = GlobalKey();
+//   String mostPlayedGenre = '';
+
+//  @override
+// void initState() {
+//   super.initState();
+//   fetchMostPlayedGenre();
+// }
+
+// Future<void> fetchMostPlayedGenre() async {
+//   final List<SongModel> listenedSongs =
+//       await _listenCon.getListeningHistory();
+//   final Map<String, int> genreCountMap = {};
+
+//   for (final song in listenedSongs) {
+//     final genre = song.genre;
+//     genreCountMap[genre] = (genreCountMap[genre] ?? 0) + 1;
+//   }
+
+//   String newMostPlayedGenre = '';
+//   int maxCount = 0;
+
+//   genreCountMap.forEach((genre, count) {
+//     if (count > maxCount) {
+//       maxCount = count;
+//       newMostPlayedGenre = genre;
+//     }
+//   });
+
+//   if (mounted) {
+//     setState(() {
+//       mostPlayedGenre = newMostPlayedGenre;
+//     });
+//   }
+// }
 
   @override
   Widget build(BuildContext context) {
@@ -46,19 +82,143 @@ class _HomeScreenState extends State<HomeScreen> {
             homeForOPM(),
             editorsPlaylists(),
             newReleases(),
+            suggestedUsers(),
             popularTracks(),
             artiststToLookOut(),
+             basedOnLikedSongs(),
+            // recentListeningMostPlayedGenre(),
             recentListening(),
             recommendedPlaylistsGenre(),
-            basedOnLikedSongs(),
+           
             basedOnListeningHistory(),
             basedOnListeningHistoryLanguage(),
+            basedOnListeningHistoryMoods(),
             const SizedBox(height: 120),
           ]),
         ),
-      ),
+      ),  
     );
   }
+
+  
+  StreamBuilder<List<UserModel>?> suggestedUsers() {
+    return StreamBuilder<List<UserModel>?>(
+      stream: UserModel.getNonFollowers(FirebaseAuth.instance.currentUser!.uid).asStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const LoadingCircularContainer();
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingCircularContainer();
+        } else {
+          List<UserModel> users = snapshot.data!;
+          Random random = Random(DateTime.now().minute);
+
+          users = users
+              .where(
+                  (user) => user.accountType != 'Admin')
+              .toList();
+
+          users.shuffle(random);
+
+          users = users.take(5).toList();
+
+          return users.isEmpty
+              ? const SizedBox.shrink()
+              : ArtistDisplay(users: users, caption: 'Suggested Users');
+        }
+      },
+    );
+  }
+
+
+  // StreamBuilder<List<PlaylistModel>> recentListeningMostPlayedGenre() {
+  //   return StreamBuilder<List<PlaylistModel>>(
+  //     stream: _playCon.getPlaylistStream(),
+  //     builder: (context, snapshot) {
+  //       if (!snapshot.hasData || snapshot.data == null) {
+  //         return const LoadingContainer();
+  //       }
+  //       if (snapshot.hasError) {
+  //         return Center(child: Text('Error: ${snapshot.error}'));
+  //       }
+
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return const LoadingContainer();
+  //       } else {
+  //         List<PlaylistModel> playlists = snapshot.data!;
+
+  //         playlists = playlists
+  //             .where((playlist) =>
+  //                 playlist.isOfficial == true &&
+  //                 playlist.genre == mostPlayedGenre)
+  //             .toList();
+
+  //         if (playlists.isEmpty) {
+  //           return const SizedBox.shrink();
+  //         } else {
+  //            playlists.shuffle();
+
+  //           return PlaylistDisplay(
+  //             playlists: playlists,
+  //             onTap: (playlist) {
+  //               Navigator.of(context).push(
+  //                 MaterialPageRoute(
+  //                   builder: (context) =>
+  //                       PlaylistDetailScreen(playlist: playlist),
+  //                 ),
+  //               );
+  //             },
+  //             caption: mostPlayedGenre,
+  //          );
+  //         }
+  //       }
+  //      } 
+  //   );
+  // }
+
+   StreamBuilder<List<SongModel>> basedOnListeningHistoryMoods() {
+    return StreamBuilder<List<SongModel>>(
+      stream: _listenCon.getRecommendedSongsBasedOnMoods().asStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const LoadingContainer();
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingContainer();
+        } else {
+          List<SongModel> songs = snapshot.data!;
+
+          songs = songs
+              .where((song) =>
+                  song.uid != FirebaseAuth.instance.currentUser!.uid)
+              .toList();
+
+          return songs.isEmpty
+              ? const SizedBox.shrink()
+              : SongDisplay(
+                  songs: songs,
+                  onTap: (song) {
+                    widget.musicHandler.currentSongs = songs;
+                    widget.musicHandler.currentIndex = songs.indexOf(song);
+                    widget.musicHandler.setAudioSource(
+                        songs[widget.musicHandler.currentIndex], uid);
+                  },
+                  caption: 'Recommended based on moods',
+                );
+        }
+      },
+    );
+  }
+
 
   StreamBuilder<List<SongModel>> basedOnListeningHistoryLanguage() {
     return StreamBuilder<List<SongModel>>(
@@ -78,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           songs = songs
               .where((song) =>
-                  song.songId != FirebaseAuth.instance.currentUser!.uid)
+                  song.uid != FirebaseAuth.instance.currentUser!.uid)
               .toList();
 
           return songs.isEmpty
@@ -114,6 +274,8 @@ class _HomeScreenState extends State<HomeScreen> {
         } else {
           List<PlaylistModel> playlists = snapshot.data!;
 
+            playlists.take(5);
+
           if (playlists.isEmpty) {
             return const SizedBox.shrink();
           } else {
@@ -129,11 +291,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-              caption: 'Playlists recommendation',
-            );
+              caption: 'Playlist recommendation',
+           );
           }
         }
-      },
+       } 
     );
   }
 
@@ -236,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           songs = songs
               .where((song) =>
-                  song.songId != FirebaseAuth.instance.currentUser!.uid)
+                  song.uid != FirebaseAuth.instance.currentUser!.uid)
               .toList();
 
           return songs.isEmpty
@@ -249,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     widget.musicHandler.setAudioSource(
                         songs[widget.musicHandler.currentIndex], uid);
                   },
-                  caption: 'Based on your liked songs',
+                  caption: 'More on what you like..',
                 );
         }
       },
@@ -274,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           songs = songs
               .where((song) =>
-                  song.songId != FirebaseAuth.instance.currentUser!.uid)
+                  song.uid != FirebaseAuth.instance.currentUser!.uid)
               .toList();
 
           return songs.isEmpty

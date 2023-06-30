@@ -121,7 +121,7 @@ class _DescriptionSelectionScreenState
               selected: _checkedDescriptions[description]!,
               title: Text(
                 description,
-                style: GoogleFonts.inter(fontSize: 14, color: Colors.white),
+                style: const TextStyle(fontSize: 14, color: Colors.white),
               ),
               trailing: _checkedDescriptions[description]!
                   ? const Icon(Icons.check, color: musikatColor2)
@@ -150,7 +150,7 @@ class _DescriptionSelectionScreenState
                     label: Text(
                       description,
                       style:
-                          GoogleFonts.inter(color: Colors.white, fontSize: 13),
+                         const TextStyle(color: Colors.white, fontSize: 13),
                     ),
                     onDeleted: () {
                       setState(() {
@@ -168,12 +168,12 @@ class _DescriptionSelectionScreenState
     return Padding(
       padding: const EdgeInsets.all(20),
       child: TextField(
-        style: GoogleFonts.inter(color: Colors.white, fontSize: 13),
+        style: const TextStyle(color: Colors.white, fontSize: 13),
         controller: _searchController,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'Search',
           fillColor: musikatBackgroundColor,
-          hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 13),
+          hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
           filled: true,
         ),
         onChanged: (value) {
