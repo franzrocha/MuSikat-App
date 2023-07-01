@@ -307,29 +307,16 @@ class _ChatCardState extends State<ChatCard> {
         ));
   }
 
-  Future<dynamic> bottomModal(BuildContext context) {
+  Future<dynamic>? bottomModal(BuildContext context) {
+    if (chatroom == 'globalchat') {
+      return null;
+    }
+
     return showModalBottomSheet(
       backgroundColor: musikatColor4,
       context: context,
-      builder: (context) => SingleChildScrollView(
-          child: ChatBottomField(
-        chat: chat[index],
-      )),
+      builder: (context) =>
+          SingleChildScrollView(child: ChatBottomField(chat: chat[index], chatroom: chatroom,)),
     );
   }
 }
-  // Future<dynamic> bottomModal(BuildContext context, chatroom) {
-  //   return showMaterialModalBottomSheet(
-  //     context: context,
-  //     builder: (context) => SingleChildScrollView(
-  //       controller: ModalScrollController.of(context),
-  //       child: BottomSheetModal(
-  //         chat: chat[index],
-  //         chatroom: chatroom,
-  //         recipient: widget.recipient,
-  //       ),
-  //     ),
-  //   );
-  // }
-
-

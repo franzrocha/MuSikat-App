@@ -87,7 +87,7 @@ class CustomSliverBar extends StatelessWidget {
       floating: true,
       pinned: true,
       snap: true,
-      expandedHeight: 220,
+      expandedHeight: 200,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: BoxDecoration(

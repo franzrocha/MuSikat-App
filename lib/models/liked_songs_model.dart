@@ -28,46 +28,57 @@ class LikedSongsModel {
         'songId': songId,
       };
 
-  static Future<List<SongModel>> getRecommendedSongsByLike(
-      {bool byGenre = true}) async {
-    try {
-      final LikedSongsController likedCon = LikedSongsController();
 
-      final List<SongModel> likedSongs = await likedCon.getLikedSongs();
+  static Future<List<SongModel>> getRecommendedSongsByLike() async {
+  try {
+    final LikedSongsController likedCon = LikedSongsController();
 
-      if (likedSongs.isEmpty) {
-        return [];
-      }
+    final List<SongModel> likedSongs = await likedCon.getLikedSongs();
 
-      final List<String> categories = [];
-      for (final song in likedSongs) {
-        categories.add(byGenre ? song.genre : song.artist);
-      }
+    if (likedSongs.isEmpty) {
+      return [];
+    }
 
-      final SongsController songsController = SongsController();
+    final List<String> categories = [];
+    for (final song in likedSongs) {
+      categories.add(song.genre);
+    }
+
+    final SongsController songsController = SongsController();
+    final List<SongModel> recommendedSongs = [];
+
+    const int chunkSize = 10;
+    final int numChunks = (categories.length / chunkSize).ceil();
+
+    for (int i = 0; i < numChunks; i++) {
+      final List<String> chunk = categories.sublist(
+          i * chunkSize,
+          (i + 1) * chunkSize > categories.length
+              ? categories.length
+              : (i + 1) * chunkSize);
+
       Query query = FirebaseFirestore.instance.collection('songs');
-      if (categories.isNotEmpty) {
-        query = query.where(byGenre ? 'genre' : 'artist', whereIn: categories);
-        // print('Print me $categories');
-      }
+      query = query.where('genre', whereIn: chunk);
+
+      query = query.orderBy('__name__');
+
+      query = query.limit(10);
 
       final QuerySnapshot querySnapshot = await query.get();
-      print(querySnapshot.docs.length);
 
-      final List<SongModel> recommendedSongs = [];
       for (final doc in querySnapshot.docs) {
         final song = await songsController.getSongById(doc.id);
         recommendedSongs.add(song);
       }
-
-      recommendedSongs.shuffle();
-      final List<SongModel> limitedRecommendedSongs =
-          recommendedSongs.take(5).toList();
-
-      return limitedRecommendedSongs;
-    } catch (e) {
-      print(e.toString());
-      return [];
     }
+
+    recommendedSongs.shuffle();
+
+    return recommendedSongs;
+  } catch (e) {
+    print(e.toString());
+    return [];
   }
+}
+
 }

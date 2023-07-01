@@ -84,7 +84,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                         ),
                       ),
                       artistHub(context),
-                      const SizedBox(height: 130),
+                      const SizedBox(height: 120),
                     ],
                   ),
                 );
@@ -197,7 +197,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                 child: SongBottomField(
                                   song: latestSong,
                                   hideRemoveToPlaylist: true,
-                                   hideLike: false,
+                                  hideLike: false,
                                 ),
                               );
                             });
@@ -224,8 +224,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                                 color: Colors.grey.withOpacity(0.5),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(
-                                        0.1),
+                                    color: Colors.black.withOpacity(0.1),
                                     spreadRadius: 2,
                                     blurRadius: 4,
                                     offset: const Offset(0, 2),
@@ -242,8 +241,8 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                latestSong.title.length > 25
-                                    ? '${latestSong.title.substring(0, 25)}...'
+                                latestSong.title.length > 30
+                                    ? '${latestSong.title.substring(0, 30)}...'
                                     : latestSong.title,
                                 style: songTitle,
                                 maxLines: 1,
@@ -251,7 +250,8 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                DateFormat("y").format(latestSong.createdAt),
+                                DateFormat("MMMM d, y")
+                                    .format(latestSong.createdAt),
                                 style: artistStyle,
                               ),
                             ],
@@ -289,7 +289,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
           style: shortDefaultGrey,
         ),
       ),
-    );    
+    );
   }
 
   Positioned editButton(snapshot) {
@@ -358,7 +358,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                 } else if (snapshot.hasData) {
                   final followersCount = snapshot.data!.length;
                   return Text(
-                    'Followers: $followersCount',
+                    '$followersCount followers',
                     style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 13.0,
@@ -366,7 +366,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   );
                 } else {
                   return const Text(
-                    'Followers: 0',
+                    '0 followers',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 13.0,
@@ -385,7 +385,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                     snapshot.connectionState == ConnectionState.done) {
                   final followingCount = snapshot.data!.length;
                   return Text(
-                    'Following: $followingCount',
+                    '$followingCount following',
                     style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 13.0,
@@ -393,7 +393,7 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
                   );
                 } else {
                   return const Text(
-                    'Following: 0',
+                    '0 following',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 13.0,

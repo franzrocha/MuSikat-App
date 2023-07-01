@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -22,8 +21,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   static final userNotificationController = UserNotificationController();
 
   static final currentUserId = firebaseService.getCurrentUserId();
-  static const IconData deleteIcon =
-      IconData(0xe1b9, fontFamily: 'MaterialIcons');
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +121,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                                   return ListTile(
                                     textColor: listileColor,
-                                    // enabled: notifiedUSer == 1 ? true : false,
+                                   
                                     onTap: () {
                                       userNotificationController
                                           .updateNotificationState(
@@ -218,18 +215,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         ],
                                       ),
                                     ),
-                                    // trailing: GestureDetector(
-                                    //   onTap: () {
-                                    //
-                                    //   },
-                                    //   child: Text(
-                                    //     'X',
-                                    //     style: GoogleFonts.inter(
-                                    //       color: Colors.black,
-                                    //       fontSize: 15,
-                                    //     ),
-                                    //   ),
-                                    // ),
+                                  
                                   );
                                 }
                               }
@@ -274,9 +260,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             style: TextStyle(color: musikatColor4, fontSize: 17),
           ),
         ),
-        // content: const SingleChildScrollView( // won't be scrollable
-        //   child: Text('Reminder: Confirm this could delete all notification listed here',style: TextStyle(color: musikatColor4)),
-        // ),
+      
         actions: <Widget>[
           TextButton(
               child: const Text('Cancel', style: TextStyle(color: cancelColor)),

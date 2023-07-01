@@ -104,7 +104,6 @@ class ChatMessage {
             .toList());
   }
 
-
   static Stream<List<ChatMessage>> individualCurrentChats(String chatroom) =>
       FirebaseFirestore.instance
           .collection('chats')
@@ -113,6 +112,7 @@ class ChatMessage {
           .orderBy('ts')
           .snapshots()
           .map(ChatMessage.fromQuerySnap);
+          
 
   Future updateMessage(String newMessage) async {
     final globalChatRef =

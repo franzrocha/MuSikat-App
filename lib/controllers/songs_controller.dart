@@ -282,5 +282,4 @@ Future<List<SongModel>> getRankedSongs(String userId) async {
     }
   }
 
-  //calculate the popularity score
 }

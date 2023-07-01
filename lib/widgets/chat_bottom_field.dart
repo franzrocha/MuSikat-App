@@ -3,9 +3,10 @@ import 'package:musikat_app/models/chat_message_model.dart';
 import 'package:musikat_app/utils/exports.dart';
 
 class ChatBottomField extends StatelessWidget {
-  ChatBottomField({required this.chat, Key? key}) : super(key: key);
+  ChatBottomField({required this.chat, Key? key, required this.chatroom}) : super(key: key);
 
   final ChatMessage chat;
+   final String chatroom;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _textController = TextEditingController();
 
@@ -35,7 +36,7 @@ class ChatBottomField extends StatelessWidget {
       ),
       onTap: () => {
         Navigator.of(context).pop(),
-        chat.deleteMessage(),
+        chat.individualDeleteMessage(chatroom),
       },
     );
   }
@@ -148,7 +149,7 @@ class ChatBottomField extends StatelessWidget {
             ToastMessage.show(context, 'Message is the same as before');
             return;
           }
-          chat.updateMessage(value);
+          chat.individualUpdateMessage(value, chatroom);
           Navigator.of(context).pop();
         },
         child: Text(

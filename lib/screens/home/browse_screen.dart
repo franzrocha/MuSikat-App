@@ -68,7 +68,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
           playlists = playlists
               .where((playlist) =>
-                  playlist.isOfficial == true && playlist.genre == genre)
+                  playlist.isOfficial == true && playlist.genre == genre && playlist.genre != 'Random')
               .toList();
 
           return playlists.isEmpty

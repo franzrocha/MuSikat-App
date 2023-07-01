@@ -99,7 +99,6 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
               ),
             );
           } else {
-
             return snapshot.data!.isEmpty
                 ? const Center(
                     child: Text(

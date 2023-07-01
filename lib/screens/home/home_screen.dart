@@ -13,7 +13,6 @@ import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
 import '../../music_player/music_handler.dart';
-import 'package:flutter/rendering.dart';
 
 class HomeScreen extends StatefulWidget {
   final MusicHandler musicHandler;
@@ -33,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final PlaylistController _playCon = PlaylistController();
   final ListeningHistoryController _listenCon = ListeningHistoryController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
-   GlobalKey _globalKey = GlobalKey();
 //   String mostPlayedGenre = '';
 
 //  @override
@@ -80,30 +78,77 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(children: [
             const SizedBox(height: 5),
             homeForOPM(),
-            editorsPlaylists(),
+           pinoyPride(),
             newReleases(),
             suggestedUsers(),
+             editorsPlaylists(),
             popularTracks(),
             artiststToLookOut(),
-             basedOnLikedSongs(),
+            basedOnLikedSongs(),
             // recentListeningMostPlayedGenre(),
             recentListening(),
             recommendedPlaylistsGenre(),
-           
             basedOnListeningHistory(),
             basedOnListeningHistoryLanguage(),
             basedOnListeningHistoryMoods(),
             const SizedBox(height: 120),
           ]),
         ),
-      ),  
+      ),
     );
   }
 
-  
+    StreamBuilder<List<PlaylistModel>> pinoyPride() {
+    return StreamBuilder<List<PlaylistModel>>(
+      stream: _playCon.getPlaylistStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const LoadingContainer();
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingContainer();
+        } else {
+          List<PlaylistModel> playlists = snapshot.data!;
+
+          playlists = playlists
+              .where((playlist) =>
+                  playlist.isOfficial != null && playlist.isOfficial == true && playlist.genre == 'Random')
+              .toList();
+
+          playlists = playlists.take(5).toList();
+
+          if (playlists.isEmpty) {
+            return const SizedBox.shrink();
+          } else {
+            playlists.shuffle();
+
+            return PlaylistDisplay(
+              playlists: playlists,
+              onTap: (playlist) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PlaylistDetailScreen(playlist: playlist),
+                  ),
+                );
+              },
+              caption: 'Pinoy Pride 🔥',
+            );
+          }
+        }
+      },
+    );
+  }
+
+
   StreamBuilder<List<UserModel>?> suggestedUsers() {
     return StreamBuilder<List<UserModel>?>(
-      stream: UserModel.getNonFollowers(FirebaseAuth.instance.currentUser!.uid).asStream(),
+      stream: UserModel.getNonFollowers(FirebaseAuth.instance.currentUser!.uid)
+          .asStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           return const LoadingCircularContainer();
@@ -118,10 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
           List<UserModel> users = snapshot.data!;
           Random random = Random(DateTime.now().minute);
 
-          users = users
-              .where(
-                  (user) => user.accountType != 'Admin')
-              .toList();
+          users = users.where((user) => user.accountType != 'Admin').toList();
 
           users.shuffle(random);
 
@@ -134,7 +176,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
 
   // StreamBuilder<List<PlaylistModel>> recentListeningMostPlayedGenre() {
   //   return StreamBuilder<List<PlaylistModel>>(
@@ -177,11 +218,11 @@ class _HomeScreenState extends State<HomeScreen> {
   //          );
   //         }
   //       }
-  //      } 
+  //      }
   //   );
   // }
 
-   StreamBuilder<List<SongModel>> basedOnListeningHistoryMoods() {
+  StreamBuilder<List<SongModel>> basedOnListeningHistoryMoods() {
     return StreamBuilder<List<SongModel>>(
       stream: _listenCon.getRecommendedSongsBasedOnMoods().asStream(),
       builder: (context, snapshot) {
@@ -198,8 +239,8 @@ class _HomeScreenState extends State<HomeScreen> {
           List<SongModel> songs = snapshot.data!;
 
           songs = songs
-              .where((song) =>
-                  song.uid != FirebaseAuth.instance.currentUser!.uid)
+              .where(
+                  (song) => song.uid != FirebaseAuth.instance.currentUser!.uid)
               .toList();
 
           return songs.isEmpty
@@ -219,7 +260,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
   StreamBuilder<List<SongModel>> basedOnListeningHistoryLanguage() {
     return StreamBuilder<List<SongModel>>(
       stream: _listenCon.getRecommendedSongsBasedOnLanguage().asStream(),
@@ -237,8 +277,8 @@ class _HomeScreenState extends State<HomeScreen> {
           List<SongModel> songs = snapshot.data!;
 
           songs = songs
-              .where((song) =>
-                  song.uid != FirebaseAuth.instance.currentUser!.uid)
+              .where(
+                  (song) => song.uid != FirebaseAuth.instance.currentUser!.uid)
               .toList();
 
           return songs.isEmpty
@@ -260,43 +300,42 @@ class _HomeScreenState extends State<HomeScreen> {
 
   StreamBuilder<List<PlaylistModel>> recommendedPlaylistsGenre() {
     return StreamBuilder<List<PlaylistModel>>(
-      stream: _listenCon.getRecommendedPlaylistBasedOnGenre().asStream(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data == null) {
-          return const LoadingContainer();
-        }
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
+        stream: _listenCon.getRecommendedPlaylistBasedOnGenre().asStream(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data == null) {
+            return const LoadingContainer();
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingContainer();
-        } else {
-          List<PlaylistModel> playlists = snapshot.data!;
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LoadingContainer();
+          } else {
+            List<PlaylistModel> playlists = snapshot.data!;
 
             playlists.take(5);
 
-          if (playlists.isEmpty) {
-            return const SizedBox.shrink();
-          } else {
-            playlists.shuffle();
+            if (playlists.isEmpty) {
+              return const SizedBox.shrink();
+            } else {
+              playlists.shuffle();
 
-            return PlaylistDisplay(
-              playlists: playlists,
-              onTap: (playlist) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        PlaylistDetailScreen(playlist: playlist),
-                  ),
-                );
-              },
-              caption: 'Playlist recommendation',
-           );
+              return PlaylistDisplay(
+                playlists: playlists,
+                onTap: (playlist) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          PlaylistDetailScreen(playlist: playlist),
+                    ),
+                  );
+                },
+                caption: 'Playlist recommendation',
+              );
+            }
           }
-        }
-       } 
-    );
+        });
   }
 
   StreamBuilder<List<PlaylistModel>> editorsPlaylists() {
@@ -320,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   playlist.isOfficial != null && playlist.isOfficial == true)
               .toList();
 
-          playlists.take(5);
+          playlists = playlists.take(5).toList();
 
           if (playlists.isEmpty) {
             return const SizedBox.shrink();
@@ -380,43 +419,45 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  StreamBuilder<List<SongModel>> basedOnLikedSongs() {
-    return StreamBuilder<List<SongModel>>(
-      stream: LikedSongsModel.getRecommendedSongsByLike().asStream(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data == null) {
-          return const LoadingContainer();
-        }
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
+ StreamBuilder<List<SongModel>> basedOnLikedSongs() {
+  return StreamBuilder<List<SongModel>>(
+    stream: LikedSongsModel.getRecommendedSongsByLike().asStream(),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData || snapshot.data == null) {
+        return const LoadingContainer();
+      }
+      if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingContainer();
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const LoadingContainer();
+      } else {
+        List<SongModel> songs = snapshot.data!;
+
+        songs = songs
+            .where(
+                (song) => song.uid != FirebaseAuth.instance.currentUser!.uid)
+            .toList();
+
+        if (songs.length <= 3) {
+          return const SizedBox.shrink();
         } else {
-          List<SongModel> songs = snapshot.data!;
-
-          songs = songs
-              .where((song) =>
-                  song.uid != FirebaseAuth.instance.currentUser!.uid)
-              .toList();
-
-          return songs.isEmpty
-              ? const SizedBox.shrink()
-              : SongDisplay(
-                  songs: songs,
-                  onTap: (song) {
-                    widget.musicHandler.currentSongs = songs;
-                    widget.musicHandler.currentIndex = songs.indexOf(song);
-                    widget.musicHandler.setAudioSource(
-                        songs[widget.musicHandler.currentIndex], uid);
-                  },
-                  caption: 'More on what you like..',
-                );
+          return SongDisplay(
+            songs: songs,
+            onTap: (song) {
+              widget.musicHandler.currentSongs = songs;
+              widget.musicHandler.currentIndex = songs.indexOf(song);
+              widget.musicHandler.setAudioSource(
+                  songs[widget.musicHandler.currentIndex], uid);
+            },
+            caption: 'More on what you like..',
+          );
         }
-      },
-    );
-  }
+      }
+    },
+  );
+}
 
   StreamBuilder<List<SongModel>> basedOnListeningHistory() {
     return StreamBuilder<List<SongModel>>(
@@ -435,8 +476,8 @@ class _HomeScreenState extends State<HomeScreen> {
           List<SongModel> songs = snapshot.data!;
 
           songs = songs
-              .where((song) =>
-                  song.uid != FirebaseAuth.instance.currentUser!.uid)
+              .where(
+                  (song) => song.uid != FirebaseAuth.instance.currentUser!.uid)
               .toList();
 
           return songs.isEmpty

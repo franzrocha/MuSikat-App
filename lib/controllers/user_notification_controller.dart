@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:musikat_app/services/firebase_service.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -26,7 +25,6 @@ class UserNotificationController with ChangeNotifier {
   }
 
   void deleteNotification(String followerId) async {
-    //delete same recent id to prevent duplicated record on firestore firebase database
     return dbCollection
         .where('follower', isEqualTo: uid)
         .where("following", isEqualTo: followerId)

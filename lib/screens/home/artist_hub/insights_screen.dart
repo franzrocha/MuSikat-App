@@ -325,6 +325,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
                   );
                 } else {
                   final List<SongModel> songs = snapshot.data!;
+
+                  songs.take(5).toList();
                   return Container(
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 56, 54, 54),
