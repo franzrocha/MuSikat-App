@@ -1,7 +1,6 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:musikat_app/controllers/user_notification_controller.dart';
+import 'package:musikat_app/controllers/firebase_service_user_notif_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/screens/home/browse_screen.dart';
 import 'package:musikat_app/screens/home/camera.dart';
@@ -10,7 +9,6 @@ import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
 import 'package:musikat_app/screens/home/dialog/notification.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
-import 'package:musikat_app/services/firebase_service.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/music_player/mini_player.dart';
 import 'package:badges/badges.dart' as badges;
@@ -31,7 +29,6 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
   Color color = Colors.red;
-  
 
   static final firebaseService = FirebaseService();
   static final userNotificationController = UserNotificationController();

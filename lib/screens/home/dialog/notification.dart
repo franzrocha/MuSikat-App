@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../../../controllers/user_notification_controller.dart';
-import '../../../services/firebase_service.dart';
+import 'package:musikat_app/controllers/firebase_service_user_notif_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/appbar_widgets.dart';
 import '../other_artist_screen.dart';
@@ -121,7 +120,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                                   return ListTile(
                                     textColor: listileColor,
-                                   
                                     onTap: () {
                                       userNotificationController
                                           .updateNotificationState(
@@ -144,8 +142,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                             child: Text(
                                               getFirstLetter,
                                               style: const TextStyle(
-                                                  color: musikatTextColor,
-                                                  fontWeight: FontWeight.bold),
+                                                color: musikatTextColor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           )
                                         : Container(
@@ -158,65 +157,75 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                               ),
                                             ),
                                           ),
-
-                                    title: Expanded(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            fullName,
-                                            style: GoogleFonts.inter(
-                                                color: notifiedUSer == 0
-                                                    ? Colors.teal
-                                                    : musikatTextColor,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w700),
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          fullName,
+                                          style: GoogleFonts.inter(
+                                            color: notifiedUSer == 0
+                                                ? Colors.teal
+                                                : musikatTextColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w700,
                                           ),
-                                          Text(
-                                            timeAgo,
-                                            style: GoogleFonts.inter(
-                                                color: notifiedUSer == 0
-                                                    ? Colors.teal
-                                                    : musikatTextColor,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          timeAgo,
+                                          style: GoogleFonts.inter(
+                                            color: notifiedUSer == 0
+                                                ? Colors.teal
+                                                : musikatTextColor,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    subtitle: Expanded(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Followed you',
-                                            style: GoogleFonts.inter(
-                                                color: notifiedUSer == 0
-                                                    ? Colors.teal
-                                                    : musikatTextColor,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w700),
+                                    subtitle: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Followed you',
+                                          style: GoogleFonts.inter(
+                                            color: notifiedUSer == 0
+                                                ? Colors.teal
+                                                : musikatTextColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w700,
                                           ),
-                                          Text(
-                                            formattedDate,
-                                            style: GoogleFonts.inter(
-                                                color: notifiedUSer == 0
-                                                    ? Colors.teal
-                                                    : musikatTextColor,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          formattedDate,
+                                          style: GoogleFonts.inter(
+                                            color: notifiedUSer == 0
+                                                ? Colors.teal
+                                                : musikatTextColor,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  
                                   );
+                                  // trailing: GestureDetector(
+                                  //   onTap: () {
+                                  //
+                                  //   },
+                                  //   child: Text(
+                                  //     'X',
+                                  //     style: GoogleFonts.inter(
+                                  //       color: Colors.black,
+                                  //       fontSize: 15,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 }
                               }
                               return const SizedBox.shrink();
@@ -260,7 +269,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
             style: TextStyle(color: musikatColor4, fontSize: 17),
           ),
         ),
-      
         actions: <Widget>[
           TextButton(
               child: const Text('Cancel', style: TextStyle(color: cancelColor)),
