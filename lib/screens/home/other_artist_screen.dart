@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
-import 'package:musikat_app/controllers/firebase_service_user_notif_controller.dart';
+import 'package:musikat_app/controllers/notification_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -37,7 +37,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
 
   final currentUser = FirebaseAuth.instance.currentUser!.uid;
 
-  // final userNotification = UserNotificationController();
+  final userNotification = UserNotificationController();
 
   final PlaylistController _playlistCon = PlaylistController();
   String get selectedUserUID => widget.selectedUserUID;
@@ -140,12 +140,12 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                     if (!selectedUserFollows) {
                       _followCon.followUser(selectedUserUID);
 
-                      // userNotification.addUserNotification(selectedUserUID, 1);
+                      userNotification.addUserNotification(selectedUserUID, 1);
 
                       followers++;
                     } else {
                       _followCon.unfollowUser(selectedUserUID);
-                      // userNotification.deleteNotification(selectedUserUID);
+                      userNotification.deleteNotification(selectedUserUID);
 
                       followers--;
                     }

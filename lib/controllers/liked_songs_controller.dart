@@ -39,18 +39,15 @@ class LikedSongsController with ChangeNotifier {
   Future<void> removeLikedSong(String userId, String songId) async {
     final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
 
-  
     final querySnapshot =
         await collectionRef.where('uid', isEqualTo: userId).get();
 
     if (querySnapshot.docs.isNotEmpty) {
-    
       final docRef = querySnapshot.docs.first.reference;
       await docRef.update({
         'songId': FieldValue.arrayRemove([songId]),
       });
 
-   
       final updatedSnapshot = await docRef.get();
       final updatedLikedSongsModel =
           LikedSongsModel.fromDocumentSnap(updatedSnapshot);
@@ -63,12 +60,11 @@ class LikedSongsController with ChangeNotifier {
 
   Future<bool> isSongLikedByUser(String songId, String userId) async {
     final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
- 
+
     final querySnapshot =
         await collectionRef.where('uid', isEqualTo: userId).get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      
       final docData = querySnapshot.docs.first.data();
       if (docData.containsKey('songId') && docData['songId'].contains(songId)) {
         return true;
@@ -81,7 +77,7 @@ class LikedSongsController with ChangeNotifier {
   Future<List<SongModel>> getLikedSongs() async {
     List<SongModel> likedSongs = [];
     try {
-      String uid = FirebaseAuth.instance.currentUser!.uid;  
+      String uid = FirebaseAuth.instance.currentUser!.uid;
       final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
       final querySnapshot =
           await collectionRef.where('uid', isEqualTo: uid).get();
@@ -101,32 +97,34 @@ class LikedSongsController with ChangeNotifier {
   }
 
   Stream<List<SongModel>> getLikedSongsStream() {
-  final StreamController<List<SongModel>> controller =
-      StreamController<List<SongModel>>();
+    final StreamController<List<SongModel>> controller =
+        StreamController<List<SongModel>>();
 
-  try {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      final collectionRef = FirebaseFirestore.instance.collection('likedSongs');
 
-    collectionRef.where('uid', isEqualTo: uid).snapshots().listen((snapshot) async {
-      List<SongModel> likedSongs = [];
+      collectionRef
+          .where('uid', isEqualTo: uid)
+          .snapshots()
+          .listen((snapshot) async {
+        List<SongModel> likedSongs = [];
 
-      for (final doc in snapshot.docs) {
-        final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
-        for (final songId in songIdList) {
-          final song = await _songCon.getSongById(songId);
-          likedSongs.add(song);
+        for (final doc in snapshot.docs) {
+          final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
+          for (final songId in songIdList) {
+            final song = await _songCon.getSongById(songId);
+            likedSongs.add(song);
+          }
         }
-      }
 
-      controller.add(likedSongs);
-    });
-  } catch (e) {
-    print(e.toString());
-    controller.addError(e);
+        controller.add(likedSongs);
+      });
+    } catch (e) {
+      print(e.toString());
+      controller.addError(e);
+    }
+
+    return controller.stream;
   }
-
-  return controller.stream;
-}
- 
 }

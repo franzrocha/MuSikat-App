@@ -147,23 +147,22 @@ class SongsController with ChangeNotifier {
     return snapshot.docs.length;
   }
 
-Future<List<SongModel>> getRankedSongs(String userId) async {
-  final QuerySnapshot snapshot = await _db.collection('songs').get();
+  Future<List<SongModel>> getRankedSongs(String userId) async {
+    final QuerySnapshot snapshot = await _db.collection('songs').get();
 
-  final List<SongModel> songs = snapshot.docs
-      .map((DocumentSnapshot documentSnapshot) =>
-          SongModel.fromDocumentSnap(documentSnapshot))
-      .toList();
+    final List<SongModel> songs = snapshot.docs
+        .map((DocumentSnapshot documentSnapshot) =>
+            SongModel.fromDocumentSnap(documentSnapshot))
+        .toList();
 
-  songs.sort((a, b) =>
-      (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount));
+    songs.sort((a, b) =>
+        (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount));
 
-  final List<SongModel> userSongs = songs
-      .where((song) => song.uid == userId)
-      .toList();
+    final List<SongModel> userSongs =
+        songs.where((song) => song.uid == userId).toList();
 
-  return userSongs;
-}
+    return userSongs;
+  }
 
   Future<int> getLikeSongCount() async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -218,7 +217,6 @@ Future<List<SongModel>> getRankedSongs(String userId) async {
     return totalPlayCount;
   }
 
-  
   Future<int> getOverallLikes(String currentUserUid) async {
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('songs')
@@ -248,22 +246,32 @@ Future<List<SongModel>> getRankedSongs(String userId) async {
       return null;
     }
 
-    QuerySnapshot usersSnapshot = await _db
-        .collection('users')
-        .where(FieldPath.documentId, whereIn: userIds)
-        .get();
+    List<UserModel> users = [];
+    final int chunksCount = (userIds.length / 10).ceil();
 
-    return usersSnapshot.docs
-        .map((doc) => UserModel.fromDocumentSnap(doc))
-        .toList();
+    for (var i = 0; i < chunksCount; i++) {
+      int start = i * 10;
+      int end = (i + 1) * 10;
+      List<String> chunk =
+          userIds.sublist(start, end > userIds.length ? userIds.length : end);
+
+      QuerySnapshot usersSnapshot = await _db
+          .collection('users')
+          .where(FieldPath.documentId, whereIn: chunk)
+          .get();
+
+      users.addAll(usersSnapshot.docs
+          .map((doc) => UserModel.fromDocumentSnap(doc))
+          .toList());
+    }
+
+    return users;
   }
 
-  Future<int> getOwnedSongCount(String userId, String songId) async {
+  Future<int> getPlaylistAdds(String songId) async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('playlists')
-          // .where('uid', isEqualTo: userId)
-          .get();
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('playlists').get();
 
       int count = 0;
 
@@ -281,5 +289,56 @@ Future<List<SongModel>> getRankedSongs(String userId) async {
       return 0;
     }
   }
+
+Future<List<Map<String, dynamic>>> getRanked(String userId) async {
+  final QuerySnapshot snapshot = await _db.collection('songs').get();
+
+  final List<SongModel> songs = snapshot.docs
+      .map((DocumentSnapshot documentSnapshot) =>
+          SongModel.fromDocumentSnap(documentSnapshot))
+      .toList();
+
+  // Calculate the total play count, like count, and playlist adds of all the user's songs
+  int totalPlayCount = 0;
+  int totalLikeCount = 0;
+  int totalPlaylistAdds = 0;
+
+  List<Map<String, dynamic>> rankedSongs = [];
+
+  // Calculate the total play count, like count, and playlist adds of all the user's songs
+  for (SongModel song in songs) {
+    totalPlayCount += song.playCount;
+    totalLikeCount += song.likeCount;
+    totalPlaylistAdds += await getPlaylistAdds(song.songId);
+  }
+
+  // Sort the songs based on the sum of play count, like count, and playlist adds
+  songs.sort((a, b) {
+    return (b.playCount + b.likeCount)
+        .compareTo(a.playCount + a.likeCount);
+  });
+
+  // Calculate the percentage score for each song and store it in a list of maps
+  for (SongModel song in songs) {
+    int playlistAdds = await getPlaylistAdds(song.songId);
+    double playPercentage = (song.playCount / totalPlayCount) * 100;
+    double likePercentage = (song.likeCount / totalLikeCount) * 100;
+    double playlistAddsPercentage = (playlistAdds / totalPlaylistAdds) * 100;
+
+    // You can adjust the weights for play count, like count, and playlist adds as per your preference
+    double percentageScore =
+        (playPercentage * 0.4) + (likePercentage * 0.4) + (playlistAddsPercentage * 0.2);
+    rankedSongs.add({
+      'song': song,
+      'percentageScore': percentageScore,
+    });
+  }
+
+  // Sort the songs and percentage scores based on the percentage scores (highest first)
+  rankedSongs.sort((a, b) => b['percentageScore'].compareTo(a['percentageScore']));
+
+  return rankedSongs;
+}
+
 
 }

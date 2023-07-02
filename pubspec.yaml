@@ -61,8 +61,8 @@ dependencies:
   rxdart: ^0.27.7
   animated_text_kit: ^4.2.2
   get: ^4.3.8
-  top_modal_sheet: ^2.0.0
   timeago: ^3.0.2
+  flutter_donation_buttons: ^0.3.7
 
 
 

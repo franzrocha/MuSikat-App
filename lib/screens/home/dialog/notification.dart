@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:musikat_app/controllers/firebase_service_user_notif_controller.dart';
+import 'package:musikat_app/controllers/notification_controller.dart';
+import 'package:musikat_app/utils/exports.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/appbar_widgets.dart';
 import '../other_artist_screen.dart';
@@ -88,10 +89,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           int notifiedUSer;
 
                           final DateTime date = dateNotified.toDate();
-                          final DateFormat formatter = DateFormat(
-                              'MMM-dd-yyyy:hh:ss'); // Define your desired date format
-                          final String formattedDate = formatter
-                              .format(date); // Format the date as a string
+                          final DateFormat formatter =
+                              DateFormat('MMM dd, yyyy');
+                          final String formattedDate = formatter.format(date);
 
                           return StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
@@ -105,13 +105,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 if (usersData.isNotEmpty) {
                                   var user = usersData.first;
                                   var userFollowerId = user['uid'];
-                                  var firstname = user['firstName'];
-                                  var lastname = user['lastName'];
-                                  var profile = user['profileImage'];
-                                  var fullName = '$firstname $lastname';
-                                  var getFirstLetter = firstname.isNotEmpty
-                                      ? firstname[0].toUpperCase()
-                                      : '';
+                                  var username = user['username'];
 
                                   notifiedUSer = notification['notify'];
 
@@ -119,7 +113,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   print(timeAgo);
 
                                   return ListTile(
-                                    textColor: listileColor,
+                                    tileColor: notifiedUSer == 0
+                                        ? musikatBackgroundColor
+                                        : Colors.black.withOpacity(0.5),
                                     onTap: () {
                                       userNotificationController
                                           .updateNotificationState(
@@ -135,28 +131,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         ),
                                       );
                                     },
-                                    leading: profile == ''
-                                        ? CircleAvatar(
-                                            backgroundColor: Colors.blue,
-                                            maxRadius: 30,
-                                            child: Text(
-                                              getFirstLetter,
-                                              style: const TextStyle(
-                                                color: musikatTextColor,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          )
-                                        : Container(
-                                            width: 50,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: NetworkImage(profile),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
+                                    leading: AvatarImage(uid: userFollowerId),
                                     title: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -164,12 +139,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          fullName,
-                                          style: GoogleFonts.inter(
+                                          username,
+                                          style: TextStyle(
                                             color: notifiedUSer == 0
-                                                ? Colors.teal
+                                                ? musikatTextColor
+                                                    .withOpacity(0.5)
                                                 : musikatTextColor,
-                                            fontSize: 15,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
@@ -177,9 +153,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           timeAgo,
                                           style: GoogleFonts.inter(
                                             color: notifiedUSer == 0
-                                                ? Colors.teal
+                                                ? musikatTextColor
+                                                    .withOpacity(0.5)
                                                 : musikatTextColor,
-                                            fontSize: 12,
+                                            fontSize: 10,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
@@ -192,40 +169,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Followed you',
-                                          style: GoogleFonts.inter(
+                                          'followed you',
+                                          style: TextStyle(
                                             color: notifiedUSer == 0
-                                                ? Colors.teal
+                                                ? musikatTextColor
+                                                    .withOpacity(0.5)
                                                 : musikatTextColor,
                                             fontSize: 15,
-                                            fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                         Text(
                                           formattedDate,
-                                          style: GoogleFonts.inter(
+                                          style: TextStyle(
                                             color: notifiedUSer == 0
-                                                ? Colors.teal
+                                                ? musikatTextColor
+                                                    .withOpacity(0.5)
                                                 : musikatTextColor,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
+                                            fontSize: 10,
                                           ),
                                         ),
                                       ],
                                     ),
                                   );
-                                  // trailing: GestureDetector(
-                                  //   onTap: () {
-                                  //
-                                  //   },
-                                  //   child: Text(
-                                  //     'X',
-                                  //     style: GoogleFonts.inter(
-                                  //       color: Colors.black,
-                                  //       fontSize: 15,
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 }
                               }
                               return const SizedBox.shrink();
@@ -233,22 +198,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           );
                         },
                       )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'No notification yet',
-                              style: GoogleFonts.inter(
+                    : const Center(
+                      child: Column(
+                        
+                          children: [
+                            Text(
+                              'No notification yet...',
+                              style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 20,
+                                height: 20
                               ),
-                            ),
-                          )
-                        ],
-                      );
+                            )
+                          ],
+                        ),
+                    );
               }
               return const SizedBox.shrink();
             },
@@ -281,13 +245,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               onPressed: () {
                 firebaseService.deleteAllCollection(
                     'userNotification', 'following', currentUserId);
-                Fluttertoast.showToast(
-                    msg: "Deleted all record successfully",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
+                ToastMessage.show(context, 'Notification deleted successfully');
+
                 Navigator.pop(context);
               }),
         ],

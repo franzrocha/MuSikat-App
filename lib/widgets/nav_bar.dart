@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:musikat_app/controllers/firebase_service_user_notif_controller.dart';
+import 'package:musikat_app/controllers/notification_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/screens/home/browse_screen.dart';
 import 'package:musikat_app/screens/home/camera.dart';
@@ -76,15 +76,14 @@ class _NavBarState extends State<NavBar> {
                             );
                           },
                           position: badges.BadgePosition.topEnd(top: 0, end: 3),
-                          badgeStyle: const badges.BadgeStyle(
-                            badgeColor: Colors.red,
-                          ),
+                          badgeStyle:
+                              const badges.BadgeStyle(badgeColor: musikatColor),
                           badgeContent: Text(
                             length.toString(),
                             style: const TextStyle(color: Colors.white),
                           ),
                           child: IconButton(
-                            icon: const Icon(Icons.notifications, size: 20),
+                            icon: const Icon(Icons.notifications, size: 25),
                             onPressed: () {
                               print('get the value');
 
@@ -99,15 +98,15 @@ class _NavBarState extends State<NavBar> {
                         );
                       }
                     } else if (snapshot.hasError) {
-                      // Handle error case
+                      
                       return Text('Error: ${snapshot.error}');
                     }
 
                     return IconButton(
                       icon: const Icon(
                         Icons.notifications,
-                        size: 20,
-                        color: Colors.teal,
+                        size: 25,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         Navigator.of(context).push(
@@ -120,7 +119,7 @@ class _NavBarState extends State<NavBar> {
                   },
                 ),
                 const SizedBox(
-                  width: 10,
+                  width: 5,
                 ),
                 IconButton(
                   onPressed: () {

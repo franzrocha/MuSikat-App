@@ -19,6 +19,7 @@ class ListeningHistoryController with ChangeNotifier {
           FirebaseFirestore.instance.collection('listeningHistory');
       final querySnapshot =
           await collectionRef.where('uid', isEqualTo: uid).get();
+
       for (var i = querySnapshot.docs.length - 1; i >= 0; i--) {
         final doc = querySnapshot.docs[i];
         final songIdList = List<String>.from(doc['songId'] as List<dynamic>);
@@ -107,60 +108,59 @@ class ListeningHistoryController with ChangeNotifier {
   }
 
   Future<List<SongModel>> getRecommendedSongsBasedOnGenre() async {
-  try {
-    final List<SongModel> recentlyPlayed = await getListeningHistory();
+    try {
+      final List<SongModel> recentlyPlayed = await getListeningHistory();
 
-    if (recentlyPlayed.isEmpty) {
-      return [];
-    }
+      if (recentlyPlayed.isEmpty) {
+        return [];
+      }
 
-    final List<String> categories = [];
-    final Set<String> addedSongs = <String>{}; 
+      final List<String> categories = [];
+      final Set<String> addedSongs = <String>{};
 
-    for (final song in recentlyPlayed) {
-      categories.add(song.genre);
-    }
+      for (final song in recentlyPlayed) {
+        categories.add(song.genre);
+      }
 
-    final SongsController songsController = SongsController();
-    final List<SongModel> recommendedSongs = [];
+      final SongsController songsController = SongsController();
+      final List<SongModel> recommendedSongs = [];
 
-    const int chunkSize = 10;
-    final int numChunks = (categories.length / chunkSize).ceil();
+      const int chunkSize = 10;
+      final int numChunks = (categories.length / chunkSize).ceil();
 
-    for (int i = 0; i < numChunks; i++) {
-      final List<String> chunk = categories.sublist(
-        i * chunkSize,
-        (i + 1) * chunkSize > categories.length
-            ? categories.length
-            : (i + 1) * chunkSize,
-      );
+      for (int i = 0; i < numChunks; i++) {
+        final List<String> chunk = categories.sublist(
+          i * chunkSize,
+          (i + 1) * chunkSize > categories.length
+              ? categories.length
+              : (i + 1) * chunkSize,
+        );
 
-      Query query = FirebaseFirestore.instance.collection('songs');
-      query = query.where('genre', whereIn: chunk);
+        Query query = FirebaseFirestore.instance.collection('songs');
+        query = query.where('genre', whereIn: chunk);
 
-      final QuerySnapshot querySnapshot = await query.get();
+        final QuerySnapshot querySnapshot = await query.get();
 
-      for (final doc in querySnapshot.docs) {
-        final song = await songsController.getSongById(doc.id);
+        for (final doc in querySnapshot.docs) {
+          final song = await songsController.getSongById(doc.id);
 
-
-        if (!addedSongs.contains(song.songId)) {
-          recommendedSongs.add(song);
-          addedSongs.add(song.songId); 
+          if (!addedSongs.contains(song.songId)) {
+            recommendedSongs.add(song);
+            addedSongs.add(song.songId);
+          }
         }
       }
+
+      recommendedSongs.shuffle();
+      final List<SongModel> limitedRecommendedSongs =
+          recommendedSongs.take(5).toList();
+
+      return limitedRecommendedSongs;
+    } catch (e) {
+      print(e.toString());
+      return [];
     }
-
-    recommendedSongs.shuffle();
-    final List<SongModel> limitedRecommendedSongs =
-        recommendedSongs.take(5).toList();
-
-    return limitedRecommendedSongs;
-  } catch (e) {
-    print(e.toString());
-    return [];
   }
-}
 
   Future<List<SongModel>> getRecommendedSongsBasedOnLanguage() async {
     try {
@@ -171,6 +171,8 @@ class ListeningHistoryController with ChangeNotifier {
       }
 
       final List<String> categories = [];
+      final Set<String> addedSongs = <String>{};
+
       for (final song in recentlyPlayed) {
         categories.addAll(song.languages);
       }
@@ -195,7 +197,11 @@ class ListeningHistoryController with ChangeNotifier {
 
         for (final doc in querySnapshot.docs) {
           final song = await songsController.getSongById(doc.id);
-          recommendedSongs.add(song);
+
+          if (!addedSongs.contains(song.songId)) {
+            recommendedSongs.add(song);
+            addedSongs.add(song.songId);
+          }
         }
       }
 
@@ -210,7 +216,7 @@ class ListeningHistoryController with ChangeNotifier {
     }
   }
 
-   Future<List<SongModel>> getRecommendedSongsBasedOnMoods() async {
+  Future<List<SongModel>> getRecommendedSongsBasedOnMoods() async {
     try {
       final List<SongModel> recentlyPlayed = await getListeningHistory();
 
@@ -219,6 +225,8 @@ class ListeningHistoryController with ChangeNotifier {
       }
 
       final List<String> categories = [];
+      final Set<String> addedSongs = <String>{};
+
       for (final song in recentlyPlayed) {
         categories.addAll(song.description);
       }
@@ -243,7 +251,11 @@ class ListeningHistoryController with ChangeNotifier {
 
         for (final doc in querySnapshot.docs) {
           final song = await songsController.getSongById(doc.id);
-          recommendedSongs.add(song);
+
+          if (!addedSongs.contains(song.songId)) {
+            recommendedSongs.add(song);
+            addedSongs.add(song.songId);
+          }
         }
       }
 
@@ -257,7 +269,6 @@ class ListeningHistoryController with ChangeNotifier {
       return [];
     }
   }
-
 
   Future<List<PlaylistModel>> getRecommendedPlaylistBasedOnGenre() async {
     try {
@@ -306,5 +317,4 @@ class ListeningHistoryController with ChangeNotifier {
       return [];
     }
   }
-
 }

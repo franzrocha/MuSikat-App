@@ -533,7 +533,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                     backgroundColor: musikatColor,
                     deleteIconColor: Colors.white,
                     label: Text(producer),
-                    labelStyle: GoogleFonts.inter(
+                    labelStyle: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                     ),
@@ -574,7 +574,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
                     backgroundColor: musikatColor,
                     deleteIconColor: Colors.white,
                     label: Text(writer),
-                    labelStyle: GoogleFonts.inter(
+                    labelStyle: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                     ),
@@ -614,10 +614,7 @@ class AudioUploaderScreenState extends State<AudioUploaderScreen> {
           fontSize: 13,
         ),
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: Colors.grey,
-              width: 0.5 
-              ),
+          borderSide: BorderSide(color: Colors.grey, width: 0.5),
         ),
         suffixIcon: IconButton(
           icon: const Icon(

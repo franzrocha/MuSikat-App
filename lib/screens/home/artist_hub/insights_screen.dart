@@ -198,9 +198,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                           SizedBox(
                               width: 50,
                               child: FutureBuilder(
-                                  future: _songCon.getOwnedSongCount(
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                      song.songId),
+                                  future: _songCon.getPlaylistAdds(song.songId),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<int> snapshot) {
                                     if (snapshot.connectionState ==
@@ -324,9 +322,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     ),
                   );
                 } else {
-                  final List<SongModel> songs = snapshot.data!;
+                  final List<SongModel> songs = snapshot.data!.take(5).toList();
 
-                  songs.take(5).toList();
                   return Container(
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 56, 54, 54),
