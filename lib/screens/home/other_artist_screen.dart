@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:musikat_app/chat/chat_screen_private.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
@@ -11,7 +12,6 @@ import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
-import 'package:musikat_app/screens/home/chat/private_chat.dart';
 import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
@@ -56,7 +56,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PrivateChatScreen(
+                  builder: (context) => ChatScreenPrivate(
                     selectedUserUID: selectedUserUID,
                   ),
                 ),
@@ -339,6 +339,8 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
               .where((song) => song.uid == widget.selectedUserUID)
               .toList();
 
+              songs.take(5).toList();
+
           return songs.isEmpty
               ? const SizedBox.shrink()
               : SizedBox(
@@ -357,10 +359,10 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: calculateHeight(songs.length),
+                        height: calculateHeight(songs.length > 5 ? 5 : songs.length),
                         width: double.infinity,
                         child: ListView.builder(
-                          itemCount: songs.length > 5 ? 5 : songs.length,
+                          itemCount: songs.length,
                           itemBuilder: (BuildContext context, int index) {
                             final SongModel song = songs[index];
                             return Padding(

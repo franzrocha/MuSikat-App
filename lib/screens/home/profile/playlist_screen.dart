@@ -62,7 +62,17 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                         playlist.uid == FirebaseAuth.instance.currentUser!.uid)
                     .toList();
 
-                return ListView.separated(
+                return playlists.isEmpty
+                ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/no_played.png', width: 200, height: 200,),
+                    Text('No playlists yet. Create a new one', style: shortDefault,),
+                  ],
+                )
+                
+                : ListView.separated(
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 4),
                   itemCount: playlists.length,

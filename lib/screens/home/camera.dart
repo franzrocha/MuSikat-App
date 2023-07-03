@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,8 +11,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/music_player/music_player.dart';
-import 'package:musikat_app/screens/home/emotion_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 
 import '../../models/song_model.dart';
 
@@ -89,39 +90,51 @@ class _CameraScreenState extends State<CameraScreen> {
         String downloadUrl = await taskSnapshot.ref.getDownloadURL();
         print(downloadUrl);
 
-        // Call the API with the download URL
-        Uri apiUrl = Uri.parse(
-            'https://1cd7-2001-4454-302-a600-7cd3-ee14-2891-4b4d.ngrok-free.app/?image=$downloadUrl');
-        http.Response response = await http.get(apiUrl);
+        // Create an instance of InputImage from the file path
+        InputImage inputImage = InputImage.fromFilePath(file.path);
 
-        if (response.statusCode == 200) {
-          emotion = response.body;
-          songs = await _songCon.getEmotionSongs(emotion);
-          int length = songs.length;
-          Random random = Random();
-          int randomIndex = random.nextInt(length);
+        // Create an instance of FaceDetector
+        FaceDetector faceDetector = GoogleMlKit.vision.faceDetector();
 
-          // API call successful
-          // print('API response: ${response.body}');
+        // Process the input image for face detection
+        List<Face> faces = await faceDetector.processImage(inputImage);
 
-          // Fluttertoast.showToast(
-          //     msg: 'It seems that you are ${response.body} today!');
+        // Check if any faces were detected
+        if (faces.isNotEmpty) {
+          // Call the API with the download URL
+          Uri apiUrl = Uri.parse(
+              'https://1aaf-2001-4454-3c3-4d00-8085-ecd0-85c4-1087.ngrok-free.app/?image=$downloadUrl');
+          http.Response response = await http.get(apiUrl);
 
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CameraResultScreen(
-                downloadUrl: downloadUrl,
-                emotion: emotion,
-                songs: songs,
-                randomIndex: randomIndex,
-                response: response.body,
+          if (response.statusCode == 200) {
+            emotion = response.body;
+            songs = await _songCon.getEmotionSongs(emotion);
+            int length = songs.length;
+            Random random = Random();
+            int randomIndex = random.nextInt(length);
+
+            // API call successful
+            // print('API response: ${response.body}');
+
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CameraResultScreen(
+                  downloadUrl: downloadUrl,
+                  emotion: emotion,
+                  songs: songs,
+                  randomIndex: randomIndex,
+                  response: response.body,
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            // API call failed
+            print('API call failed with status code: ${response.statusCode}');
+            ToastMessage.show(context, 'Failed to call API');
+          }
         } else {
-          // API call failed
-          print('API call failed with status code: ${response.statusCode}');
-          Fluttertoast.showToast(msg: 'Failed to call API');
+          // No face detected
+          ToastMessage.show(context, 'No face detected');
         }
 
         setState(() {
@@ -175,22 +188,22 @@ class _CameraScreenState extends State<CameraScreen> {
                   child: const Icon(
                     Icons.face,
                     color: Colors.yellow,
-                    size: 48.0,
+                    size: 60,
                   ),
                 ),
               ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  direction = direction == 0 ? 1 : 0;
-                  startCamera(direction);
-                });
-              },
-              child: button(
-                  Icons.flip_camera_ios_outlined, Alignment.bottomLeft, () {
-                // Callback function logic goes here
-              }),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     setState(() {
+            //       direction = direction == 0 ? 1 : 0;
+            //       startCamera(direction);
+            //     });
+            //   },
+            //   child: button(
+            //       Icons.flip_camera_ios_outlined, Alignment.bottomLeft, () {
+            //     // Callback function logic goes here
+            //   }),
+            // ),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -291,7 +304,7 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 }
 
-class CameraResultScreen extends StatelessWidget {
+class CameraResultScreen extends StatefulWidget {
   final String downloadUrl;
   final String emotion;
   final List<SongModel> songs;
@@ -306,6 +319,13 @@ class CameraResultScreen extends StatelessWidget {
     required this.randomIndex,
     required this.response,
   }) : super(key: key);
+
+  @override
+  State<CameraResultScreen> createState() => _CameraResultScreenState();
+}
+
+class _CameraResultScreenState extends State<CameraResultScreen> {
+  final SongsController songCon = SongsController();
 
   @override
   Widget build(BuildContext context) {
@@ -350,12 +370,15 @@ class CameraResultScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            SizedBox(height: 500, child: Image.network(downloadUrl)),
+            SizedBox(height: 500, child: Image.network(widget.downloadUrl)),
             const SizedBox(height: 30),
             Text(
-              'It seems that you are $response today ${getEmojiForResponse(response)}',
+              'It seems that you are ${widget.response} today ${getEmojiForResponse(widget.response)}',
               style: const TextStyle(
-                  color: Colors.white, fontSize: 16, fontFamily: 'Gotham'),
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontFamily: 'Gotham',
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),
             Row(
@@ -373,10 +396,9 @@ class CameraResultScreen extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => MusicPlayerScreen(
-                            songs: songs,
-                            emotion: emotion,
-                            initialIndex: randomIndex,
-                           
+                            songs: widget.songs,
+                            emotion: widget.emotion,
+                            initialIndex: widget.randomIndex,
                           ),
                         ),
                       );
@@ -397,13 +419,184 @@ class CameraResultScreen extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EmotionDisplayScreen(
-                            emotion: emotion,
-                          ),
-                        ),
-                      );
+                      showModalBottomSheet(
+                          backgroundColor: musikatColor4,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SingleChildScrollView(
+                              child: Material(
+                                color: musikatBackgroundColor,
+                                child: SafeArea(
+                                  top: false,
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                      maxHeight:
+                                          MediaQuery.of(context).size.height *
+                                              0.8,
+                                    ),
+                                    child: Column(
+                                      // mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.centerRight,
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: IconButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              icon: const Icon(Icons.close,
+                                                  color: Colors.white)),
+                                        ),
+                                        Text(
+                                            getTextForEmotion(widget.emotion,
+                                                widget.response),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Gotham')),
+                                        const SizedBox(height: 20),
+                                        Expanded(
+                                          child: FutureBuilder<List<SongModel>>(
+                                            future: songCon.getEmotionSongs(
+                                                widget.emotion),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return const Center(
+                                                    child: LoadingIndicator());
+                                              } else if (snapshot.hasError) {
+                                                return Center(
+                                                    child: Text(
+                                                        'Error: ${snapshot.error}'));
+                                              } else {
+                                                final descriptionSongs =
+                                                    snapshot.data!;
+                                                final limitedSongs =
+                                                    descriptionSongs.length > 5
+                                                        ? descriptionSongs
+                                                            .sublist(0, 5)
+                                                        : descriptionSongs;
+
+                                                final random = Random();
+
+                                                limitedSongs.shuffle(random);
+
+                                                return limitedSongs.isEmpty
+                                                    ? Center(
+                                                        child: Text(
+                                                          "No songs found related \nto $widget.emotion yet.",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                            color: Colors.white,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : ListView.builder(
+                                                        itemCount:
+                                                            limitedSongs.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          final song =
+                                                              limitedSongs[
+                                                                  index];
+
+                                                          return ListTile(
+                                                            leading: Container(
+                                                              width: 50,
+                                                              height: 50,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                image:
+                                                                    DecorationImage(
+                                                                  image: CachedNetworkImageProvider(
+                                                                      song.albumCover),
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            title: Text(
+                                                              song.title,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: GoogleFonts
+                                                                  .inter(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          16),
+                                                            ),
+                                                            subtitle: Text(
+                                                                song.artist,
+                                                                style: GoogleFonts.inter(
+                                                                    color: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    fontSize:
+                                                                        14)),
+                                                            onTap: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            MusicPlayerScreen(
+                                                                              songs: descriptionSongs,
+                                                                              initialIndex: index,
+                                                                            )),
+                                                              );
+                                                            },
+                                                            onLongPress: () {
+                                                              showModalBottomSheet(
+                                                                  backgroundColor:
+                                                                      musikatColor4,
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return SingleChildScrollView(
+                                                                      child:
+                                                                          SongBottomField(
+                                                                        song:
+                                                                            song,
+                                                                        hideRemoveToPlaylist:
+                                                                            true,
+                                                                        hideDelete:
+                                                                            true,
+                                                                        hideEdit:
+                                                                            true,
+                                                                        hideLike:
+                                                                            false,
+                                                                      ),
+                                                                    );
+                                                                  });
+                                                            },
+                                                          );
+                                                        },
+                                                      );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
                     },
                     child: Text(
                       "Suggested songs",
@@ -418,6 +611,22 @@ class CameraResultScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getTextForEmotion(String emotion, String response) {
+    String emoji = getEmojiForResponse(response);
+
+    if (emotion == 'happy') {
+      return 'Here are some songs to make you feel even happier $emoji';
+    } else if (emotion == 'sad') {
+      return 'Here are some songs to help you feel a little better $emoji';
+    } else if (emotion == 'normal') {
+      return 'Here are some songs to enjoy $emoji';
+    } else if (emotion == 'angry') {
+      return 'Here are some songs to help you vent your anger $emoji';
+    } else {
+      return 'Here are some songs for your current emotion $emoji';
+    }
   }
 
   String getEmojiForResponse(String response) {

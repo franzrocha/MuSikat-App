@@ -69,32 +69,31 @@ class SongsController with ChangeNotifier {
     return songs;
   }
 
-  Future<List<SongModel>> getEmotionSongs(String description) async {
-    List<String> emotion = [];
+  Future<List<SongModel>> getEmotionSongs(String emotion) async {
+    final List<String> descriptions = [];
 
-    if (description == 'happy') {
-      emotion.addAll(happy);
-    } else if (description == 'sad') {
-      emotion.addAll(sad);
-    } else if (description == 'angry') {
-      emotion.addAll(angry);
-    } else {
-      emotion.addAll(normal);
-    }
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('descriptions')
+        .where('emotion', isEqualTo: emotion)
+        .get();
+
+    descriptions
+        .addAll(querySnapshot.docs.map((doc) => doc['description'] as String));
 
     const chunkSize = 5;
-    final chunkedEmotions = <List<String>>[];
+    final chunkedDescriptions = <List<String>>[];
 
-    for (var i = 0; i < emotion.length; i += chunkSize) {
-      final end =
-          (i + chunkSize < emotion.length) ? i + chunkSize : emotion.length;
-      final chunk = emotion.sublist(i, end);
-      chunkedEmotions.add(chunk);
+    for (var i = 0; i < descriptions.length; i += chunkSize) {
+      final end = (i + chunkSize < descriptions.length)
+          ? i + chunkSize
+          : descriptions.length;
+      final chunk = descriptions.sublist(i, end);
+      chunkedDescriptions.add(chunk);
     }
 
     final Set<SongModel> songs = {};
 
-    for (final chunk in chunkedEmotions) {
+    for (final chunk in chunkedDescriptions) {
       final querySnapshot = await FirebaseFirestore.instance
           .collection('songs')
           .where('description', arrayContainsAny: chunk)
@@ -290,55 +289,53 @@ class SongsController with ChangeNotifier {
     }
   }
 
-Future<List<Map<String, dynamic>>> getRanked(String userId) async {
-  final QuerySnapshot snapshot = await _db.collection('songs').get();
+  // Future<List<Map<String, dynamic>>> getRanked() async {
+  //   final QuerySnapshot snapshot = await _db.collection('songs').get();
 
-  final List<SongModel> songs = snapshot.docs
-      .map((DocumentSnapshot documentSnapshot) =>
-          SongModel.fromDocumentSnap(documentSnapshot))
-      .toList();
+  //   final List<SongModel> songs = snapshot.docs
+  //       .map((DocumentSnapshot documentSnapshot) =>
+  //           SongModel.fromDocumentSnap(documentSnapshot))
+  //       .toList();
 
-  // Calculate the total play count, like count, and playlist adds of all the user's songs
-  int totalPlayCount = 0;
-  int totalLikeCount = 0;
-  int totalPlaylistAdds = 0;
+  //   int totalPlayCount = 0;
+  //   int totalLikeCount = 0;
+  //   int totalPlaylistAdds = 0;
 
-  List<Map<String, dynamic>> rankedSongs = [];
+  //   List<Map<String, dynamic>> rankedSongs = [];
 
-  // Calculate the total play count, like count, and playlist adds of all the user's songs
-  for (SongModel song in songs) {
-    totalPlayCount += song.playCount;
-    totalLikeCount += song.likeCount;
-    totalPlaylistAdds += await getPlaylistAdds(song.songId);
-  }
+  //   // Calculate the total play count, like count, and playlist adds of all the user's songs
+  //   for (SongModel song in songs) {
+  //     totalPlayCount += song.playCount;
+  //     totalLikeCount += song.likeCount;
+  //     totalPlaylistAdds += await getPlaylistAdds(song.songId);
+  //   }
 
-  // Sort the songs based on the sum of play count, like count, and playlist adds
-  songs.sort((a, b) {
-    return (b.playCount + b.likeCount)
-        .compareTo(a.playCount + a.likeCount);
-  });
+  //   // Sort the songs based on the sum of play count, like count, and playlist adds
+  //   songs.sort((a, b) {
+  //     return (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount);
+  //   });
 
-  // Calculate the percentage score for each song and store it in a list of maps
-  for (SongModel song in songs) {
-    int playlistAdds = await getPlaylistAdds(song.songId);
-    double playPercentage = (song.playCount / totalPlayCount) * 100;
-    double likePercentage = (song.likeCount / totalLikeCount) * 100;
-    double playlistAddsPercentage = (playlistAdds / totalPlaylistAdds) * 100;
+  //   // Calculate the percentage score for each song and store it in a list of maps
+  //   for (SongModel song in songs) {
+  //     int playlistAdds = await getPlaylistAdds(song.songId);
+  //     double playPercentage = (song.playCount / totalPlayCount) * 100;
+  //     double likePercentage = (song.likeCount / totalLikeCount) * 100;
+  //     double playlistAddsPercentage = (playlistAdds / totalPlaylistAdds) * 100;
 
-    // You can adjust the weights for play count, like count, and playlist adds as per your preference
-    double percentageScore =
-        (playPercentage * 0.4) + (likePercentage * 0.4) + (playlistAddsPercentage * 0.2);
-    rankedSongs.add({
-      'song': song,
-      'percentageScore': percentageScore,
-    });
-  }
+  //     // You can adjust the weights for play count, like count, and playlist adds as per your preference
+  //     double percentageScore = (playPercentage * 0.4) +
+  //         (likePercentage * 0.4) +
+  //         (playlistAddsPercentage * 0.2);
+  //     rankedSongs.add({
+  //       'song': song,
+  //       'percentageScore': percentageScore,
+  //     });
+  //   }
 
-  // Sort the songs and percentage scores based on the percentage scores (highest first)
-  rankedSongs.sort((a, b) => b['percentageScore'].compareTo(a['percentageScore']));
+  //   // Sort the songs and percentage scores based on the percentage scores (highest first)
+  //   rankedSongs
+  //       .sort((a, b) => b['percentageScore'].compareTo(a['percentageScore']));
 
-  return rankedSongs;
-}
-
-
+  //   return rankedSongs;
+  // }
 }

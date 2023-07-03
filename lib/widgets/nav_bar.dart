@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:musikat_app/chat/home_chat.dart';
 import 'package:musikat_app/controllers/notification_controller.dart';
 import 'package:musikat_app/music_player/music_handler.dart';
 import 'package:musikat_app/screens/home/browse_screen.dart';
 import 'package:musikat_app/screens/home/camera.dart';
 import 'package:musikat_app/screens/home/chat/chat_home.dart';
 import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
-import 'package:musikat_app/screens/home/dialog/notification.dart';
+import 'package:musikat_app/screens/home/notification_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
@@ -126,7 +127,7 @@ class _NavBarState extends State<NavBar> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const ChatHomeScreen(),
+                        builder: (context) => const HomeChatScreen(),
                       ),
                     );
                   },

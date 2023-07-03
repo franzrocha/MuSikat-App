@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/notification_controller.dart';
 import 'package:musikat_app/utils/exports.dart';
-import '../../../utils/constants.dart';
-import '../../../widgets/appbar_widgets.dart';
-import '../other_artist_screen.dart';
+import '../../utils/constants.dart';
+import '../../widgets/appbar_widgets.dart';
+import 'other_artist_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
