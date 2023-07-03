@@ -56,37 +56,20 @@ class _NavBarState extends State<NavBar> {
           actions: [
             Row(
               children: [
-                StreamBuilder<QuerySnapshot>(
-                  stream: userNotificationController
-                      .streamUserNotification(currentUserId!),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      QuerySnapshot? querySnapshot = snapshot.data;
-                      int length = querySnapshot!.docs.length;
-
-                      if (snapshot.hasData && length > 0) {
-                        return badges.Badge(
-                          onTap: () {
-                            print('get the value');
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const NotificationScreen(),
-                              ),
-                            );
-                          },
-                          position: badges.BadgePosition.topEnd(top: 0, end: 3),
-                          badgeStyle:
-                              const badges.BadgeStyle(badgeColor: musikatColor),
-                          badgeContent: Text(
-                            length.toString(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          child: IconButton(
-                            icon: const Icon(Icons.notifications, size: 25),
-                            onPressed: () {
+                SizedBox(
+                  width: 40,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: userNotificationController
+                        .streamUserNotification(currentUserId!),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        QuerySnapshot? querySnapshot = snapshot.data;
+                        int length = querySnapshot!.docs.length;
+                
+                        if (snapshot.hasData && length > 0) {
+                          return badges.Badge(
+                            onTap: () {
                               print('get the value');
-
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
@@ -94,33 +77,51 @@ class _NavBarState extends State<NavBar> {
                                 ),
                               );
                             },
-                          ),
-                        );
+                            position: badges.BadgePosition.topEnd(top: 0, end: 3),
+                            badgeStyle:
+                                const badges.BadgeStyle(badgeColor: musikatColor),
+                            badgeContent: Text(
+                              length.toString(),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.notifications, size: 25),
+                              onPressed: () {
+                                print('get the value');
+                
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const NotificationScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      } else if (snapshot.hasError) {
+                        
+                        return Text('Error: ${snapshot.error}');
                       }
-                    } else if (snapshot.hasError) {
-                      
-                      return Text('Error: ${snapshot.error}');
-                    }
-
-                    return IconButton(
-                      icon: const Icon(
-                        Icons.notifications,
-                        size: 25,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const NotificationScreen(),
-                          ),
-                        );
-                      },
-                    );
-                  },
+                
+                      return IconButton(
+                        icon: const Icon(
+                          Icons.notifications,
+                          size: 25,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationScreen(),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-                const SizedBox(
-                  width: 5,
-                ),
+             
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).push(

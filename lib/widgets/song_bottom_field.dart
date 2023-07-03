@@ -65,11 +65,13 @@ class _SongBottomFieldState extends State<SongBottomField> {
             children: [
               addToPlaylist(context),
               viewSongInfo(),
+
               Visibility(
                 visible: widget.hideLike == true ? false : true,
                 child: likeSong(context),
               ),
-              if (widget.playlist?.uid == FirebaseAuth.instance.currentUser?.uid) ...{
+              if (widget.playlist?.uid ==
+                  FirebaseAuth.instance.currentUser?.uid) ...{
                 Visibility(
                   visible: widget.hideRemoveToPlaylist == true ? false : true,
                   child: removeSongFromPlaylist(context),
@@ -228,6 +230,23 @@ class _SongBottomFieldState extends State<SongBottomField> {
       },
     );
   }
+
+  // ListTile addToQueue() {
+  //   return ListTile(
+  //     leading: const Icon(
+  //       Icons.info,
+  //       color: Colors.white,
+  //     ),
+  //     title: Text(
+  //       "Add to queue",
+  //       style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
+  //     ),
+  //     onTap: () {
+  //      locator<MusicHandler>().addToQueue(widget.song);
+  //       Navigator.pop(context);
+  //     },
+  //   );
+  // }
 
   ListTile viewSongInfo() {
     return ListTile(

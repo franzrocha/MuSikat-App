@@ -120,7 +120,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       userNotificationController
                                           .updateNotificationState(
                                               userFollowerId, followingId);
-                                      Navigator.pop(context);
+
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -199,20 +199,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         },
                       )
                     : const Center(
-                      child: Column(
-                        
+                        child: Column(
                           children: [
                             Text(
                               'No notification yet...',
                               style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                                height: 20
-                              ),
+                                  color: Colors.grey, fontSize: 20, height: 20),
                             )
                           ],
                         ),
-                    );
+                      );
               }
               return const SizedBox.shrink();
             },

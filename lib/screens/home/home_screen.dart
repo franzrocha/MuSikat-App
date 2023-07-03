@@ -9,7 +9,6 @@ import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
-import 'package:musikat_app/screens/home/leaderboard.dart';
 import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
@@ -78,7 +77,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           child: Column(children: [
             const SizedBox(height: 5),
-
             homeForOPM(),
             pinoyPride(),
             newReleases(),

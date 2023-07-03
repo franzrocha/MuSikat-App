@@ -186,15 +186,14 @@ class MusicHandler with ChangeNotifier, RouteAware {
   Duration get getDuration => duration;
   Duration get getPosition => position;
 
-  
-//  void stopPlayback() async {
-//     await player.stop();
-//     isPlaying = false;
-//     currentSong = null;
-//     currentIndex = 0;
-//     notifyListeners();
-//   }
-
+  // void addToQueue(SongModel song) {
+  //   currentSongs.add(song);
+  //   if (currentSong == null) {
+  //     currentIndex = 0;
+  //     currentSong = song;
+  //   }
+  //   notifyListeners();
+  // }
 }
 // @override
   // void dispose() {

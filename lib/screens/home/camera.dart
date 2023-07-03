@@ -91,7 +91,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
         // Call the API with the download URL
         Uri apiUrl = Uri.parse(
-            'https://3944-2001-4454-39a-f600-311e-e230-f4b5-72fa.ngrok-free.app/?image=$downloadUrl');
+            'https://1cd7-2001-4454-302-a600-7cd3-ee14-2891-4b4d.ngrok-free.app/?image=$downloadUrl');
         http.Response response = await http.get(apiUrl);
 
         if (response.statusCode == 200) {

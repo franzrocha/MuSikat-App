@@ -271,50 +271,57 @@ class ListeningHistoryController with ChangeNotifier {
   }
 
   Future<List<PlaylistModel>> getRecommendedPlaylistBasedOnGenre() async {
-    try {
-      final List<SongModel> recentlyPlayed = await getListeningHistory();
+  try {
+    final List<SongModel> recentlyPlayed = await getListeningHistory();
 
-      if (recentlyPlayed.isEmpty) {
-        return [];
-      }
+    if (recentlyPlayed.isEmpty) {
+      return [];
+    }
 
-      final List<String> categories = [];
-      for (final song in recentlyPlayed) {
-        categories.add(song.genre);
-      }
+    final List<String> categories = [];
+    for (final song in recentlyPlayed) {
+      categories.add(song.genre);
+    }
 
-      final PlaylistController playlistController = PlaylistController();
-      final List<PlaylistModel> recommendedPlaylists = [];
+    final PlaylistController playlistController = PlaylistController();
+    final Set<String> playlistIds = {}; // Set to store unique playlist IDs
+    final List<PlaylistModel> recommendedPlaylists = [];
 
-      const int chunkSize = 10;
-      final int numChunks = (categories.length / chunkSize).ceil();
+    const int chunkSize = 10;
+    final int numChunks = (categories.length / chunkSize).ceil();
 
-      for (int i = 0; i < numChunks; i++) {
-        final List<String> chunk = categories.sublist(
-            i * chunkSize,
-            (i + 1) * chunkSize > categories.length
-                ? categories.length
-                : (i + 1) * chunkSize);
+    for (int i = 0; i < numChunks; i++) {
+      final List<String> chunk = categories.sublist(
+          i * chunkSize,
+          (i + 1) * chunkSize > categories.length
+              ? categories.length
+              : (i + 1) * chunkSize);
 
-        Query query = FirebaseFirestore.instance.collection('playlists');
-        query = query.where('genre', whereIn: chunk);
+      Query query = FirebaseFirestore.instance.collection('playlists');
+      query = query.where('genre', whereIn: chunk);
 
-        final QuerySnapshot querySnapshot = await query.get();
+      final QuerySnapshot querySnapshot = await query.get();
 
-        for (final doc in querySnapshot.docs) {
-          final playlist = await playlistController.getPlaylistById(doc.id);
+      for (final doc in querySnapshot.docs) {
+        final playlistId = doc.id;
+        if (!playlistIds.contains(playlistId)) {
+          playlistIds.add(playlistId);
+
+          final playlist = await playlistController.getPlaylistById(playlistId);
           recommendedPlaylists.add(playlist);
         }
       }
-
-      recommendedPlaylists.shuffle();
-      final List<PlaylistModel> limitedRecommendedSongs =
-          recommendedPlaylists.take(5).toList();
-
-      return limitedRecommendedSongs;
-    } catch (e) {
-      print(e.toString());
-      return [];
     }
+
+    recommendedPlaylists.shuffle();
+    final List<PlaylistModel> limitedRecommendedSongs =
+        recommendedPlaylists.take(5).toList();
+
+    return limitedRecommendedSongs;
+  } catch (e) {
+    print(e.toString());
+    return [];
   }
+}
+
 }
