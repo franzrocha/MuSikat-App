@@ -6,13 +6,11 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/music_player/music_player.dart';
 import 'package:musikat_app/utils/exports.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
 
 import '../../models/song_model.dart';
 
@@ -91,19 +89,19 @@ class _CameraScreenState extends State<CameraScreen> {
         print(downloadUrl);
 
         // Create an instance of InputImage from the file path
-        InputImage inputImage = InputImage.fromFilePath(file.path);
+        // InputImage inputImage = InputImage.fromFilePath(file.path);
 
-        // Create an instance of FaceDetector
-        FaceDetector faceDetector = GoogleMlKit.vision.faceDetector();
+        // // Create an instance of FaceDetector
+        // FaceDetector faceDetector = GoogleMlKit.vision.faceDetector();
 
-        // Process the input image for face detection
-        List<Face> faces = await faceDetector.processImage(inputImage);
+        // // Process the input image for face detection
+        // List<Face> faces = await faceDetector.processImage(inputImage);
 
         // Check if any faces were detected
-        if (faces.isNotEmpty) {
+        // if (faces.isNotEmpty) {
           // Call the API with the download URL
           Uri apiUrl = Uri.parse(
-              'https://1aaf-2001-4454-3c3-4d00-8085-ecd0-85c4-1087.ngrok-free.app/?image=$downloadUrl');
+              'https://d6db-49-145-99-111.ngrok-free.app/?image=$downloadUrl');
           http.Response response = await http.get(apiUrl);
 
           if (response.statusCode == 200) {
@@ -142,7 +140,7 @@ class _CameraScreenState extends State<CameraScreen> {
         });
 
         cameraController?.resumePreview();
-      }
+      
     });
   }
 

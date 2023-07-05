@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
 import 'package:musikat_app/models/recent_log_model.dart';
 import 'package:musikat_app/models/song_model.dart';

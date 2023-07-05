@@ -30,18 +30,18 @@ dependencies:
   flutter:
    sdk: flutter
   flutter_native_splash: ^2.3.0
-  google_fonts: ^4.0.3
+  google_fonts: ^5.1.0
   font_awesome_flutter: ^10.1.0
   firebase_core: ^2.8.0
   firebase_auth: ^4.2.2
   cloud_firestore: ^4.4.5
   firebase_storage: ^11.0.16 
   get_it: ^7.2.0
-  image_picker: ^0.8.5
+  image_picker: ^1.0.0
   file_picker: ^5.2.3
   fluttertoast: ^8.2.1
   firebase_database: ^10.0.16
-  modal_progress_hud_nsn: ^0.3.0
+  modal_progress_hud_nsn: ^0.4.0
   rounded_expansion_tile: ^0.0.13
   firebase_core_platform_interface: ^4.5.3
   transparent_image: ^2.0.1
@@ -53,16 +53,15 @@ dependencies:
   shared_preferences: ^2.1.0
   cached_network_image: ^3.2.3
   camera: ^0.10.5
-  image_cropper: ^3.0.3
+  image_cropper: ^5.0.0
   badges: ^3.1.1
-  syncfusion_flutter_charts: ^21.2.3
-  http: ^0.13.3
+  syncfusion_flutter_charts: ^22.1.36
+  http: ^1.1.0
   path_provider: ^2.0.2
   rxdart: ^0.27.7
   animated_text_kit: ^4.2.2
   get: ^4.3.8
   timeago: ^3.0.2
-  google_ml_kit: ^0.15.0
 
 
 

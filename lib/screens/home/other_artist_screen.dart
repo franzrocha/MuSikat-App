@@ -12,6 +12,7 @@ import 'package:musikat_app/models/playlist_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/music_player/music_player.dart';
+import 'package:musikat_app/screens/home/chat/private_chat.dart';
 import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
@@ -56,7 +57,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ChatScreenPrivate(
+                  builder: (context) => PrivateChatScreen(
                     selectedUserUID: selectedUserUID,
                   ),
                 ),

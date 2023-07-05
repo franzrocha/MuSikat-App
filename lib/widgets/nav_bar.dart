@@ -127,7 +127,7 @@ class _NavBarState extends State<NavBar> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const HomeChatScreen(),
+                        builder: (context) => const ChatHomeScreen(),
                       ),
                     );
                   },
