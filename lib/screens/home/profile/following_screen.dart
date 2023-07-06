@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/following_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -45,8 +44,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         FutureBuilder<List<String>>(
-          future: _followCon
-              .getUserFollowers(FirebaseAuth.instance.currentUser!.uid),
+          future: _followCon.getUserFollowers(currentUser),
           builder:
               (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -56,6 +54,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
             } else {
               final followers = snapshot.data!;
               final followersCount = followers.length;
+
               return Column(
                 children: [
                   ListTile(
@@ -87,15 +86,15 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ArtistsProfileScreen(
-                                              selectedUserUID: user.uid,
-                                            )));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ArtistsProfileScreen(
+                                        selectedUserUID: user.uid),
+                                  ),
+                                );
                               },
                               child: ListTile(
-                               leading: AvatarImage(uid: follower),
+                                leading: AvatarImage(uid: follower),
                                 title: Text(
                                   user.username,
                                   style: const TextStyle(
@@ -123,8 +122,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         FutureBuilder<List<String>>(
-          future: _followCon
-              .getUserFollowing(FirebaseAuth.instance.currentUser!.uid),
+          future: _followCon.getUserFollowing(currentUser),
           builder:
               (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -134,6 +132,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
             } else {
               final following = snapshot.data!;
               final followingCount = following.length;
+
               return Column(
                 children: [
                   ListTile(
@@ -165,15 +164,15 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ArtistsProfileScreen(
-                                              selectedUserUID: user.uid,
-                                            )));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ArtistsProfileScreen(
+                                        selectedUserUID: user.uid),
+                                  ),
+                                );
                               },
                               child: ListTile(
-                               leading: AvatarImage(uid: followings),
+                                leading: AvatarImage(uid: followings),
                                 title: Text(
                                   user.username,
                                   style: const TextStyle(

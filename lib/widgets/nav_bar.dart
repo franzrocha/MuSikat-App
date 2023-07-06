@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musikat_app/chat/home_chat.dart';
 import 'package:musikat_app/controllers/notification_controller.dart';
@@ -29,11 +31,38 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int pageIndex = 0;
-  Color color = Colors.red;
 
   static final firebaseService = FirebaseService();
   static final userNotificationController = UserNotificationController();
   static final currentUserId = firebaseService.getCurrentUserId();
+
+  late Stream<QuerySnapshot<Map<String, dynamic>>> badgeNotification =
+      const Stream.empty();
+
+  late Stream<User?> authStateStream;
+  late User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    authStateStream = FirebaseAuth.instance.authStateChanges();
+    authStateStream.listen((User? user) {
+      if (mounted) {
+        setState(() {
+          currentUser = user;
+          if (user != null) {
+            badgeNotification = FirebaseFirestore.instance
+                .collection('userNotification')
+                .where('notify', isEqualTo: 1)
+                .where('following', isEqualTo: user.uid)
+                .snapshots();
+          } else {
+            badgeNotification = const Stream.empty();
+          }
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +95,6 @@ class _NavBarState extends State<NavBar> {
                       if (snapshot.hasData) {
                         QuerySnapshot? querySnapshot = snapshot.data;
                         int length = querySnapshot!.docs.length;
-                
                         if (snapshot.hasData && length > 0) {
                           return badges.Badge(
                             onTap: () {
@@ -78,9 +106,10 @@ class _NavBarState extends State<NavBar> {
                                 ),
                               );
                             },
-                            position: badges.BadgePosition.topEnd(top: 0, end: 3),
-                            badgeStyle:
-                                const badges.BadgeStyle(badgeColor: musikatColor),
+                            position:
+                                badges.BadgePosition.topEnd(top: 0, end: 3),
+                            badgeStyle: const badges.BadgeStyle(
+                                badgeColor: musikatColor),
                             badgeContent: Text(
                               length.toString(),
                               style: const TextStyle(color: Colors.white),
@@ -89,7 +118,6 @@ class _NavBarState extends State<NavBar> {
                               icon: const Icon(Icons.notifications, size: 25),
                               onPressed: () {
                                 print('get the value');
-                
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) =>
@@ -101,10 +129,9 @@ class _NavBarState extends State<NavBar> {
                           );
                         }
                       } else if (snapshot.hasError) {
-                        
                         return Text('Error: ${snapshot.error}');
                       }
-                
+
                       return IconButton(
                         icon: const Icon(
                           Icons.notifications,
@@ -122,7 +149,6 @@ class _NavBarState extends State<NavBar> {
                     },
                   ),
                 ),
-             
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).push(
@@ -132,7 +158,7 @@ class _NavBarState extends State<NavBar> {
                     );
                   },
                   icon: const Icon(
-                    FontAwesomeIcons.rocketchat,
+                    Icons.chat_bubble,
                     size: 20,
                   ),
                 ),
@@ -209,14 +235,14 @@ class _NavBarState extends State<NavBar> {
                       },
                       items: [
                         const BottomNavigationBarItem(
-                          icon: FaIcon(
-                            FontAwesomeIcons.house,
+                          icon: Icon(
+                            Icons.home,
                             size: 20,
                           ),
                           label: 'Home',
                         ),
                         const BottomNavigationBarItem(
-                          icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                          icon: Icon(Icons.search),
                           label: 'Browse',
                         ),
                         BottomNavigationBarItem(
@@ -228,8 +254,8 @@ class _NavBarState extends State<NavBar> {
                             child: const CircleAvatar(
                               radius: 20,
                               backgroundColor: musikatBackgroundColor,
-                              child: FaIcon(
-                                FontAwesomeIcons.camera,
+                              child: Icon(
+                                Icons.camera_alt,
                                 color: Colors.white,
                                 size: 18,
                               ),
@@ -238,7 +264,7 @@ class _NavBarState extends State<NavBar> {
                           label: '',
                         ),
                         const BottomNavigationBarItem(
-                          icon: Icon(FontAwesomeIcons.music),
+                          icon: Icon(Icons.music_note),
                           label: 'Artist\'s Hub',
                         ),
                         const BottomNavigationBarItem(

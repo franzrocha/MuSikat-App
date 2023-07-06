@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:musikat_app/controllers/notification_controller.dart';
@@ -17,10 +17,37 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  static final firebaseService = FirebaseService();
-  static final userNotificationController = UserNotificationController();
+  final firebaseService = FirebaseService();
+  final userNotificationController = UserNotificationController();
 
-  static final currentUserId = firebaseService.getCurrentUserId();
+  late Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+      const Stream.empty();
+  late Stream<User?> authStateStream;
+  late User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    // Subscribe to the authentication state changes
+    authStateStream = FirebaseAuth.instance.authStateChanges();
+    authStateStream.listen((User? user) {
+      if (mounted) {
+        setState(() {
+          currentUser = user;
+          if (user != null) {
+            // User is logged in, subscribe to the notification stream
+            notificationStream = FirebaseFirestore.instance
+                .collection('userNotification')
+                .where('following', isEqualTo: user.uid)
+                .snapshots();
+          } else {
+            // User is logged out, set the notification stream to null
+            notificationStream = const Stream.empty();
+          }
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +87,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('userNotification')
-                .where('following', isEqualTo: currentUserId)
-                .snapshots(),
+            stream: notificationStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 var notificationsData = snapshot.data!.docs;
@@ -86,7 +110,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           Timestamp dateNotified = notification['timestamp'];
                           String timeAgo = userNotificationController
                               .getTimeAgo(dateNotified);
-                          int notifiedUSer;
+                          int notifiedUser;
 
                           final DateTime date = dateNotified.toDate();
                           final DateFormat formatter =
@@ -107,13 +131,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   var userFollowerId = user['uid'];
                                   var username = user['username'];
 
-                                  notifiedUSer = notification['notify'];
-
-                                  print('dateNotified');
-                                  print(timeAgo);
+                                  notifiedUser = notification['notify'];
 
                                   return ListTile(
-                                    tileColor: notifiedUSer == 0
+                                    tileColor: notifiedUser == 0
                                         ? musikatBackgroundColor
                                         : Colors.black.withOpacity(0.5),
                                     onTap: () {
@@ -141,7 +162,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         Text(
                                           username,
                                           style: TextStyle(
-                                            color: notifiedUSer == 0
+                                            color: notifiedUser == 0
                                                 ? musikatTextColor
                                                     .withOpacity(0.5)
                                                 : musikatTextColor,
@@ -152,7 +173,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         Text(
                                           timeAgo,
                                           style: GoogleFonts.inter(
-                                            color: notifiedUSer == 0
+                                            color: notifiedUser == 0
                                                 ? musikatTextColor
                                                     .withOpacity(0.5)
                                                 : musikatTextColor,
@@ -171,7 +192,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         Text(
                                           'followed you',
                                           style: TextStyle(
-                                            color: notifiedUSer == 0
+                                            color: notifiedUser == 0
                                                 ? musikatTextColor
                                                     .withOpacity(0.5)
                                                 : musikatTextColor,
@@ -181,7 +202,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         Text(
                                           formattedDate,
                                           style: TextStyle(
-                                            color: notifiedUSer == 0
+                                            color: notifiedUser == 0
                                                 ? musikatTextColor
                                                     .withOpacity(0.5)
                                                 : musikatTextColor,
@@ -240,7 +261,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   const Text('Confirm', style: TextStyle(color: deleteColor)),
               onPressed: () {
                 firebaseService.deleteAllCollection(
-                    'userNotification', 'following', currentUserId);
+                    'userNotification', 'following', currentUser!.uid);
                 ToastMessage.show(context, 'Notification deleted successfully');
 
                 Navigator.pop(context);

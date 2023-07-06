@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musikat_app/controllers/listening_history_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
@@ -12,7 +14,10 @@ import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../controllers/auth_controller.dart';
 import '../../music_player/music_handler.dart';
+import 'other_artist_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final MusicHandler musicHandler;
@@ -32,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final PlaylistController _playCon = PlaylistController();
   final ListeningHistoryController _listenCon = ListeningHistoryController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
+
 //   String mostPlayedGenre = '';
 
 //  @override
@@ -92,6 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
             basedOnListeningHistory(),
             basedOnListeningHistoryLanguage(),
             basedOnListeningHistoryMoods(),
+
+            suggestedSongFromFollower(),
             const SizedBox(height: 120),
           ]),
         ),
@@ -699,6 +707,258 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
         }
       },
+    );
+  }
+
+//suggested follower
+  StreamBuilder<DocumentSnapshot<Object?>> suggestedSongFromFollower() {
+    return StreamBuilder<DocumentSnapshot>(
+      stream:
+          FirebaseFirestore.instance.collection('users').doc(uid).snapshots(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const SizedBox.shrink();
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        }
+
+        // User document exists, retrieve follower array
+        List<dynamic> followerIDs =
+            (snapshot.data!.data() as Map<String, dynamic>)['followings'] ?? [];
+
+        if (snapshot.hasData) {
+          // Retrieve songs with matching UID to follower IDs
+          return StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('songs').snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SizedBox.shrink();
+              }
+
+              if (snapshot.hasData) {
+                List<SongModel> songsData = snapshot.data!.docs.map((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  return SongModel(
+                    songId: data['song_id'] as String,
+                    title: data['title'] as String,
+                    artist: data['artist'] as String,
+                    fileName: data['file_name'] as String,
+                    audio: data['audio'] as String,
+                    albumCover: data['album_cover'] as String,
+                    createdAt: (data['created_at'] as Timestamp).toDate(),
+                    writers:
+                        List<String>.from(data['writers'] as List<dynamic>),
+                    producers:
+                        List<String>.from(data['producers'] as List<dynamic>),
+                    genre: data['genre'] as String,
+                    uid: data['uid'] as String,
+                    languages:
+                        List<String>.from(data['languages'] as List<dynamic>),
+                    description:
+                        List<String>.from(data['description'] as List<dynamic>),
+                    playCount: data['playCount'] as int? ?? 0,
+                    likeCount: data['likeCount'] as int? ?? 0,
+                  );
+                }).toList();
+
+                // Filter songs by follower IDs
+                List<SongModel> followerSongs = songsData
+                    .where((song) => followerIDs.contains(song.uid))
+                    .toList();
+
+                // Sort follower songs by play count in descending order
+                followerSongs
+                    .sort((a, b) => b.playCount.compareTo(a.playCount));
+
+                // Take the top 5 songs (limited to one song per user)
+                List<SongModel> topSongs = [];
+                List<String> addedUserIDs = [];
+                for (SongModel song in followerSongs) {
+                  if (!addedUserIDs.contains(song.uid)) {
+                    topSongs.add(song);
+                    addedUserIDs.add(song.uid);
+                  }
+                  if (topSongs.length >= 5) {
+                    break;
+                  }
+                }
+
+                return topSongs.isNotEmpty
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 25, bottom: 10),
+                                child: buildCustomContainer(
+                                    'Suggested song for you...')),
+                          ),
+                          SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: topSongs.map((user) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 25, top: 10),
+                                    child: Column(
+                                      children: [
+                                        Column(children: [
+                                          InkWell(
+                                            onTap: () {
+                                              int index = topSongs.indexWhere(
+                                                  (song) =>
+                                                      song.songId ==
+                                                      user.songId);
+
+                                              final selectedSong =
+                                                  topSongs[index];
+
+                                              if (selectedSong != null) {
+                                                widget.musicHandler
+                                                    .currentSongs = topSongs;
+                                                widget.musicHandler
+                                                        .currentIndex =
+                                                    topSongs
+                                                        .indexOf(selectedSong);
+                                                widget.musicHandler
+                                                    .setAudioSource(
+                                                        selectedSong, uid!);
+                                              }
+                                            },
+                                            onLongPress: () {
+                                              int index = topSongs.indexWhere(
+                                                  (song) =>
+                                                      song.songId ==
+                                                      user.songId);
+
+                                              showModalBottomSheet(
+                                                  backgroundColor:
+                                                      musikatColor4,
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return SingleChildScrollView(
+                                                      child: SongBottomField(
+                                                        song: songsData[index],
+                                                        hideEdit: true,
+                                                        hideDelete: true,
+                                                        hideRemoveToPlaylist:
+                                                            true,
+                                                        hideLike: null,
+                                                      ),
+                                                    );
+                                                  });
+                                            },
+                                            child: user.albumCover.isNotEmpty
+                                                ? Container(
+                                                    width: 120,
+                                                    height: 120,
+                                                    decoration: BoxDecoration(
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors.black
+                                                              .withOpacity(0.1),
+                                                          spreadRadius: 2,
+                                                          blurRadius: 4,
+                                                          offset: const Offset(
+                                                              0, 2),
+                                                        ),
+                                                      ],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                      image: user.albumCover
+                                                              .isNotEmpty
+                                                          ? DecorationImage(
+                                                              image: CachedNetworkImageProvider(
+                                                                  user.albumCover),
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                          : null,
+                                                    ),
+                                                  )
+                                                : SizedBox(
+                                                    width: 120,
+                                                    height: 120,
+                                                    child: CircleAvatar(
+                                                      backgroundColor:
+                                                          musikatColor4,
+                                                      maxRadius: 30,
+                                                      child: Text(
+                                                        user.title.isNotEmpty
+                                                            ? user.title[0]
+                                                                .toUpperCase()
+                                                            : '',
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 30),
+                                                      ),
+                                                    ),
+                                                  ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: Text(
+                                              user.title,
+                                              style: titleStyle,
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: Text(
+                                              user.artist,
+                                              style: titleStyle,
+                                            ),
+                                          ),
+                                        ]),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox.shrink();
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+//end sugggested follower
+
+  Container buildCustomContainer(String text) {
+    return Container(
+      padding: const EdgeInsets.only(top: 25),
+      child: Text(
+        text,
+        textAlign: TextAlign.right,
+        style: sloganStyle,
+      ),
     );
   }
 }
