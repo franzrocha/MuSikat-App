@@ -264,6 +264,8 @@ class SongsController with ChangeNotifier {
           .toList());
     }
 
+    print(users);
+
     return users;
   }
 
@@ -289,53 +291,147 @@ class SongsController with ChangeNotifier {
     }
   }
 
-  // Future<List<Map<String, dynamic>>> getRanked() async {
-  //   final QuerySnapshot snapshot = await _db.collection('songs').get();
+  Future<List<Map<String, dynamic>>> getRanked() async {
+    final QuerySnapshot snapshot = await _db.collection('songs').get();
+    print('This is here before snapshot');
 
-  //   final List<SongModel> songs = snapshot.docs
-  //       .map((DocumentSnapshot documentSnapshot) =>
-  //           SongModel.fromDocumentSnap(documentSnapshot))
-  //       .toList();
+    final List<SongModel> songs = snapshot.docs
+        .map((DocumentSnapshot documentSnapshot) =>
+            SongModel.fromDocumentSnap(documentSnapshot))
+        .toList();
+    print(songs);
+    int totalPlayCount = 0;
+    int totalLikeCount = 0;
+    int totalPlaylistAdds = 0;
 
-  //   int totalPlayCount = 0;
-  //   int totalLikeCount = 0;
-  //   int totalPlaylistAdds = 0;
+    List<Map<String, dynamic>> rankedSongs = [];
 
-  //   List<Map<String, dynamic>> rankedSongs = [];
+    DateTime currentDate = DateTime.now();
+    DateTime todayStartDate =
+        DateTime(currentDate.year, currentDate.month, currentDate.day);
+    DateTime todayEndDate = DateTime(
+        currentDate.year, currentDate.month, currentDate.day, 23, 59, 59);
 
-  //   // Calculate the total play count, like count, and playlist adds of all the user's songs
-  //   for (SongModel song in songs) {
-  //     totalPlayCount += song.playCount;
-  //     totalLikeCount += song.likeCount;
-  //     totalPlaylistAdds += await getPlaylistAdds(song.songId);
-  //   }
+    print(todayStartDate);
+    print(todayEndDate);
 
-  //   // Sort the songs based on the sum of play count, like count, and playlist adds
-  //   songs.sort((a, b) {
-  //     return (b.playCount + b.likeCount).compareTo(a.playCount + a.likeCount);
-  //   });
+    // Calculate the total play count, like count, and playlist adds of all the user's songs
+    for (SongModel song in songs) {
+      totalPlayCount += song.playCount;
+      totalLikeCount += song.likeCount;
+      totalPlaylistAdds += await getPlaylistAdds(song.songId);
+    }
 
-  //   // Calculate the percentage score for each song and store it in a list of maps
-  //   for (SongModel song in songs) {
-  //     int playlistAdds = await getPlaylistAdds(song.songId);
-  //     double playPercentage = (song.playCount / totalPlayCount) * 100;
-  //     double likePercentage = (song.likeCount / totalLikeCount) * 100;
-  //     double playlistAddsPercentage = (playlistAdds / totalPlaylistAdds) * 100;
+    // Filter songs to include only those played today
+    List<SongModel> songsPlayedToday = songs
+        .where((song) =>
+            song.playCount > 0) // You can add additional conditions if needed
+        .toList();
 
-  //     // You can adjust the weights for play count, like count, and playlist adds as per your preference
-  //     double percentageScore = (playPercentage * 0.4) +
-  //         (likePercentage * 0.4) +
-  //         (playlistAddsPercentage * 0.2);
-  //     rankedSongs.add({
-  //       'song': song,
-  //       'percentageScore': percentageScore,
-  //     });
-  //   }
+    // Sort the songs based on play count to get the most played songs today
+    songsPlayedToday.sort((a, b) => b.playCount.compareTo(a.playCount));
 
-  //   // Sort the songs and percentage scores based on the percentage scores (highest first)
-  //   rankedSongs
-  //       .sort((a, b) => b['percentageScore'].compareTo(a['percentageScore']));
+    // Limit the list to the top 10 songs played today
+    songsPlayedToday = songsPlayedToday.take(20).toList();
 
-  //   return rankedSongs;
-  // }
+    // Calculate the percentage score for each song and store it in a list of maps
+    for (SongModel song in songsPlayedToday) {
+      int playlistAdds = await getPlaylistAdds(song.songId);
+      double playPercentage = (song.playCount / totalPlayCount) * 100;
+      double likePercentage = (song.likeCount / totalLikeCount) * 100;
+      double playlistAddsPercentage = (playlistAdds / totalPlaylistAdds) * 100;
+
+      // You can adjust the weights for play count, like count, and playlist adds as per your preference
+      double percentageScore = (playPercentage * 0.4) +
+          (likePercentage * 0.4) +
+          (playlistAddsPercentage * 0.2);
+      rankedSongs.add({
+        'song': song,
+        'percentageScore': percentageScore,
+        'playCount': song.playCount,
+        'likeCount': song.likeCount,
+      });
+    }
+
+    // Sort the songs and percentage scores based on the percentage scores (highest first)
+    rankedSongs.sort((a, b) => b['playCount'].compareTo(a['playCount']));
+
+    return rankedSongs;
+  }
+
+  Future<List<Map<String, dynamic>>> getRankedUsers() async {
+    QuerySnapshot songsSnapshot = await _db.collection('songs').get();
+    List<SongModel> songs = songsSnapshot.docs
+        .map((doc) => SongModel.fromDocumentSnap(doc))
+        .toList();
+
+    List<String> userIds = songs.map((song) => song.uid).toSet().toList();
+
+    if (userIds.isEmpty) {
+      return []; // Return an empty list if there are no users with songs
+    }
+
+    List<Map<String, dynamic>> rankedUsers = [];
+    final int chunksCount = (userIds.length / 10).ceil();
+
+    for (var i = 0; i < chunksCount; i++) {
+      int start = i * 10;
+      int end = (i + 1) * 10;
+      List<String> chunk =
+          userIds.sublist(start, end > userIds.length ? userIds.length : end);
+
+      QuerySnapshot usersSnapshot = await _db
+          .collection('users')
+          .where(FieldPath.documentId, whereIn: chunk)
+          .get();
+
+      List<UserModel> users = usersSnapshot.docs
+          .map((doc) => UserModel.fromDocumentSnap(doc))
+          .toList();
+
+      // Calculate the total play count, like count, and playlist adds of all the user's songs
+      int totalPlayCount = 0;
+      int totalLikeCount = 0;
+      int totalPlaylistAdds = 0;
+
+      for (SongModel song in songs) {
+        if (users.any((user) => user.uid == song.uid)) {
+          totalPlayCount += song.playCount;
+          totalLikeCount += song.likeCount;
+          totalPlaylistAdds += await getPlaylistAdds(song.songId);
+        }
+      }
+
+      // Calculate the percentage score for each user and store it in the list
+      for (UserModel user in users) {
+        int userTotalPlayCount = songs
+            .where((song) => song.uid == user.uid)
+            .map((song) => song.playCount)
+            .fold(0, (prev, curr) => prev + curr);
+
+        double playPercentage = (userTotalPlayCount / totalPlayCount) * 100;
+        double likePercentage = (userTotalPlayCount / totalLikeCount) * 100;
+        double playlistAddsPercentage =
+            (userTotalPlayCount / totalPlaylistAdds) * 100;
+
+        // You can adjust the weights for play count, like count, and playlist adds as per your preference
+        double percentageScore = (playPercentage * 0.4) +
+            (likePercentage * 0.4) +
+            (playlistAddsPercentage * 0.2);
+
+        rankedUsers.add({
+          'user': user,
+          'percentageScore': percentageScore,
+          'totalPlayCount': userTotalPlayCount,
+          'totalLikeCount': userTotalPlayCount,
+        });
+      }
+    }
+
+    // Sort the users and percentage scores based on the percentage scores (highest first)
+    rankedUsers
+        .sort((a, b) => b['totalPlayCount'].compareTo(a['totalPlayCount']));
+
+    return rankedUsers;
+  }
 }

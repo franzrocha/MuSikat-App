@@ -1,12 +1,13 @@
 import 'package:musikat_app/controllers/playlist_controller.dart';
 import 'package:musikat_app/models/playlist_model.dart';
-import 'package:musikat_app/screens/home/categories/genres_screen.dart';
-import 'package:musikat_app/screens/home/categories/language_screen.dart';
-import 'package:musikat_app/screens/home/categories/mood_screen.dart';
 import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
 import 'package:musikat_app/widgets/search_bar.dart';
+
+import 'categories/genres_screen.dart';
+import 'categories/language_screen.dart';
+import 'categories/mood_screen.dart';
 
 class BrowseScreen extends StatefulWidget {
   const BrowseScreen({super.key});
@@ -68,7 +69,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
           playlists = playlists
               .where((playlist) =>
-                  playlist.isOfficial == true && playlist.genre == genre && playlist.genre != 'Random')
+                  playlist.isOfficial == true &&
+                  playlist.genre == genre &&
+                  playlist.genre != 'Random')
               .toList();
 
           return playlists.isEmpty

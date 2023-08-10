@@ -9,6 +9,7 @@ import 'package:musikat_app/screens/home/browse_screen.dart';
 import 'package:musikat_app/screens/home/camera.dart';
 import 'package:musikat_app/screens/home/chat/chat_home.dart';
 import 'package:musikat_app/screens/home/artist_hub/artists_hub_screen.dart';
+import 'package:musikat_app/screens/home/leaderboard.dart';
 import 'package:musikat_app/screens/home/notification_screen.dart';
 import 'package:musikat_app/screens/home/home_screen.dart';
 import 'package:musikat_app/screens/home/profile/profile_screen.dart';
@@ -86,6 +87,19 @@ class _NavBarState extends State<NavBar> {
           actions: [
             Row(
               children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const Leaderboard(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.leaderboard,
+                    size: 20,
+                  ),
+                ),
                 SizedBox(
                   width: 40,
                   child: StreamBuilder<QuerySnapshot>(
