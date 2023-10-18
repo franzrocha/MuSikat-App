@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:musikat_app/controllers/navigation/navigation_service.dart';
+import 'package:musikat_app/controllers/recommender_controller.dart';
 import 'package:musikat_app/models/recent_log_model.dart';
 import 'package:musikat_app/models/song_model.dart';
 import 'package:musikat_app/models/user_model.dart';
@@ -30,6 +32,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() =>
+        RecommenderController(myUid: FirebaseAuth.instance.currentUser!.uid));
     String uid = FirebaseAuth.instance.currentUser!.uid;
     getSongs ??= SongModel.getSongs();
     getUsers ??= UserModel.getUsers();
@@ -321,6 +325,8 @@ class _SearchScreenState extends State<SearchScreen> {
           return user.uid != FirebaseAuth.instance.currentUser?.uid
               ? ListTile(
                   onTap: () {
+                    RecommenderController.instance
+                        .addRecommendArtist(userUid: user.uid);
                     RecentHistoryUserSearchLogs().addSearchHistoryLogs(
                         user.uid, user.username, user.profileImage, 'User');
 
@@ -355,6 +361,8 @@ class _SearchScreenState extends State<SearchScreen> {
           return song.uid != FirebaseAuth.instance.currentUser?.uid
               ? ListTile(
                   onTap: () {
+                    RecommenderController.instance.addRecommendedSongs(
+                        userId: song.uid, currentSongId: song.songId);
                     RecentHistoryUserSearchLogs().addSearchHistoryLogs(
                         song.songId,
                         song.title,

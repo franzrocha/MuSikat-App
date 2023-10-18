@@ -1,12 +1,16 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:musikat_app/controllers/listening_history_controller.dart';
 import 'package:musikat_app/controllers/playlist_controller.dart';
+import 'package:musikat_app/controllers/recommender_controller.dart';
 import 'package:musikat_app/models/liked_songs_model.dart';
 import 'package:musikat_app/controllers/songs_controller.dart';
 import 'package:musikat_app/models/user_model.dart';
 import 'package:musikat_app/utils/exports.dart';
+import 'package:musikat_app/widgets/recommended_artists.dart';
+import 'package:musikat_app/widgets/recommended_songs.dart';
 import '../../music_player/music_handler.dart';
 import 'song_streams/songs_list.dart';
 
@@ -30,6 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
+  void initState() {
+    super.initState();
+    Get.put(RecommenderController(myUid: uid));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: musikatBackgroundColor,
@@ -39,6 +49,26 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           child: Column(children: [
             const SizedBox(height: 5),
+            GetBuilder<RecommenderController>(
+              init: RecommenderController(myUid: uid),
+              initState: (_) {
+                RecommenderController.instance.fetchRecommendedArtists(uid);
+                RecommenderController.instance.fetchRecommendedSongs(uid);
+              },
+              builder: ((controller) {
+                return Column(
+                  children: [
+                    if (controller.recommendedArtists.isNotEmpty)
+                      RecommendedSearchArtists(controller: controller),
+                    if (controller.recommendedSongs.isNotEmpty)
+                      RecommendedSongs(
+                          controller: controller,
+                          musicHandler: widget.musicHandler,
+                          myUid: uid),
+                  ],
+                );
+              }),
+            ),
             homeForOPM(),
             pinoyPride(),
             newReleases(),
