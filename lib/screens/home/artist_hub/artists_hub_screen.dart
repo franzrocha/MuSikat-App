@@ -9,6 +9,7 @@ import 'package:musikat_app/screens/home/artist_hub/edit_profile_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/library_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/insights_screen.dart';
 import 'package:musikat_app/screens/home/artist_hub/audio_uploader_screen.dart';
+import 'package:musikat_app/screens/home/donations_feature/screens/support_screens/support_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import '../../../music_player/music_handler.dart';
 
@@ -131,7 +132,11 @@ class _ArtistsHubScreenState extends State<ArtistsHubScreen> {
               text: 'Insights',
             ),
             CardTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SupportScreen(),
+                ));
+              },
               icon: Icons.monetization_on,
               text: 'Support',
             ),

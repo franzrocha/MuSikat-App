@@ -107,3 +107,10 @@ TextStyle shortThinStyle = const TextStyle(
   color: Colors.white,
   fontSize: 13,
 );
+
+TextStyle moneyText = const TextStyle(
+  fontFamily: 'Gotham',
+  fontWeight: FontWeight.w400,
+  color: Colors.white,
+  fontSize: 35,
+);

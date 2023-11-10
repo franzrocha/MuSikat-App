@@ -17,6 +17,8 @@ import 'package:musikat_app/screens/home/profile/playlist_detail_screen.dart';
 import 'package:musikat_app/utils/exports.dart';
 import 'package:musikat_app/widgets/display_widgets.dart';
 
+import 'donations_feature/screens/donation_screens/donation_wallet_screen.dart';
+
 class ArtistsProfileScreen extends StatefulWidget {
   ArtistsProfileScreen({Key? key, required this.selectedUserUID})
       : super(key: key);
@@ -66,7 +68,25 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
             icon: const Icon(Icons.chat),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _songCon
+                  .getLatestSong(selectedUserUID)
+                  .listen((List<SongModel> latestSongs) {
+                if (latestSongs.isNotEmpty) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DonationWalletScreen(
+                        userIdtoSupport: selectedUserUID,
+                      ),
+                    ),
+                  );
+                } else {
+                  ToastMessage.show(context,
+                      'This user hasn’t uploaded yet so donations are unavailable. ');
+                }
+              });
+            },
             icon: const Icon(Icons.monetization_on),
           ),
         ],
@@ -340,7 +360,7 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
               .where((song) => song.uid == widget.selectedUserUID)
               .toList();
 
-              songs.take(5).toList();
+          songs.take(5).toList();
 
           return songs.isEmpty
               ? const SizedBox.shrink()
@@ -360,7 +380,8 @@ class _ArtistsProfileScreenState extends State<ArtistsProfileScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: calculateHeight(songs.length > 5 ? 5 : songs.length),
+                        height: calculateHeight(
+                            songs.length > 5 ? 5 : songs.length),
                         width: double.infinity,
                         child: ListView.builder(
                           itemCount: songs.length,
